@@ -13,26 +13,21 @@
       <div class="pt-3">
         <v-list-item-title class="text-center font-weight-bold">Welcome Junho!</v-list-item-title>
       </div>
-
       <v-list dense>
-        <v-list-item link to="/">
-          <v-list-item-action>
-            <v-icon>mdi-alpha-h-box</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <SidebarFeed />
+        <SidebarBoard />
+        <SidebarMypage />
       </v-list>
     </v-navigation-drawer>
 
-    <v-content class="row m-0">
+    <v-content class="row">
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
           <v-col>
             <router-view></router-view>
           </v-col>
         </v-row>
+        <AppFooter />
       </v-container>
     </v-content>
   </v-app>
@@ -40,8 +35,20 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import SidebarFeed from "@/components/feeds/SidebarFeed.vue";
+import SidebarBoard from "@/components/feeds/SidebarBoard.vue";
+import SidebarMypage from "@/components/pages/SidebarMypage.vue";
 
-@Component({})
+import AppFooter from "@/components/main/AppFooter.vue";
+
+@Component({
+  components: {
+    SidebarFeed,
+    SidebarBoard,
+    SidebarMypage,
+    AppFooter
+  }
+})
 export default class AppSidebar extends Vue {
   data() {
     return {

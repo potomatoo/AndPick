@@ -17,6 +17,9 @@
 </template>
 
 <style scoped>
+footer {
+  text-align: end;
+}
 a {
   color: #5cb85c !important;
 }

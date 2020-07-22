@@ -1,24 +1,26 @@
 import { Module } from "vuex";
 import { RootState } from "./index";
 
-
 export interface MypageModule {
-  // isSidebarActive: boolean,
-  data: string
+  isSidebarActive: boolean,
+
 }
 
 const module: Module<MypageModule, RootState> = {
   namespaced: true,
+
   state: {
-    // isSidebarActive: false,
-    data: "hi"
+    isSidebarActive: true,
   },
+
   getters: {},
+
   mutations: {
     toggleSidebar(state) {
-      console.log(state)
+      state.isSidebarActive = !state.isSidebarActive;
     }
   },
+
   actions: {
 
   }

@@ -1,10 +1,12 @@
 <template>
-  <v-app id="inspire">
-    <AppNavbar />
-    <AppSidebar />
-    <AppMain />
+  <div>
+    <v-app id="inspire">
+      <AppNavbar />
+      <AppSidebar />
+      <AppMain />
+    </v-app>
     <AppFooter />
-  </v-app>
+  </div>
 </template>
 
 <script lang="ts">

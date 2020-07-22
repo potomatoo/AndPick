@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app clipped-left>
-    <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+    <v-app-bar-nav-icon @click="toggleSidebar()" />
     <v-toolbar-title>
       <router-link :to="{ name: 'Home' }">
         <a class="navbar-brand">Junho</a>
@@ -14,9 +14,7 @@ import { Vue, Component } from "vue-property-decorator";
 import { mapMutations, mapActions } from "vuex";
 
 @Component({
-  methods: {
-    ...mapMutations(["MypageModule/toggleSidebar"])
-  }
+  methods: mapMutations("mypageModule", ["toggleSidebar"])
 })
 export default class AppNavbar extends Vue {}
 </script>

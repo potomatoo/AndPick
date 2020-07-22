@@ -1,8 +1,7 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app clipped>
+  <v-navigation-drawer v-if="isSidebarActive" app clipped>
     <div class="pt-3">
       <v-list-item-title class="text-center font-weight-bold">Welcome Junho!</v-list-item-title>
-      {{ data }}
     </div>
     <v-list dense>
       <SidebarFeed />
@@ -26,9 +25,7 @@ import SidebarMypage from "@/components/pages/SidebarMypage.vue";
     SidebarBoard,
     SidebarMypage
   },
-  computed: {
-    ...mapState(["data"])
-  }
+  computed: mapState("mypageModule", ["isSidebarActive"])
 })
 export default class AppSidebar extends Vue {}
 </script>

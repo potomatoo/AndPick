@@ -6,16 +6,18 @@ import mypageModule from "./MypageModule.store";
 Vue.use(Vuex);
 
 export interface RootState {
-  data: string;
+  data: string,
+
 }
 
 const store: StoreOptions<RootState> = {
   modules: {
     feedModule,
-    mypageModule
+    mypageModule: mypageModule
   },
   state: {
-    data: "root"
+    data: "root",
+
   },
   getters: {},
   mutations: {},

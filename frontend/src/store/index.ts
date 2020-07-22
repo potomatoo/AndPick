@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
 import feedModule from "./FeedModule.store";
-import mypageModule from "./MypageModue.store";
+import mypageModule from "./MypageModule.store";
 
 Vue.use(Vuex);
 

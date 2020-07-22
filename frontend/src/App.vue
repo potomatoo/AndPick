@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <AppSidebar />
+    <Home />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import AppSidebar from "@/components/main/AppSidebar.vue";
+import Home from "@/views/Home.vue";
 
 @Component({
   components: {
-    AppSidebar
+    Home
   }
 })
 export default class App extends Vue {}

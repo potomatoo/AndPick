@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
 import feedModule from "./FeedModule.store";
-import mypageModule from "./MypageModue.store";
+import mypageModule from "./MypageModule.store";
 
 import axios, { AxiosResponse } from "axios";
 
@@ -20,7 +20,7 @@ export interface RootState {
 const store: StoreOptions<RootState> = {
   modules: {
     feedModule,
-    mypageModule,
+    mypageModule: mypageModule
   },
   state: {
     JWT: STORAGE.getItem("jwt-token"),

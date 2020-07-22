@@ -6,28 +6,18 @@
       <router-link :to="{ name: 'Login' }">Login</router-link> |
     </div>
     <router-view />
+    <Home />
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import Home from "@/views/Home.vue";
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+@Component({
+  components: {
+    Home,
+  },
+})
+export default class App extends Vue {}
+</script>

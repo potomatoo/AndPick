@@ -4,7 +4,7 @@
     <div class="form-group">
       <label for="useremail">이메일</label>
       <input
-        v-model="loginata.useremail"
+        v-model="loginData.useremail"
         class="form-control"
         id="useremail"
         type="text"

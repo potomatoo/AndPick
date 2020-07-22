@@ -1,10 +1,28 @@
 <template>
-  <div class="home"></div>
+  <div>
+    <v-app id="inspire">
+      <AppNavbar />
+      <AppSidebar />
+      <AppMain />
+    </v-app>
+    <AppFooter />
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
+import AppNavbar from "@/components/main/AppNavbar.vue";
+import AppSidebar from "@/components/main/AppSidebar.vue";
+import AppMain from "@/components/main/AppMain.vue";
+import AppFooter from "@/components/main/AppFooter.vue";
 
-@Component
+@Component({
+  components: {
+    AppNavbar,
+    AppSidebar,
+    AppMain,
+    AppFooter
+  }
+})
 export default class Home extends Vue {}
 </script>

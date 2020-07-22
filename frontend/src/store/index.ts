@@ -3,23 +3,61 @@ import Vuex, { StoreOptions } from "vuex";
 import feedModule from "./FeedModule.store";
 import mypageModule from "./MypageModue.store";
 
+import axios, { AxiosResponse } from "axios";
+
+import router from "@/router";
+import SERVER from "@/api/spr";
+
+const STORAGE = window.sessionStorage;
+
 Vue.use(Vuex);
 
 export interface RootState {
-  data: string;
+  JWT: string | null;
+  isLogedIn: boolean;
 }
 
 const store: StoreOptions<RootState> = {
   modules: {
     feedModule,
-    mypageModule
+    mypageModule,
   },
   state: {
-    data: "root"
+    JWT: STORAGE.getItem("jwt-token"),
+    isLogedIn: false,
   },
   getters: {},
-  mutations: {},
-  actions: {}
+  mutations: {
+    SET_TOKEN(state, token) {
+      state.JWT = token;
+      STORAGE.setItem("jwt-token", token);
+    },
+    isLogedIn(state, bool) {
+      state.isLogedIn = bool;
+    },
+  },
+  actions: {
+    postAuthData({ commit }, info) {
+      axios
+        .post(SERVER.URL + info.location, info.data)
+        .then((res: AxiosResponse<{}>) => {
+          commit("SET_TOKEN", res.headers["jwt-token"]);
+          commit("isLogedIn", info.bool);
+          router.push({ name: "Home " });
+        })
+        .catch((err) => console.log(err.response.data));
+    },
+
+    signup({ dispatch }, signupData) {
+      const info = {
+        data: signupData,
+        location: SERVER.ROUTES.signup,
+        bool: true,
+      };
+      console.log(info.data);
+      dispatch("postAuthData", info);
+    },
+  },
 };
 
 export default new Vuex.Store(store);

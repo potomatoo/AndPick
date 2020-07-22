@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1>Signup</h1>
+    <h1>Login</h1>
     <div class="form-group">
       <label for="useremail">이메일</label>
       <input
-        v-model="signupData.useremail"
+        v-model="loginata.useremail"
         class="form-control"
         id="useremail"
         type="text"
@@ -12,17 +12,17 @@
       />
     </div>
     <div class="form-group">
-      <label for="password1">비밀번호</label>
+      <label for="password">비밀번호</label>
       <input
-        v-model="signupData.password1"
+        v-model="loginData.password"
         class="form-control"
-        id="password1"
+        id="password"
         type="password"
         placeholder="비밀번호"
       />
     </div>
     <div>
-      <button @click="signup(signupData)">Signup</button>
+      <button @click="login(loginData)">Login</button>
     </div>
   </div>
 </template>
@@ -32,26 +32,20 @@ import { Vue, Component } from "vue-property-decorator";
 
 import { mapActions } from "vuex";
 
-interface SignupData {
+interface LoginData {
   useremail: string | null;
-  username: string | null;
-  password1: string | null;
-  password2: string | null;
-  usertype: number;
+  password: string | null;
 }
 
 @Component({
   methods: {
-    ...mapActions(["signup"]),
+    ...mapActions(["login"]),
   },
 })
-export default class SignupView extends Vue {
-  signupData: SignupData = {
+export default class LoginView extends Vue {
+  loginData: LoginData = {
     useremail: null,
-    username: null,
-    password1: null,
-    password2: null,
-    usertype: 0,
+    password: null,
   };
 }
 </script>

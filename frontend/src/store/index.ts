@@ -54,7 +54,15 @@ const store: StoreOptions<RootState> = {
         location: SERVER.ROUTES.signup,
         bool: true,
       };
-      console.log(info.data);
+      dispatch("postAuthData", info);
+    },
+
+    login({ dispatch }, loginData) {
+      const info = {
+        data: loginData,
+        location: SERVER.ROUTES.login,
+        bool: true,
+      };
       dispatch("postAuthData", info);
     },
   },

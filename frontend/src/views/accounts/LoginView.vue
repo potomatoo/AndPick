@@ -1,53 +1,58 @@
 <template>
-  <div class="auth-page">
-    <div class="container page">
-      <div class="row">
-        <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">Sign in</h1>
-          <p class="text-xs-center">
-            <router-link to="/register">Need an account?</router-link>
-          </p>
-          <!-- <ul class="error-messages">
-            <li>That email is already taken</li>
-          </ul> -->
-          <form>
-            <fieldset class="form-group">
-              <input
-                class="form-control form-control-lg"
-                type="text"
-                v-model="email"
-                placeholder="Email"
-              />
-            </fieldset>
-            <fieldset class="form-group">
-              <input
-                class="form-control form-control-lg"
-                type="password"
-                v-model="password"
-                placeholder="Password"
-              />
-            </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right">
-              Sign in
-            </button>
-          </form>
-        </div>
-      </div>
+  <div>
+    <h1>Signup</h1>
+    <div class="form-group">
+      <label for="useremail">이메일</label>
+      <input
+        v-model="signupData.useremail"
+        class="form-control"
+        id="useremail"
+        type="text"
+        placeholder="이메일"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password1">비밀번호</label>
+      <input
+        v-model="signupData.password1"
+        class="form-control"
+        id="password1"
+        type="password"
+        placeholder="비밀번호"
+      />
+    </div>
+    <div>
+      <button @click="signup(signupData)">Signup</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
 
-@Component
-export default class LoginView extends Vue {
-  email = "";
-  password = "";
+import { mapActions } from "vuex";
 
-  login() {
-    console.log("login with");
-  }
+interface SignupData {
+  useremail: string | null;
+  username: string | null;
+  password1: string | null;
+  password2: string | null;
+  usertype: number;
+}
+
+@Component({
+  methods: {
+    ...mapActions(["signup"]),
+  },
+})
+export default class SignupView extends Vue {
+  signupData: SignupData = {
+    useremail: null,
+    username: null,
+    password1: null,
+    password2: null,
+    usertype: 0,
+  };
 }
 </script>
 

@@ -1,11 +1,25 @@
 import Vue from "vue";
-import Vuex from "vuex";
+import Vuex, { StoreOptions } from "vuex";
+import feedModule from "./FeedModule.store";
+import mypageModule from "./MypageModue.store";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {},
+export interface RootState {
+  data: string;
+}
+
+const store: StoreOptions<RootState> = {
+  modules: {
+    feedModule,
+    mypageModule
+  },
+  state: {
+    data: "root"
+  },
+  getters: {},
   mutations: {},
-  actions: {},
-  modules: {}
-});
+  actions: {}
+};
+
+export default new Vuex.Store(store);

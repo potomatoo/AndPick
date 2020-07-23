@@ -20,7 +20,7 @@ export interface RootState {
 const store: StoreOptions<RootState> = {
   modules: {
     feedModule,
-    mypageModule: mypageModule
+    mypageModule: mypageModule,
   },
   state: {
     JWT: STORAGE.getItem("jwt-token"),

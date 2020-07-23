@@ -6,10 +6,9 @@
       </router-link>
       <span class="attribution">
         An interactive learning project from
-        <a
-          href="https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp"
-          target="_blank"
-        >SSAFY</a>
+        <a href="https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp" target="_blank"
+          >SSAFY</a
+        >
         .
       </span>
     </div>

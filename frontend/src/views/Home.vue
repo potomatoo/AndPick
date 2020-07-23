@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-app id="inspire">
-      <AppNavbar />
-      <AppSidebar />
-      <AppMain />
+      <app-sidebar />
+      <app-navbar />
+      <app-main />
     </v-app>
-    <AppFooter />
+    <app-footer />
   </div>
 </template>
 

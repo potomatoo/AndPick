@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { mapMutations, mapActions } from "vuex";
+import { mapMutations } from "vuex";
 
 @Component({
   methods: mapMutations("mypageModule", ["toggleSidebar"])

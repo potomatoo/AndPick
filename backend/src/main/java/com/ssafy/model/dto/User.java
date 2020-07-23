@@ -1,62 +1,95 @@
 package com.ssafy.model.dto;
 
-import java.io.Serializable;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * @author multicampus
- *
- */
 @Entity
-@Table(name="USER")
-public class User implements Serializable {
+@Table(name = "USER")
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long user_no;
-	private String user_id;
-	private String user_password;
-	private String user_email;
+	@Column(name = "user_no")
+	private long userNo;
 
-	public long getUser_no() {
-		return user_no;
+	@Column(name = "user_id")
+	private String userId;
+
+	@Column(name = "user_password")
+	private String userPassword;
+
+	@Column(name = "user_name")
+	private String userName;
+
+	@Column(name = "user_type")
+	private int userType;
+
+	public User() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public void setUser_no(long user_no) {
-		this.user_no = user_no;
+	public User(String userId, String userPassword, String userName, int userType) {
+		this.userId = userId;
+		this.userPassword = userPassword;
+		this.userName = userName;
+		this.userType = userType;
 	}
 
-	public String getUser_id() {
-		return user_id;
+	public User(long userNo, String userId, String userPassword, String userName, int userType) {
+		this.userNo = userNo;
+		this.userId = userId;
+		this.userPassword = userPassword;
+		this.userName = userName;
+		this.userType = userType;
 	}
 
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public long getUserNo() {
+		return userNo;
 	}
 
-	public String getUser_password() {
-		return user_password;
+	public void setUserNo(long userNo) {
+		this.userNo = userNo;
 	}
 
-	public void setUser_password(String user_password) {
-		this.user_password = user_password;
+	public String getUserId() {
+		return userId;
 	}
 
-	public String getUser_email() {
-		return user_email;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public String getUserPassword() {
+		return userPassword;
+	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public int getUserType() {
+		return userType;
+	}
+
+	public void setUserType(int userType) {
+		this.userType = userType;
 	}
 
 	@Override
 	public String toString() {
-		return "User [user_no=" + user_no + ", user_id=" + user_id + ", user_password=" + user_password
-				+ ", user_email=" + user_email + "]";
+		return "User [userNo=" + userNo + ", userId=" + userId + ", userPassword=" + userPassword + ", userName="
+				+ userName + ", userType=" + userType + "]";
 	}
+
 }

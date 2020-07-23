@@ -75,6 +75,7 @@ const store: StoreOptions<RootState> = {
         .post(SERVER.URL + SERVER.ROUTES.logout, null, config)
         .then(() => {
           commit("SET_TOKEN", null);
+          commit("isLogedIn", false);
           STORAGE.removeItem("jwt-token");
           router.push("/");
         })

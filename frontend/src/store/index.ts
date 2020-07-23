@@ -43,7 +43,7 @@ const store: StoreOptions<RootState> = {
         .then((res: AxiosResponse<{}>) => {
           commit("SET_TOKEN", res.headers["jwt-token"]);
           commit("isLogedIn", info.bool);
-          router.push({ name: "Home " });
+          router.push("/");
         })
         .catch((err) => console.log(err.response.data));
     },
@@ -76,6 +76,7 @@ const store: StoreOptions<RootState> = {
         .then(() => {
           commit("SET_TOKEN", null);
           STORAGE.removeItem("jwt-token");
+          router.push("/");
         })
         .catch((err) => console.log(err.response.data));
     },

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-app id="inspire">
-      <AppNavbar />
+    <v-app>
       <AppSidebar />
+      <AppNavbar />
       <AppMain />
     </v-app>
     <AppFooter />

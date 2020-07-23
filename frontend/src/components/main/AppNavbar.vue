@@ -7,6 +7,7 @@
       </router-link>
       <router-link :to="{ name: 'Signup' }">Signup</router-link> |
       <router-link :to="{ name: 'Login' }">Login</router-link> |
+      <router-link :to="{ name: 'Logout' }">Logout</router-link> |
     </v-toolbar-title>
   </v-app-bar>
 </template>

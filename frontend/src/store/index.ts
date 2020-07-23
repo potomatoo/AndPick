@@ -65,6 +65,20 @@ const store: StoreOptions<RootState> = {
       };
       dispatch("postAuthData", info);
     },
+    logout({ commit }) {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.state.JWT}`,
+        },
+      };
+      axios
+        .post(SERVER.URL + SERVER.ROUTES.logout, null, config)
+        .then(() => {
+          commit("SET_TOKEN", null);
+          STORAGE.removeItem("jwt-token");
+        })
+        .catch((err) => console.log(err.response.data));
+    },
   },
 };
 

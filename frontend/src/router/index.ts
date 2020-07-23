@@ -4,6 +4,7 @@ import Home from "../views/main/a.vue";
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
+import LogoutView from "@/views/accounts/LogoutView.vue";
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,11 @@ const routes: Array<RouteConfig> = [
     path: "/accounts/login",
     name: "Login",
     component: LoginView,
+  },
+  {
+    path: "/accounts/logout",
+    name: "Logout",
+    component: LogoutView,
   },
 ];
 

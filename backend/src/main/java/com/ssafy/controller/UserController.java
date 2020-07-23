@@ -36,11 +36,11 @@ public class UserController {
 
 		if (user != null) {
 			result.status = true;
-			result.data = "Sign up success";
+			result.message = "Sign up success";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.status = false;
-			result.data = "중복된 이메일 입니다.";
+			result.message = "중복된 이메일 입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.CONFLICT);
 		}
 		return response;

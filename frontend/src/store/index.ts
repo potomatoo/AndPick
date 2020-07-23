@@ -6,8 +6,7 @@ import mypageModule from "./MypageModule.store";
 Vue.use(Vuex);
 
 export interface RootState {
-  data: string,
-
+  data: string;
 }
 
 const store: StoreOptions<RootState> = {
@@ -16,8 +15,7 @@ const store: StoreOptions<RootState> = {
     mypageModule: mypageModule
   },
   state: {
-    data: "root",
-
+    data: "root"
   },
   getters: {},
   mutations: {},

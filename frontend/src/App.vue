@@ -15,5 +15,3 @@ import Home from "@/views/Home.vue";
 })
 export default class App extends Vue {}
 </script>
-
-

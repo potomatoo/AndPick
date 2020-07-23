@@ -2,15 +2,14 @@ import { Module } from "vuex";
 import { RootState } from "./index";
 
 export interface MypageModule {
-  isSidebarActive: boolean,
-
+  isSidebarActive: boolean;
 }
 
 const module: Module<MypageModule, RootState> = {
   namespaced: true,
 
   state: {
-    isSidebarActive: true,
+    isSidebarActive: true
   },
 
   getters: {},
@@ -21,9 +20,7 @@ const module: Module<MypageModule, RootState> = {
     }
   },
 
-  actions: {
-
-  }
+  actions: {}
 };
 
 export default module;

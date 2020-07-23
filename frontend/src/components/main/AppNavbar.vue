@@ -5,6 +5,8 @@
       <router-link :to="{ name: 'Home' }">
         <a class="navbar-brand">Junho</a>
       </router-link>
+      <router-link :to="{ name: 'Signup' }">Signup</router-link> |
+      <router-link :to="{ name: 'Login' }">Login</router-link> |
     </v-toolbar-title>
   </v-app-bar>
 </template>
@@ -14,7 +16,7 @@ import { Vue, Component } from "vue-property-decorator";
 import { mapMutations, mapActions } from "vuex";
 
 @Component({
-  methods: mapMutations("mypageModule", ["toggleSidebar"])
+  methods: mapMutations("mypageModule", ["toggleSidebar"]),
 })
 export default class AppNavbar extends Vue {}
 </script>

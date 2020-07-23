@@ -20,7 +20,7 @@ public class UserPrincipal implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub\
-		//계정이 가진 권한 목록 반환
+		// 계정이 가진 권한 목록 반환
 		List<GrantedAuthority> authorites = new ArrayList<>();
 
 		authorites.add(new SimpleGrantedAuthority("USER"));
@@ -45,32 +45,41 @@ public class UserPrincipal implements UserDetails {
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
-		//계정 만료되어있는지 반환 (true: 만료 안됨)
+		// 계정 만료되어있는지 반환 (true: 만료 안됨)
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
-		//계정 잠겨있는지 반환 (true: 잠기지 않음 )
+		// 계정 잠겨있는지 반환 (true: 잠기지 않음 )
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
-		//계정의 비밀번호 만료상태 반환 (true: 만료 안됨)
+		// 계정의 비밀번호 만료상태 반환 (true: 만료 안됨)
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		//계정이 활성화 되어있는지 반환 (true: 활성화 되어있음)
+		// 계정이 활성화 되어있는지 반환 (true: 활성화 되어있음)
 		return true;
 	}
-	
+
 	public long getUserNo() {
 		return this.user.getUserNo();
 	}
+
+	public String getUserName() {
+		return this.user.getUserName();
+	}
+
+	public int getUserType() {
+		return this.user.getUserType();
+	}
+
 }

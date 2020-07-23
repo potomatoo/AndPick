@@ -64,5 +64,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()));
 
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
+		// @formatter:off
+		response.getWriter().write(
+				"{"
+				+ "\"status\": true,"
+				+ "\"message\": \"login success\","
+				+ "\"data\": {"
+					+ "\"user_no\": \""+principal.getUserNo()+"\","
+					+ "\"user_id\": \""+principal.getUsername()+"\","
+					+ "\"user_name\": \""+principal.getUserName()+"\","
+					+ "\"user_type\":"+principal.getUserType()
+				+ "}"
+				+ "}"
+				);
+		// @formatter:on
+		response.getWriter().flush();
+		response.getWriter().close();
 	}
+	
+	
 }

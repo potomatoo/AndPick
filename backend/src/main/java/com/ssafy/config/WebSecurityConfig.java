@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -47,24 +48,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http.formLogin().disable();
-		http.csrf().disable()//rest api이므로 csrf보안이 필요없음
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//jwt 토큰 사용으로 세션이 필요 없음
-			.and()
-				.addFilterAt(customfilter(),UsernamePasswordAuthenticationFilter.class)
+		http.csrf().disable()// rest api이므로 csrf보안이 필요없음
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// jwt 토큰 사용으로 세션이 필요 없음
+				.and()
+				.addFilterAt(customfilter(), UsernamePasswordAuthenticationFilter.class)
 				.addFilter(new JwtAuthorizationFilter(authenticationManager(), this.userRepository))
 				.authorizeRequests()
-					.antMatchers("/api/public/*").permitAll()
-					.anyRequest().authenticated();
-		
+				.antMatchers("/swagger-ui.html").permitAll()
+				.antMatchers("/swagger-resources/**").permitAll()
+				.antMatchers("/v2/api-docs").permitAll()
+				.antMatchers("/webjars/**").permitAll()
+				.antMatchers("/swagger/**").permitAll()
+				.antMatchers("/api/public/**").permitAll()
+				.anyRequest().authenticated();
+
 		// 로그아웃 처리
 		http.logout().invalidateHttpSession(true).clearAuthentication(true)
-				.logoutRequestMatcher(new AntPathRequestMatcher("/api/user/logout")).logoutSuccessUrl("/index").permitAll();
+				.logoutRequestMatcher(new AntPathRequestMatcher("/api/user/logout")).logoutSuccessUrl("/index")
+				.permitAll();
 		// @formatter:on
 	}
 
 	protected JwtAuthenticationFilter customfilter() {
 		JwtAuthenticationFilter authfilter = new JwtAuthenticationFilter();
-		
+
 		try {
 			authfilter.setFilterProcessesUrl("/api/public/login");
 			authfilter.setAuthenticationManager(this.authenticationManagerBean());
@@ -73,11 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		
+
 		return authfilter;
 	}
-	
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

@@ -58,6 +58,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
 
 		<!-- JWT 토큰 관련 https://mvnrepository.com/artifact/com.auth0/java-jwt -->
 		<dependency>

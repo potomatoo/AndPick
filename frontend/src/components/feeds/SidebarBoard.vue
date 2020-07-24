@@ -19,11 +19,7 @@
           </v-list-item-content>
         </template>
 
-        <v-list-item
-          v-for="subItem in item.items"
-          :key="subItem.title"
-          @click="click"
-        >
+        <v-list-item v-for="subItem in item.items" :key="subItem.title" @click="click">
           <v-list-item-content>
             <v-list-item-title v-text="subItem.title"></v-list-item-title>
           </v-list-item-content>
@@ -53,7 +49,7 @@ export default class SidebarMypage extends Vue {
     {
       title: "Samsung",
       icon: "mdi-alpha-s-box",
-      active: true,
+      active: false,
       items: [{ title: "list item" }, { title: "hi" }]
     },
     {
@@ -75,3 +71,17 @@ export default class SidebarMypage extends Vue {
   }
 }
 </script>
+
+<style scoped>
+a.router-link-exact-active {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
+
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

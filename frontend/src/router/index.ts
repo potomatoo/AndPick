@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/main/a.vue";
+import MypageMain from "@/views/pages/MypageMain.vue";
+import Home from "@/views/main/a.vue"
 
 Vue.use(VueRouter);
 
@@ -8,7 +9,13 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: Home,
+  },
+
+  {
+    path: "/mypage",
+    name: "MypageMain",
+    component: MypageMain,
   }
 ];
 

@@ -1,0 +1,42 @@
+{
+  "feedList": [
+    {
+      "title": "Naver",
+      "icon": "mdi-alpha-n-box",
+      "active": false,
+      "items": [{ "title": "list item" }, { "title": "hi" }]
+    },
+    {
+      "title": "Google",
+      "icon": "mdi-alpha-g-box",
+      "active": false,
+      "items": [{ "title": "list item" }, { "title": "hi" }]
+    },
+    {
+      "title": "Tesla",
+      "icon": "mdi-alpha-t-box",
+      "active": false,
+      "items": [{ "title": "list item" }, { "title": "hi" }]
+    }
+  ],
+  "boardList": [
+    {
+      "title": "Samsung",
+      "icon": "mdi-alpha-s-box",
+      "active": false,
+      "items": [{ "title": "list item" }, { "title": "hi" }]
+    },
+    {
+      "title": "Nasa",
+      "icon": "mdi-alpha-n-box",
+      "active": false,
+      "items": [{ "title": "list item" }, { "title": "hi" }]
+    },
+    {
+      "title": "Tesla",
+      "icon": "mdi-alpha-t-box",
+      "active": false,
+      "items": [{ "title": "list item" }, { "title": "hi" }]
+    }
+  ]
+}

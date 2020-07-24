@@ -3,7 +3,6 @@ package com.ssafy.filter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.config.JwtProperties;
 import com.ssafy.model.dto.LoginRequest;
 import com.ssafy.security.UserPrincipal;
@@ -27,7 +26,9 @@ import com.ssafy.security.UserPrincipal;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	@Autowired
 	private AuthenticationManager authenticationManager;
-
+	@Autowired
+	RedisTemplate<String, Object> redisTemplate;
+	
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
@@ -62,8 +63,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String token = JWT.create().withSubject(Long.toString(principal.getUserNo()))
 				.withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()));
-
+		
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
+
 		// @formatter:off
 		response.getWriter().write(
 				"{"

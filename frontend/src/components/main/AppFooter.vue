@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <v-footer app>
     <div class="container">
       <router-link :to="{ name: 'Home' }">
         <a class="logo-font">Junho</a>
@@ -12,7 +12,7 @@
         .
       </span>
     </div>
-  </footer>
+  </v-footer>
 </template>
 
 <style scoped>

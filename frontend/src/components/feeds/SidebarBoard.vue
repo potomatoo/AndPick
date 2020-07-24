@@ -86,3 +86,17 @@ export default class SedebarBoard extends Vue {
   }
 }
 </script>
+
+<style scoped>
+a.router-link-exact-active {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
+
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

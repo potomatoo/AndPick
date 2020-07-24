@@ -15,6 +15,11 @@ public class UserServiceImpl implements UserService {
 	public User Signup(User model) {
 		// TODO Auto-generated method stub
 		System.out.println("Service");
+		
+		if(model.getUserId()==null||model.getUserName()==null) {
+			return null;
+		}
+		
 		if (userRepository.findByUserId(model.getUserId()) != null) {
 			return null;
 		}

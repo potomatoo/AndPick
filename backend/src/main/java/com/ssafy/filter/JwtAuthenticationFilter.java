@@ -25,8 +25,6 @@ import com.ssafy.security.UserPrincipal;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	@Autowired
-	private AuthenticationManager authenticationManager;
-	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 	
 	@Override
@@ -50,7 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 				loginreq.getUsername(), loginreq.getPassword(), new ArrayList<>());
 
-		return super.attemptAuthentication(request, response);
+		return this.getAuthenticationManager().authenticate(authenticationToken);
 	}
 
 	@Override

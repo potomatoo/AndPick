@@ -73,4 +73,17 @@ public class UserPrincipal implements UserDetails {
 	public long getUserNo() {
 		return this.user.getUserNo();
 	}
+	
+	public String getUserName() {
+		return this.user.getUserName();
+	}
+	
+	public int getUserType() {
+		return this.user.getUserType();
+	}
+	
+	public User getUser() {
+		return this.user;
+	}
+	
 }

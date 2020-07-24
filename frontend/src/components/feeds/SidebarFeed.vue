@@ -11,9 +11,6 @@
         no-action
       >
         <template v-slot:activator>
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title v-text="item.title"></v-list-item-title>
           </v-list-item-content>
@@ -49,7 +46,7 @@ export default class SidebarMypage extends Vue {
     {
       title: "Naver",
       icon: "mdi-alpha-n-box",
-      active: true,
+      active: false,
       items: [{ title: "list item" }, { title: "hi" }]
     },
     {
@@ -71,3 +68,18 @@ export default class SidebarMypage extends Vue {
   }
 }
 </script>
+
+<style scoped>
+a.router-link-exact-active {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
+
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
+

@@ -49,7 +49,7 @@ export default class SidebarMypage extends Vue {
     {
       title: "Samsung",
       icon: "mdi-alpha-s-box",
-      active: true,
+      active: false,
       items: [{ title: "list item" }, { title: "hi" }]
     },
     {
@@ -71,3 +71,17 @@ export default class SidebarMypage extends Vue {
   }
 }
 </script>
+
+<style scoped>
+a.router-link-exact-active {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
+
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

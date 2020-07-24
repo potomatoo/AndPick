@@ -12,7 +12,7 @@ export interface RootState {
 const store: StoreOptions<RootState> = {
   modules: {
     feedModule,
-    mypageModule: mypageModule
+    mypageModule
   },
   state: {
     data: "root"

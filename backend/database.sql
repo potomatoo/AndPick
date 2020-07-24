@@ -4,9 +4,10 @@ use SSAFYDB;
 
 create table `USER`(
 	`user_no` bigint auto_increment,
-	`user_id` char(20),
-    `user_password` char(20) NOT NULL,
-    `user_email` varchar(50) NOT NULL,
+	`user_id` varchar(50) NOT NULL,
+    `user_password` char(80) NOT NULL,
+    `user_name` char(20) NOT NULL,
+    `user_type` int,
 	PRIMARY KEY (`user_no`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -91,10 +92,10 @@ create table `BOARD` (
 
 create table `news` (
 	`news_id` bigint auto_increment,
-    `title` varchar(50),
-    `link` varchar(200),
-    `date` timestamp,
-    `description` varchar(200),
+    `news_title` varchar(50),
+    `new_link` varchar(200),
+    `new_date` timestamp,
+    `new_description` varchar(200),
     `board_id` bigint,
     PRIMARY KEY (`news_id`),
     FOREIGN KEY (`board_id`) REFERENCES BOARD (`board_id`)

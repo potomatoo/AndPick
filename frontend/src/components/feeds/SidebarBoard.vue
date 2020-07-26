@@ -31,24 +31,26 @@
 
       <v-dialog v-model="modalActive" max-width="500px">
         <v-card>
-          <v-card-text>
-            <v-text-field
-              v-model="newBoardName"
-              label="Board Name"
-              autofocus
-              clearable
-              :rules="rules"
-              @keyup.enter="addBoards"
-            ></v-text-field>
+          <v-form ref="form">
+            <v-card-text>
+              <v-text-field
+                v-model="newBoardName"
+                label="Board Name"
+                autofocus
+                clearable
+                :rules="rules"
+                @keyup.enter="addBoards"
+              ></v-text-field>
 
-            <small class="grey--text">* Create New Board</small>
-          </v-card-text>
+              <small class="grey--text">* Create New Board</small>
+            </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addBoards">Create</v-btn>
-            <v-btn text color="error" @click="closeModal">Cancle</v-btn>
-          </v-card-actions>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="addBoards">Create</v-btn>
+              <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-list>
@@ -56,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 const feedModule = namespace("feedModule");
@@ -71,6 +73,13 @@ export default class SedebarBoard extends Vue {
   modalActive = false;
 
   rules = [(value: any) => !!value || "this filed is required."];
+
+  @Watch("modalActive")
+  onModalClose(isActive: boolean) {
+    if (!isActive) {
+      (this.$refs.form as HTMLFormElement).reset();
+    }
+  }
 
   closeModal() {
     this.newBoardName = null;

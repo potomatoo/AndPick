@@ -8,6 +8,8 @@ import axios, { AxiosResponse } from "axios";
 import router from "@/router";
 import SERVER from "@/api/spr";
 
+import qs from "qs";
+
 const STORAGE = window.sessionStorage;
 
 Vue.use(Vuex);
@@ -39,22 +41,34 @@ const store: StoreOptions<RootState> = {
   actions: {
     postAuthData({ commit }, info) {
       axios
-        .post(SERVER.URL + info.location, info.data)
-        .then((res: AxiosResponse<{}>) => {
-          commit("SET_TOKEN", res.headers["jwt-token"]);
-          commit("isLogedIn", info.bool);
-          router.push("/");
+        .post(SERVER.URL + info.location, qs.stringify(info.data), {
+          withCredentials: true,
         })
-        .catch((err) => console.log(err.response.data));
+
+        .then((res) => {
+          console.log(res, "로그인성공");
+          // console.log(res.headers.common["Authorization"]);
+
+          // commit("SET_TOKEN", res.headers["jwt-token"]);
+          commit("isLogedIn", info.bool);
+          // router.push("/");
+        })
+        .catch((err) => console.log("err", err.response));
     },
 
-    signup({ dispatch }, signupData) {
-      const info = {
-        data: signupData,
-        location: SERVER.ROUTES.signup,
-        bool: true,
-      };
-      dispatch("postAuthData", info);
+    signup(context, signupData) {
+      // const info = {
+      //   data: signupData,
+      //   location: SERVER.ROUTES.signup,
+      //   bool: true,
+      // };
+      // dispatch("postAuthData", info);
+      axios
+        .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData))
+        .then((res) => {
+          console.log("성공", res);
+        })
+        .catch((err) => console.error("err", err.response));
     },
 
     login({ dispatch }, loginData) {
@@ -79,7 +93,7 @@ const store: StoreOptions<RootState> = {
           STORAGE.removeItem("jwt-token");
           router.push("/");
         })
-        .catch((err) => console.log(err.response.data));
+        .catch((err) => console.log(err.response));
     },
   },
 };

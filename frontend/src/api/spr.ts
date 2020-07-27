@@ -1,8 +1,8 @@
 export default {
-  URL: "http://localhost:8000",
+  URL: "http://i3b107.p.ssafy.io:8080",
   ROUTES: {
-    signup: "/signup",
-    login: "/login",
+    signup: "/api/public/signup",
+    login: "/api/public/login",
     logout: "/logout",
   },
 };

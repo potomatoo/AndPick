@@ -35,8 +35,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		LoginRequest loginreq = new LoginRequest();
 
-		String id = request.getParameter("user_id");
-		String password = request.getParameter("user_password");
+		String id = request.getParameter("userId");
+		String password = request.getParameter("userPassword");
 
 		if (id == null)
 			id = "";
@@ -67,10 +67,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		this.redisTemplate.opsForValue().set(JwtProperties.TOKEN_PREFIX + token, principal.getUser());
 		// @formatter:off
 		response.getWriter()
-				.write("{" + "\"status\": true," + "\"message\": \"login success\"," + "\"data\": {" + "\"user_no\": \""
-						+ principal.getUserNo() + "\"," + "\"user_id\": \"" + principal.getUsername() + "\","
-						+ "\"user_name\": \"" + principal.getUserName() + "\"," + "\"user_type\":"
-						+ principal.getUserType() + "}" + "}");
+				.write("{" 
+						+ "\"status\": true," 
+						+ "\"message\": \"login success\"," 
+						+ "\"data\": {" + "\"userNo\": \""+ principal.getUserNo() + "\"," 
+										+ "\"userId\": \"" + principal.getUsername() + "\","
+										+ "\"userName\": \"" + principal.getUserName() + "\"," 
+										+ "\"userType\":"+ principal.getUserType() +","
+										+ "\""+JwtProperties.HEADER_STRING+"\": \""+JwtProperties.TOKEN_PREFIX + token+"\""
+									+ "}" 
+					+ "}");
 		// @formatter:on
 		response.getWriter().flush();
 		response.getWriter().close();

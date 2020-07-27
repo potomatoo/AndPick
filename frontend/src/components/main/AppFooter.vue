@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <v-footer app>
     <div class="container">
       <router-link :to="{ name: 'Home' }">
         <a class="logo-font">Junho</a>
@@ -12,8 +12,15 @@
         .
       </span>
     </div>
-  </footer>
+  </v-footer>
 </template>
+
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+
+@Component
+export default class AppFooter extends Vue {}
+</script>
 
 <style scoped>
 footer {

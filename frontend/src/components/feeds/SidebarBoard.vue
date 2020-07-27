@@ -4,74 +4,119 @@
     <v-list>
       <v-subheader>Board</v-subheader>
       <v-list-group
-        v-for="item in boardList"
-        :key="item.title"
-        v-model="item.active"
-        :prepend-icon="item.action"
+        v-for="board in boardList"
+        :key="board.title"
+        v-model="board.active"
+        :prepend-icon="board.action"
         no-action
       >
         <template v-slot:activator>
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
+            <v-list-item-title v-text="board.title"></v-list-item-title>
           </v-list-item-content>
         </template>
 
-        <v-list-item
-          v-for="subItem in item.items"
-          :key="subItem.title"
-          @click="click"
-        >
+        <v-list-item v-for="subItem in board.items" :key="subItem.title">
           <v-list-item-content>
             <v-list-item-title v-text="subItem.title"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list-group>
+
+      <v-list-item @click="modalActive = !modalActive">
+        <v-list-item-content class="text-center">
+          <v-list-item-title>Create New Board</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-dialog v-model="modalActive" max-width="500px">
+        <v-card>
+          <v-form ref="form" onsubmit="return false;">
+            <v-card-text>
+              <v-text-field
+                v-model="newBoardName"
+                label="Board Name"
+                autofocus
+                clearable
+                :rules="rules"
+                @keyup.enter="addBoards"
+              ></v-text-field>
+
+              <small class="grey--text">* Create New Board</small>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="addBoards">Create</v-btn>
+              <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-dialog>
     </v-list>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { namespace } from "vuex-class";
 
-interface BoardItem {
-  title: string;
-}
+import { SidebarList } from "../../store/Feed.interface";
 
-interface BoardList {
-  title: string;
-  icon: string;
-  active: boolean;
-  items: BoardItem[];
-}
+const feedModule = namespace("feedModule");
 
 @Component
-export default class SidebarMypage extends Vue {
-  boardList: BoardList[] = [
-    {
-      title: "Samsung",
-      icon: "mdi-alpha-s-box",
-      active: true,
-      items: [{ title: "list item" }, { title: "hi" }]
-    },
-    {
-      title: "Nasa",
-      icon: "mdi-alpha-n-box",
-      active: false,
-      items: [{ title: "list item" }, { title: "hi" }]
-    },
-    {
-      title: "Tesla",
-      icon: "mdi-alpha-t-box",
-      active: false,
-      items: [{ title: "list item" }, { title: "hi" }]
-    }
+export default class SedebarBoard extends Vue {
+  @feedModule.State boardList!: [];
+  @feedModule.Mutation addBoard: any;
+
+  newBoardName = null;
+
+  modalActive = false;
+
+  rules = [
+    (value: any) => !!value || "this filed is required.",
+    (value: string) =>
+      !this.checkDuplication(value) || "동일한 보드가 존재합니다."
   ];
 
-  click() {
-    console.log("click");
+  @Watch("modalActive")
+  onModalClose(isActive: boolean) {
+    if (isActive && this.$refs.form) {
+      (this.$refs.form as HTMLFormElement).reset();
+    }
+  }
+
+  checkDuplication(name: string | null) {
+    if (this.boardList.length) {
+      return this.boardList.some((feed: SidebarList) => feed.title === name);
+    }
+  }
+
+  closeModal() {
+    this.newBoardName = null;
+    this.modalActive = false;
+  }
+
+  addBoards() {
+    if (this.newBoardName && !this.checkDuplication(this.newBoardName)) {
+      this.addBoard({ title: this.newBoardName });
+      this.closeModal();
+    }
   }
 }
 </script>
+
+<style scoped>
+a.router-link-exact-active {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
+
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

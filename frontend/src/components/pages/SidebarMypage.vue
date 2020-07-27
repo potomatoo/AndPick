@@ -2,13 +2,16 @@
   <div>
     <v-divider></v-divider>
     <v-list>
-      <v-subheader>Mypage</v-subheader>
-      <v-list-item v-for="(item, i) in mypageList" :key="i" @click="click">
-        <v-list-item-icon>
-          <v-icon v-text="item.icon"></v-icon>
-        </v-list-item-icon>
+      <v-subheader>
+        Mypage
+        <create-folder />
+      </v-subheader>
+
+      <v-list-item v-for="(item, i) in MyFolderList" :key="i" @click="click">
         <v-list-item-content>
-          <v-list-item-title v-text="item.title"></v-list-item-title>
+          <router-link :to="{ name: 'MypageMain' }" class="router-link">
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </router-link>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -17,21 +20,26 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import CreateFolder from "@/components/pages/CreateFolder.vue";
 
-interface MypageList {
-  title: string;
-  icon: string;
-}
+import { mapState } from "vuex";
 
-@Component
+@Component({
+  components: {
+    CreateFolder
+  },
+  computed: mapState("mypageModule", ["MyFolderList"])
+})
 export default class SidebarMypage extends Vue {
-  mypageList: MypageList[] = [
-    { title: "My list", icon: "mdi-alpha-l-box" },
-    { title: "New Post", icon: "mdi-alpha-n-box" },
-    { title: "logout", icon: "mdi-alpha-l-box" }
-  ];
   click() {
     console.log("click");
   }
 }
 </script>
+
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

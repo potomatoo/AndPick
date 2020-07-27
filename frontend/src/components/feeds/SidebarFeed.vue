@@ -31,24 +31,26 @@
 
       <v-dialog v-model="modalActive" max-width="500px">
         <v-card>
-          <v-card-text>
-            <v-text-field
-              v-model="newFeedName"
-              label="Feed Name"
-              autofocus
-              clearable
-              :rules="rules"
-              @keyup.enter="addFeeds"
-            ></v-text-field>
+          <v-form ref="form" onsubmit="return false;">
+            <v-card-text>
+              <v-text-field
+                v-model="newFeedName"
+                label="Feed Name"
+                autofocus
+                clearable
+                :rules="rules"
+                @keypress.enter="addFeeds"
+              ></v-text-field>
 
-            <small class="grey--text">* Create New Feed</small>
-          </v-card-text>
+              <small class="grey--text">* Create New Feed</small>
+            </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addFeeds">Create</v-btn>
-            <v-btn text color="error" @click="closeModal">Cancle</v-btn>
-          </v-card-actions>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="addFeeds">Create</v-btn>
+              <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-list>
@@ -56,18 +58,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
+// import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
+import { SidebarList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
-@Component({
-  components: {
-    CreateFeedModal
-  }
-})
+@Component
 export default class SidebarFeed extends Vue {
   @feedModule.State feedList!: [];
   @feedModule.Mutation addFeed: any;
@@ -76,7 +75,24 @@ export default class SidebarFeed extends Vue {
 
   modalActive = false;
 
-  rules = [(value: any) => !!value || "This field is required."];
+  rules = [
+    (value: any) => !!value || "This field is required.",
+    (value: string) =>
+      !this.checkDuplication(value) || "동일한 피드가 존재합니다."
+  ];
+
+  @Watch("modalActive")
+  onModalClose(isActive: boolean) {
+    if (isActive && this.$refs.form) {
+      (this.$refs.form as HTMLFormElement).reset();
+    }
+  }
+
+  checkDuplication(name: string | null) {
+    if (this.feedList.length) {
+      return this.feedList.some((feed: SidebarList) => feed.title === name);
+    }
+  }
 
   closeModal() {
     this.newFeedName = null;
@@ -84,9 +100,8 @@ export default class SidebarFeed extends Vue {
   }
 
   addFeeds() {
-    if (this.newFeedName) {
+    if (this.newFeedName && !this.checkDuplication(this.newFeedName)) {
       this.addFeed({ title: this.newFeedName });
-      this.newFeedName = null;
       this.closeModal();
     }
   }
@@ -94,16 +109,8 @@ export default class SidebarFeed extends Vue {
 </script>
 
 <style scoped>
-a.router-link-exact-active {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
-
-<style scoped>
 .router-link {
   text-decoration: none;
   color: inherit;
 }
 </style>
-

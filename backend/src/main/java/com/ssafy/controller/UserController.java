@@ -34,9 +34,9 @@ public class UserController {
 	RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping("/api/public/signup")
-	public Object signup(@RequestParam(value = "user_id") String userId,
-			@RequestParam(value = "user_password") String userPassword,
-			@RequestParam(value = "user_name") String userName, @RequestParam(value = "user_type") int userType) {
+	public Object signup(@RequestParam(value = "userId") String userId,
+			@RequestParam(value = "userPassword") String userPassword,
+			@RequestParam(value = "userName") String userName, @RequestParam(value = "userType") int userType) {
 
 		User user = userService.Signup(new User(userId, encoder.encode(userPassword), userName, userType));
 
@@ -57,7 +57,7 @@ public class UserController {
 	}
 
 	@PostMapping("/api/public/signup/checkid")
-	public Object checkId(@RequestParam(value = "user_id") String userId) {
+	public Object checkId(@RequestParam(value = "userId") String userId) {
 		User user = userService.findByUser_id(userId);
 
 		ResponseEntity response = null;
@@ -99,7 +99,7 @@ public class UserController {
 
 	@PutMapping("/api/user/update")
 	public Object updateUser(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam(value = "user_name") String userName) {
+			@RequestParam(value = "userName") String userName) {
 
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();

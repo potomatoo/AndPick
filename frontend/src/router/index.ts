@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/main/a.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
+import Later from "@/views/feeds/ReadLaterList.vue";
 import MypageMain from "@/views/pages/MypageMain.vue";
 
 Vue.use(VueRouter);
@@ -17,7 +18,11 @@ const routes: Array<RouteConfig> = [
     name: "Today",
     component: Today
   },
-
+  {
+    path: "/later",
+    name: "Later",
+    component: Later
+  },
   {
     path: "/mypage",
     name: "MypageMain",

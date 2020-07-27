@@ -3,7 +3,7 @@
     <v-divider></v-divider>
     <v-list>
       <router-link class="router-link" :to="{ name: 'Today' }">
-        <v-list-item @click="click">
+        <v-list-item>
           <v-list-item-icon>
             <v-icon>mdi-update</v-icon>
           </v-list-item-icon>
@@ -13,14 +13,16 @@
         </v-list-item>
       </router-link>
 
-      <v-list-item @click="click">
-        <v-list-item-icon>
-          <v-icon>mdi-bookmark-outline</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Read Later</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <router-link class="router-link" :to="{ name: 'Later' }">
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-bookmark-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Read Later</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </router-link>
     </v-list>
   </div>
 </template>
@@ -29,11 +31,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class SidebarTop extends Vue {
-  click() {
-    console.log("click");
-  }
-}
+export default class SidebarTop extends Vue {}
 </script>
 <style scoped>
 .router-link {

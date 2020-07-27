@@ -3,6 +3,7 @@ package com.ssafy.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserPrincipalDetailService userPrincipalDetailsService;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+	
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -67,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		try {
 			authfilter.setFilterProcessesUrl("/api/public/login");
 			authfilter.setAuthenticationManager(this.authenticationManagerBean());
+			authfilter.setRedisTemplate(this.redisTemplate);
 			authfilter.setUsernameParameter("user_id");
 			authfilter.setPasswordParameter("user_password");
 		} catch (Exception e) {

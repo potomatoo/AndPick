@@ -1,5 +1,6 @@
 package com.ssafy.model.service;
 
+import org.mapstruct.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +13,20 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public User Signup(User model) {
+	public User Signup(User user) {
 		// TODO Auto-generated method stub
-		System.out.println("Service");
-		
-		if(model.getUserId()==null||model.getUserName()==null) {
+		if (user.getUserId() == null || user.getUserName() == null) {
+			return null;
+		}
+
+		if (userRepository.findByUserId(user.getUserId()) != null) {
 			return null;
 		}
 		
-		if (userRepository.findByUserId(model.getUserId()) != null) {
-			return null;
-		}
-		return userRepository.save(model);
+		
+		User result = userRepository.save(user);
+		result.setUserPassword(null);
+		return result;
 	}
 
 	@Override
@@ -32,4 +35,21 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByUserId(userId);
 	}
 
+	@Override
+	public boolean deleteUser(User user) {
+		try {
+			userRepository.delete(user);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public User UpdateUser(User user) {
+		User result = userRepository.save(user);
+		result.setUserPassword(null);
+		return result;
+	}
 }

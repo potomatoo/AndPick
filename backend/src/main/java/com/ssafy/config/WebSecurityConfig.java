@@ -89,8 +89,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			authfilter.setFilterProcessesUrl("/api/public/login");
 			authfilter.setAuthenticationManager(this.authenticationManagerBean());
 			authfilter.setRedisTemplate(this.redisTemplate);
-			authfilter.setUsernameParameter("user_id");
-			authfilter.setPasswordParameter("user_password");
+			authfilter.setUsernameParameter("userId");
+			authfilter.setPasswordParameter("userPassword");
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

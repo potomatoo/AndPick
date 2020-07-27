@@ -9,9 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -24,9 +22,12 @@ import com.ssafy.model.dto.LoginRequest;
 import com.ssafy.security.UserPrincipal;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
-	
+
+	public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
+
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
@@ -61,26 +62,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String token = JWT.create().withSubject(Long.toString(principal.getUserNo()))
 				.withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()));
-		
-		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
 
+		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
+		this.redisTemplate.opsForValue().set(JwtProperties.TOKEN_PREFIX + token, principal.getUser());
 		// @formatter:off
-		response.getWriter().write(
-				"{"
-				+ "\"status\": true,"
-				+ "\"message\": \"login success\","
-				+ "\"data\": {"
-					+ "\"user_no\": \""+principal.getUserNo()+"\","
-					+ "\"user_id\": \""+principal.getUsername()+"\","
-					+ "\"user_name\": \""+principal.getUserName()+"\","
-					+ "\"user_type\":"+principal.getUserType()
-				+ "}"
-				+ "}"
-				);
+		response.getWriter()
+				.write("{" + "\"status\": true," + "\"message\": \"login success\"," + "\"data\": {" + "\"user_no\": \""
+						+ principal.getUserNo() + "\"," + "\"user_id\": \"" + principal.getUsername() + "\","
+						+ "\"user_name\": \"" + principal.getUserName() + "\"," + "\"user_type\":"
+						+ principal.getUserType() + "}" + "}");
 		// @formatter:on
 		response.getWriter().flush();
 		response.getWriter().close();
 	}
-	
-	
+
 }

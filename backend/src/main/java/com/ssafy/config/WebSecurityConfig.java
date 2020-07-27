@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ssafy.filter.JwtAuthenticationFilter;
 import com.ssafy.filter.JwtAuthorizationFilter;
@@ -47,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin().disable();
 		http.csrf().disable()// rest api이므로 csrf보안이 필요없음
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// jwt 토큰 사용으로 세션이 필요 없음
-				.and().addFilterAt(customfilter(), UsernamePasswordAuthenticationFilter.class)
+				.and().cors().and().addFilterAt(customfilter(), UsernamePasswordAuthenticationFilter.class)
 				.addFilter(new JwtAuthorizationFilter(authenticationManager(), this.userRepository)).authorizeRequests()
 				.antMatchers("/swagger-ui.html").permitAll().antMatchers("/swagger-resources/**").permitAll()
 				.antMatchers("/v2/api-docs").permitAll().antMatchers("/webjars/**").permitAll()
@@ -59,6 +62,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutRequestMatcher(new AntPathRequestMatcher("/api/user/logout")).logoutSuccessUrl("/index")
 				.permitAll();
 		// @formatter:on
+	}
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+
+		configuration.addAllowedOrigin("*");
+		configuration.addAllowedHeader("*");
+		configuration.addAllowedMethod("*");
+		configuration.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 	protected JwtAuthenticationFilter customfilter() {

@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import MypageMain from "@/views/pages/MypageMain.vue";
 import Home from "@/views/main/a.vue"
+import EditArticle from "@/views/pages/EditArticle.vue"
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,12 @@ const routes: Array<RouteConfig> = [
     path: "/mypage",
     name: "MypageMain",
     component: MypageMain,
+  },
+
+  {
+    path: "/editarticle",
+    name: "EditArticle",
+    component: EditArticle,
   }
 ];
 

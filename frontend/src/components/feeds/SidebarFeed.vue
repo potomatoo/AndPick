@@ -59,15 +59,9 @@
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
-
 const feedModule = namespace("feedModule");
 
-@Component({
-  components: {
-    CreateFeedModal
-  }
-})
+@Component({})
 export default class SidebarFeed extends Vue {
   @feedModule.State feedList!: [];
   @feedModule.Mutation addFeed: any;

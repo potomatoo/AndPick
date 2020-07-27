@@ -1,14 +1,13 @@
 <template>
   <div>
+    <router-link :to="{ name: 'EditArticle' }" class="router-link">
+      <v-btn class="ml-5" outlined large fab color="#5cb85c" id="editbtn">
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+    </router-link>
+
     <v-row>
-      <v-col
-        cols="12"
-        sm="6"
-        md="4"
-        v-for="article in MyArticleList"
-        :key="article.title"
-        click="click"
-      >
+      <v-col cols="12" sm="6" md="4" v-for="(article, i) in MyArticleList" :key="i" click="click">
         <v-hover v-slot:default="{ hover }" open-delay="200">
           <v-card
             id="cursor_test"
@@ -42,5 +41,16 @@ export default class FolderMain extends Vue {
 <style scoped>
 #cursor_test {
   cursor: pointer;
+}
+
+.router-link {
+  text-decoration: none;
+  color: inherit;
+  border: 0;
+  outline: none !important;
+}
+
+#editbtn {
+  outline: none !important;
 }
 </style>

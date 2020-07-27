@@ -33,5 +33,3 @@ export default class AppSidebar extends Vue {
   }
 }
 </script>
-
-

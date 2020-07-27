@@ -31,7 +31,7 @@
 
       <v-dialog v-model="modalActive" max-width="500px">
         <v-card>
-          <v-form ref="form">
+          <v-form ref="form" onsubmit="return false;">
             <v-card-text>
               <v-text-field
                 v-model="newBoardName"
@@ -61,6 +61,8 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
+import { SidebarList } from "../../store/Feed.interface";
+
 const feedModule = namespace("feedModule");
 
 @Component
@@ -72,12 +74,22 @@ export default class SedebarBoard extends Vue {
 
   modalActive = false;
 
-  rules = [(value: any) => !!value || "this filed is required."];
+  rules = [
+    (value: any) => !!value || "this filed is required.",
+    (value: string) =>
+      !this.checkDuplication(value) || "동일한 보드가 존재합니다."
+  ];
 
   @Watch("modalActive")
   onModalClose(isActive: boolean) {
-    if (!isActive) {
+    if (isActive && this.$refs.form) {
       (this.$refs.form as HTMLFormElement).reset();
+    }
+  }
+
+  checkDuplication(name: string | null) {
+    if (this.boardList.length) {
+      return this.boardList.some((feed: SidebarList) => feed.title === name);
     }
   }
 
@@ -87,9 +99,8 @@ export default class SedebarBoard extends Vue {
   }
 
   addBoards() {
-    if (this.newBoardName) {
+    if (this.newBoardName && !this.checkDuplication(this.newBoardName)) {
       this.addBoard({ title: this.newBoardName });
-      this.newBoardName = null;
       this.closeModal();
     }
   }

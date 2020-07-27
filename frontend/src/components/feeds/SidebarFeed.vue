@@ -31,7 +31,7 @@
 
       <v-dialog v-model="modalActive" max-width="500px">
         <v-card>
-          <v-form ref="form">
+          <v-form ref="form" onsubmit="return false;">
             <v-card-text>
               <v-text-field
                 v-model="newFeedName"
@@ -39,7 +39,7 @@
                 autofocus
                 clearable
                 :rules="rules"
-                @keyup.enter="addFeeds"
+                @keypress.enter="addFeeds"
               ></v-text-field>
 
               <small class="grey--text">* Create New Feed</small>
@@ -61,15 +61,12 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
+// import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
+import { SidebarList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
-@Component({
-  components: {
-    CreateFeedModal
-  }
-})
+@Component
 export default class SidebarFeed extends Vue {
   @feedModule.State feedList!: [];
   @feedModule.Mutation addFeed: any;
@@ -78,12 +75,22 @@ export default class SidebarFeed extends Vue {
 
   modalActive = false;
 
-  rules = [(value: any) => !!value || "This field is required."];
+  rules = [
+    (value: any) => !!value || "This field is required.",
+    (value: string) =>
+      !this.checkDuplication(value) || "동일한 피드가 존재합니다."
+  ];
 
   @Watch("modalActive")
   onModalClose(isActive: boolean) {
-    if (!isActive) {
+    if (isActive && this.$refs.form) {
       (this.$refs.form as HTMLFormElement).reset();
+    }
+  }
+
+  checkDuplication(name: string | null) {
+    if (this.feedList.length) {
+      return this.feedList.some((feed: SidebarList) => feed.title === name);
     }
   }
 
@@ -93,21 +100,13 @@ export default class SidebarFeed extends Vue {
   }
 
   addFeeds() {
-    if (this.newFeedName) {
+    if (this.newFeedName && !this.checkDuplication(this.newFeedName)) {
       this.addFeed({ title: this.newFeedName });
-      this.newFeedName = null;
       this.closeModal();
     }
   }
 }
 </script>
-
-<style scoped>
-a.router-link-exact-active {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
 
 <style scoped>
 .router-link {

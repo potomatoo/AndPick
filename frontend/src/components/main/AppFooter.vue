@@ -15,6 +15,13 @@
   </v-footer>
 </template>
 
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+
+@Component
+export default class AppFooter extends Vue {}
+</script>
+
 <style scoped>
 footer {
   text-align: end;

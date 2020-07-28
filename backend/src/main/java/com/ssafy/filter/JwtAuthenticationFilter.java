@@ -17,7 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.google.gson.Gson;
 import com.ssafy.config.JwtProperties;
+import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.LoginRequest;
 import com.ssafy.security.UserPrincipal;
 
@@ -66,17 +68,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
 		this.redisTemplate.opsForValue().set(JwtProperties.TOKEN_PREFIX + token, principal.getUser());
 		// @formatter:off
-		response.getWriter()
-				.write("{" 
-						+ "\"status\": true," 
-						+ "\"message\": \"login success\"," 
-						+ "\"data\": {" + "\"userNo\": \""+ principal.getUserNo() + "\"," 
-										+ "\"userId\": \"" + principal.getUsername() + "\","
-										+ "\"userName\": \"" + principal.getUserName() + "\"," 
-										+ "\"userType\":"+ principal.getUserType() +","
-										+ "\""+JwtProperties.HEADER_STRING+"\": \""+JwtProperties.TOKEN_PREFIX + token+"\""
-									+ "}" 
-					+ "}");
+		BasicResponse result = new BasicResponse();
+
+		result.status = true;
+		result.message = "login success";
+		result.data = principal.getUser();
+
+		response.getWriter().write(new Gson().toJson(result));
+
 		// @formatter:on
 		response.getWriter().flush();
 		response.getWriter().close();

@@ -1,27 +1,24 @@
 <template>
   <div>
-    <v-divider></v-divider>
     <v-list>
       <v-subheader>Board</v-subheader>
-      <v-list-group
-        v-for="board in boardList"
-        :key="board.title"
-        v-model="board.active"
-        :prepend-icon="board.action"
-        no-action
-      >
-        <template v-slot:activator>
+      <v-list-item-group>
+        <v-list-item v-for="board in boardList" :key="board.title">
+          <v-list-item-icon>
+            <v-icon>
+              mdi-star-outline
+            </v-icon>
+          </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="board.title"></v-list-item-title>
-          </v-list-item-content>
-        </template>
-
-        <v-list-item v-for="subItem in board.items" :key="subItem.title">
-          <v-list-item-content>
-            <v-list-item-title v-text="subItem.title"></v-list-item-title>
+            <router-link
+              :to="{ name: 'BoardList', params: { boardname: board.title } }"
+              class="router-link"
+            >
+              <v-list-item-title v-text="board.title"></v-list-item-title>
+            </router-link>
           </v-list-item-content>
         </v-list-item>
-      </v-list-group>
+      </v-list-item-group>
 
       <v-list-item @click="modalActive = !modalActive">
         <v-list-item-content class="text-center">

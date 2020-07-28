@@ -16,26 +16,24 @@ Vue.use(Vuex);
 
 export interface RootState {
   JWT: string | null;
-  isLogedIn: boolean;
 }
 
 const store: StoreOptions<RootState> = {
   modules: {
     feedModule,
-    mypageModule: mypageModule,
+    mypageModule,
   },
   state: {
     JWT: STORAGE.getItem("jwt-token"),
-    isLogedIn: false,
   },
-  getters: {},
+  getters: {
+    isLoggedIn: (state) => !!state.JWT,
+    config: (state) => ({ headers: { Authorization: `${state.JWT}` } }),
+  },
   mutations: {
     SET_TOKEN(state, token) {
       state.JWT = token;
       STORAGE.setItem("jwt-token", token);
-    },
-    isLogedIn(state, bool) {
-      state.isLogedIn = bool;
     },
   },
   actions: {
@@ -44,29 +42,18 @@ const store: StoreOptions<RootState> = {
         .post(SERVER.URL + info.location, qs.stringify(info.data), {
           withCredentials: true,
         })
-
         .then((res) => {
-          console.log(res, "로그인성공");
-          // console.log(res.headers.common["Authorization"]);
-
-          // commit("SET_TOKEN", res.headers["jwt-token"]);
-          commit("isLogedIn", info.bool);
-          // router.push("/");
+          commit("SET_TOKEN", res.data.data["Authorization"]);
+          router.push("/");
         })
         .catch((err) => console.log("err", err.response));
     },
 
     signup(context, signupData) {
-      // const info = {
-      //   data: signupData,
-      //   location: SERVER.ROUTES.signup,
-      //   bool: true,
-      // };
-      // dispatch("postAuthData", info);
       axios
         .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData))
         .then((res) => {
-          console.log("성공", res);
+          console.log("회원가입 성공", res);
         })
         .catch((err) => console.error("err", err.response));
     },
@@ -75,21 +62,15 @@ const store: StoreOptions<RootState> = {
       const info = {
         data: loginData,
         location: SERVER.ROUTES.login,
-        bool: true,
       };
       dispatch("postAuthData", info);
     },
-    logout({ commit }) {
-      const config = {
-        headers: {
-          Authorization: `Token ${this.state.JWT}`,
-        },
-      };
+    logout({ getters, commit }) {
+      console.log("로그아웃");
       axios
-        .post(SERVER.URL + SERVER.ROUTES.logout, null, config)
+        .post(SERVER.URL + SERVER.ROUTES.logout, null, getters.config)
         .then(() => {
           commit("SET_TOKEN", null);
-          commit("isLogedIn", false);
           STORAGE.removeItem("jwt-token");
           router.push("/");
         })

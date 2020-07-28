@@ -5,19 +5,26 @@
       <router-link :to="{ name: 'Home' }">
         <a class="navbar-brand">Junho</a>
       </router-link>
-      <router-link :to="{ name: 'Signup' }">Signup</router-link> |
-      <router-link :to="{ name: 'Login' }">Login</router-link> |
-      <router-link :to="{ name: 'Logout' }">Logout</router-link> |
+      <router-link v-if="!isLoggedIn" :to="{ name: 'Signup' }"
+        >Signup |
+      </router-link>
+      <router-link v-if="!isLoggedIn" :to="{ name: 'Login' }"
+        >Login</router-link
+      >
+      <router-link v-if="isLoggedIn" :to="{ name: 'Logout' }"
+        >Logout</router-link
+      >
     </v-toolbar-title>
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 @Component({
   methods: mapMutations("mypageModule", ["toggleSidebar"]),
+  computed: { ...mapGetters(["isLoggedIn"]) },
 })
 export default class AppNavbar extends Vue {}
 </script>

@@ -1,24 +1,35 @@
 <template>
   <div>
     <h1>Signup</h1>
-    <div>
-      <label for="userid">userID:</label>
-      <input v-model="signupData.userid" id="userid" type="text" />
-    </div>
-    <div>
-      <label for="username">username:</label>
-      <input v-model="signupData.username" id="username" type="text" />
-    </div>
-    <div>
-      <label for="userpassword">password:</label>
+    <div class="form-group">
+      <label for="userId">userID:</label>
       <input
-        v-model="signupData.userpassword"
-        id="userpassword"
+        v-model="signupData.userId"
+        class="form-control"
+        id="userId"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="userName">userName:</label>
+      <input
+        v-model="signupData.userName"
+        class="form-control"
+        id="userName"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label for="userPassword">password:</label>
+      <input
+        v-model="signupData.userPassword"
+        class="form-control"
+        id="userPassword"
         type="password"
       />
     </div>
     <div>
-      <input v-model="signupData.usertype" id="usertype" type="hidden" />
+      <input v-model="signupData.userType" id="userType" type="hidden" />
     </div>
     <div>
       <button @click="signup(signupData)">Signup</button>
@@ -26,25 +37,30 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
 import { mapActions } from "vuex";
 
-export default {
-  name: "SignupView",
-  data() {
-    return {
-      signupData: {
-        userid: null,
-        username: null,
-        userpassword: null,
-        usertype: 1,
-      },
-    };
-  },
+interface SignupData {
+  userId: string | null;
+  userName: string | null;
+  userPassword: string | null;
+  userType: number;
+}
+
+@Component({
   methods: {
     ...mapActions(["signup"]),
   },
-};
+})
+export default class SignupView extends Vue {
+  signupData: SignupData = {
+    userId: null,
+    userName: null,
+    userPassword: null,
+    userType: 0,
+  };
+}
 </script>
 
 <style></style>

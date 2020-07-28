@@ -3,6 +3,6 @@ export default {
   ROUTES: {
     signup: "/api/public/signup",
     login: "/api/public/login",
-    logout: "/logout",
+    logout: "/api/user/logout",
   },
 };

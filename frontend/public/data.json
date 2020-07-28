@@ -38,5 +38,19 @@
       "active": false,
       "items": [{ "title": "list item" }, { "title": "hi" }]
     }
+  ],
+  "rssList": [
+    {
+      "title": "IT",
+      "url": "/api/public/test/rss"
+    },
+    {
+      "title": "Economy",
+      "url":"/api/public/test/rss"
+    },
+    {
+      "title": "Industry",
+      "url":"/api/public/test/rss"
+    }
   ]
 }

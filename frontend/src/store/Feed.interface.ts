@@ -1,5 +1,6 @@
 export interface SidebarItem {
   title: string;
+  url?: string;
 }
 
 export interface SidebarList {
@@ -10,6 +11,12 @@ export interface SidebarList {
 }
 
 export interface FeedModule {
+  rssList: RssList[];
   feedList: SidebarList[];
   boardList: SidebarList[];
+}
+
+export interface RssList {
+  title: string;
+  url: string;
 }

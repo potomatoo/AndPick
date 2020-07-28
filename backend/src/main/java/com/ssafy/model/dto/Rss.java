@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Rss implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "rss_no")
+	@Column(name = "rss_id")
 	private long rssId;
 	@Column(name = "rss_url")
 	private String rssUrl;

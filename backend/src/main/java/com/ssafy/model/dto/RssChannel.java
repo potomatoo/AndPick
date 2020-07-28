@@ -1,9 +1,12 @@
 package com.ssafy.model.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class RssChannel {
+public class RssChannel implements Serializable {
+	private static final long serialVersionUID = 1L;
 	// 필수요소
 	private String title;
 	private String link;
@@ -43,6 +46,14 @@ public class RssChannel {
 
 	public void addItem(RssItem item) {
 		this.items.add(item);
+	}
+
+	public List<RssItem> getItems() {
+		return items;
+	}
+
+	public void itemInit() {
+		this.items = new LinkedList<RssItem>();
 	}
 
 	@Override

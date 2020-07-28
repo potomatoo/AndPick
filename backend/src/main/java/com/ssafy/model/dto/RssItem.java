@@ -1,12 +1,16 @@
 package com.ssafy.model.dto;
 
-public class RssItem {
+import java.io.Serializable;
+
+public class RssItem implements Serializable {
 	// 필수 요소
 	private String title;
 	private String description;
 	private String link;
 	// 선택 요소
 	private String pubDate;
+	// 식별용
+	private String rssTitle;
 
 	public String getTitle() {
 		return title;
@@ -40,10 +44,11 @@ public class RssItem {
 		this.pubDate = pubDate;
 	}
 
-	@Override
-	public String toString() {
-		return "RssItem [title=" + title + ", description=" + description + ", link=" + link + ", pubDate=" + pubDate
-				+ "]";
+	public String getRssTitle() {
+		return rssTitle;
 	}
 
+	public void setRssTitle(String rssTitle) {
+		this.rssTitle = rssTitle;
+	}
 }

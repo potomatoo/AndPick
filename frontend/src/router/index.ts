@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/main/a.vue";
+import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 import MypageMain from "@/views/pages/MypageMain.vue";
 
@@ -15,6 +16,11 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/cover",
+    name: "Cover",
+    component: Cover,
   },
   {
     path: "/accounts/signup",

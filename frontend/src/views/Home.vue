@@ -1,10 +1,14 @@
 <template>
   <div>
-    <v-app id="inspire">
+    <v-app v-if="isLoggedIn" id="inspire">
       <app-sidebar />
       <app-navbar />
       <app-main />
     </v-app>
+    <div v-if="!isLoggedIn">
+      <app-navbar />
+      <router-view />
+    </div>
     <app-footer />
   </div>
 </template>
@@ -16,13 +20,16 @@ import AppSidebar from "@/components/main/AppSidebar.vue";
 import AppMain from "@/components/main/AppMain.vue";
 import AppFooter from "@/components/main/AppFooter.vue";
 
+import { mapGetters } from "vuex";
+
 @Component({
   components: {
     AppNavbar,
     AppSidebar,
     AppMain,
-    AppFooter
-  }
+    AppFooter,
+  },
+  computed: { ...mapGetters(["isLoggedIn"]) },
 })
 export default class Home extends Vue {}
 </script>

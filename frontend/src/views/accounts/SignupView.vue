@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container my-5">
     <h1>Signup</h1>
     <div class="form-group">
       <label for="userId">userID:</label>

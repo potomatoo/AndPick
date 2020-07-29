@@ -1,14 +1,19 @@
 package com.ssafy.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Category;
+import com.ssafy.model.dto.Feed;
 import com.ssafy.model.dto.Rss;
+import com.ssafy.model.dto.Subscribe;
 import com.ssafy.model.repository.CategoryRepository;
+import com.ssafy.model.repository.FeedRepository;
 import com.ssafy.model.repository.RssRepository;
+import com.ssafy.model.repository.SubscribeRepository;
 
 @Service
 public class RssServiceImpl implements RssService {
@@ -17,6 +22,10 @@ public class RssServiceImpl implements RssService {
 	private RssRepository rssRepository;
 	@Autowired
 	private CategoryRepository categoryRepository;
+	@Autowired
+	private FeedRepository feedRepository;
+	@Autowired
+	private SubscribeRepository subscribeRepository;
 
 	@Override
 	public List<Rss> findAll() {
@@ -56,6 +65,31 @@ public class RssServiceImpl implements RssService {
 			return null;
 
 		return rssRepository.save(rss);
+	}
+
+	@Override
+	public List<Rss> findItemByFeed(long feedId) {
+		// TODO Auto-generated method stub
+
+		List<Subscribe> subscribe = subscribeRepository.findByFeedId(feedId);
+
+		List<Rss> list = new ArrayList<Rss>();
+
+		for (Subscribe item : subscribe)
+			list.add(item.getRss());
+
+		return list;
+	}
+
+	@Override
+	public List<Rss> findItemBySubscribe(long subscribeId) {
+		// TODO Auto-generated method stub
+
+		List<Rss> list = new ArrayList<Rss>();
+
+		list.add(subscribeRepository.findOneBySubscribeId(subscribeId).getRss());
+
+		return list;
 	}
 
 }

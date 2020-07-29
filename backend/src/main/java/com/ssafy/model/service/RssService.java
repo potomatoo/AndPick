@@ -15,4 +15,9 @@ public interface RssService {
 	public List<Rss> findByRssName(String rssName);
 
 	public Rss saveRss(Rss rss, String categoryName);
+
+	public List<Rss> findItemByFeed(long feedId);
+
+	public List<Rss> findItemBySubscribe(long subscribeId);
+
 }

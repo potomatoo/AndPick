@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -112,4 +113,29 @@ public class RssController {
 		return response;
 	}
 
+	@PostMapping(value = "/api/rss/save")
+	public Object saveRss(@RequestHeader("Authorization") String jwtToken, @RequestParam("rssName") String rssName,
+			@RequestParam("rssUrl") String rssUrl, @RequestParam("categoryName") String categoryName) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		Rss rss = new Rss();
+
+		rss.setRssName(rssName);
+		rss.setRssUrl(rssUrl);
+		
+		result.data = rssService.saveRss(rss, categoryName);
+		result.status = (result.data != null) ? true : false;
+		
+
+		if (result.status) {
+			result.message = "rss 저장이 완료되었습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "rss 저장에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+		
+		return response;
+	}
 }

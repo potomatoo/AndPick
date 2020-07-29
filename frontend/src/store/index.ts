@@ -76,6 +76,17 @@ const store: StoreOptions<RootState> = {
         })
         .catch((err) => console.log(err.response));
     },
+    deleteUser({ getters, commit }) {
+      console.log("회원탈퇴");
+      axios
+        .post(SERVER.URL + SERVER.ROUTES.deleteUser, null, getters.config)
+        .then(() => {
+          commit("SET_TOKEN", null);
+          STORAGE.removeItem("jwt-token");
+          router.push("/");
+        })
+        .catch((err) => console.log(err.response));
+    },
   },
 };
 

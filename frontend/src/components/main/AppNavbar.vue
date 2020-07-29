@@ -17,6 +17,9 @@
       <router-link v-if="isLoggedIn" :to="{ name: 'Logout' }"
         >Logout</router-link
       >
+      <router-link v-if="isLoggedIn" :to="{ name: 'DeleteUser' }"
+        >회원탈퇴</router-link
+      >
     </v-toolbar-title>
   </v-app-bar>
 </template>

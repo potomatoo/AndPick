@@ -29,7 +29,7 @@ public class RssController {
 	@Autowired
 	private RssService rssService;
 
-	@RequestMapping(value = "/api/public/test/rss", produces = "application/json; charset=utf8")
+	@RequestMapping(value = "/api/public/test/rss")
 	public Object getRss() {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
@@ -47,6 +47,8 @@ public class RssController {
 		List<RssItem> resultItem = new ArrayList<RssItem>(10);
 
 		for (int i = 0; i < 10; i++) {
+			if (i >= rssItem.size())
+				break;
 			resultItem.add(rssItem.get(i));
 		}
 
@@ -123,10 +125,9 @@ public class RssController {
 
 		rss.setRssName(rssName);
 		rss.setRssUrl(rssUrl);
-		
+
 		result.data = rssService.saveRss(rss, categoryName);
 		result.status = (result.data != null) ? true : false;
-		
 
 		if (result.status) {
 			result.message = "rss 저장이 완료되었습니다.";
@@ -135,7 +136,68 @@ public class RssController {
 			result.message = "rss 저장에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return response;
+	}
+
+	@GetMapping(value = "/api/rss/item/feed")
+	public Object findItemByFeed(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedId") long feedId) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		List<Rss> rssList = rssService.findItemByFeed(feedId);
+		List<RssItem> rssItem = new LinkedList<RssItem>();
+
+		for (Rss item : rssList) {
+			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
+			System.out.println(channel);
+			rssItem.addAll(channel.getItems());
+		}
+
+		// sort과정
+		List<RssItem> resultItem = new ArrayList<RssItem>(10);
+
+		for (int i = 0; i < 10; i++) {
+			if (i >= rssItem.size())
+				break;
+			resultItem.add(rssItem.get(i));
+		}
+
+		result.status = true;
+		result.message = "rss test api...";
+		result.data = resultItem;
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "api/rss/item/subscribe")
+	public Object findItemBySubscribe(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("subscribeId") long subscribeId) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		List<Rss> rssList = rssService.findItemBySubscribe(subscribeId);
+		List<RssItem> rssItem = new LinkedList<RssItem>();
+
+		for (Rss item : rssList) {
+			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
+			System.out.println(channel);
+			rssItem.addAll(channel.getItems());
+		}
+
+		// sort과정
+		List<RssItem> resultItem = new ArrayList<RssItem>(10);
+
+		for (int i = 0; i < 10; i++) {
+			if (i >= rssItem.size())
+				break;
+			resultItem.add(rssItem.get(i));
+		}
+
+		result.status = true;
+		result.message = "rss test api...";
+		result.data = resultItem;
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

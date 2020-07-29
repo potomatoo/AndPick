@@ -8,6 +8,7 @@ import MypageMain from "@/views/pages/MypageMain.vue";
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
 import LogoutView from "@/views/accounts/LogoutView.vue";
+import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 
 Vue.use(VueRouter);
 
@@ -36,6 +37,11 @@ const routes: Array<RouteConfig> = [
     path: "/accounts/logout",
     name: "Logout",
     component: LogoutView,
+  },
+  {
+    path: "/accounts/delete",
+    name: "DeleteUser",
+    component: DeleteUserView,
   },
   {
     path: "/today",

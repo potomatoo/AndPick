@@ -7,10 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "RSS")
+@Table(name = "rss")
 public class Rss implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +20,11 @@ public class Rss implements Serializable {
 	private long rssId;
 	@Column(name = "rss_url")
 	private String rssUrl;
-	@Column(name = "category_id")
-	private long categoryId;
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+	@Column(name="rss_name")
+	private String rssName;
 
 	public long getRssId() {
 		return rssId;
@@ -37,16 +42,26 @@ public class Rss implements Serializable {
 		this.rssUrl = rssUrl;
 	}
 
-	public long getCategoryId() {
-		return categoryId;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setCategoryId(long categoryId) {
-		this.categoryId = categoryId;
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public String getRssName() {
+		return rssName;
+	}
+
+	public void setRssName(String rssName) {
+		this.rssName = rssName;
 	}
 
 	@Override
 	public String toString() {
-		return "Rss [rssId=" + rssId + ", rssUrl=" + rssUrl + ", categoryId=" + categoryId + "]";
+		return "Rss [rssId=" + rssId + ", rssUrl=" + rssUrl + ", category=" + category + ", rssName=" + rssName + "]";
 	}
+
+
 }

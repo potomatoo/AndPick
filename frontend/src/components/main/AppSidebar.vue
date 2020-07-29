@@ -1,9 +1,17 @@
 <template>
   <v-navigation-drawer v-if="isSidebarActive" app clipped permanent>
-    <v-list>
+    <!-- <div class="pt-3">
+      <v-list-item-title class="text-center font-weight-bold"
+        >Welcome Junho!</v-list-item-title
+      >
+    </div>-->
+    <v-list dense>
       <sidebar-top />
+      <v-divider></v-divider>
       <sidebar-feed />
+      <v-divider></v-divider>
       <SidebarBoard />
+      <v-divider></v-divider>
       <SidebarMypage />
     </v-list>
   </v-navigation-drawer>
@@ -33,3 +41,4 @@ export default class AppSidebar extends Vue {
   }
 }
 </script>
+

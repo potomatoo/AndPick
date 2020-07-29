@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/main/a.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
-import MypageMain from "@/views/pages/MypageMain.vue";
+import FolderMain from "@/views/pages/FolderMain.vue";
 
 import EditArticle from "@/views/pages/EditArticle.vue"
 
@@ -21,9 +21,9 @@ const routes: Array<RouteConfig> = [
   },
 
   {
-    path: "/mypage",
-    name: "MypageMain",
-    component: MypageMain,
+    path: "/mypage/:pageName",
+    name: "FolderMain",
+    component: FolderMain,
   },
 
   {

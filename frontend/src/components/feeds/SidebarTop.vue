@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-divider></v-divider>
     <v-list>
       <router-link class="router-link" :to="{ name: 'Today' }">
         <v-list-item @click="click">

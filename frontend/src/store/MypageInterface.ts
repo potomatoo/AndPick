@@ -1,19 +1,18 @@
-export interface FolderItem {
+export interface SidebarList {
     title: string;
 }
 
-export interface CreateFolderItem {
-    CreateFolderName: string;
+export interface ArticleItem {
+    title: string;
+    content: string;
 }
 
-export interface MyArticleList {
-    title: string;
+export interface ArticleList {
+    articleItems: ArticleItem[];
 }
 
 export interface MypageModule {
     isSidebarActive: boolean;
-    IsCreateFolderActive: boolean;
-    MyFolderList: FolderItem[];
-    CreateFolderItem: CreateFolderItem;
-    MyArticleList: MyArticleList[];
+    FolderList: SidebarList[];
+    MyArticleList: ArticleList[];
 }

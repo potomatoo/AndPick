@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app clipped-left>
-    <v-app-bar-nav-icon @click="toggleSidebar()" />
+    <v-app-bar-nav-icon class="sidebarBtn" @click="toggleSidebar()" />
     <v-toolbar-title>
       <router-link :to="{ name: 'Home' }">
         <a class="navbar-brand">Junho</a>
@@ -18,3 +18,9 @@ import { mapMutations } from "vuex";
 })
 export default class AppNavbar extends Vue {}
 </script>
+
+<style scoped>
+.sidebarBtn {
+  outline: none;
+}
+</style>

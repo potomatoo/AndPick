@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-divider></v-divider>
     <v-list>
       <v-subheader>Board</v-subheader>
       <v-list-group

@@ -1,58 +1,80 @@
 <template>
   <div>
-    <v-icon
-      class="ml-3"
-      style="color: black;"
-      @click="isCreateFolderActive = !isCreateFolderActive"
-    >mdi-folder-plus</v-icon>
+    <v-icon class="ml-3" style="color: black;" @click="modalActive = !modalActive">mdi-folder-plus</v-icon>
 
-    <v-dialog v-model="isCreateFolderActive" max-width="500px">
+    <v-dialog v-model="modalActive" max-width="500px">
       <v-card>
-        <v-card-text>
-          <v-text-field
-            v-model="FolderName"
-            label="Folder name"
-            autofocus
-            clearable
-            :rules="rules"
-            @keyup.enter="addFolderItem"
-          ></v-text-field>
+        <v-form ref="form" onsubmit="return false;">
+          <v-card-text>
+            <v-text-field
+              v-model="FolderName"
+              label="Folder name"
+              autofocus
+              clearable
+              :rules="rules"
+              @keyup.enter="addFolderItem"
+            ></v-text-field>
 
-          <small class="grey--text">* 생성할 폴더 이름을 작성해주세요</small>
-        </v-card-text>
+            <small class="grey--text">* 생성할 폴더 이름을 작성해주세요</small>
+          </v-card-text>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="addFolderItem">Create</v-btn>
-          <v-btn text color="error" @click="closeModal">Cancle</v-btn>
-        </v-card-actions>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="addFolderItem">Create</v-btn>
+            <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
+
+import { SidebarList } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
-@Component({})
+@Component
 export default class CreateFolder extends Vue {
-  @mypageModule.State MyFolderList!: [];
+  @mypageModule.State FolderList!: [];
   @mypageModule.Mutation addFolder: any;
 
-  isCreateFolderActive = false;
-  FolderName = "";
-  rules = [(value: any) => !!value || "This field is required."];
+  FolderName = null;
+
+  modalActive = false;
+
+  rules = [
+    (value: any) => !!value || "This field is required.",
+    (value: string) =>
+      !this.checkDuplication(value) || "동일한 폴더가 존재합니다."
+  ];
+
+  @Watch("modalActive")
+  onModalClose(isActive: boolean) {
+    if (isActive && this.$refs.form) {
+      (this.$refs.form as HTMLFormElement).reset();
+    }
+  }
+
+  checkDuplication(name: string | null) {
+    if (this.FolderList.length) {
+      return this.FolderList.some(
+        (folder: SidebarList) => folder.title === name
+      );
+    }
+  }
 
   closeModal() {
-    this.isCreateFolderActive = false;
+    this.FolderName = null;
+    this.modalActive = false;
   }
+
   addFolderItem() {
-    if (this.FolderName) {
-      this.addFolder(this.FolderName);
-      this.FolderName = "";
+    if (this.FolderName && !this.checkDuplication(this.FolderName)) {
+      this.addFolder({ title: this.FolderName });
       this.closeModal();
     }
   }
@@ -60,4 +82,8 @@ export default class CreateFolder extends Vue {
 </script>
 
 <style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
 </style>

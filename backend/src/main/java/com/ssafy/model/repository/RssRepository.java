@@ -13,4 +13,6 @@ public interface RssRepository extends JpaRepository<Rss, Long> {
 	public List<Rss> findByCategory(Category category);
 
 	public List<Rss> findByRssNameLike(String rssName);
+
+	public Rss findOneByRssUrl(String rssUrl);
 }

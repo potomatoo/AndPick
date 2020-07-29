@@ -13,9 +13,12 @@ import com.ssafy.model.dto.Feed;
 @Repository
 public interface FeedRepository extends JpaRepository<Feed, Long> {
 	public Feed findOneByFeedName(String feedName);
+
 	public List<Feed> findByUserNo(Long userNo);
-	
+
+	public Feed findOneByFeedId(Long feedId);
+
 	@Modifying
-	@Query(value = "delete from SSAFYDB.subscribe where feed_id=:feed_id ",nativeQuery = true)
-	public void deleteSubscribe(@Param("feed_id")Long feed_id);
+	@Query(value = "delete from SSAFYDB.subscribe where feed_id=:feed_id ", nativeQuery = true)
+	public void deleteSubscribe(@Param("feed_id") Long feed_id);
 }

@@ -42,4 +42,20 @@ public class RssServiceImpl implements RssService {
 		return rssRepository.findByRssNameLike('%' + rssName + '%');
 	}
 
+	@Override
+	public Rss saveRss(Rss rss, String categoryName) {
+		// TODO Auto-generated method stub
+
+		Category category = categoryRepository.findOneByCategoryName(categoryName);
+
+		if (category == null)
+			return null;
+		rss.setCategory(category);
+
+		if (rssRepository.findOneByRssUrl(rss.getRssUrl()) != null)
+			return null;
+
+		return rssRepository.save(rss);
+	}
+
 }

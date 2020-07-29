@@ -9,9 +9,9 @@ import com.ssafy.model.dto.Subscribe;
 
 @Repository
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
-	public List<Subscribe> findByUserNo(long UserNo);
+	public List<Subscribe> findByUserNo(long userNo);
 
-	public List<Subscribe> findByFeedId(long FeedId);
+	public List<Subscribe> findByFeedId(long feedId);
 
-	public Subscribe findOneBySubscribeId(long SubscribeId);
+	public Subscribe findOneBySubscribeId(long subscribeId);
 }

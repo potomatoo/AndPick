@@ -35,9 +35,5 @@ import SidebarMypage from "@/components/pages/SidebarMypage.vue";
   },
   computed: mapState("mypageModule", ["isSidebarActive"])
 })
-export default class AppSidebar extends Vue {
-  created() {
-    this.$store.dispatch("feedModule/initData");
-  }
-}
+export default class AppSidebar extends Vue {}
 </script>

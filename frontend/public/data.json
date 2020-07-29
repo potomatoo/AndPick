@@ -4,19 +4,19 @@
       "title": "Naver",
       "icon": "mdi-alpha-n-box",
       "active": false,
-      "items": [{ "title": "list item" }, { "title": "hi" }]
+      "items": [{"id": 1, "title": "list item" }, {"id": 2, "title": "hi" }]
     },
     {
       "title": "Google",
       "icon": "mdi-alpha-g-box",
       "active": false,
-      "items": [{ "title": "list item" }, { "title": "hi" }]
+      "items": [{"id": 1, "title": "list item" }, {"id": 2, "title": "hi" }]
     },
     {
       "title": "Tesla",
       "icon": "mdi-alpha-t-box",
       "active": false,
-      "items": [{ "title": "list item" }, { "title": "hi" }]
+      "items": [{"id": 1, "title": "list item" }, {"id": 2, "title": "hi" }]
     }
   ],
   "boardList": [
@@ -41,14 +41,27 @@
   ],
   "rssList": [
     {
+      "id": 1,
+      "title": "list item",
+      "url": "/api/public/test/rss"
+    },
+    {
+      "id": 2,
+      "title": "hi",
+      "url": "/api/public/test/rss"
+    },
+    {
+      "id": 3,
       "title": "IT",
       "url": "/api/public/test/rss"
     },
     {
+      "id": 4,
       "title": "Economy",
       "url":"/api/public/test/rss"
     },
-    {
+    { 
+      "id": 5,
       "title": "Industry",
       "url":"/api/public/test/rss"
     }

@@ -10,13 +10,10 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
-<<<<<<< HEAD
     "tiptap": "^1.29.1",
     "tiptap-extensions": "^1.31.1",
-=======
     "cors": "^2.8.5",
     "qs": "^6.9.4",
->>>>>>> a57a79a90a6ffda792081a8b1afaff2732d52423
     "tslint": "^6.1.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",

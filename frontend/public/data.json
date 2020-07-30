@@ -1,24 +1,55 @@
 {
-  "feedList": [
-    {
-      "title": "Naver",
-      "icon": "mdi-alpha-n-box",
-      "active": false,
-      "items": [{ "title": "list item" }, { "title": "hi" }]
-    },
-    {
-      "title": "Google",
-      "icon": "mdi-alpha-g-box",
-      "active": false,
-      "items": [{ "title": "list item" }, { "title": "hi" }]
-    },
-    {
-      "title": "Tesla",
-      "icon": "mdi-alpha-t-box",
-      "active": false,
-      "items": [{ "title": "list item" }, { "title": "hi" }]
-    }
-  ],
+  "feedList": {
+    "status": true,
+    "message": null,
+    "data": [
+      {
+        "feedId": 1,
+        "userNo": 16,
+        "feedName": "Feed_Test",
+        "subscribeList": [
+          {
+            "subscribeId": 1,
+            "subscribeName": "동아경제",
+            "feedId": 1,
+            "userNo": 16,
+            "rss": {
+              "rssId": 1,
+              "rssUrl": "http://rss.donga.com/economy.xml",
+              "category": {
+                "categoryId": 1,
+                "categoryName": "test"
+              },
+              "rssName": "동아경제"
+            }
+          }
+        ]
+      },
+      {
+        "feedId": 2,
+        "userNo": 16,
+        "feedName": "feed name",
+        "subscribeList": [
+          {
+            "subscribeId": 2,
+            "subscribeName": "동아경제",
+            "feedId": 2,
+            "userNo": 16,
+            "rss": {
+              "rssId": 1,
+              "rssUrl": "http://rss.donga.com/economy.xml",
+              "category": {
+                "categoryId": 1,
+                "categoryName": "test"
+              },
+              "rssName": "동아경제"
+            }
+          }
+        ]
+      }
+    ]
+  },
+
   "boardList": [
     {
       "title": "Samsung",
@@ -38,5 +69,48 @@
       "active": false,
       "items": [{ "title": "list item" }, { "title": "hi" }]
     }
-  ]
+  ],
+  
+  "rssList": {
+    "status": true,
+    "message": "모든 rss 정보입니다.",
+    "data": [
+      {
+        "rssId": 1,
+        "rssUrl": "http://rss.donga.com/economy.xml",
+        "category": {
+          "categoryId": 1,
+          "categoryName": "test"
+        },
+        "rssName": "동아경제"
+      },
+      {
+        "rssId": 2,
+        "rssUrl": "http://rss.nocutnews.co.kr/NocutEconomy.xml",
+        "category": {
+          "categoryId": 1,
+          "categoryName": "test"
+        },
+        "rssName": "노컷경제"
+      },
+      {
+        "rssId": 3,
+        "rssUrl": "http://www.khan.co.kr/rss/rssdata/economy_news.xml",
+        "category": {
+          "categoryId": 1,
+          "categoryName": "test"
+        },
+        "rssName": "칸경제"
+      },
+      {
+        "rssId": 5,
+        "rssUrl": "https://www.khan.co.kr/rss/rssdata/it_news.xml",
+        "category": {
+          "categoryId": 1,
+          "categoryName": "test"
+        },
+        "rssName": "칸IT"
+      }
+    ]
+  }
 }

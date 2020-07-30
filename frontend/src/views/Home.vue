@@ -31,5 +31,9 @@ import { mapGetters } from "vuex";
   },
   computed: { ...mapGetters(["isLoggedIn"]) },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  created() {
+    this.$store.dispatch("feedModule/FETCH_DATA");
+  }
+}
 </script>

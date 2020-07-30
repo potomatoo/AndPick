@@ -4,8 +4,10 @@ import Home from "../views/main/a.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
-import FeedList from "@/views/feeds/FeedList.vue";
+import FeedPage from "@/views/feeds/FeedPage.vue";
 import BoardList from "@/views/feeds/BoardList.vue";
+import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
+import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
 import MypageMain from "@/views/pages/MypageMain.vue";
 
 Vue.use(VueRouter);
@@ -37,12 +39,22 @@ const routes: Array<RouteConfig> = [
     component: AddRss
   },
   {
-    path: "/feeds/:feedname",
-    name: "FeedList",
-    component: FeedList
+    path: "/feeds/:feedName",
+    name: "Feed",
+    component: FeedPage
   },
   {
-    path: "/boards/:boardname",
+    path: "/:feedName/subscription/:subscribeId",
+    name: "ArticleListInRss",
+    component: ArticleListInRss
+  },
+  {
+    path: "/:feedname/subscription/:rssId/:articleId",
+    name: "ArticleDetail",
+    component: ArticleDetail
+  },
+  {
+    path: "/boards/:boardName",
     name: "BoardList",
     component: BoardList
   }

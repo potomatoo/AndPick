@@ -7,12 +7,12 @@
         <v-form ref="form" onsubmit="return false;">
           <v-card-text>
             <v-text-field
-              v-model="folderName"
-              label="Folder name"
+              v-model="newPostDirName"
+              label="PostDirName"
               autofocus
               clearable
               :rules="rules"
-              @keyup.enter="addFolderItem"
+              @keyup.enter="addPostDir"
             ></v-text-field>
 
             <small class="grey--text">* 생성할 폴더 이름을 작성해주세요</small>
@@ -20,7 +20,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addFolderItem">Create</v-btn>
+            <v-btn text color="primary" @click="addPostDir">Create</v-btn>
             <v-btn text color="error" @click="closeModal">Cancle</v-btn>
           </v-card-actions>
         </v-form>
@@ -40,9 +40,9 @@ const mypageModule = namespace("mypageModule");
 @Component
 export default class CreateFolder extends Vue {
   @mypageModule.State postDirList!: [];
-  @mypageModule.Mutation addPost: any;
+  @mypageModule.Action ADD_POSTDIR: any;
 
-  folderName = null;
+  newPostDirName = null;
 
   modalActive = false;
 
@@ -62,19 +62,19 @@ export default class CreateFolder extends Vue {
   checkDuplication(name: string | null) {
     if (this.postDirList.length) {
       return this.postDirList.some(
-        (folder: PostDir) => folder.postDirName === name
+        (PostDir: PostDir) => PostDir.postDirName === name
       );
     }
   }
 
   closeModal() {
-    this.folderName = null;
+    this.newPostDirName = null;
     this.modalActive = false;
   }
 
-  addFolderItem() {
-    if (this.folderName && !this.checkDuplication(this.folderName)) {
-      this.addPost({ title: this.folderName, articleList: [] });
+  addPostDir() {
+    if (this.newPostDirName && !this.checkDuplication(this.newPostDirName)) {
+      this.ADD_POSTDIR(this.newPostDirName);
       this.closeModal();
     }
   }

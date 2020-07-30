@@ -27,13 +27,14 @@ import { mapGetters } from "vuex";
     AppNavbar,
     AppSidebar,
     AppMain,
-    AppFooter,
+    AppFooter
   },
-  computed: { ...mapGetters(["isLoggedIn"]) },
+  computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class Home extends Vue {
   created() {
     this.$store.dispatch("feedModule/FETCH_DATA");
+    this.$store.dispatch("mypageModule/FETCH_DATA");
   }
 }
 </script>

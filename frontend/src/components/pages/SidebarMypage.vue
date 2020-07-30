@@ -5,17 +5,18 @@
         Mypage
         <create-folder />
       </v-subheader>
-
-      <v-list-item v-for="folder in folderList" :key="folder.title" @click="click">
-        <v-list-item-content>
-          <router-link
-            :to="{ name: 'FolderMain', params: { pageName: folder.title } }"
-            class="router-link"
-          >
-            <v-list-item-title v-text="folder.title"></v-list-item-title>
-          </router-link>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list-item-group>
+        <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
+          <v-list-item-content>
+            <router-link
+              :to="{ name: 'FolderMain', params: { pageName: postDir.postDirName } }"
+              class="router-link"
+            >
+              <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
+            </router-link>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
     </v-list>
   </div>
 </template>
@@ -33,7 +34,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class SidebarMypage extends Vue {
-  @mypageModule.State folderList!: [];
+  @mypageModule.State postDirList!: [];
   click() {
     console.log("click");
   }

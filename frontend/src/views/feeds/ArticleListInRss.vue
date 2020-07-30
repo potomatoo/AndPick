@@ -24,7 +24,7 @@
           You can follow publications, blogs feeds.
         </p>
       </v-layout>
-      <v-btn color="success" dark @click="selectArticle(article)"
+      <v-btn color="success" dark @click="SELECT_ARTICLE(article)"
         >ADD CONTENT</v-btn
       >
     </v-container>
@@ -34,7 +34,7 @@
       <v-list three-line>
         <v-list-item-group>
           <v-list-item v-for="(article, idx) in articleList" :key="idx">
-            <v-list-item-content @click="selectArticle(article)">
+            <v-list-item-content @click="SELECT_ARTICLE(article)">
               <router-link
                 class="router-link"
                 :to="{
@@ -74,7 +74,7 @@ const feedModule = namespace("feedModule");
 @Component
 export default class ArticleListInRss extends Vue {
   @feedModule.State rssList!: Rss[];
-  @feedModule.Mutation selectArticle: any;
+  @feedModule.Mutation SELECT_ARTICLE: any;
 
   rssTitle: string | null = null;
   articleList: [] | null = null;

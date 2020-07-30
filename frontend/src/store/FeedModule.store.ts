@@ -24,29 +24,29 @@ const module: Module<FeedModule, RootState> = {
   getters: {},
 
   mutations: {
-    setFeedList(state, feedList: FeedList[]) {
+    SET_FEED_LIST(state, feedList: FeedList[]) {
       state.feedList = feedList;
     },
 
-    addFeed(state, feed: FeedList) {
+    ADD_FEED(state, feed: FeedList) {
       state.feedList.push(feed);
     },
 
-    setBoardList(state, boardList: SidebarList[]) {
+    SET_BOARD_LIST(state, boardList: SidebarList[]) {
       state.boardList = boardList;
       console.log("보드리스트", state.boardList);
     },
 
-    setRssList(state, rssList: Rss[]) {
+    SET_RSS_LIST(state, rssList: Rss[]) {
       state.rssList = rssList;
     },
 
     // 보드 처리하는 api 아직 없음
-    addBoard(state, board: SidebarList) {
+    ADD_BOARD(state, board: SidebarList) {
       state.boardList.push(board);
     },
 
-    selectArticle(state, article: Article) {
+    SELECT_ARTICLE(state, article: Article) {
       console.log(article, state);
       state.article = article;
     }
@@ -55,14 +55,14 @@ const module: Module<FeedModule, RootState> = {
     FETCH_FEED({ commit }) {
       Axios.instance
         .get("/api/feed/list")
-        .then(({ data }) => commit("setFeedList", data.data))
+        .then(({ data }) => commit("SET_FEED_LIST", data.data))
         .catch(err => console.error(err));
     },
 
     FETCH_RSS({ commit }) {
       Axios.instance
         .get("/api/rss/list/all")
-        .then(({ data }) => commit("setRssList", data.data))
+        .then(({ data }) => commit("SET_RSS_LIST", data.data))
         .catch(err => console.error(err));
     },
 

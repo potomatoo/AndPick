@@ -8,6 +8,7 @@ import MypageMain from "@/views/pages/MypageMain.vue";
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
 import LogoutView from "@/views/accounts/LogoutView.vue";
+import UpdateUserView from "@/views/accounts/UpdateUserView.vue";
 import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 
 Vue.use(VueRouter);
@@ -17,6 +18,15 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home,
+    beforeEnter(from, to, next) {
+      console.log(from, to);
+      if (!window.sessionStorage.getItem("jwt-token")) {
+        next("/cover");
+        console.log(!window.sessionStorage.getItem("jwt-token"));
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/cover",
@@ -44,6 +54,11 @@ const routes: Array<RouteConfig> = [
     component: DeleteUserView,
   },
   {
+    path: "/accounts/update",
+    name: "UpdateUser",
+    component: UpdateUserView,
+  },
+  {
     path: "/today",
     name: "Today",
     component: Today,
@@ -61,5 +76,14 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+// router.beforeEach(function(to, from, next) {
+//   if (!window.sessionStorage.getItem("jwt-token")) {
+//     next("/cover");
+//     next(false);
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

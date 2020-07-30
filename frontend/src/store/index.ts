@@ -34,24 +34,33 @@ const store: StoreOptions<RootState> = {
     SET_TOKEN(state, token) {
       state.JWT = token;
       STORAGE.setItem("jwt-token", token);
+      axios.defaults.headers.common["Authorization"] = token;
     },
   },
   actions: {
     postAuthData({ commit }, info) {
       axios
         .post(SERVER.URL + info.location, qs.stringify(info.data), {
-          withCredentials: true,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            withCredentials: true,
+          },
         })
         .then((res) => {
           commit("SET_TOKEN", res.data.data["Authorization"]);
           router.push("/");
         })
-        .catch((err) => console.log("err", err.response));
+        .catch((err) => console.log("err", err));
     },
 
     signup(context, signupData) {
       axios
-        .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData))
+        .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData), {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            withCredentials: true,
+          },
+        })
         .then((res) => {
           console.log("회원가입 성공", res);
         })
@@ -65,6 +74,7 @@ const store: StoreOptions<RootState> = {
       };
       dispatch("postAuthData", info);
     },
+
     logout({ getters, commit }) {
       console.log("로그아웃");
       axios
@@ -76,6 +86,17 @@ const store: StoreOptions<RootState> = {
         })
         .catch((err) => console.log(err.response));
     },
+
+    updateUser({ getters, commit }, updateData) {
+      axios
+        .put(SERVER.URL + SERVER.ROUTES.updateUser, updateData, getters.config)
+        .then((res) => {
+          commit("SET_TOKEN", res.data.data["Authorization"]);
+          router.push("/");
+        })
+        .catch((err) => console.log("err", err));
+    },
+
     deleteUser({ getters, commit }) {
       console.log("회원탈퇴");
       axios

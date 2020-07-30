@@ -23,6 +23,12 @@
         class="mr-2 router-link"
         >Logout</router-link
       >
+      <router-link
+        v-if="isLoggedIn"
+        :to="{ name: 'UpdateUser' }"
+        class="mr-2 router-link"
+        >회원정보수정</router-link
+      >
       <router-link v-if="isLoggedIn" :to="{ name: 'DeleteUser' }"
         >회원탈퇴</router-link
       >

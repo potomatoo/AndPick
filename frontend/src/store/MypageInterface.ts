@@ -1,16 +1,22 @@
-export interface FolderItem {
-    title: string;
-    articleList: ArticleItem[]
+export interface PostDir {
+    postDirID: number;
+    userNo: number;
+    postDirName: string;
+    postList: Post[]
 }
 
-export interface ArticleItem {
-    title: string;
-    content: string;
+export interface Post {
+    postId: number;
+    userNo: number;
+    postDirID: number;
+    postTitle: string
+    postContent: string;
+    postDate: string;
+    postFavorite: boolean;
 }
 
 export interface MypageModule {
     isSidebarActive: boolean;
-    folderList: FolderItem[];
-    myArticleList: ArticleItem[];
+    postDirList: PostDir[];
 }
 

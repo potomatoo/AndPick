@@ -1,43 +1,34 @@
 import { Module } from "vuex";
-import store, { RootState } from "./index";
-import { MypageModule, FolderItem, ArticleItem } from "@/store/MypageInterface.ts"
+import { RootState } from "./index";
+import { MypageModule, PostDir, Post } from "@/store/MypageInterface.ts"
+import { Axios, LocalAxios } from "@/service/axios.service";
 
 const module: Module<MypageModule, RootState> = {
   namespaced: true,
 
   state: {
     isSidebarActive: true,
-    folderList: [
-      {
-        title: "kakao 면접준비",
-        articleList: [
-          {
-            title: "kakao taxi",
-            content: "택시사업이 흥행하고 있다..."
-          }
-        ]
-      }
-    ],
-    myArticleList: []
+    postDirList: []
   },
-
 
   getters: {},
 
   mutations: {
-    TOGGLE_SIDEBAR(state) {
+    toggleSidebar(state) {
       state.isSidebarActive = !state.isSidebarActive
     },
-    ADD_FOLDER(state, folder: FolderItem) {
-      state.folderList.push(folder)
+    addPost(state, postDir: PostDir) {
+      state.postDirList.push(postDir)
     },
-    ADD_ARTICLE(state, articleItem: ArticleItem) {
-      state.myArticleList.push(articleItem);
-      console.log(state.myArticleList)
-    }
   },
 
-  actions: {}
+  actions: {
+    ADD_FOLDER({ commit }, folderName) {
+      Axios.instance
+        .post("/api/postdir/save")
+        .then()
+    }
+  }
 };
 
 export default module;

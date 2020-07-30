@@ -3,19 +3,16 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
-<<<<<<< HEAD
 import FolderMain from "@/views/pages/FolderMain.vue";
 
 import EditArticle from "@/views/pages/EditArticle.vue"
-=======
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
 import FeedPage from "@/views/feeds/FeedPage.vue";
 import BoardList from "@/views/feeds/BoardList.vue";
 import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
 import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
-import MypageMain from "@/views/pages/MypageMain.vue";
->>>>>>> a57a79a90a6ffda792081a8b1afaff2732d52423
+
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
@@ -28,7 +25,6 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Home",
     component: Home,
     beforeEnter(from, to, next) {
       console.log(from, to);
@@ -81,7 +77,6 @@ const routes: Array<RouteConfig> = [
     component: Later
   },
   {
-<<<<<<< HEAD
     path: "/mypage/:pageName",
     name: "FolderMain",
     component: FolderMain,
@@ -92,11 +87,7 @@ const routes: Array<RouteConfig> = [
     name: "EditArticle",
     component: EditArticle,
   },
-=======
-    path: "/mypage",
-    name: "MypageMain",
-    component: MypageMain
-  },
+
   {
     path: "/add",
     name: "AddRss",
@@ -122,7 +113,6 @@ const routes: Array<RouteConfig> = [
     name: "BoardList",
     component: BoardList
   }
->>>>>>> a57a79a90a6ffda792081a8b1afaff2732d52423
 ];
 
 const router = new VueRouter({

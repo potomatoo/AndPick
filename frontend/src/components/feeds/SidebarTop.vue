@@ -1,13 +1,7 @@
 <template>
   <div>
-<<<<<<< HEAD
-    <v-list>
-      <router-link class="router-link" :to="{ name: 'Today' }">
-        <v-list-item @click="click">
-=======
     <!-- <router-link class="router-link" :to="{ name: 'Today' }">
         <v-list-item>
->>>>>>> a57a79a90a6ffda792081a8b1afaff2732d52423
           <v-list-item-icon>
             <v-icon>mdi-update</v-icon>
           </v-list-item-icon>
@@ -26,7 +20,7 @@
             <v-list-item-title>Read Later</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </router-link> -->
+    </router-link>-->
     <v-list-item>
       <v-list-item-icon>
         <v-icon>mdi-plus-box-outline</v-icon>

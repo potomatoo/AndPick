@@ -33,14 +33,14 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import { FolderItem } from "../../store/MypageInterface";
+import { PostDir } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
 @Component
 export default class CreateFolder extends Vue {
-  @mypageModule.State folderList!: [];
-  @mypageModule.Mutation ADD_FOLDER: any;
+  @mypageModule.State postDirList!: [];
+  @mypageModule.Mutation addPost: any;
 
   folderName = null;
 
@@ -60,9 +60,9 @@ export default class CreateFolder extends Vue {
   }
 
   checkDuplication(name: string | null) {
-    if (this.folderList.length) {
-      return this.folderList.some(
-        (folder: FolderItem) => folder.title === name
+    if (this.postDirList.length) {
+      return this.postDirList.some(
+        (folder: PostDir) => folder.postDirName === name
       );
     }
   }
@@ -74,7 +74,7 @@ export default class CreateFolder extends Vue {
 
   addFolderItem() {
     if (this.folderName && !this.checkDuplication(this.folderName)) {
-      this.ADD_FOLDER({ title: this.folderName });
+      this.addPost({ title: this.folderName, articleList: [] });
       this.closeModal();
     }
   }

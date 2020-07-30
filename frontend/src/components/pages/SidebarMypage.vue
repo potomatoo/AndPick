@@ -6,7 +6,7 @@
         <create-folder />
       </v-subheader>
 
-      <v-list-item v-for="folder in FolderList" :key="folder.title" @click="click">
+      <v-list-item v-for="folder in folderList" :key="folder.title" @click="click">
         <v-list-item-content>
           <router-link
             :to="{ name: 'FolderMain', params: { pageName: folder.title } }"
@@ -33,7 +33,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class SidebarMypage extends Vue {
-  @mypageModule.State FolderList!: [];
+  @mypageModule.State folderList!: [];
   click() {
     console.log("click");
   }

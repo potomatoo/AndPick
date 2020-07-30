@@ -1,39 +1,7 @@
 <template>
   <div>
-<<<<<<< HEAD
-    <v-list>
-      <v-subheader>Feed</v-subheader>
-      <v-list-group
-        v-for="feed in feedList"
-        :key="feed.title"
-        v-model="feed.active"
-        :prepend-icon="feed.action"
-        no-action
-      >
-        <template v-slot:activator>
-          <v-list-item-content>
-            <v-list-item-title v-text="feed.title"></v-list-item-title>
-          </v-list-item-content>
-        </template>
-
-        <v-list-item v-for="subItem in feed.items" :key="subItem.title">
-          <v-list-item-content>
-            <v-list-item-title v-text="subItem.title"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group>
-
-      <v-list-item @click="modalActive = !modalActive">
-        <v-list-item-content class="text-center">
-          <v-list-item-title>Create New Feed</v-list-item-title>
-=======
     <v-subheader>Feed</v-subheader>
-    <v-list-group
-      v-for="feed in feedList"
-      :key="feed.feedName"
-      no-action
-      sub-group
-    >
+    <v-list-group v-for="feed in feedList" :key="feed.feedName" no-action sub-group>
       <template v-slot:activator>
         <v-list-item-content>
           <router-link
@@ -57,11 +25,8 @@
             }"
             class="router-link"
           >
-            <v-list-item-title
-              v-text="subItem.subscribeName"
-            ></v-list-item-title>
+            <v-list-item-title v-text="subItem.subscribeName"></v-list-item-title>
           </router-link>
->>>>>>> a57a79a90a6ffda792081a8b1afaff2732d52423
         </v-list-item-content>
       </v-list-item>
     </v-list-group>

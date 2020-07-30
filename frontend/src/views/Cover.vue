@@ -18,8 +18,8 @@ import UserInformation from "@/components/cover/UserInformation.vue";
   components: {
     ServiceDescription,
     RssImage,
-    UserInformation,
-  },
+    UserInformation
+  }
 })
 export default class Cover extends Vue {}
 </script>

@@ -8,9 +8,7 @@
         </v-flex>
         <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
-          <v-icon class="ml-3" @click="console.log('hi')"
-            >mdi-replay mdi-flip-h</v-icon
-          >
+          <v-icon class="ml-3" @click="console.log('hi')">mdi-replay mdi-flip-h</v-icon>
         </v-flex>
       </v-layout>
     </v-container>
@@ -20,13 +18,9 @@
         <h4>Which sources would you like to follow?</h4>
       </v-layout>
       <v-layout justify-center>
-        <p>
-          You can follow publications, blogs feeds.
-        </p>
+        <p>You can follow publications, blogs feeds.</p>
       </v-layout>
-      <v-btn color="success" dark @click="selectArticle(article)"
-        >ADD CONTENT</v-btn
-      >
+      <v-btn color="success" dark @click="selectArticle(article)">ADD CONTENT</v-btn>
     </v-container>
 
     <!-- 기사 리스트 -->
@@ -43,15 +37,9 @@
                 }"
               >
                 <v-list-item-content class="mt-3">
-                  <div class="h4">
-                    {{ article.title }}
-                  </div>
-                  <div class="sumtitle-1 text--secondary">
-                    {{ article.pubDate }}
-                  </div>
-                  <v-list-item-subtitle>
-                    {{ article.description }}
-                  </v-list-item-subtitle>
+                  <div class="h4">{{ article.title }}</div>
+                  <div class="sumtitle-1 text--secondary">{{ article.pubDate }}</div>
+                  <v-list-item-subtitle>{{ article.description }}</v-list-item-subtitle>
                 </v-list-item-content>
               </router-link>
             </v-list-item-content>
@@ -67,7 +55,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { RssList, Rss } from "../../store/Feed.interface";
-import { Axios } from "@/service/axios.service";
+import { Axios } from "../../service/axios.service";
 
 const feedModule = namespace("feedModule");
 
@@ -83,6 +71,7 @@ export default class ArticleListInRss extends Vue {
   @Watch("rssList")
   fetchArticles() {
     console.log("fetchArticle 안됨");
+
     // this.rssList.forEach(rss => {
     //   if (rss.id === Number(this.$route.params.rssId)) {
     //     this.rssTitle = rss.title;

@@ -1,10 +1,18 @@
 <template>
+<<<<<<< HEAD
   <v-navigation-drawer class="sidebar" v-if="isSidebarActive" app clipped permanent>
+=======
+  <v-navigation-drawer v-if="isSidebarActive" app clipped permanent>
+>>>>>>> a57a79a90a6ffda792081a8b1afaff2732d52423
     <!-- <div class="pt-3">
       <v-list-item-title class="text-center font-weight-bold"
         >Welcome Junho!</v-list-item-title
       >
+<<<<<<< HEAD
     </div>-->
+=======
+    </div> -->
+>>>>>>> a57a79a90a6ffda792081a8b1afaff2732d52423
     <v-list dense>
       <sidebar-top />
       <v-divider></v-divider>
@@ -35,11 +43,7 @@ import SidebarMypage from "@/components/pages/SidebarMypage.vue";
   },
   computed: mapState("mypageModule", ["isSidebarActive"])
 })
-export default class AppSidebar extends Vue {
-  created() {
-    // this.$store.dispatch("feedModule/initData");
-  }
-}
+export default class AppSidebar extends Vue {}
 </script>
 
 <style scoped>

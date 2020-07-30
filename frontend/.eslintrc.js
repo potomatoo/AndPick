@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     quotes: ["error", "double"],
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off"
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "camelcase": "off",
   }
 };

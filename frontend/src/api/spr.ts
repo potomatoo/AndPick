@@ -4,6 +4,7 @@ export default {
     signup: "/api/public/signup",
     login: "/api/public/login",
     logout: "/api/user/logout",
+    updateUser: "/api/user/update",
     deleteUser: "/api/user/delete",
   },
 };

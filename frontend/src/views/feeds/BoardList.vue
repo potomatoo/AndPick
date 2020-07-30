@@ -33,7 +33,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class FeedList extends Vue {}
+export default class BoardList extends Vue {}
 </script>
 
 <style></style>

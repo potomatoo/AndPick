@@ -36,7 +36,7 @@
 
     <v-container fluid>
       <!-- <v-row> -->
-      <v-col v-for="rss in rssList" :key="rss.title">
+      <v-col v-for="rss in rssList" :key="rss.rssId">
         <v-card max-height="250px">
           <v-card-text>
             <div class="float-left">Word of the Day</div>
@@ -54,9 +54,9 @@
               </template>
               <v-list>
                 <v-list-item v-for="(feed, i) in feedList" :key="i">
-                  <v-list-item-title>{{ feed.title }}</v-list-item-title>
+                  <v-list-item-title>{{ feed.feedName }}</v-list-item-title>
                   <v-btn
-                    v-if="checkRssInFeed(feed.items, rss)"
+                    v-if="checkSubscribe(feed.subscribeList, rss)"
                     class="ml-3"
                     outlined
                     color="success"
@@ -78,7 +78,7 @@
             </v-menu>
 
             <p class="display-1 text--primary mt-10">
-              {{ rss.title }}
+              {{ rss.rssName }}
             </p>
             <p>adjective</p>
             <div class="text--primary">
@@ -96,22 +96,34 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { SidebarList, SidebarItem, RssList } from "../../store/Feed.interface";
+import {
+  SidebarList,
+  SidebarItem,
+  RssList,
+  FeedList,
+  Rss,
+  SubscribeList
+} from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
-export default class ReadLaterList extends Vue {
+export default class AddRss extends Vue {
   @feedModule.State rssList!: [];
   @feedModule.State feedList!: [];
-  @feedModule.Mutation addRssToFeed: any;
+  @feedModule.Mutation subscribeRss: any;
 
-  addRss(feed: SidebarList, rss: { rss: string; feed: string }) {
-    this.addRssToFeed({ feedname: feed.title, rss });
+  addRss(feed: FeedList, rss: Rss) {
+    this.subscribeRss({ feedname: feed.feedName, rss });
   }
 
-  checkRssInFeed(rssList: SidebarItem[], rss: RssList) {
-    return !(rssList.length && rssList.some(el => el.title === rss.title));
+  checkSubscribe(subscribedList: SubscribeList[], rss: Rss) {
+    console.log("rsssslst", subscribedList);
+    console.log("rssss", rss.rssId);
+    return !(
+      subscribedList.length &&
+      subscribedList.some(el => el.rss.rssId === rss.rssId)
+    );
   }
 }
 </script>

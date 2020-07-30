@@ -3,7 +3,7 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <h1>{{ $route.params.feedname }}</h1>
+          <h1>{{ $route.params.feedName }}</h1>
         </v-flex>
         <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
@@ -32,7 +32,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class FeedList extends Vue {}
+export default class FeedPage extends Vue {}
 </script>
 
 <style></style>

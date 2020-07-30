@@ -14,9 +14,5 @@
 import { Vue, Component } from "vue-property-decorator";
 
 @Component
-export default class AppMain extends Vue {
-  mounted() {
-    console.log("gkgk", this.$vuetify);
-  }
-}
+export default class AppMain extends Vue {}
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-if="isSidebarActive" app clipped permanent>
+  <v-navigation-drawer class="sidebar" v-if="isSidebarActive" app clipped permanent>
     <!-- <div class="pt-3">
       <v-list-item-title class="text-center font-weight-bold"
         >Welcome Junho!</v-list-item-title
@@ -42,3 +42,5 @@ export default class AppSidebar extends Vue {
 }
 </script>
 
+<style scoped>
+</style>

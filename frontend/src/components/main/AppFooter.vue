@@ -1,5 +1,5 @@
 <template>
-  <v-footer app>
+  <v-footer app clipped-left>
     <div class="container">
       <router-link :to="{ name: 'Home' }">
         <a class="logo-font">Junho</a>

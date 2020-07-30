@@ -7,7 +7,7 @@
         <v-form ref="form" onsubmit="return false;">
           <v-card-text>
             <v-text-field
-              v-model="FolderName"
+              v-model="folderName"
               label="Folder name"
               autofocus
               clearable
@@ -33,16 +33,16 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import { SidebarList } from "../../store/MypageInterface";
+import { FolderItem } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
 @Component
 export default class CreateFolder extends Vue {
-  @mypageModule.State FolderList!: [];
-  @mypageModule.Mutation addFolder: any;
+  @mypageModule.State folderList!: [];
+  @mypageModule.Mutation ADD_FOLDER: any;
 
-  FolderName = null;
+  folderName = null;
 
   modalActive = false;
 
@@ -60,21 +60,21 @@ export default class CreateFolder extends Vue {
   }
 
   checkDuplication(name: string | null) {
-    if (this.FolderList.length) {
-      return this.FolderList.some(
-        (folder: SidebarList) => folder.title === name
+    if (this.folderList.length) {
+      return this.folderList.some(
+        (folder: FolderItem) => folder.title === name
       );
     }
   }
 
   closeModal() {
-    this.FolderName = null;
+    this.folderName = null;
     this.modalActive = false;
   }
 
   addFolderItem() {
-    if (this.FolderName && !this.checkDuplication(this.FolderName)) {
-      this.addFolder({ title: this.FolderName });
+    if (this.folderName && !this.checkDuplication(this.folderName)) {
+      this.ADD_FOLDER({ title: this.folderName });
       this.closeModal();
     }
   }

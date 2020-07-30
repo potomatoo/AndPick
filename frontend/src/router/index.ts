@@ -27,10 +27,10 @@ const routes: Array<RouteConfig> = [
   },
 
   {
-    path: "/editarticle",
+    path: "/mypage/:pageName/post",
     name: "EditArticle",
     component: EditArticle,
-  }
+  },
 ];
 
 const router = new VueRouter({

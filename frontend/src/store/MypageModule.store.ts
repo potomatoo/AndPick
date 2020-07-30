@@ -1,53 +1,41 @@
 import { Module } from "vuex";
 import store, { RootState } from "./index";
-import { MypageModule, SidebarList } from "@/store/MypageInterface.ts"
+import { MypageModule, FolderItem, ArticleItem } from "@/store/MypageInterface.ts"
 
 const module: Module<MypageModule, RootState> = {
   namespaced: true,
 
   state: {
     isSidebarActive: true,
-    FolderList: [],
-
-    MyArticleList: [
+    folderList: [
       {
-        articleItems: [
+        title: "kakao 면접준비",
+        articleList: [
           {
-            title: "samsung",
-            content: "삼성면접",
-          },
-          {
-            title: "kakao",
-            content: "카카오 기술면접"
-          },
-          {
-            title: "LG",
-            content: "LG 인적성"
-          },
-          {
-            title: "Hyundai",
-            content: "임원면접"
+            title: "kakao taxi",
+            content: "택시사업이 흥행하고 있다..."
           }
         ]
-      },
-    ]
+      }
+    ],
+    myArticleList: []
   },
 
 
   getters: {},
 
   mutations: {
-    toggleSidebar(state) {
+    TOGGLE_SIDEBAR(state) {
       state.isSidebarActive = !state.isSidebarActive
     },
-    addFolder(state, folder: SidebarList) {
-      state.FolderList.push(folder)
+    ADD_FOLDER(state, folder: FolderItem) {
+      state.folderList.push(folder)
     },
-    changeArticle(state, changeArticleList) {
-      state.MyArticleList = changeArticleList;
+    ADD_ARTICLE(state, articleItem: ArticleItem) {
+      state.myArticleList.push(articleItem);
+      console.log(state.myArticleList)
     }
   },
-
 
   actions: {}
 };

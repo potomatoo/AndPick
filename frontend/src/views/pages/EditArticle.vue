@@ -1,125 +1,178 @@
 <template>
-  <div class="editor">
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-      <div class="menubar">
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.bold() }"
-          @click="commands.bold"
+  <div class="container mt-5">
+    <v-text-field
+      label="Title"
+      single-line
+      v-model="title"
+      class="font-weight-bold font-size: 3rem"
+    ></v-text-field>
+    <div class="editor">
+      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+        <div class="menubar">
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.bold() }"
+            @click="commands.bold"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/bold.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.italic() }"
+            @click="commands.italic"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/italic.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.strike() }"
+            @click="commands.strike"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/strike.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.underline() }"
+            @click="commands.underline"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/underline.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.code() }"
+            @click="commands.code"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/code.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.paragraph() }"
+            @click="commands.paragraph"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/paragraph.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+            @click="commands.heading({ level: 1 })"
+          >H1</button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+            @click="commands.heading({ level: 2 })"
+          >H2</button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+            @click="commands.heading({ level: 3 })"
+          >H3</button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.bullet_list() }"
+            @click="commands.bullet_list"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/ul.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.ordered_list() }"
+            @click="commands.ordered_list"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/ol.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.blockquote() }"
+            @click="commands.blockquote"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/quote.svg" />
+          </button>
+
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.code_block() }"
+            @click="commands.code_block"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/code.svg" />
+          </button>
+
+          <button class="menubar__button" @click="commands.horizontal_rule">
+            <img class="icon" src="@/assets/tiptap/icons/hr.svg" />
+          </button>
+
+          <button class="menubar__button" @click="commands.undo">
+            <img class="icon" src="@/assets/tiptap/icons/undo.svg" />
+          </button>
+
+          <button class="menubar__button" @click="commands.redo">
+            <img class="icon" src="@/assets/tiptap/icons/redo.svg" />
+          </button>
+        </div>
+      </editor-menu-bar>
+
+      <editor-menu-bubble
+        :editor="editor"
+        :keep-in-bounds="keepInBounds"
+        v-slot="{ commands, isActive, menu }"
+      >
+        <div
+          class="menububble"
+          :class="{ 'is-active': menu.isActive }"
+          :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
         >
-          <img class="icon" src="@/assets/tiptap/icons/bold.svg" />
-        </button>
+          <button
+            class="menububble__button"
+            :class="{ 'is-active': isActive.bold() }"
+            @click="commands.bold"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/bold.svg" />
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.italic() }"
-          @click="commands.italic"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/italic.svg" />
-        </button>
+          <button
+            class="menububble__button"
+            :class="{ 'is-active': isActive.italic() }"
+            @click="commands.italic"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/italic.svg" />
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.strike() }"
-          @click="commands.strike"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/strike.svg" />
-        </button>
+          <button
+            class="menububble__button"
+            :class="{ 'is-active': isActive.code() }"
+            @click="commands.code"
+          >
+            <img class="icon" src="@/assets/tiptap/icons/code.svg" />
+          </button>
+        </div>
+      </editor-menu-bubble>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.underline() }"
-          @click="commands.underline"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/underline.svg" />
-        </button>
+      <editor-content class="content" :editor="editor" />
+      <!-- <v-textarea name id cols="30" rows="10" :editor="editor"></v-textarea> -->
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.code() }"
-          @click="commands.code"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/code.svg" />
-        </button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.paragraph() }"
-          @click="commands.paragraph"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/paragraph.svg" />
-        </button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-          @click="commands.heading({ level: 1 })"
-        >H1</button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-          @click="commands.heading({ level: 2 })"
-        >H2</button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-          @click="commands.heading({ level: 3 })"
-        >H3</button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.bullet_list() }"
-          @click="commands.bullet_list"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/ul.svg" />
-        </button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.ordered_list() }"
-          @click="commands.ordered_list"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/ol.svg" />
-        </button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.blockquote() }"
-          @click="commands.blockquote"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/quote.svg" />
-        </button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.code_block() }"
-          @click="commands.code_block"
-        >
-          <img class="icon" src="@/assets/tiptap/icons/code.svg" />
-        </button>
-
-        <button class="menubar__button" @click="commands.horizontal_rule">
-          <img class="icon" src="@/assets/tiptap/icons/hr.svg" />
-        </button>
-
-        <button class="menubar__button" @click="commands.undo">
-          <img class="icon" src="@/assets/tiptap/icons/undo.svg" />
-        </button>
-
-        <button class="menubar__button" @click="commands.redo">
-          <img class="icon" src="@/assets/tiptap/icons/redo.svg" />
-        </button>
-      </div>
-    </editor-menu-bar>
-
-    <editor-content class="editor__content" :editor="editor" />
+      <v-flex offset-lg10 lg2>
+        <v-btn small outlined color="secondary" class="mt-10" @click="addArticleItem">
+          <v-icon left>mdi-plus</v-icon>SAVE
+        </v-btn>
+      </v-flex>
+    </div>
   </div>
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+import { Component, Vue } from "vue-property-decorator";
+import { mapMutations } from "vuex";
+import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
 import {
   Blockquote,
   CodeBlock,
@@ -139,13 +192,32 @@ import {
   Underline,
   History
 } from "tiptap-extensions";
-export default {
+
+@Component({
   components: {
     EditorContent,
-    EditorMenuBar
+    EditorMenuBar,
+    EditorMenuBubble
   },
+  methods: mapMutations("mypageModule", ["addArticle"])
+})
+export default class EditArticle extends Vue {
+  click() {
+    console.log(this.title, this.html);
+  }
+
+  addArticleItem() {
+    const articleItem = {
+      title: this.title,
+      content: this.html
+    };
+    this.addArticle(articleItem);
+  }
+
   data() {
     return {
+      keepInBounds: true,
+      title: "",
       editor: new Editor({
         extensions: [
           new Blockquote(),
@@ -167,34 +239,18 @@ export default {
           new History()
         ],
         content: `
-          <h2>
-            Hi there,
-          </h2>
-          <p>
-            this is a very <em>basic</em> example of tiptap.
-          </p>
-          <pre><code>body { display: none; }</code></pre>
-          <ul>
-            <li>
-              A regular list
-            </li>
-            <li>
-              With regular items
-            </li>
-          </ul>
-          <blockquote>
-            It's amazing 👏
-            <br />
-            – mom
-          </blockquote>
-        `
-      })
+          
+        `,
+        onUpdate: ({ getJSON, getHTML }) => {
+          this.json = getJSON();
+          this.html = getHTML();
+        }
+      }),
+      json: "",
+      html: ""
     };
-  },
-  beforeDestroy() {
-    this.editor.destroy();
   }
-};
+}
 </script>
 <style lang="scss" scope>
 .icon {
@@ -242,6 +298,23 @@ symbol {
   *[d="M0 0h24v24H0z"] {
     display: none;
   }
+}
+
+.menububble {
+  background-color: white !important;
+}
+
+.content {
+  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  border: 1px solid #dbdbdb;
+  display: block;
+  min-height: 250px;
+  max-width: 100%;
+  min-width: 100%;
+  padding: 0.625em;
+  resize: vertical;
+  background-color: white;
+  border-radius: 4px;
 }
 </style>
 

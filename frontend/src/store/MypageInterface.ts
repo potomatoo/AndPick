@@ -1,5 +1,6 @@
-export interface SidebarList {
+export interface FolderItem {
     title: string;
+    articleList: ArticleItem[]
 }
 
 export interface ArticleItem {
@@ -7,12 +8,9 @@ export interface ArticleItem {
     content: string;
 }
 
-export interface ArticleList {
-    articleItems: ArticleItem[];
-}
-
 export interface MypageModule {
     isSidebarActive: boolean;
-    FolderList: SidebarList[];
-    MyArticleList: ArticleList[];
+    folderList: FolderItem[];
+    myArticleList: ArticleItem[];
 }
+

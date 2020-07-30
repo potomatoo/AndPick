@@ -7,7 +7,7 @@
     <div class="row">
       <h1 class="pl-0 font-weight-bold">{{ $route.params.pageName }}</h1>
       <router-link :to="{ name: 'EditArticle' }" class="router-link">
-        <v-btn small outlined color="secondary" class="ml-3 mt-3">
+        <v-btn small outlined color="secondary" class="ml-5 mt-5">
           <v-icon left>mdi-plus</v-icon>New
         </v-btn>
       </router-link>
@@ -15,20 +15,19 @@
 
     <div class="container">
       <div class="row">
-        <draggable :list="MyArticleList" :options="{animation:200}" class="row wrap sortable-list">
-          <v-flex v-for="row in MyArticleList" :key="row.likeArticle" class="sortable">
+        <draggable :list="folderList" :options="{animation:200}" class="row wrap sortable-list">
+          <v-flex v-for="row in folderList" :key="row.title" class="sortable">
             <draggable
-              :list="row.articleItems"
+              :list="row.articleList"
               :group="{ name: 'row' }"
               class="row justify-content-start row-sm-12"
             >
               <v-flex
-                v-for="item in row.articleItems"
+                v-for="item in row.articleList"
                 :key="item.title"
                 xs12
                 sm6
                 md4
-                lg3
                 pa-3
                 class="row-v"
               >
@@ -67,11 +66,10 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class FolderMain extends Vue {
-  @mypageModule.State MyArticleList!: [];
-  @mypageModule.Mutation changeArticle: any;
+  @mypageModule.State folderList!: [];
 
-  update() {
-    this.changeArticle(this.MyArticleList);
+  click() {
+    console.log("click");
   }
 }
 </script>

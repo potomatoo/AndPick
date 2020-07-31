@@ -25,6 +25,7 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
+    name: "Home",
     component: Home,
     beforeEnter(from, to, next) {
       console.log(from, to);
@@ -77,13 +78,13 @@ const routes: Array<RouteConfig> = [
     component: Later
   },
   {
-    path: "/mypage/:pageName",
-    name: "FolderMain",
+    path: "/mypage/:postDirName",
+    name: "PostDir",
     component: FolderMain,
   },
 
   {
-    path: "/mypage/:pageName/post",
+    path: "/mypage/:postDirName/post",
     name: "EditArticle",
     component: EditArticle,
   },

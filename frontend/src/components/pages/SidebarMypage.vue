@@ -9,7 +9,7 @@
         <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
           <v-list-item-content>
             <router-link
-              :to="{ name: 'FolderMain', params: { pageName: postDir.postDirName } }"
+              :to="{ name: 'PostDir', params: { postDirName: postDir.postDirName } }"
               class="router-link"
             >
               <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
@@ -35,9 +35,6 @@ const mypageModule = namespace("mypageModule");
 })
 export default class SidebarMypage extends Vue {
   @mypageModule.State postDirList!: [];
-  click() {
-    console.log("click");
-  }
 }
 </script>
 

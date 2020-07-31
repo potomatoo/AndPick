@@ -5,8 +5,11 @@
     </div>
 
     <div class="row">
-      <h1 class="pl-0 font-weight-bold">{{ $route.params.pageName }}</h1>
-      <router-link :to="{ name: 'EditArticle' }" class="router-link">
+      <h1 class="pl-0 font-weight-bold">{{ $route.params.postDirName }}</h1>
+      <router-link
+        :to="{ name: 'EditArticle', params: { postDirName: $route.params.postDirName } }"
+        class="router-link"
+      >
         <v-btn small outlined color="secondary" class="ml-5 mt-5">
           <v-icon left>mdi-plus</v-icon>New
         </v-btn>
@@ -15,16 +18,16 @@
 
     <div class="container">
       <div class="row">
-        <draggable :list="folderList" :options="{animation:200}" class="row wrap sortable-list">
-          <v-flex v-for="row in folderList" :key="row.title" class="sortable">
+        <draggable :list="postDirList" :options="{animation:200}" class="row wrap sortable-list">
+          <v-flex v-for="postDir in postDirList" :key="postDir.postDirName" class="sortable">
             <draggable
-              :list="row.articleList"
-              :group="{ name: 'row' }"
+              :list="postDir.postList"
+              :group="{ name: 'postDir' }"
               class="row justify-content-start row-sm-12"
             >
               <v-flex
-                v-for="item in row.articleList"
-                :key="item.title"
+                v-for="post in postDir.postList"
+                :key="post.postId"
                 xs12
                 sm6
                 md4
@@ -35,10 +38,10 @@
                   <v-card id="cursor_test" :elevation="hover ? 16 : 2" height="350" max-width="350">
                     <v-card-text
                       class="font-weight-medium mt-12 text-center subtitle-1"
-                    >{{ item.title }}</v-card-text>
+                    >{{ post.postTitle }}</v-card-text>
                     <hr class="mt-0" />
                     <div class="text--primary text-left ml-3">
-                      {{ item.content }}
+                      {{ post.postContent }}
                       <br />
                     </div>
                   </v-card>
@@ -66,7 +69,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class FolderMain extends Vue {
-  @mypageModule.State folderList!: [];
+  @mypageModule.State postDirList!: [];
 
   click() {
     console.log("click");

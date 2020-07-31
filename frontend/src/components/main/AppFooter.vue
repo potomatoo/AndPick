@@ -1,14 +1,15 @@
 <template>
-  <v-footer app>
+  <v-footer app clipped-left>
     <div class="container">
       <router-link :to="{ name: 'Home' }">
         <a class="logo-font">Junho</a>
       </router-link>
       <span class="attribution">
         An interactive learning project from
-        <a href="https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp" target="_blank"
-          >SSAFY</a
-        >
+        <a
+          href="https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp"
+          target="_blank"
+        >SSAFY</a>
         .
       </span>
     </div>

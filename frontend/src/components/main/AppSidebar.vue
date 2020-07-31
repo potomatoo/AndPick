@@ -4,7 +4,7 @@
       <v-list-item-title class="text-center font-weight-bold"
         >Welcome Junho!</v-list-item-title
       >
-    </div> -->
+    </div>-->
     <v-list dense>
       <sidebar-top />
       <v-divider></v-divider>
@@ -37,3 +37,6 @@ import SidebarMypage from "@/components/pages/SidebarMypage.vue";
 })
 export default class AppSidebar extends Vue {}
 </script>
+
+<style scoped>
+</style>

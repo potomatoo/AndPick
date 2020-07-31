@@ -1,15 +1,18 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/main/a.vue";
+import Home from "@/views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
+import FolderMain from "@/views/pages/FolderMain.vue";
+
+import EditArticle from "@/views/pages/EditArticle.vue"
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
 import FeedPage from "@/views/feeds/FeedPage.vue";
 import BoardList from "@/views/feeds/BoardList.vue";
 import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
 import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
-import MypageMain from "@/views/pages/MypageMain.vue";
+
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
@@ -75,10 +78,17 @@ const routes: Array<RouteConfig> = [
     component: Later
   },
   {
-    path: "/mypage",
-    name: "MypageMain",
-    component: MypageMain
+    path: "/mypage/:postDirName",
+    name: "PostDir",
+    component: FolderMain,
   },
+
+  {
+    path: "/mypage/:postDirName/post",
+    name: "EditArticle",
+    component: EditArticle,
+  },
+
   {
     path: "/add",
     name: "AddRss",

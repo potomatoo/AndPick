@@ -20,7 +20,7 @@
             <v-list-item-title>Read Later</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </router-link> -->
+    </router-link>-->
     <v-list-item>
       <v-list-item-icon>
         <v-icon>mdi-plus-box-outline</v-icon>

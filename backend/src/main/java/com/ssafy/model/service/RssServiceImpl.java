@@ -57,10 +57,14 @@ public class RssServiceImpl implements RssService {
 
 		Category category = categoryRepository.findOneByCategoryName(categoryName);
 
-		if (category == null)
-			return null;
+		if (category == null) {
+			category = new Category();
+			category.setCategoryName(categoryName);
+			
+			category = categoryRepository.save(category);
+		}
 		rss.setCategory(category);
-
+		
 		if (rssRepository.findOneByRssUrl(rss.getRssUrl()) != null)
 			return null;
 

@@ -150,8 +150,11 @@ public class RssController {
 
 		for (Rss item : rssList) {
 			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
-			System.out.println(channel);
-			rssItem.addAll(channel.getItems());
+
+			for (RssItem cur : channel.getItems()) {
+				cur.setRssTitle(item.getRssName());
+				rssItem.add(cur);
+			}
 		}
 
 		// sort과정
@@ -181,8 +184,11 @@ public class RssController {
 
 		for (Rss item : rssList) {
 			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
-			System.out.println(channel);
-			rssItem.addAll(channel.getItems());
+
+			for (RssItem cur : channel.getItems()) {
+				cur.setRssTitle(item.getRssName());
+				rssItem.add(cur);
+			}
 		}
 
 		// sort과정

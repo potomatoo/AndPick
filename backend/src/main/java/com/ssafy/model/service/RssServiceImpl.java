@@ -60,11 +60,11 @@ public class RssServiceImpl implements RssService {
 		if (category == null) {
 			category = new Category();
 			category.setCategoryName(categoryName);
-			
+
 			category = categoryRepository.save(category);
 		}
 		rss.setCategory(category);
-		
+
 		if (rssRepository.findOneByRssUrl(rss.getRssUrl()) != null)
 			return null;
 
@@ -79,8 +79,11 @@ public class RssServiceImpl implements RssService {
 
 		List<Rss> list = new ArrayList<Rss>();
 
-		for (Subscribe item : subscribe)
-			list.add(item.getRss());
+		for (Subscribe item : subscribe) {
+			Rss rss = item.getRss();
+			rss.setRssName(item.getSubscribeName());
+			list.add(rss);
+		}
 
 		return list;
 	}
@@ -91,7 +94,11 @@ public class RssServiceImpl implements RssService {
 
 		List<Rss> list = new ArrayList<Rss>();
 
-		list.add(subscribeRepository.findOneBySubscribeId(subscribeId).getRss());
+		Subscribe subscribe = subscribeRepository.findOneBySubscribeId(subscribeId);
+		Rss rss = subscribe.getRss();
+		rss.setRssName(subscribe.getSubscribeName());
+
+		list.add(rss);
 
 		return list;
 	}

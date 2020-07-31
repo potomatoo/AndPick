@@ -1,9 +1,7 @@
 <template>
   <div>
-    <v-divider></v-divider>
-    <v-list>
-      <router-link class="router-link" :to="{ name: 'Today' }">
-        <v-list-item @click="click">
+    <!-- <router-link class="router-link" :to="{ name: 'Today' }">
+        <v-list-item>
           <v-list-item-icon>
             <v-icon>mdi-update</v-icon>
           </v-list-item-icon>
@@ -13,15 +11,26 @@
         </v-list-item>
       </router-link>
 
-      <v-list-item @click="click">
-        <v-list-item-icon>
-          <v-icon>mdi-bookmark-outline</v-icon>
-        </v-list-item-icon>
+      <router-link class="router-link" :to="{ name: 'Later' }">
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-bookmark-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Read Later</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </router-link> -->
+    <v-list-item>
+      <v-list-item-icon>
+        <v-icon>mdi-plus-box-outline</v-icon>
+      </v-list-item-icon>
+      <router-link class="router-link" :to="{ name: 'AddRss' }">
         <v-list-item-content>
-          <v-list-item-title>Read Later</v-list-item-title>
+          <v-list-item-title>Follow New Sources</v-list-item-title>
         </v-list-item-content>
-      </v-list-item>
-    </v-list>
+      </router-link>
+    </v-list-item>
   </div>
 </template>
 
@@ -29,11 +38,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class SidebarTop extends Vue {
-  click() {
-    console.log("click");
-  }
-}
+export default class SidebarTop extends Vue {}
 </script>
 <style scoped>
 .router-link {

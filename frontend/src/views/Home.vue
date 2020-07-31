@@ -36,5 +36,8 @@ export default class Home extends Vue {
       console.log("토큰없음");
     }
   }
+  created() {
+    this.$store.dispatch("feedModule/FETCH_DATA");
+  }
 }
 </script>

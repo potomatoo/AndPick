@@ -1,7 +1,9 @@
 <template>
-  <div class="col-lg-7 mt-5 d-flex justify-content-center">
+  <div class="col-lg-6 mt-5 d-flex justify-content-center">
     <!-- <img src="@/assets/businessman.png" width="300px" height="300px" /> -->
-    <video src="@/assets/Subscribe.mp4" width="700" autoplay muted loop>video 태그</video>
+    <video src="@/assets/Subscribe.mp4" width="450" autoplay muted loop>
+      video 태그
+    </video>
   </div>
 </template>
 

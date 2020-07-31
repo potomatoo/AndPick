@@ -41,13 +41,14 @@ const store: StoreOptions<RootState> = {
     postAuthData({ commit }, info) {
       axios
         .post(SERVER.URL + info.location, qs.stringify(info.data), {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            withCredentials: true,
-          },
+          // headers: {
+          // "Access-Control-Allow-Origin": "*",
+          withCredentials: true,
+          // },
         })
         .then((res) => {
-          commit("SET_TOKEN", res.data.data["Authorization"]);
+          // console.log(res);
+          commit("SET_TOKEN", res.data.data["userPassword"]);
           router.push("/");
         })
         .catch((err) => console.log("err", err));
@@ -56,10 +57,10 @@ const store: StoreOptions<RootState> = {
     signup(context, signupData) {
       axios
         .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData), {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            withCredentials: true,
-          },
+          // headers: {
+          // "Access-Control-Allow-Origin": "*",
+          withCredentials: true,
+          // },
         })
         .then((res) => {
           console.log("회원가입 성공", res);

@@ -28,10 +28,8 @@ const routes: Array<RouteConfig> = [
     name: "Home",
     component: Home,
     beforeEnter(from, to, next) {
-      console.log(from, to);
       if (!window.sessionStorage.getItem("jwt-token")) {
         next("/cover");
-        console.log(!window.sessionStorage.getItem("jwt-token"));
       } else {
         next();
       }

@@ -18,7 +18,9 @@ const module: Module<FeedModule, RootState> = {
     rssList: [],
     feedList: [],
     boardList: [],
-    article: null
+    article: null,
+    subscribeId: null,
+    articleList: []
   },
 
   getters: {},
@@ -47,8 +49,10 @@ const module: Module<FeedModule, RootState> = {
     },
 
     SELECT_ARTICLE(state, article: Article) {
-      console.log(article, state);
       state.article = article;
+    },
+    SELECT_SUBSCRIBE(state, { subscribeId }) {
+      state.subscribeId = subscribeId;
     }
   },
   actions: {
@@ -84,13 +88,15 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    SUBSCRIBE_RSS({ dispatch }, { feedId, rss }: { feedId: number; rss: Rss }) {
+    SUBSCRIBE_RSS(
+      { dispatch, state },
+      { feedId, rss }: { feedId: number; rss: Rss }
+    ) {
       const feedData = {
         params: {
           feedId
         }
       };
-
       const subscribeData = {
         params: {
           categoryName: rss.category.categoryName,
@@ -131,6 +137,15 @@ const module: Module<FeedModule, RootState> = {
               .then(() => dispatch("FETCH_FEED"))
               .catch(err => console.error(err));
           }
+        });
+    },
+    FETCH_ARTICLE_LIST({ state }) {
+      Axios.instance
+        .get("/api/rss/item/subscribe", {
+          params: { subscribeId: state.subscribeId }
+        })
+        .then(({ data }) => {
+          state.articleList = data.data;
         });
     }
   }

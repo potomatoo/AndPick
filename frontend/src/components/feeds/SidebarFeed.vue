@@ -76,7 +76,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 // import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
-import { SidebarList, FeedList } from "../../store/Feed.interface";
+import { FeedList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
@@ -116,7 +116,6 @@ export default class SidebarFeed extends Vue {
 
   addFeeds() {
     if (this.newFeedName && !this.checkDuplication(this.newFeedName)) {
-      // subscribeList 없어도 될듯
       this.ADD_FEED(this.newFeedName);
       this.closeModal();
     }

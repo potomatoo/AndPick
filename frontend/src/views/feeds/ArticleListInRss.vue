@@ -3,8 +3,7 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <h1>{{ rssTitle }}</h1>
-          <h1>{{ $route.params }}</h1>
+          <h1 v-if="articleList[0]">{{ articleList[0].rssTitle }}</h1>
         </v-flex>
         <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
@@ -15,19 +14,6 @@
       </v-layout>
     </v-container>
     <v-divider></v-divider>
-    <v-container class="text-center">
-      <v-layout justify-center>
-        <h4>Which sources would you like to follow?</h4>
-      </v-layout>
-      <v-layout justify-center>
-        <p>
-          You can follow publications, blogs feeds.
-        </p>
-      </v-layout>
-      <v-btn color="success" dark @click="SELECT_ARTICLE(article)"
-        >ADD CONTENT</v-btn
-      >
-    </v-container>
 
     <!-- 기사 리스트 -->
     <v-container class="offset-lg3 lg6">
@@ -66,21 +52,23 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { RssList, Rss } from "../../store/Feed.interface";
-import { Axios } from "@/service/axios.service";
+import { Rss, Article } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
 export default class ArticleListInRss extends Vue {
   @feedModule.State rssList!: Rss[];
+  @feedModule.State subscribeId!: number | null;
+  @feedModule.State articleList!: Article[];
   @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Mutation SELECT_SUBSCRIBE: any;
+  @feedModule.Action FETCH_ARTICLE_LIST: any;
 
   rssTitle: string | null = null;
-  articleList: [] | null = null;
 
-  @Watch("$route", { immediate: true })
-  @Watch("rssList")
+  // @Watch("$route", { immediate: true })
+  // @Watch("rssList")
   fetchArticles() {
     console.log("fetchArticle 안됨");
     // this.rssList.forEach(rss => {
@@ -96,9 +84,17 @@ export default class ArticleListInRss extends Vue {
     // });
   }
 
-  // created() {
-  //   this.fetchArticles();
-  // }
+  @Watch("$route", { immediate: true })
+  selectSub() {
+    this.SELECT_SUBSCRIBE({
+      subscribeId: this.$route.params.subscribeId
+    });
+  }
+
+  @Watch("subscribeId", { immediate: true })
+  fetchData() {
+    this.FETCH_ARTICLE_LIST();
+  }
 }
 </script>
 

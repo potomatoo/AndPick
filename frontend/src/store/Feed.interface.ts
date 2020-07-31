@@ -53,6 +53,8 @@ export interface FeedModule {
   feedList: FeedList[];
   boardList: SidebarList[];
   article: Article | null;
+  subscribeId: number | null;
+  articleList: Article[];
 }
 // dummy
 export interface RssList {

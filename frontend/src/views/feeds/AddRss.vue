@@ -101,14 +101,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import {
-  SidebarList,
-  SidebarItem,
-  RssList,
-  FeedList,
-  Rss,
-  SubscribeList
-} from "../../store/Feed.interface";
+import { Rss, SubscribeList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 

@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.ssafy.config.JwtProperties;
 import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.LoginRequest;
+import com.ssafy.model.dto.User;
 import com.ssafy.security.UserPrincipal;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -72,7 +73,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		result.status = true;
 		result.message = "login success";
-		result.data = principal.getUser();
+
+		User user = principal.getUser();
+		user.setUserPassword(JwtProperties.TOKEN_PREFIX + token);
+
+		result.data = user;
 
 		response.getWriter().write(new Gson().toJson(result));
 

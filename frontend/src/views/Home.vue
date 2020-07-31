@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app id="inspire">
-      <app-sidebar />
+      <app-sidebar v-if="this.$store.state.JWT" />
       <app-navbar />
       <app-main />
     </v-app>
@@ -10,23 +10,35 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import AppNavbar from "@/components/main/AppNavbar.vue";
 import AppSidebar from "@/components/main/AppSidebar.vue";
 import AppMain from "@/components/main/AppMain.vue";
 import AppFooter from "@/components/main/AppFooter.vue";
+
+// import { mapGetters } from "vuex";
 
 @Component({
   components: {
     AppNavbar,
     AppSidebar,
     AppMain,
-    AppFooter
-  }
+    AppFooter,
+  },
+  // computed: { ...mapGetters(["isLoggedIn"]) },
 })
 export default class Home extends Vue {
+  @Watch("$store.state.JWT")
+  stateUpdate() {
+    if (this.$store.state.JWT) {
+      console.log("로그인감지");
+    } else {
+      console.log("토큰없음");
+    }
+  }
   created() {
     this.$store.dispatch("feedModule/FETCH_FEED");
+    this.$store.dispatch("mypageModule/FETCH_DATA");
   }
 }
 </script>

@@ -9,53 +9,78 @@ const module: Module<MypageModule, RootState> = {
 
   state: {
     isSidebarActive: true,
-    postDirList: []
+    postDirList: [],
+    postDir: [],
+    post: null,
+    postDirId: null,
   },
 
   getters: {},
 
   mutations: {
-    toggleSidebar(state) {
+    TOGGLE_SIDEBAR(state) {
       state.isSidebarActive = !state.isSidebarActive
     },
 
-    setPostDirList(state, postDirList: PostDir[]) {
+    SET_POSTDIR_LIST(state, postDirList: PostDir[]) {
       state.postDirList = postDirList;
-      console.log("postDir리스트", state.postDirList);
     },
 
-    addPost(state, postDir: PostDir) {
+    ADD_POSTDIR(state, postDir: PostDir) {
       state.postDirList.push(postDir)
+
     },
+
+    SET_POSTDIR(state, postDir: Post[]) {
+      state.postDir = postDir;
+    },
+
+    SELECT_POSTDIR(state, { postDirId }) {
+      state.postDirId = postDirId
+    }
   },
 
   actions: {
-    FETCH_DATA({ commit }) {
+    FETCH_POSTDIR_LIST({ commit }) {
       Axios.instance
         .get("/api/postdir/find/user")
         .then(({ data }) => {
-          commit("setPostDirList", data.data)
+          commit("SET_POSTDIR_LIST", data.data)
         })
         .catch(err => console.error(err))
     },
 
-    ADD_POSTDIR({ dispatch }, postDirName) {
-      const data = {
+    FETCH_POSTDIR({ commit }, postDirId: number) {
+      const postData = {
+        params: {
+          postDirId
+        }
+      };
+      Axios.instance
+        .get("/api/postdir/find/postdir", postData)
+        .then(({ data }) => {
+          commit("SET_POSTDIR", data.data)
+        })
+        .catch(err => console.error(err))
+    },
+
+    ADD_POSTDIR({ dispatch }, postDirName: string) {
+      const postDirData = {
         params: {
           postDirName
         }
       };
       Axios.instance
-        .post("/api/postdir/save", null, data)
+        .post("/api/postdir/save", null, postDirData)
         .then(({ data }) => {
-          dispatch("FETCH_DATA");
+          dispatch("FETCH_POSTDIR_LIST");
           return data.data.postDirName;
         })
         .then(postDirName => {
-          router.push({ name: "FolderMain", params: { postDirName } });
+          router.push({ name: "PostDir", params: { postDirName } });
         })
         .catch(err => console.error(err));
-    }
+    },
   }
 };
 

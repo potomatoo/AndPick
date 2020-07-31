@@ -3,7 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
-import FolderMain from "@/views/pages/FolderMain.vue";
+import PostDir from "@/views/pages/PostDir.vue";
 
 import EditArticle from "@/views/pages/EditArticle.vue"
 import Later from "@/views/feeds/ReadLaterList.vue";
@@ -76,9 +76,9 @@ const routes: Array<RouteConfig> = [
     component: Later
   },
   {
-    path: "/mypage/:postDirName",
+    path: "/mypage/:postDirId",
     name: "PostDir",
-    component: FolderMain,
+    component: PostDir,
   },
 
   {

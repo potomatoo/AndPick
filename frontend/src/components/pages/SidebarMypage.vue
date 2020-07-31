@@ -9,7 +9,7 @@
         <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
           <v-list-item-content>
             <router-link
-              :to="{ name: 'PostDir', params: { postDirName: postDir.postDirName } }"
+              :to="{ name: 'PostDir', params: { postDirId: postDir.postDirId } }"
               class="router-link"
             >
               <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>

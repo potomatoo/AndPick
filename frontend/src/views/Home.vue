@@ -1,26 +1,22 @@
 <template>
   <div>
-    <v-app v-if="isLoggedIn" id="inspire">
-      <app-sidebar />
+    <v-app id="inspire">
+      <app-sidebar v-if="this.$store.state.JWT" />
       <app-navbar />
       <app-main />
     </v-app>
-    <div v-if="!isLoggedIn">
-      <app-navbar />
-      <router-view />
-    </div>
     <app-footer />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import AppNavbar from "@/components/main/AppNavbar.vue";
 import AppSidebar from "@/components/main/AppSidebar.vue";
 import AppMain from "@/components/main/AppMain.vue";
 import AppFooter from "@/components/main/AppFooter.vue";
 
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 
 @Component({
   components: {
@@ -29,7 +25,16 @@ import { mapGetters } from "vuex";
     AppMain,
     AppFooter,
   },
-  computed: { ...mapGetters(["isLoggedIn"]) },
+  // computed: { ...mapGetters(["isLoggedIn"]) },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  @Watch("$store.state.JWT")
+  stateUpdate() {
+    if (this.$store.state.JWT) {
+      console.log("로그인감지");
+    } else {
+      console.log("토큰없음");
+    }
+  }
+}
 </script>

@@ -103,7 +103,7 @@ const routes: Array<RouteConfig> = [
     component: ArticleListInRss
   },
   {
-    path: "/:feedname/subscription/:rssId/:articleId",
+    path: "/:feedName/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail
   },

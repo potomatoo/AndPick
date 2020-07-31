@@ -23,7 +23,7 @@
           You can follow publications, blogs feeds.
         </p>
       </v-layout>
-      <v-btn color="success" dark>ADD CONTENT</v-btn>
+      <v-btn color="success" dark @click="addRss">ADD CONTENT</v-btn>
     </v-container>
   </div>
 </template>
@@ -32,7 +32,11 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class FeedPage extends Vue {}
+export default class FeedPage extends Vue {
+  addRss() {
+    this.$router.push({ name: "AddRss" });
+  }
+}
 </script>
 
 <style></style>

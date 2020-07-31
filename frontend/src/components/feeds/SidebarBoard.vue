@@ -63,9 +63,9 @@ import { SidebarList } from "../../store/Feed.interface";
 const feedModule = namespace("feedModule");
 
 @Component
-export default class SedebarBoard extends Vue {
+export default class SidebarBoard extends Vue {
   @feedModule.State boardList!: [];
-  @feedModule.Mutation addBoard: any;
+  @feedModule.Mutation ADD_BOARD: any;
 
   newBoardName = null;
 
@@ -97,7 +97,7 @@ export default class SedebarBoard extends Vue {
 
   addBoards() {
     if (this.newBoardName && !this.checkDuplication(this.newBoardName)) {
-      this.addBoard({ title: this.newBoardName });
+      this.ADD_BOARD({ title: this.newBoardName });
       this.closeModal();
     }
   }

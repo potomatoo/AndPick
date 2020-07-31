@@ -6,7 +6,8 @@ import {
   RssList,
   Article,
   FeedList,
-  Rss
+  Rss,
+  Feed
 } from "./Feed.interface";
 import { Axios, LocalAxios } from "@/service/axios.service";
 import router from "@/router";
@@ -17,72 +18,58 @@ const module: Module<FeedModule, RootState> = {
     rssList: [],
     feedList: [],
     boardList: [],
-    article: null
+    article: null,
+    subscribeId: null,
+    articleList: []
   },
+
   getters: {},
+
   mutations: {
-    setFeedList(state, feedList: FeedList[]) {
+    SET_FEED_LIST(state, feedList: FeedList[]) {
       state.feedList = feedList;
-      console.log("피드리스트", state.feedList);
     },
-    addFeed(state, feed: FeedList) {
+
+    ADD_FEED(state, feed: FeedList) {
       state.feedList.push(feed);
     },
 
-    setBoardList(state, boardList: SidebarList[]) {
+    SET_BOARD_LIST(state, boardList: SidebarList[]) {
       state.boardList = boardList;
       console.log("보드리스트", state.boardList);
     },
-    setRssList(state, rssList: Rss[]) {
+
+    SET_RSS_LIST(state, rssList: Rss[]) {
       state.rssList = rssList;
-      console.log("RSS리스트", state.rssList);
     },
+
     // 보드 처리하는 api 아직 없음
-    addBoard(state, board: SidebarList) {
+    ADD_BOARD(state, board: SidebarList) {
       state.boardList.push(board);
     },
-    subscribeRss(state, { feedname, rss }: { feedname: string; rss: Rss }) {
-      console.log("피드피드 작동안함", state.feedList);
-      // state.feedList.forEach(feed => {
-      //   if (feed.feedName === feedname) {
-      //     let removeIdx = 0;
-      //     if (
-      //       feed.subscribeList?.length &&
-      //       feed.subscribeList?.some((el, idx) => {
-      //         removeIdx = idx;
-      //         return el.subscribeName === rss.rssName;
-      //       })
-      //     ) {
-      //       feed.subscribeList?.splice(removeIdx, 1);
-      //     } else {
-      //       feed.subscribeList?.push(rss);
-      //     }
-      //   }
-      // });
-    },
-    selectArticle(state, article: Article) {
-      console.log(article, state);
+
+    SELECT_ARTICLE(state, article: Article) {
       state.article = article;
+    },
+    SELECT_SUBSCRIBE(state, { subscribeId }) {
+      state.subscribeId = subscribeId;
     }
   },
   actions: {
-    FETCH_DATA({ commit }) {
+    FETCH_FEED({ commit }) {
       Axios.instance
         .get("/api/feed/list")
-        .then(({ data }) => {
-          commit("setFeedList", data.data);
-          // commit("setRssList", data.rssList.data);
-        })
+        .then(({ data }) => commit("SET_FEED_LIST", data.data))
         .catch(err => console.error(err));
-
-      // LocalAxios.instance.get("/data.json").then(({ data }) => {
-      //   console.log("초기feed데이터", data.feedList.data);
-      //   console.log("초기rss데이터", data.rssList);
-      //   commit("setFeedList", data.feedList.data);
-      //   commit("setRssList", data.rssList.data);
-      //   commit("setBoardList", data.boardList);
-      // });
     },
+
+    FETCH_RSS({ commit }) {
+      Axios.instance
+        .get("/api/rss/list/all")
+        .then(({ data }) => commit("SET_RSS_LIST", data.data))
+        .catch(err => console.error(err));
+    },
+
     ADD_FEED({ dispatch }, feedName) {
       const data = {
         params: {
@@ -92,13 +79,74 @@ const module: Module<FeedModule, RootState> = {
       Axios.instance
         .post("/api/feed/save", null, data)
         .then(({ data }) => {
-          dispatch("FETCH_DATA");
+          dispatch("FETCH_FEED");
           return data.data.feedName;
         })
         .then(feedName => {
           router.push({ name: "Feed", params: { feedName } });
         })
         .catch(err => console.error(err));
+    },
+
+    SUBSCRIBE_RSS(
+      { dispatch, state },
+      { feedId, rss }: { feedId: number; rss: Rss }
+    ) {
+      const feedData = {
+        params: {
+          feedId
+        }
+      };
+      const subscribeData = {
+        params: {
+          categoryName: rss.category.categoryName,
+          rssUrl: rss.rssUrl,
+          subscribeName:
+            rss.rssName ||
+            ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1],
+          feedId
+        }
+      };
+
+      let deleteId: number | null = null;
+
+      Axios.instance
+        .get("/api/subscribe/find/feed", feedData)
+        .then(({ data }) => {
+          if (
+            data.data.length &&
+            data.data.some((el: Feed) => {
+              deleteId = el.subscribeId;
+              return el.rss.rssId === rss.rssId;
+            })
+          ) {
+            // subscribe 취소
+            const deleteData = {
+              params: {
+                subscribeId: deleteId
+              }
+            };
+            Axios.instance
+              .delete("/api/subscribe/delete", deleteData)
+              .then(() => dispatch("FETCH_FEED"))
+              .catch(err => console.error(err));
+          } else {
+            // subscribe
+            Axios.instance
+              .post("/api/subscribe/save", null, subscribeData)
+              .then(() => dispatch("FETCH_FEED"))
+              .catch(err => console.error(err));
+          }
+        });
+    },
+    FETCH_ARTICLE_LIST({ state }) {
+      Axios.instance
+        .get("/api/rss/item/subscribe", {
+          params: { subscribeId: state.subscribeId }
+        })
+        .then(({ data }) => {
+          state.articleList = data.data;
+        });
     }
   }
 };

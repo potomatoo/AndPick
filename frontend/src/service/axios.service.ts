@@ -15,4 +15,4 @@ export class Axios {
 }
 
 Axios.instance.defaults.headers.common["Authorization"] =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsImV4cCI6MTU5NjkzMjQ5NX0.SZLXqldePju5cbE-P7pf03P21QKO-QNxMKRPjv5R0m1rFGZCq2OlBcwtcmlVgMQSnTouEYzKvMxBvuQFzRfZ9Q";
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsImV4cCI6MTU5Njk4MzY1NH0.6xjY-gwjfAOEZ7-T27BnJuGm99zMZJ0pQkkxOhcFCfiHdyEvXbXcg6hy0qaNPuOH5VGAefqmr4YifUgrUS-BIw";

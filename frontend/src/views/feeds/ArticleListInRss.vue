@@ -20,7 +20,7 @@
       <v-list three-line>
         <v-list-item-group>
           <v-list-item v-for="(article, idx) in articleList" :key="idx">
-            <v-list-item-content @click="SELECT_ARTICLE(article)">
+            <v-list-item-content @click="selectArticle(article)">
               <router-link
                 class="router-link"
                 :to="{
@@ -45,7 +45,6 @@
         </v-list-item-group>
       </v-list>
     </v-container>
-    <router-view />
   </div>
 </template>
 
@@ -59,41 +58,26 @@ const feedModule = namespace("feedModule");
 @Component
 export default class ArticleListInRss extends Vue {
   @feedModule.State rssList!: Rss[];
-  @feedModule.State subscribeId!: number | null;
   @feedModule.State articleList!: Article[];
   @feedModule.Mutation SELECT_ARTICLE: any;
-  @feedModule.Mutation SELECT_SUBSCRIBE: any;
   @feedModule.Action FETCH_ARTICLE_LIST: any;
 
   rssTitle: string | null = null;
 
   // @Watch("$route", { immediate: true })
-  // @Watch("rssList")
-  fetchArticles() {
-    console.log("fetchArticle 안됨");
-    // this.rssList.forEach(rss => {
-    //   if (rss.id === Number(this.$route.params.rssId)) {
-    //     this.rssTitle = rss.title;
-    //     Axios.instance
-    //       .get("/api/public/test/rss")
-    //       .then(res => {
-    //         this.articleList = res.data.data;
-    //       })
-    //       .catch(err => console.error(err));
-    //   }
-    // });
+  // selectSub() {
+  //   this.SELECT_SUBSCRIBE({
+  //     subscribeId: this.$route.params.subscribeId
+  //   });
+  // }
+
+  selectArticle(article: Article) {
+    this.SELECT_ARTICLE(article);
   }
 
   @Watch("$route", { immediate: true })
-  selectSub() {
-    this.SELECT_SUBSCRIBE({
-      subscribeId: this.$route.params.subscribeId
-    });
-  }
-
-  @Watch("subscribeId", { immediate: true })
   fetchData() {
-    this.FETCH_ARTICLE_LIST();
+    this.FETCH_ARTICLE_LIST(this.$route.params.subscribeId);
   }
 }
 </script>

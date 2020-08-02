@@ -1,21 +1,44 @@
 <template>
   <div class="container">
     <div class="row">
-      <h6 class="text-secondary font-weight-light mb-3">Mypage</h6>
+      <h6 class="pl-3 text-secondary font-weight-light mb-3 col-10">Mypage</h6>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn id="optionBtn" small color="white" class="mt-3">
+            <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item @click="click">
+            <v-list-item-title>Latest</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="click">
+            <v-list-item-title>Oldest</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="click">
+            <v-list-item-title>More Settings</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="deletePostDir()">
+            <v-list-item-title>
+              <v-icon small left>mdi-delete</v-icon>Delete
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
 
     <div class="row">
-      <h1 class="pl-0 font-weight-bold">{{ postDir.postDirName }}</h1>
-      <router-link
-        :to="{ name: 'EditArticle', params: { postDirName: $route.params.postDirId } }"
-        class="router-link"
-      >
-        <v-btn small outlined color="secondary" class="ml-5 mt-5">
-          <v-icon left>mdi-plus</v-icon>New
-        </v-btn>
-      </router-link>
+      <h1 class="pl-3 font-weight-bold">{{ postDir.postDirName }}</h1>
     </div>
-
+    <v-divider></v-divider>
+    <router-link
+      :to="{ name: 'EditArticle', params: { postDirName: $route.params.postDirId } }"
+      class="router-link"
+    >
+      <v-btn small outlined color="secondary" class>
+        <v-icon left>mdi-plus</v-icon>New
+      </v-btn>
+    </router-link>
     <div class="container">
       <div class="row">
         <draggable :list="dragList" :options="{animation:200}" class="row wrap sortable-list">
@@ -83,12 +106,21 @@ export default class FolderMain extends Vue {
   @mypageModule.State postDirId!: number | null;
   @mypageModule.Mutation SELECT_POSTDIR: any;
   @mypageModule.Action FETCH_POSTDIR: any;
+  @mypageModule.Action DELETE_POSTDIR: any;
+
+  click() {
+    console.log("click");
+  }
 
   dragList = [
     {
       length: 1
     }
   ];
+
+  deletePostDir() {
+    this.DELETE_POSTDIR(this.$route.params.postDirId);
+  }
 
   @Watch("$route", { immediate: true })
   selectPostDir() {
@@ -117,6 +149,10 @@ export default class FolderMain extends Vue {
 }
 
 #editbtn {
+  outline: none;
+}
+
+#optionBtn {
   outline: none;
 }
 </style>

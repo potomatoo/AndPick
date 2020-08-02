@@ -81,7 +81,28 @@ const module: Module<MypageModule, RootState> = {
         })
         .catch(err => console.error(err));
     },
+
+    DELETE_POSTDIR({ dispatch }, postDirId: number) {
+      const postDirData = {
+        params: {
+          postDirId
+        }
+      };
+      Axios.instance
+        .delete("/api/postdir/delete", postDirData)
+        .then(() => {
+          dispatch("FETCH_POSTDIR_LIST");
+
+        })
+        .then(() => {
+          router.push({ name: "Home" });
+        })
+        .catch(err => console.error(err));
+    },
+
   }
+
+
 };
 
 export default module;

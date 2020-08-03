@@ -21,7 +21,7 @@ const module: Module<FeedModule, RootState> = {
     article: null,
     subscribeId: null,
     articleList: [],
-    subContextMenu: {
+    subsContextMenu: {
       showCtx: false,
       x: 0,
       y: 0
@@ -58,8 +58,8 @@ const module: Module<FeedModule, RootState> = {
     },
 
     SET_SUB_CONTEXT_MENU(state, ctx) {
-      state.subContextMenu.showCtx = false;
-      state.subContextMenu = ctx;
+      state.subsContextMenu.showCtx = false;
+      state.subsContextMenu = ctx;
     }
   },
   actions: {

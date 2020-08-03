@@ -1,8 +1,8 @@
 <template>
   <v-menu
-    v-model="subContextMenu.showCtx"
-    :position-x="subContextMenu.x"
-    :position-y="subContextMenu.y"
+    v-model="subsContextMenu.showCtx"
+    :position-x="subsContextMenu.x"
+    :position-y="subsContextMenu.y"
     offset-y
     absolute
   >
@@ -39,7 +39,7 @@ const feedModule = namespace("feedModule");
   }
 })
 export default class SubsContextMenu extends Vue {
-  @feedModule.State subContextMenu!: Context;
+  @feedModule.State subsContextMenu!: Context;
 }
 </script>
 

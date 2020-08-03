@@ -75,7 +75,7 @@
         </v-form>
       </v-card>
     </v-dialog>
-    <SubsContextMenu :item="subsItem" />
+    <subs-context-menu :item="subsItem" />
   </div>
 </template>
 
@@ -86,12 +86,14 @@ import { namespace } from "vuex-class";
 // import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
 import { FeedList, SubscribeList } from "../../store/Feed.interface";
 import SubsContextMenu from "@/components/feeds/SubsContextMenu.vue";
+import FeedContextMenu from "@/components/feeds/FeedContextMenu.vue";
 
 const feedModule = namespace("feedModule");
 
 @Component({
   components: {
-    SubsContextMenu
+    SubsContextMenu,
+    FeedContextMenu
   }
 })
 export default class SidebarFeed extends Vue {

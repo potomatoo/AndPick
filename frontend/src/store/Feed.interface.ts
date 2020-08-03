@@ -61,7 +61,7 @@ export interface FeedModule {
   article: Article | null;
   subscribeId: number | null;
   articleList: Article[];
-  subContextMenu: Context;
+  subsContextMenu: Context;
 }
 // dummy
 export interface RssList {

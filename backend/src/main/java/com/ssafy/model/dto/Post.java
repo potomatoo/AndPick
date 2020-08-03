@@ -25,7 +25,7 @@ public class Post {
 	@Column(name = "post_title")
 	private String postTitle;
 	@Column(name = "post_content")
-	private String postContetnt;
+	private String postContent;
 	@Column(name = "post_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date postDate;
@@ -64,12 +64,12 @@ public class Post {
 		this.postTitle = postTitle;
 	}
 
-	public String getPostContetnt() {
-		return postContetnt;
+	public String getPostContent() {
+		return postContent;
 	}
 
-	public void setPostContetnt(String postContetnt) {
-		this.postContetnt = postContetnt;
+	public void setPostContent(String postContent) {
+		this.postContent = postContent;
 	}
 
 	public Date getPostDate() {
@@ -91,7 +91,7 @@ public class Post {
 	@Override
 	public String toString() {
 		return "Post [postId=" + postId + ", userNo=" + userNo + ", postDirId=" + postDirId + ", postTitle=" + postTitle
-				+ ", postContetnt=" + postContetnt + ", postDate=" + postDate + ", postFavorite=" + postFavorite + "]";
+				+ ", postContent=" + postContent + ", postDate=" + postDate + ", postFavorite=" + postFavorite + "]";
 	}
 
 }

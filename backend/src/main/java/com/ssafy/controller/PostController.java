@@ -37,7 +37,7 @@ public class PostController {
 		Post post = new Post();
 		post.setPostDirId(postDirId);
 		post.setPostTitle(postTitle);
-		post.setPostContetnt(postContent);
+		post.setPostContent(postContent);
 		post.setPostDate(new Date());
 
 		result.data = postService.savePost(user, post);

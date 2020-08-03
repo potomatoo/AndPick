@@ -1,7 +1,11 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/main/a.vue";
+import Home from "@/views/main/a.vue";
+import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
+import PostDir from "@/views/pages/PostDir.vue";
+
+import EditArticle from "@/views/pages/EditArticle.vue"
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
 import FeedPage from "@/views/feeds/FeedPage.vue";
@@ -11,18 +15,61 @@ import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
 import ArticleDetailInFeed from "@/views/feeds/ArticleDetailInFeed.vue";
 import MypageMain from "@/views/pages/MypageMain.vue";
 
+import SignupView from "@/views/accounts/SignupView.vue";
+import LoginView from "@/views/accounts/LoginView.vue";
+import LogoutView from "@/views/accounts/LogoutView.vue";
+import UpdateUserView from "@/views/accounts/UpdateUserView.vue";
+import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: Home,
+    beforeEnter(from, to, next) {
+      if (!window.sessionStorage.getItem("jwt-token")) {
+        next("/cover");
+      } else {
+        next();
+      }
+    },
+  },
+  {
+    path: "/cover",
+    name: "Cover",
+    component: Cover,
+  },
+  {
+    path: "/accounts/signup",
+    name: "Signup",
+    component: SignupView,
+  },
+  {
+    path: "/accounts/login",
+    name: "Login",
+    component: LoginView,
+  },
+  {
+    path: "/accounts/logout",
+    name: "Logout",
+    component: LogoutView,
+  },
+  {
+    path: "/accounts/delete",
+    name: "DeleteUser",
+    component: DeleteUserView,
+  },
+  {
+    path: "/accounts/update",
+    name: "UpdateUser",
+    component: UpdateUserView,
   },
   {
     path: "/today",
     name: "Today",
-    component: Today
+    component: Today,
   },
   {
     path: "/later",
@@ -30,10 +77,17 @@ const routes: Array<RouteConfig> = [
     component: Later
   },
   {
-    path: "/mypage",
-    name: "MypageMain",
-    component: MypageMain
+    path: "/mypage/:postDirId",
+    name: "PostDir",
+    component: PostDir,
   },
+
+  {
+    path: "/mypage/:postDirName/post",
+    name: "EditArticle",
+    component: EditArticle,
+  },
+
   {
     path: "/add",
     name: "AddRss",
@@ -69,7 +123,16 @@ const routes: Array<RouteConfig> = [
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
+
+// router.beforeEach(function(to, from, next) {
+//   if (!window.sessionStorage.getItem("jwt-token")) {
+//     next("/cover");
+//     next(false);
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

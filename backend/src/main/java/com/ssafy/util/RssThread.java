@@ -22,18 +22,17 @@ public class RssThread implements ApplicationListener<ApplicationStartedEvent> {
 	@Override
 	public void onApplicationEvent(ApplicationStartedEvent event) {
 		// TODO Auto-generated method stub
-		
+
 		System.out.println("[RSS   ] Start RSS Parsing...");
-		List<Rss> rssList = rssService.searchAll();
-		
-		for(Rss item : rssList) {
+		List<Rss> rssList = rssService.findAll();
+
+		for (Rss item : rssList) {
 			RssParser parser = new RssParser(item.getRssUrl());
 			parser.setRedisTemplate(redisTemplate);
-			
-			
+
 			new Thread(parser).start();
 		}
-	
+
 	}
 
 }

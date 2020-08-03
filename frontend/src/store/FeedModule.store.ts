@@ -50,9 +50,6 @@ const module: Module<FeedModule, RootState> = {
 
     SELECT_ARTICLE(state, article: Article) {
       state.article = article;
-    },
-    SELECT_SUBSCRIBE(state, { subscribeId }) {
-      state.subscribeId = subscribeId;
     }
   },
   actions: {
@@ -139,14 +136,24 @@ const module: Module<FeedModule, RootState> = {
           }
         });
     },
-    FETCH_ARTICLE_LIST({ state }) {
+    FETCH_ARTICLE_LIST({ state }, subscribeId) {
       Axios.instance
         .get("/api/rss/item/subscribe", {
-          params: { subscribeId: state.subscribeId }
+          params: { subscribeId: subscribeId }
+        })
+        .then(({ data }) => (state.articleList = data.data));
+    },
+
+    FETCH_ARTICLE_LIST_IN_FEED({ state }, feedId) {
+      Axios.instance
+        .get("/api/rss/item/feed", {
+          params: { feedId: feedId }
         })
         .then(({ data }) => {
+          console.log(data.data);
           state.articleList = data.data;
-        });
+        })
+        .catch(err => console.error(err));
     }
   }
 };

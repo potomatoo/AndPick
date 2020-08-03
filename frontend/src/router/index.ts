@@ -12,7 +12,8 @@ import FeedPage from "@/views/feeds/FeedPage.vue";
 import BoardList from "@/views/feeds/BoardList.vue";
 import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
 import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
-
+import ArticleDetailInFeed from "@/views/feeds/ArticleDetailInFeed.vue";
+import MypageMain from "@/views/pages/MypageMain.vue";
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
@@ -93,7 +94,7 @@ const routes: Array<RouteConfig> = [
     component: AddRss
   },
   {
-    path: "/feeds/:feedName",
+    path: "/feeds/:feedName/:feedId",
     name: "Feed",
     component: FeedPage
   },
@@ -106,6 +107,11 @@ const routes: Array<RouteConfig> = [
     path: "/:feedName/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail
+  },
+  {
+    path: "/feed/:feedName/:feedId/article/:articleId",
+    name: "ArticleDetailInFeed",
+    component: ArticleDetailInFeed
   },
   {
     path: "/boards/:boardName",

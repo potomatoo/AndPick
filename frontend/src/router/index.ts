@@ -5,7 +5,7 @@ import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 import PostDir from "@/views/pages/PostDir.vue";
 
-import EditArticle from "@/views/pages/EditArticle.vue"
+import EditArticle from "@/views/pages/EditArticle.vue";
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
 import FeedPage from "@/views/feeds/FeedPage.vue";
@@ -74,7 +74,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/later",
     name: "Later",
-    component: Later
+    component: Later,
   },
   {
     path: "/mypage/:postDirId",
@@ -91,33 +91,33 @@ const routes: Array<RouteConfig> = [
   {
     path: "/add",
     name: "AddRss",
-    component: AddRss
+    component: AddRss,
   },
   {
     path: "/feeds/:feedName/:feedId",
     name: "Feed",
-    component: FeedPage
+    component: FeedPage,
   },
   {
     path: "/:feedName/subscription/:subscribeId",
     name: "ArticleListInRss",
-    component: ArticleListInRss
+    component: ArticleListInRss,
   },
   {
     path: "/:feedName/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
-    component: ArticleDetail
+    component: ArticleDetail,
   },
   {
     path: "/feed/:feedName/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
-    component: ArticleDetailInFeed
+    component: ArticleDetailInFeed,
   },
   {
     path: "/boards/:boardName",
     name: "BoardList",
-    component: BoardList
-  }
+    component: BoardList,
+  },
 ];
 
 const router = new VueRouter({

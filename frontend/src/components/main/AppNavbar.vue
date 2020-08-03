@@ -5,15 +5,26 @@
       <router-link :to="{ name: 'Home' }">
         <a class="navbar-brand">Junho</a>
       </router-link>
-      <router-link v-if="!isLoggedIn" :to="{ name: 'Signup' }" class="mr-2 router-link">
-        <v-btn color="#5cb85c">Signup</v-btn>
-      </router-link>
-      <router-link v-if="!isLoggedIn" :to="{ name: 'Login' }" class="router-link">
+      <router-link
+        v-if="!isLoggedIn"
+        :to="{ name: 'Login' }"
+        class="router-link ml-5"
+      >
         <v-btn color="#5cb85c">Login</v-btn>
       </router-link>
-      <router-link v-if="isLoggedIn" :to="{ name: 'Logout' }" class="mr-2 router-link">Logout</router-link>
-      <router-link v-if="isLoggedIn" :to="{ name: 'UpdateUser' }" class="mr-2 router-link">회원정보수정</router-link>
-      <router-link v-if="isLoggedIn" :to="{ name: 'DeleteUser' }">회원탈퇴</router-link>
+      <router-link
+        v-if="isLoggedIn"
+        :to="{ name: 'Logout' }"
+        class="mr-2 router-link"
+        >Logout</router-link
+      >
+      <router-link
+        v-if="isLoggedIn"
+        :to="{ name: 'UpdateUser' }"
+        class="mr-2 router-link"
+        >회원정보수정</router-link
+      >
+      <!-- <router-link v-if="isLoggedIn" :to="{ name: 'DeleteUser' }">회원탈퇴</router-link> -->
     </v-toolbar-title>
   </v-app-bar>
 </template>
@@ -24,7 +35,7 @@ import { mapMutations, mapGetters } from "vuex";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
-  computed: { ...mapGetters(["isLoggedIn"]) }
+  computed: { ...mapGetters(["isLoggedIn"]) },
 })
 export default class AppNavbar extends Vue {}
 </script>

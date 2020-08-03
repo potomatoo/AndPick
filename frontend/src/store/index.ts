@@ -47,11 +47,14 @@ const store: StoreOptions<RootState> = {
           // },
         })
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           commit("SET_TOKEN", res.data.data["userPassword"]);
           router.push("/");
         })
-        .catch((err) => console.log("err", err));
+        .catch((err) => {
+          console.log("err", err);
+          alert("아이디 또는 비밀번호가 옳지 않습니다.");
+        });
     },
 
     signup(context, signupData) {
@@ -64,8 +67,12 @@ const store: StoreOptions<RootState> = {
         })
         .then((res) => {
           console.log("회원가입 성공", res);
+          router.push("/");
         })
-        .catch((err) => console.error("err", err.response));
+        .catch((err) => {
+          console.log("err", err);
+          alert("회원가입 실패입니다.");
+        });
     },
 
     login({ dispatch }, loginData) {

@@ -5,7 +5,10 @@
       <template v-slot:activator>
         <v-list-item-content>
           <router-link
-            :to="{ name: 'Feed', params: { feedName: feed.feedName } }"
+            :to="{
+              name: 'Feed',
+              params: { feedName: feed.feedName, feedId: feed.feedId }
+            }"
             class="router-link"
           >
             <v-list-item-title v-text="feed.feedName"></v-list-item-title>

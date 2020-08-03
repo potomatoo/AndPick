@@ -9,7 +9,7 @@
         <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
           <v-list-item-content>
             <router-link
-              :to="{ name: 'PostDir', params: { postDirName: postDir.postDirName } }"
+              :to="{ name: 'PostDir', params: { postDirId: postDir.postDirId } }"
               class="router-link"
             >
               <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
 
@@ -35,6 +35,12 @@ const mypageModule = namespace("mypageModule");
 })
 export default class SidebarMypage extends Vue {
   @mypageModule.State postDirList!: [];
+  @mypageModule.Action FETCH_POSTDIR_LIST: any;
+
+  @Watch("postDirList", { immediate: true })
+  fetchPostDirList() {
+    this.FETCH_POSTDIR_LIST();
+  }
 }
 </script>
 

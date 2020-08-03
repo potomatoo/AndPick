@@ -44,10 +44,10 @@ export default class ArticleDetail extends Vue {
   checkArticle() {
     if (!this.article) {
       this.$router.replace({
-        name: "ArticleListInRss",
+        name: "Feed",
         params: {
           feedName: this.$route.params.feedName,
-          subscribeId: this.$route.params.subscribeId
+          feedId: this.$route.params.feedId
         }
       });
     }

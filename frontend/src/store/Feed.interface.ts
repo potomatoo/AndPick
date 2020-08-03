@@ -39,11 +39,22 @@ export interface FeedList {
   subscribeList?: SubscribeList[];
 }
 
+// api data
+export interface Feed {
+  feedId: number;
+  subscribeId: number;
+  subscribeName: string;
+  userNo: number;
+  rss: Rss;
+}
+
 export interface FeedModule {
   rssList: Rss[];
   feedList: FeedList[];
   boardList: SidebarList[];
   article: Article | null;
+  subscribeId: number | null;
+  articleList: Article[];
 }
 // dummy
 export interface RssList {

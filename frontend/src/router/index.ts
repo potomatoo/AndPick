@@ -3,7 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
-import FolderMain from "@/views/pages/FolderMain.vue";
+import PostDir from "@/views/pages/PostDir.vue";
 
 import EditArticle from "@/views/pages/EditArticle.vue";
 import Later from "@/views/feeds/ReadLaterList.vue";
@@ -12,6 +12,8 @@ import FeedPage from "@/views/feeds/FeedPage.vue";
 import BoardList from "@/views/feeds/BoardList.vue";
 import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
 import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
+import ArticleDetailInFeed from "@/views/feeds/ArticleDetailInFeed.vue";
+import MypageMain from "@/views/pages/MypageMain.vue";
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
@@ -75,9 +77,9 @@ const routes: Array<RouteConfig> = [
     component: Later,
   },
   {
-    path: "/mypage/:postDirName",
+    path: "/mypage/:postDirId",
     name: "PostDir",
-    component: FolderMain,
+    component: PostDir,
   },
 
   {
@@ -92,7 +94,7 @@ const routes: Array<RouteConfig> = [
     component: AddRss,
   },
   {
-    path: "/feeds/:feedName",
+    path: "/feeds/:feedName/:feedId",
     name: "Feed",
     component: FeedPage,
   },
@@ -102,9 +104,14 @@ const routes: Array<RouteConfig> = [
     component: ArticleListInRss,
   },
   {
-    path: "/:feedname/subscription/:rssId/:articleId",
+    path: "/:feedName/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail,
+  },
+  {
+    path: "/feed/:feedName/:feedId/article/:articleId",
+    name: "ArticleDetailInFeed",
+    component: ArticleDetailInFeed,
   },
   {
     path: "/boards/:boardName",

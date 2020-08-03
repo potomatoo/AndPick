@@ -18,5 +18,8 @@ export interface Post {
 export interface MypageModule {
     isSidebarActive: boolean;
     postDirList: PostDir[];
+    postDir: Post[];
+    post: Post | null;
+    postDirId: number | null;
 }
 

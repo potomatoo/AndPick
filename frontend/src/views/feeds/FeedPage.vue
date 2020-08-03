@@ -14,7 +14,9 @@
       </v-layout>
     </v-container>
     <v-divider></v-divider>
-    <v-container class="text-center">
+
+    <!-- 기사 리스트 -->
+    <v-container v-if="!articleList.length" class="text-center">
       <v-layout justify-center>
         <h4>Which sources would you like to follow?</h4>
       </v-layout>
@@ -23,16 +25,76 @@
           You can follow publications, blogs feeds.
         </p>
       </v-layout>
-      <v-btn color="success" dark>ADD CONTENT</v-btn>
+      <v-btn color="success" dark @click="addRss">ADD CONTENT</v-btn>
+    </v-container>
+
+    <v-container v-else class="offset-lg3 lg6">
+      <v-list three-line>
+        <v-list-item-group>
+          <v-list-item v-for="(article, idx) in articleList" :key="idx">
+            <v-list-item-content @click="selectArticle(article)">
+              <router-link
+                class="router-link"
+                :to="{
+                  name: 'ArticleDetailInFeed',
+                  params: { articleId: idx }
+                }"
+              >
+                <v-list-item-content class="mt-3">
+                  <div class="h4">
+                    {{ article.title }}
+                  </div>
+                  <div class="sumtitle-1 text--secondary">
+                    {{ article.pubDate }}
+                  </div>
+                  <div class="sumtitle-1 text--secondary">
+                    {{ article.rssTitle }}
+                  </div>
+                  <v-list-item-subtitle>
+                    {{ article.description }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </router-link>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
     </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { namespace } from "vuex-class";
+import { Article } from "../../store/Feed.interface";
+
+const feedModule = namespace("feedModule");
 
 @Component
-export default class FeedPage extends Vue {}
+export default class FeedPage extends Vue {
+  @feedModule.State articleList!: Article[];
+  @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Action FETCH_ARTICLE_LIST_IN_FEED!: any;
+
+  @Watch("$route", { immediate: true })
+  fetchData() {
+    console.log(this.$route.params.feedId);
+    this.FETCH_ARTICLE_LIST_IN_FEED(this.$route.params.feedId);
+  }
+
+  selectArticle(article: Article) {
+    this.SELECT_ARTICLE(article);
+  }
+
+  addRss() {
+    this.$router.push({ name: "AddRss" });
+  }
+}
 </script>
 
-<style></style>
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

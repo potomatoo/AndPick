@@ -40,6 +40,8 @@
         <v-card max-height="250px">
           <v-card-text>
             <div class="float-left">Word of the Day</div>
+
+            <!-- ADD 버튼 메뉴 -->
             <v-menu offset-x :close-on-content-click="false" min-width="250px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -60,7 +62,7 @@
                     class="ml-3"
                     outlined
                     color="success"
-                    @click="addRss(feed, rss)"
+                    @click="addRss(feed.feedId, rss)"
                   >
                     <v-icon left>mdi-plus</v-icon> ADD
                   </v-btn>
@@ -69,7 +71,7 @@
                     class="ml-3"
                     outlined
                     color="error"
-                    @click="addRss(feed, rss)"
+                    @click="addRss(feed.feedId, rss)"
                   >
                     <v-icon left>mdi-window-close</v-icon> REMOVE
                   </v-btn>
@@ -78,7 +80,10 @@
             </v-menu>
 
             <p class="display-1 text--primary mt-10">
-              {{ rss.rssName }}
+              {{
+                rss.rssName ||
+                  ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1]
+              }}
             </p>
             <p>adjective</p>
             <div class="text--primary">
@@ -96,14 +101,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import {
-  SidebarList,
-  SidebarItem,
-  RssList,
-  FeedList,
-  Rss,
-  SubscribeList
-} from "../../store/Feed.interface";
+import { Rss, SubscribeList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
@@ -111,19 +109,22 @@ const feedModule = namespace("feedModule");
 export default class AddRss extends Vue {
   @feedModule.State rssList!: [];
   @feedModule.State feedList!: [];
-  @feedModule.Mutation subscribeRss: any;
+  @feedModule.Action FETCH_RSS: any;
+  @feedModule.Action SUBSCRIBE_RSS: any;
 
-  addRss(feed: FeedList, rss: Rss) {
-    this.subscribeRss({ feedname: feed.feedName, rss });
+  addRss(feedId: number, rss: Rss) {
+    this.SUBSCRIBE_RSS({ feedId, rss });
   }
 
   checkSubscribe(subscribedList: SubscribeList[], rss: Rss) {
-    console.log("rsssslst", subscribedList);
-    console.log("rssss", rss.rssId);
     return !(
       subscribedList.length &&
       subscribedList.some(el => el.rss.rssId === rss.rssId)
     );
+  }
+
+  created() {
+    this.FETCH_RSS();
   }
 }
 </script>

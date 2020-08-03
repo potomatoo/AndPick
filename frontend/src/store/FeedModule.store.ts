@@ -25,6 +25,11 @@ const module: Module<FeedModule, RootState> = {
       showCtx: false,
       x: 0,
       y: 0
+    },
+    feedContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
     }
   },
 
@@ -59,7 +64,15 @@ const module: Module<FeedModule, RootState> = {
 
     SET_SUB_CONTEXT_MENU(state, ctx) {
       state.subsContextMenu.showCtx = false;
+      state.feedContextMenu.showCtx = false;
       state.subsContextMenu = ctx;
+    },
+
+    SET_FEED_CONTEXT_MENU(state, ctx) {
+      state.feedContextMenu.showCtx = false;
+      state.subsContextMenu.showCtx = false;
+      state.feedContextMenu = ctx;
+      console.log("state", state.feedContextMenu);
     }
   },
   actions: {

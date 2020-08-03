@@ -8,7 +8,7 @@
       sub-group
     >
       <template v-slot:activator>
-        <v-list-item-content>
+        <v-list-item-content @contextmenu.prevent="showFeedCtx($event, feed)">
           <router-link
             :to="{
               name: 'Feed',
@@ -24,7 +24,7 @@
       <v-list-item
         v-for="subItem in feed.subscribeList"
         :key="subItem.title"
-        @contextmenu.prevent="showSubsCxt($event, subItem)"
+        @contextmenu.prevent="showSubsCtx($event, subItem)"
       >
         <v-list-item-content>
           <router-link
@@ -75,6 +75,7 @@
         </v-form>
       </v-card>
     </v-dialog>
+    <feed-context-menu :item="feedItem" />
     <subs-context-menu :item="subsItem" />
   </div>
 </template>
@@ -99,6 +100,7 @@ const feedModule = namespace("feedModule");
 export default class SidebarFeed extends Vue {
   @feedModule.State feedList!: [];
   @feedModule.Mutation SET_SUB_CONTEXT_MENU: any;
+  @feedModule.Mutation SET_FEED_CONTEXT_MENU: any;
   @feedModule.Action ADD_FEED: any;
 
   newFeedName = null;
@@ -108,6 +110,8 @@ export default class SidebarFeed extends Vue {
   isActiveSubsCtx = false;
 
   subsItem = {};
+
+  feedItem = {};
 
   rules = [
     (value: any) => !!value || "This field is required.",
@@ -141,7 +145,7 @@ export default class SidebarFeed extends Vue {
     }
   }
 
-  showSubsCxt(e: MouseEvent, item: SubscribeList) {
+  showSubsCtx(e: MouseEvent, item: SubscribeList) {
     this.subsItem = item;
     console.log(e);
     const ctx = {
@@ -150,6 +154,17 @@ export default class SidebarFeed extends Vue {
       y: e.clientY
     };
     this.SET_SUB_CONTEXT_MENU(ctx);
+  }
+
+  showFeedCtx(e: MouseEvent, item: FeedList) {
+    this.feedItem = item;
+    console.log(item, e);
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_FEED_CONTEXT_MENU(ctx);
   }
 }
 </script>

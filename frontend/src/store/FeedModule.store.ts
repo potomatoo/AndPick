@@ -20,7 +20,12 @@ const module: Module<FeedModule, RootState> = {
     boardList: [],
     article: null,
     subscribeId: null,
-    articleList: []
+    articleList: [],
+    subContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
+    }
   },
 
   getters: {},
@@ -50,6 +55,11 @@ const module: Module<FeedModule, RootState> = {
 
     SELECT_ARTICLE(state, article: Article) {
       state.article = article;
+    },
+
+    SET_SUB_CONTEXT_MENU(state, ctx) {
+      state.subContextMenu.showCtx = false;
+      state.subContextMenu = ctx;
     }
   },
   actions: {

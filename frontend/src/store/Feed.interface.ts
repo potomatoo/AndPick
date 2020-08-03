@@ -48,6 +48,12 @@ export interface Feed {
   rss: Rss;
 }
 
+export interface Context {
+  showCtx: boolean;
+  x: number;
+  y: number;
+}
+
 export interface FeedModule {
   rssList: Rss[];
   feedList: FeedList[];
@@ -55,6 +61,7 @@ export interface FeedModule {
   article: Article | null;
   subscribeId: number | null;
   articleList: Article[];
+  subContextMenu: Context;
 }
 // dummy
 export interface RssList {

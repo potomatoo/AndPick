@@ -128,13 +128,12 @@ public class RssServiceImpl implements RssService {
 			result.message = "해당 피드가 없습니다.";
 			return result;
 		}
-		
-		if(checkFeed.getUserNo() != user.getUserNo()) {
+
+		if (checkFeed.getUserNo() != user.getUserNo()) {
 			result.status = false;
 			result.message = "사용자 정보와 피드 정보가 일치하지 않습니다.";
-			return result;		
+			return result;
 		}
-		
 
 		List<Subscribe> subscribe = subscribeRepository.findByFeedId(feed.getFeedId());
 		List<Rss> list = new ArrayList<Rss>();
@@ -146,7 +145,7 @@ public class RssServiceImpl implements RssService {
 		}
 
 		if (list.size() == 0) {
-			result.status = false;
+			result.status = true;
 			result.message = "피드에 rss가 없습니다.";
 		} else {
 			result.status = true;
@@ -169,12 +168,11 @@ public class RssServiceImpl implements RssService {
 			return result;
 		}
 
-		if(checkSubscribe.getUserNo() != user.getUserNo()) {
+		if (checkSubscribe.getUserNo() != user.getUserNo()) {
 			result.status = false;
 			result.message = "사용자 정보와 구독 정보가 일치하지 않습니다.";
-			return result;		
+			return result;
 		}
-		
 
 		result.status = true;
 		result.data = checkSubscribe;

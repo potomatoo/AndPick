@@ -14,7 +14,12 @@ const module: Module<MypageModule, RootState> = {
     post: null,
     postDirId: null,
     postId: null,
-    postDirName: null
+    postDirName: null,
+    postDirContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
+    }
   },
 
   getters: {},
@@ -46,6 +51,11 @@ const module: Module<MypageModule, RootState> = {
 
     SELECT_POST(state, { postId }) {
       state.postId = postId;
+    },
+
+    SET_POSTDIR_CONTEXT_MENU(state, ctx) {
+      state.postDirContextMenu.showCtx = false;
+      state.postDirContextMenu = ctx;
     }
   },
 

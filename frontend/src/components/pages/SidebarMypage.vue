@@ -6,7 +6,11 @@
         <create-folder />
       </v-subheader>
       <v-list-item-group>
-        <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
+        <v-list-item
+          v-for="postDir in postDirList"
+          :key="postDir.postDirId"
+          @contextmenu.prevent="showPostDirCtx($event, postDir)"
+        >
           <v-list-item-content>
             <router-link
               :to="{
@@ -23,6 +27,7 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <post-dir-menu :item="postDirItem" />
   </div>
 </template>
 
@@ -30,16 +35,32 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
+import PostDirMenu from "@/components/pages/PostDirMenu.vue";
+import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
 @Component({
   components: {
-    CreateFolder
+    CreateFolder,
+    PostDirMenu
   }
 })
 export default class SidebarMypage extends Vue {
   @mypageModule.State postDirList!: [];
+  @mypageModule.Mutation SET_POSTDIR_CONTEXT_MENU: any;
+
+  postDirItem = {};
+
+  showPostDirCtx(e: MouseEvent, postDir: Post[]) {
+    this.postDirItem = postDir;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_POSTDIR_CONTEXT_MENU(ctx);
+  }
 }
 </script>
 

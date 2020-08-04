@@ -15,6 +15,12 @@ export interface Post {
   postFavorite: boolean;
 }
 
+export interface Context {
+  showCtx: boolean;
+  x: number;
+  y: number;
+}
+
 export interface MypageModule {
   isSidebarActive: boolean;
   postDirList: PostDir[];
@@ -23,4 +29,5 @@ export interface MypageModule {
   postDirId: number | null;
   postId: number | null;
   postDirName: string | null;
+  postDirContextMenu: Context;
 }

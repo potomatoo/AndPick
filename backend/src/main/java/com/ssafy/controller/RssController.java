@@ -42,8 +42,8 @@ public class RssController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-
 			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
 		}
 
 		result = rssService.findAll();
@@ -66,14 +66,15 @@ public class RssController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		if (categoryName == null) {
 			result.status = false;
 			result.message = "필수값을 입력해 주세요.";
-			return result;
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		result = rssService.findByCategoryName(categoryName);
@@ -96,14 +97,15 @@ public class RssController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		if (rssName == null) {
 			result.status = false;
 			result.message = "필수값을 입력해 주세요.";
-			return result;
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		result = rssService.findByRssName(rssName);
@@ -126,13 +128,15 @@ public class RssController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		if (rssName == null || rssUrl == null || categoryName == null) {
 			result.status = false;
 			result.message = "필수값을 입력하세요.";
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		Rss rss = new Rss();

@@ -32,8 +32,8 @@ public class CategoryController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		result = categoryService.findAll();
@@ -56,8 +56,8 @@ public class CategoryController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		result = categoryService.findByCategoryNameLike(categoryName);
@@ -80,8 +80,8 @@ public class CategoryController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		result.data = categoryService.findByName(categoryName);
@@ -104,7 +104,8 @@ public class CategoryController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		result.data = categoryService.save(categoryName);

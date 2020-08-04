@@ -20,7 +20,17 @@ const module: Module<FeedModule, RootState> = {
     boardList: [],
     article: null,
     subscribeId: null,
-    articleList: []
+    articleList: [],
+    subsContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
+    },
+    feedContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
+    }
   },
 
   getters: {},
@@ -36,7 +46,6 @@ const module: Module<FeedModule, RootState> = {
 
     SET_BOARD_LIST(state, boardList: SidebarList[]) {
       state.boardList = boardList;
-      console.log("보드리스트", state.boardList);
     },
 
     SET_RSS_LIST(state, rssList: Rss[]) {
@@ -50,6 +59,18 @@ const module: Module<FeedModule, RootState> = {
 
     SELECT_ARTICLE(state, article: Article) {
       state.article = article;
+    },
+
+    SET_SUB_CONTEXT_MENU(state, ctx) {
+      state.subsContextMenu.showCtx = false;
+      state.feedContextMenu.showCtx = false;
+      state.subsContextMenu = ctx;
+    },
+
+    SET_FEED_CONTEXT_MENU(state, ctx) {
+      state.feedContextMenu.showCtx = false;
+      state.subsContextMenu.showCtx = false;
+      state.feedContextMenu = ctx;
     }
   },
   actions: {
@@ -141,7 +162,8 @@ const module: Module<FeedModule, RootState> = {
         .get("/api/rss/item/subscribe", {
           params: { subscribeId: subscribeId }
         })
-        .then(({ data }) => (state.articleList = data.data));
+        .then(({ data }) => (state.articleList = data.data))
+        .catch(err => console.error(err));
     },
 
     FETCH_ARTICLE_LIST_IN_FEED({ state }, feedId) {
@@ -150,9 +172,30 @@ const module: Module<FeedModule, RootState> = {
           params: { feedId: feedId }
         })
         .then(({ data }) => {
-          console.log(data.data);
           state.articleList = data.data;
         })
+        .catch(err => console.error(err));
+    },
+
+    UPDATE_SUBSCRIBE({ dispatch }, { feedId, subscribeId, subscribeName }) {
+      const updateData = {
+        params: {
+          feedId,
+          subscribeId,
+          subscribeName
+        }
+      };
+      Axios.instance
+        .put("api/subscribe/update", null, updateData)
+        .then(() => dispatch("FETCH_FEED"))
+        .then(() => dispatch("FETCH_ARTICLE_LIST", subscribeId))
+        .catch(err => console.error(err));
+    },
+
+    UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
+      Axios.instance
+        .delete("api/subscribe/delete", { params: { subscribeId } })
+        .then(() => dispatch("FETCH_FEED"))
         .catch(err => console.error(err));
     }
   }

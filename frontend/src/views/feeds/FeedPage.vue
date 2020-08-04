@@ -78,7 +78,6 @@ export default class FeedPage extends Vue {
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    console.log(this.$route.params.feedId);
     this.FETCH_ARTICLE_LIST_IN_FEED(this.$route.params.feedId);
   }
 

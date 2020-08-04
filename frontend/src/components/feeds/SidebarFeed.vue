@@ -3,7 +3,7 @@
     <v-subheader>Feed</v-subheader>
     <v-list-group v-for="feed in feedList" :key="feed.feedName" no-action sub-group>
       <template v-slot:activator>
-        <v-list-item-content>
+        <v-list-item-content @contextmenu.prevent="showFeedCtx($event, feed)">
           <router-link
             :to="{
               name: 'Feed',
@@ -16,7 +16,11 @@
         </v-list-item-content>
       </template>
 
-      <v-list-item v-for="subItem in feed.subscribeList" :key="subItem.title">
+      <v-list-item
+        v-for="subItem in feed.subscribeList"
+        :key="subItem.title"
+        @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
+      >
         <v-list-item-content>
           <router-link
             :to="{
@@ -64,6 +68,8 @@
         </v-form>
       </v-card>
     </v-dialog>
+    <feed-context-menu :item="feedItem" />
+    <subs-context-menu :subsItem="subsItem" :feedItem="feedItem" />
   </div>
 </template>
 
@@ -72,18 +78,33 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 // import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
-import { FeedList } from "../../store/Feed.interface";
+import { FeedList, SubscribeList } from "../../store/Feed.interface";
+import SubsContextMenu from "@/components/feeds/SubsContextMenu.vue";
+import FeedContextMenu from "@/components/feeds/FeedContextMenu.vue";
 
 const feedModule = namespace("feedModule");
 
-@Component
+@Component({
+  components: {
+    SubsContextMenu,
+    FeedContextMenu
+  }
+})
 export default class SidebarFeed extends Vue {
   @feedModule.State feedList!: [];
+  @feedModule.Mutation SET_SUB_CONTEXT_MENU: any;
+  @feedModule.Mutation SET_FEED_CONTEXT_MENU: any;
   @feedModule.Action ADD_FEED: any;
 
   newFeedName = null;
 
   modalActive = false;
+
+  isActiveSubsCtx = false;
+
+  subsItem = {};
+
+  feedItem = {};
 
   rules = [
     (value: any) => !!value || "This field is required.",
@@ -115,6 +136,27 @@ export default class SidebarFeed extends Vue {
       this.ADD_FEED(this.newFeedName);
       this.closeModal();
     }
+  }
+
+  showSubsCtx(e: MouseEvent, subsItem: SubscribeList, feedItem: FeedList) {
+    this.subsItem = subsItem;
+    this.feedItem = feedItem;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_SUB_CONTEXT_MENU(ctx);
+  }
+
+  showFeedCtx(e: MouseEvent, item: FeedList) {
+    this.feedItem = item;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_FEED_CONTEXT_MENU(ctx);
   }
 }
 </script>

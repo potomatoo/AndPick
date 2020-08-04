@@ -5,10 +5,10 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.News;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.NewsRepository;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public class NewsServiceImpl implements NewsService {

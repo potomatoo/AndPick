@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.UserRepository;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.UserService;
 
 @CrossOrigin("*")

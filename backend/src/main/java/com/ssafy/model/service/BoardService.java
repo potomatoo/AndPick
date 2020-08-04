@@ -2,8 +2,8 @@ package com.ssafy.model.service;
 
 import org.springframework.stereotype.Service;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface BoardService {

@@ -24,7 +24,7 @@
       <v-list-item
         v-for="subItem in feed.subscribeList"
         :key="subItem.title"
-        @contextmenu.prevent="showSubsCtx($event, subItem)"
+        @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
       >
         <v-list-item-content>
           <router-link
@@ -76,7 +76,7 @@
       </v-card>
     </v-dialog>
     <feed-context-menu :item="feedItem" />
-    <subs-context-menu :item="subsItem" />
+    <subs-context-menu :subsItem="subsItem" :feedItem="feedItem" />
   </div>
 </template>
 
@@ -145,9 +145,9 @@ export default class SidebarFeed extends Vue {
     }
   }
 
-  showSubsCtx(e: MouseEvent, item: SubscribeList) {
-    this.subsItem = item;
-    console.log(e);
+  showSubsCtx(e: MouseEvent, subsItem: SubscribeList, feedItem: FeedList) {
+    this.subsItem = subsItem;
+    this.feedItem = feedItem;
     const ctx = {
       showCtx: true,
       x: e.clientX,
@@ -158,7 +158,6 @@ export default class SidebarFeed extends Vue {
 
   showFeedCtx(e: MouseEvent, item: FeedList) {
     this.feedItem = item;
-    console.log(item, e);
     const ctx = {
       showCtx: true,
       x: e.clientX,

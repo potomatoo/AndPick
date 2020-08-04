@@ -46,7 +46,6 @@ const module: Module<FeedModule, RootState> = {
 
     SET_BOARD_LIST(state, boardList: SidebarList[]) {
       state.boardList = boardList;
-      console.log("보드리스트", state.boardList);
     },
 
     SET_RSS_LIST(state, rssList: Rss[]) {
@@ -72,7 +71,6 @@ const module: Module<FeedModule, RootState> = {
       state.feedContextMenu.showCtx = false;
       state.subsContextMenu.showCtx = false;
       state.feedContextMenu = ctx;
-      console.log("state", state.feedContextMenu);
     }
   },
   actions: {
@@ -173,9 +171,22 @@ const module: Module<FeedModule, RootState> = {
           params: { feedId: feedId }
         })
         .then(({ data }) => {
-          console.log(data.data);
           state.articleList = data.data;
         })
+        .catch(err => console.error(err));
+    },
+
+    UPDATE_SUBSCRIBE({ dispatch }, { feedId, subscribeId, subscribeName }) {
+      const updateData = {
+        params: {
+          feedId,
+          subscribeId,
+          subscribeName
+        }
+      };
+      Axios.instance
+        .put("api/subscribe/update", null, updateData)
+        .then(() => dispatch("FETCH_FEED"))
         .catch(err => console.error(err));
     }
   }

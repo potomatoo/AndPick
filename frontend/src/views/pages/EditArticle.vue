@@ -6,6 +6,7 @@
       v-model="title"
       class="font-weight-bold font-size: 3rem"
     ></v-text-field>
+
     <div class="editor">
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
@@ -161,7 +162,7 @@
       <!-- <v-textarea name id cols="30" rows="10" :editor="editor"></v-textarea> -->
 
       <v-flex offset-lg10 lg2>
-        <v-btn small outlined color="secondary" class="mt-10" @click="addArticleItem">
+        <v-btn small outlined color="secondary" class="mt-10" @click="addPost">
           <v-icon left>mdi-plus</v-icon>SAVE
         </v-btn>
       </v-flex>
@@ -170,8 +171,9 @@
 </template>
 
 <script>
-import { Component, Vue } from "vue-property-decorator";
-import { mapMutations } from "vuex";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { mapMutations, mapActions, mapGetters, mapState } from "vuex";
+import { namespace } from "vuex-class";
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
 import {
   Blockquote,
@@ -193,31 +195,46 @@ import {
   History
 } from "tiptap-extensions";
 
+const mypageModule = namespace("mypageModule");
+
 @Component({
   components: {
     EditorContent,
     EditorMenuBar,
     EditorMenuBubble
-  },
-  methods: mapMutations("mypageModule", ["addArticle"])
+  }
 })
 export default class EditArticle extends Vue {
-  click() {
-    console.log(this.title, this.html);
+  @mypageModule.State postId;
+  @mypageModule.State post;
+  @mypageModule.Mutation SELECT_POST;
+  @mypageModule.Action FETCH_POST;
+  @mypageModule.Action ADD_POST;
+  @mypageModule.Action UPDATE_POST;
+
+  title = "";
+
+  setContent() {
+    this.editor.setContent(
+      {
+        type: "doc",
+        content: []
+      },
+      true
+    );
+    this.editor.focus();
   }
 
-  addArticleItem() {
-    const articleItem = {
-      title: this.title,
-      content: this.html
-    };
-    this.addArticle(articleItem);
+  @Watch("post")
+  setTitle() {
+    this.title = this.post.postTitle;
+    this.html = this.post.postContent;
+    this.editor.setContent(this.post.postContent);
   }
 
   data() {
     return {
       keepInBounds: true,
-      title: "",
       editor: new Editor({
         extensions: [
           new Blockquote(),
@@ -239,7 +256,6 @@ export default class EditArticle extends Vue {
           new History()
         ],
         content: `
-          
         `,
         onUpdate: ({ getJSON, getHTML }) => {
           this.json = getJSON();
@@ -249,6 +265,38 @@ export default class EditArticle extends Vue {
       json: "",
       html: ""
     };
+  }
+
+  addPost() {
+    if (isNaN(this.postId)) {
+      this.ADD_POST({
+        postContent: this.html,
+        postDirId: Number(this.$route.params.postDirId),
+        postTitle: this.title
+      });
+    } else {
+      this.UPDATE_POST({
+        postContent: this.html,
+        postDirId: Number(this.$route.params.postDirId),
+        postId: Number(this.$route.params.postId),
+        postTitle: this.title
+      });
+    }
+  }
+
+  @Watch("$route", { immediate: true })
+  selectPost() {
+    this.title = "";
+    this.SELECT_POST({
+      postId: Number(this.$route.params.postId)
+    });
+  }
+
+  @Watch("postId", { immediate: true })
+  fetchPost() {
+    if (!isNaN(this.postId)) {
+      this.FETCH_POST(this.postId);
+    }
   }
 }
 </script>

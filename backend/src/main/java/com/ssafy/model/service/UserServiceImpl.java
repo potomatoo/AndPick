@@ -1,6 +1,5 @@
 package com.ssafy.model.service;
 
-import org.mapstruct.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

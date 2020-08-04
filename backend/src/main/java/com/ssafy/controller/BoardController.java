@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.BoardService;
@@ -28,9 +29,28 @@ public class BoardController {
 	public Object saveBoard(@RequestHeader("Authorization") String jwtToken,
 			@RequestParam("boardName") String boardName) {
 		ResponseEntity response = null;
-		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		BasicResponse result = boardService.svaeBoard(user, boardName);
+		BasicResponse result = new BasicResponse();
 
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		if (boardName == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		Board board = new Board();
+		board.setBoardName(boardName);
+		board.setUserNo(user.getUserNo());
+
+		result = boardService.svaeBoard(user, board);
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);
 		} else {
@@ -43,8 +63,17 @@ public class BoardController {
 	@GetMapping(value = "/api/board/find/all")
 	public Object findAllBoard(@RequestHeader("Authorization") String jwtToken) {
 		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		BasicResponse result = boardService.findAllBoard(user);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		result = boardService.findAllBoard(user);
 
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);
@@ -58,9 +87,20 @@ public class BoardController {
 	@GetMapping(value = "/api/board/find/id")
 	public Object findOneByID(@RequestHeader("Authorization") String jwtToken, @RequestParam("boardId") long boardId) {
 		ResponseEntity response = null;
-		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		BasicResponse result = boardService.findOneBoard(user, boardId);
+		BasicResponse result = new BasicResponse();
 
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		Board board = new Board();
+		board.setBoardId(boardId);
+
+		result = boardService.findOneBoard(user, board);
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);
 		} else {
@@ -74,9 +114,29 @@ public class BoardController {
 	public Object updateBoard(@RequestHeader("Authorization") String jwtToken, @RequestParam("boardId") long boardId,
 			@RequestParam("boardName") String boardName) {
 		ResponseEntity response = null;
-		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		BasicResponse result = boardService.updateBoard(user, boardId, boardName);
+		BasicResponse result = new BasicResponse();
 
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		if (boardName == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		Board board = new Board();
+		board.setBoardId(boardId);
+		board.setBoardName(boardName);
+		board.setUserNo(user.getUserNo());
+
+		result = boardService.updateBoard(user, board);
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);
 		} else {
@@ -89,8 +149,20 @@ public class BoardController {
 	@DeleteMapping(value = "/api/board/delete")
 	public Object deleteBoard(@RequestHeader("Authorization") String jwtToken, @RequestParam("boardId") long boardId) {
 		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		BasicResponse result = boardService.deleteBoard(user, boardId);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		Board board = new Board();
+		board.setBoardId(boardId);
+
+		result = boardService.deleteBoard(user, board);
 
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);

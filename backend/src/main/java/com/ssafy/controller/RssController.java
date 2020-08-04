@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ssafy.model.dto.Category;
+import com.ssafy.model.dto.Feed;
 import com.ssafy.model.dto.Rss;
 import com.ssafy.model.dto.RssChannel;
 import com.ssafy.model.dto.RssItem;
+import com.ssafy.model.dto.Subscribe;
+import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.RssService;
 
@@ -29,46 +33,25 @@ public class RssController {
 	@Autowired
 	private RssService rssService;
 
-	@RequestMapping(value = "/api/public/test/rss")
-	public Object getRss() {
-		ResponseEntity response = null;
-		BasicResponse result = new BasicResponse();
-
-		List<Rss> rssList = rssService.findAll();
-		List<RssItem> rssItem = new LinkedList<RssItem>();
-
-		for (Rss item : rssList) {
-			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
-			System.out.println(channel);
-			rssItem.addAll(channel.getItems());
-		}
-
-		// sort과정
-		List<RssItem> resultItem = new ArrayList<RssItem>(10);
-
-		for (int i = 0; i < 10; i++) {
-			if (i >= rssItem.size())
-				break;
-			resultItem.add(rssItem.get(i));
-		}
-
-		result.status = true;
-		result.message = "rss test api...";
-		result.data = resultItem;
-
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
 	@GetMapping(value = "/api/rss/list/all")
 	public Object findAllRss(@RequestHeader("Authorization") String jwtToken) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.status = true;
-		result.message = "모든 rss 정보입니다.";
-		result.data = rssService.findAll();
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
 
-		response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+
+		result = rssService.findAll();
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
 
 		return response;
 	}
@@ -79,17 +62,25 @@ public class RssController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.data = rssService.findByCategoryName(categoryName);
-		result.status = (result.data != null) ? true : false;
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
 
-		if (result.status) {
-			result.message = "선택한 카테고리의 RSS리스트 입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
 
+		if (categoryName == null) {
+			result.status = false;
+			result.message = "필수값을 입력해 주세요.";
+			return result;
+		}
+
+		result = rssService.findByCategoryName(categoryName);
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "잘못된 카테고리 명입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-
 		}
 
 		return response;
@@ -101,14 +92,24 @@ public class RssController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.data = rssService.findByRssName(rssName);
-		result.status = (result.data != null) ? true : false;
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
 
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+
+		if (rssName == null) {
+			result.status = false;
+			result.message = "필수값을 입력해 주세요.";
+			return result;
+		}
+
+		result = rssService.findByRssName(rssName);
 		if (result.status) {
-			result.message = "rss이름으로 검색 결과 입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "해당하는 rss가 없습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -121,12 +122,28 @@ public class RssController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+
+		if (rssName == null || rssUrl == null || categoryName == null) {
+			result.status = false;
+			result.message = "필수값을 입력하세요.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+
 		Rss rss = new Rss();
 
 		rss.setRssName(rssName);
 		rss.setRssUrl(rssUrl);
 
-		result.data = rssService.saveRss(rss, categoryName);
+		Category category = new Category();
+		category.setCategoryName(categoryName);
+
+		result.data = rssService.saveRss(rss, category);
 		result.status = (result.data != null) ? true : false;
 
 		if (result.status) {
@@ -145,10 +162,27 @@ public class RssController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		List<Rss> rssList = rssService.findItemByFeed(feedId);
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		Feed feed = new Feed();
+		feed.setFeedId(feedId);
+
+		result = rssService.findItemByFeed(user, feed);
+
+		if (!result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
 		List<RssItem> rssItem = new LinkedList<RssItem>();
 
-		for (Rss item : rssList) {
+		for (Rss item : (List<Rss>) result.data) {
 			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
 
 			for (RssItem cur : channel.getItems()) {
@@ -158,18 +192,9 @@ public class RssController {
 		}
 
 		// sort과정
-		List<RssItem> resultItem = new ArrayList<RssItem>(10);
-
-		for (int i = 0; i < 10; i++) {
-			if (i >= rssItem.size())
-				break;
-			resultItem.add(rssItem.get(i));
-		}
-
 		result.status = true;
-		result.message = "rss test api...";
-		result.data = resultItem;
-
+		result.message = "피드의 뉴스 목록입니다.";
+		result.data = rssItem;
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -179,30 +204,36 @@ public class RssController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		List<Rss> rssList = rssService.findItemBySubscribe(subscribeId);
-		List<RssItem> rssItem = new LinkedList<RssItem>();
-
-		for (Rss item : rssList) {
-			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
-
-			for (RssItem cur : channel.getItems()) {
-				cur.setRssTitle(item.getRssName());
-				rssItem.add(cur);
-			}
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
-		// sort과정
-		List<RssItem> resultItem = new ArrayList<RssItem>(10);
+		Subscribe subscribe = new Subscribe();
+		subscribe.setSubscribeId(subscribeId);
 
-		for (int i = 0; i < 10; i++) {
-			if (i >= rssItem.size())
-				break;
-			resultItem.add(rssItem.get(i));
+		result = rssService.findItemBySubscribe(user, subscribe);
+
+		if (!result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+		List<RssItem> rssItem = new LinkedList<RssItem>();
+
+		Subscribe resultSubscribe = (Subscribe) result.data;
+
+		RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(resultSubscribe.getRss().getRssUrl());
+		for (RssItem cur : channel.getItems()) {
+			cur.setRssTitle(resultSubscribe.getSubscribeName());
+			rssItem.add(cur);
 		}
 
 		result.status = true;
 		result.message = "rss test api...";
-		result.data = resultItem;
+		result.data = rssItem;
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

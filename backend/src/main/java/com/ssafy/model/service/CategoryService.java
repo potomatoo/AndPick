@@ -1,18 +1,17 @@
 package com.ssafy.model.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Category;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface CategoryService {
-	public List<Category> findAll();
+	public BasicResponse findAll();
 
-	public List<Category> findByCategoryNameLike(String categoryName);
-	
-	public Category findByName(String categoryName);
-	
-	public Category save(Category category);
+	public BasicResponse findByCategoryNameLike(String categoryName);
+
+	public BasicResponse findByName(String categoryName);
+
+	public BasicResponse save(String categoryName);
 }

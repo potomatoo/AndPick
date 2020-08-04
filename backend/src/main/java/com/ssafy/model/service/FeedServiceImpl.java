@@ -7,40 +7,113 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.model.dto.Feed;
+import com.ssafy.model.dto.Subscribe;
+import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.FeedRepository;
+import com.ssafy.model.repository.SubscribeRepository;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public class FeedServiceImpl implements FeedService {
 	@Autowired
 	private FeedRepository feedRepository;
+	@Autowired
+	private SubscribeRepository subscribeRepository;
 
 	@Override
-	public Feed save(Feed feed) {
+	public BasicResponse saveFeed(User user, Feed feed) {
 		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
 
-		if (feed.getFeedName() == null)
-			return null;
+		List<Feed> feedList = feedRepository.findByUserNo(user.getUserNo());
 
-		if (feedRepository.findOneByFeedName(feed.getFeedName()) != null)
-			return null;
+		for (Feed item : feedList) {
+			if (item.getFeedName() == feed.getFeedName()) {
+				result.status = false;
+				result.message = "해당 이름의 피드가 존재합니다.";
+				return result;
+			}
+		}
 
-		return feedRepository.save(feed);
+		result.data = feedRepository.save(feed);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "피드 저장에 완료하였습니다.";
+		} else {
+			result.message = "피드 저장에 실패하였습니다.";
+		}
+		return result;
 	}
 
 	@Override
-	public List<Feed> findAllByuser(Long userNo) {
+	public BasicResponse findAllByuser(User user) {
 		// TODO Auto-generated method stub
-		return feedRepository.findByUserNo(userNo);
+		BasicResponse result = new BasicResponse();
+
+		result.data = feedRepository.findByUserNo(user.getUserNo());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "피드 조회를 완료하였습니다.";
+		} else {
+			result.message = "피드 조회에 실패하였습니다.";
+		}
+		return result;
+	}
+
+	@Override
+	public BasicResponse updateFeed(User user, Feed feed) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		Feed checkFeed = feedRepository.findOneByFeedId(feed.getFeedId());
+
+		if (checkFeed == null || checkFeed.getUserNo() != user.getUserNo()) {
+			result.status = false;
+			result.message = "피드 정보가 일치하지 않습니다.";
+			return result;
+		}
+
+		List<Feed> feedList = feedRepository.findByUserNo(user.getUserNo());
+
+		for (Feed item : feedList) {
+			if (item.getFeedName() == feed.getFeedName()) {
+				result.status = false;
+				result.message = "해당 이름의 피드가 존재합니다.";
+				return result;
+			}
+		}
+
+		result.data = feedRepository.save(feed);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "피드 수정를 완료하였습니다.";
+		} else {
+			result.message = "피드 수정에 실패하였습니다.";
+		}
+		return result;
 	}
 
 	@Override
 	@Transactional
-	public void deleteFeed(Long feedId) {
+	public BasicResponse deleteFeed(User user, Feed feed) {
 		// TODO Auto-generated method stub
-		Feed feed = new Feed();
-		feed.setFeedId(feedId);
-		feedRepository.deleteSubscribe(feedId);
-		feedRepository.delete(feed);
+		BasicResponse result = new BasicResponse();
+
+		Feed checkFeed = feedRepository.findOneByFeedId(feed.getFeedId());
+
+		if (checkFeed == null || checkFeed.getUserNo() != user.getUserNo()) {
+			result.status = false;
+			result.message = "피드 정보가 일치하지 않습니다.";
+			return result;
+		}
+
+		feedRepository.deleteSubscribe(feed.getFeedId());
+		feedRepository.deleteById(feed.getFeedId());
+
+		result.status = true;
+		result.message = "삭제에 성공하였습니다.";
+
+		return result;
 	}
 
 }

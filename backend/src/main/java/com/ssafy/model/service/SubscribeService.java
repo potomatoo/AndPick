@@ -1,24 +1,26 @@
 package com.ssafy.model.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
+import com.ssafy.model.dto.Feed;
 import com.ssafy.model.dto.Subscribe;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface SubscribeService {
-	public Subscribe saveSubscribe(User user, long feedId, String subscribeName, String rssUrl, String categoryName);
+	public BasicResponse saveSubscribeNew(User user, Subscribe subscribe);
 
-	public Subscribe updateSubscribe(User user, long feedId, long subscribeId, String subscribeName);
+	public BasicResponse saveSubscribe(User user, Subscribe subscribe);
 
-	public boolean deleteSubscribe(long subscribeId);
+	public BasicResponse updateSubscribe(User user, Subscribe subscribe);
 
-	public List<Subscribe> findSubscribeByUser(User user);
+	public BasicResponse deleteSubscribe(User user, Subscribe subscribe);
 
-	public List<Subscribe> findSubscribeByFeed(long feedId);
+	public BasicResponse findSubscribeByUser(User user);
 
-	public Subscribe findSubscribeBySubscribe(long subscribeId);
+	public BasicResponse findSubscribeByFeed(User user, Feed feed);
+
+	public BasicResponse findSubscribeBySubscribe(User user, Subscribe subscribe);
 
 }

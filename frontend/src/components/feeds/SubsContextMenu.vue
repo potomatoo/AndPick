@@ -19,7 +19,7 @@
           <v-list-item-title>Move to...</v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item>
+        <v-list-item @click="unfollowModal = true">
           <v-icon class="mr-3">mdi-trash-can-outline</v-icon>
           <v-list-item-title>Unfollow</v-list-item-title>
         </v-list-item>
@@ -43,10 +43,30 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="saveName">Save</v-btn>
-            <v-btn text color="error" @click="closeFeedModal">Cancle</v-btn>
+            <v-btn text color="primary" @click="saveName">SAVE</v-btn>
+            <v-btn text color="error" @click="closeFeedModal">CANCLE</v-btn>
           </v-card-actions>
         </v-form>
+      </v-card>
+    </v-dialog>
+
+    <!-- 구독취소 모달 -->
+    <v-dialog v-model="unfollowModal" max-width="450px">
+      <v-card>
+        <v-card-title
+          >{{ subsItem.subscribeName }} 구독을 취소 하시겠습니까?</v-card-title
+        >
+        <v-card-text>
+          It well be removed from {{ feedItem.feedName }}
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="unfollowSubs">OK</v-btn>
+          <v-btn text color="error" @click="unfollowModal = false"
+            >CANCLE</v-btn
+          >
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -63,6 +83,7 @@ const feedModule = namespace("feedModule");
 export default class SubsContextMenu extends Vue {
   @feedModule.State subsContextMenu!: Context;
   @feedModule.Action UPDATE_SUBSCRIBE: any;
+  @feedModule.Action UNFOLLOW_SUBSCRIPTION: any;
 
   @Prop({ type: Object }) readonly subsItem!: SubscribeList;
   @Prop({ type: Object }) readonly feedItem!: FeedList;
@@ -70,6 +91,7 @@ export default class SubsContextMenu extends Vue {
   inputSubsname = "";
 
   renameModal = false;
+  unfollowModal = false;
 
   rules = [
     (value: string) => !!value || "this field is required.",
@@ -113,6 +135,11 @@ export default class SubsContextMenu extends Vue {
     };
     this.UPDATE_SUBSCRIBE(payload);
     this.closeFeedModal();
+  }
+
+  unfollowSubs() {
+    this.UNFOLLOW_SUBSCRIPTION(this.subsItem.subscribeId);
+    this.unfollowModal = false;
   }
 }
 </script>

@@ -162,7 +162,8 @@ const module: Module<FeedModule, RootState> = {
         .get("/api/rss/item/subscribe", {
           params: { subscribeId: subscribeId }
         })
-        .then(({ data }) => (state.articleList = data.data));
+        .then(({ data }) => (state.articleList = data.data))
+        .catch(err => console.error(err));
     },
 
     FETCH_ARTICLE_LIST_IN_FEED({ state }, feedId) {
@@ -186,6 +187,14 @@ const module: Module<FeedModule, RootState> = {
       };
       Axios.instance
         .put("api/subscribe/update", null, updateData)
+        .then(() => dispatch("FETCH_FEED"))
+        .then(() => dispatch("FETCH_ARTICLE_LIST", subscribeId))
+        .catch(err => console.error(err));
+    },
+
+    UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
+      Axios.instance
+        .delete("api/subscribe/delete", { params: { subscribeId } })
         .then(() => dispatch("FETCH_FEED"))
         .catch(err => console.error(err));
     }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.model.dto.Post;
+import com.ssafy.model.dto.PostDir;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.PostService;
@@ -34,6 +35,19 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		if (postTitle == null || postContent == null) {
+			result.status = false;
+			result.message = "필수값을 입력하세요.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
 		Post post = new Post();
 		post.setPostDirId(postDirId);
@@ -41,14 +55,10 @@ public class PostController {
 		post.setPostContent(postContent);
 		post.setPostDate(new Date());
 
-		result.data = postService.savePost(user, post);
-		result.status = (result.data != null) ? true : false;
-
+		result = postService.savePost(user, post);
 		if (result.status) {
-			result.message = "게시글 저장이 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 저장에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -61,15 +71,17 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.findByUser(user);
-		result.status = (result.data != null) ? true : false;
-
+		result = postService.findByUser(user);
 		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -83,15 +95,20 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.findByDirId(user, postDirId);
-		result.status = (result.data != null) ? true : false;
+		PostDir postDir = new PostDir();
+		postDir.setPostDirId(postDirId);
 
+		result = postService.findByDirId(user, postDir);
 		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -104,37 +121,20 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-
-		result.data = postService.findByPostId(user, postId);
-		result.status = (result.data != null) ? true : false;
-
-		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
-			response = new ResponseEntity<>(result, HttpStatus.OK);
-		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
-		return response;
-	}
+		Post post = new Post();
+		post.setPostId(postId);
 
-	@GetMapping(value = "/api/post/find/title")
-	public Object findByTitle(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam("postTitle") String title) {
-		ResponseEntity response = null;
-		BasicResponse result = new BasicResponse();
-
-		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-
-		result.data = postService.findByTitle(user, title);
-		result.status = (result.data != null) ? true : false;
-
+		result = postService.findByPostId(user, post);
 		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -149,6 +149,19 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		if (postTitle == null || postContent == null) {
+			result.status = false;
+			result.message = "필수값을 입력하세요.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
 		Post post = new Post();
 		post.setPostId(postId);
@@ -157,14 +170,10 @@ public class PostController {
 		post.setPostContent(postContent);
 		post.setPostDate(new Date());
 
-		result.data = postService.savePost(user, post);
-		result.status = (result.data != null) ? true : false;
-
+		result = postService.savePost(user, post);
 		if (result.status) {
-			result.message = "게시글 수정이 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 수정에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -177,14 +186,21 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.deletePost(user, postId);
+		Post post = new Post();
+		post.setPostId(postId);
+
+		result = postService.deletePost(user, post);
 
 		if (result.status) {
-			result.message = "게시글 저장이 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 저장에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 

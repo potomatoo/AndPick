@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.Category;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.CategoryService;
 
 @Controller

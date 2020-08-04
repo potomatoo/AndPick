@@ -10,12 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.Post;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.PostService;
 
 @Controller
@@ -140,8 +141,38 @@ public class PostController {
 		return response;
 	}
 
+	@PutMapping(value = "/api/post/update")
+	public Object updatePostDir(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("postDirId") long postDirId, @RequestParam("postId") long postId,
+			@RequestParam("postTitle") String postTitle, @RequestParam("postContent") String postContent) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+
+		Post post = new Post();
+		post.setPostId(postId);
+		post.setPostDirId(postDirId);
+		post.setPostTitle(postTitle);
+		post.setPostContent(postContent);
+		post.setPostDate(new Date());
+
+		result.data = postService.savePost(user, post);
+		result.status = (result.data != null) ? true : false;
+
+		if (result.status) {
+			result.message = "게시글 수정이 완료되었습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "게시글 수정에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
 	@DeleteMapping(value = "/api/post/delete")
-	public Object savePostDir(@RequestHeader("Authorization") String jwtToken, @RequestParam("postId") long postId) {
+	public Object deletePost(@RequestHeader("Authorization") String jwtToken, @RequestParam("postId") long postId) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 

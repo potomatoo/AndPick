@@ -1,4 +1,4 @@
-package com.ssafy.model;
+package com.ssafy.model.response;
 
 import io.swagger.annotations.ApiModelProperty;
 

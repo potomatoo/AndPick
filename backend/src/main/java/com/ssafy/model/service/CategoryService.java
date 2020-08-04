@@ -2,7 +2,6 @@ package com.ssafy.model.service;
 
 import org.springframework.stereotype.Service;
 
-import com.ssafy.model.dto.Category;
 import com.ssafy.model.response.BasicResponse;
 
 @Service

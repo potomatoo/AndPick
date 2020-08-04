@@ -1,7 +1,5 @@
 package com.ssafy.controller;
 
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -9,16 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.model.dto.User;
-import com.ssafy.model.repository.UserRepository;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.UserService;
 
@@ -103,12 +98,12 @@ public class UserController {
 
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
-		
+
 		User user = (User) this.redisTemplate.opsForValue().get(jwtToken);
 		user.setUserName(userName);
-		
+
 		User update = userService.UpdateUser(user);
-		
+
 		if (update != null) {
 			result.status = true;
 			result.message = "회원정보 수정에 성공하였습니다.";
@@ -119,7 +114,7 @@ public class UserController {
 			result.message = "회원정보 수정에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.CONFLICT);
 		}
-		
+
 		return response;
 	}
 

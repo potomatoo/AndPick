@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.model.dto.Feed;
-import com.ssafy.model.dto.Subscribe;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.FeedRepository;
 import com.ssafy.model.repository.SubscribeRepository;

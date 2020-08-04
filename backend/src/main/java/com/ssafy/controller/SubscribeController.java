@@ -28,8 +28,8 @@ public class SubscribeController {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
-	@PostMapping(value = "/api/subscribe/save")
-	public Object saveSubscribe(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedId") long feedId,
+	@PostMapping(value = "/api/subscribe/new")
+	public Object saveSubscribeNew(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedId") long feedId,
 			@RequestParam("subscribeName") String subscribeName, @RequestParam("rssUrl") String rssUrl,
 			@RequestParam("categoryName") String categoryName) {
 		ResponseEntity response = null;
@@ -56,6 +56,48 @@ public class SubscribeController {
 		Rss rss = new Rss();
 		rss.setRssUrl(rssUrl);
 		rss.setCategory(category);
+
+		Subscribe subscribe = new Subscribe();
+		subscribe.setSubscribeName(subscribeName);
+		subscribe.setFeedId(feedId);
+		subscribe.setUserNo(user.getUserNo());
+
+		subscribe.setRss(rss);
+
+		result = subscribeService.saveSubscribe(user, subscribe);
+
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
+	@PostMapping(value = "/api/subscribe/save")
+	public Object saveSubscribe(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedId") long feedId,
+			@RequestParam("subscribeName") String subscribeName, @RequestParam("rssId") long rssId) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		if (subscribeName == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요 ";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		Rss rss = new Rss();
+		rss.setRssId(rssId);
 
 		Subscribe subscribe = new Subscribe();
 		subscribe.setSubscribeName(subscribeName);

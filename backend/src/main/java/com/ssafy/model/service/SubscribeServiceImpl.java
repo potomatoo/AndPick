@@ -31,7 +31,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
 	@Override
 	@Transactional
-	public BasicResponse saveSubscribe(User user, Subscribe subscribe) {
+	public BasicResponse saveSubscribeNew(User user, Subscribe subscribe) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
@@ -77,6 +77,58 @@ public class SubscribeServiceImpl implements SubscribeService {
 			checkRss.setRssUrl(subscribe.getRss().getRssUrl());
 
 			subscribe.setRss(rssRepository.save(checkRss));
+		} else {
+			subscribe.setRss(checkRss);
+		}
+
+		result.data = subscribeRepository.save(subscribe);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "구독 저장에 완료하였습니다.";
+		} else {
+			result.message = "구독 저장에 실패하였습니다.";
+		}
+		return result;
+	}
+
+	@Override
+	public BasicResponse saveSubscribe(User user, Subscribe subscribe) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		Feed feed = feedRepository.findOneByFeedId(subscribe.getFeedId());
+
+		if (feed == null) {
+			result.status = false;
+			result.message = "잘못된 피드 정보입니다.";
+			return result;
+		}
+
+		if (feed.getUserNo() != user.getUserNo()) {
+			result.status = false;
+			result.message = "피드 정보와 사용자 정보가 일치하지 않습니다.";
+			return result;
+		}
+
+		for (Subscribe item : feed.getSubscribeList()) {
+			if (item.getRss().getRssUrl().equals(subscribe.getRss().getRssUrl())) {
+				result.status = false;
+				result.message = "해당 RSS가 이미 피드에 저장되어 있습니다.";
+				return result;
+			}
+
+			if (item.getSubscribeName().equals(subscribe.getSubscribeName())) {
+				result.status = false;
+				result.message = "해당 RSS이름이 사용중입니다.";
+				return result;
+			}
+		}
+
+		Rss checkRss = rssRepository.findOneByRssUrl(subscribe.getRss().getRssUrl());
+		if (checkRss == null) {
+			result.status = false;
+			result.message = "해당 RSS가 존재하지 않습니다.";
+			return result;
 		} else {
 			subscribe.setRss(checkRss);
 		}

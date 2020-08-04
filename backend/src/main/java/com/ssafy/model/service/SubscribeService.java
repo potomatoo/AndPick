@@ -9,6 +9,8 @@ import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface SubscribeService {
+	public BasicResponse saveSubscribeNew(User user, Subscribe subscribe);
+
 	public BasicResponse saveSubscribe(User user, Subscribe subscribe);
 
 	public BasicResponse updateSubscribe(User user, Subscribe subscribe);

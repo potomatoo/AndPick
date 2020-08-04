@@ -62,19 +62,25 @@
             class="menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 1 }) }"
             @click="commands.heading({ level: 1 })"
-          >H1</button>
+          >
+            H1
+          </button>
 
           <button
             class="menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 2 }) }"
             @click="commands.heading({ level: 2 })"
-          >H2</button>
+          >
+            H2
+          </button>
 
           <button
             class="menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 3 }) }"
             @click="commands.heading({ level: 3 })"
-          >H3</button>
+          >
+            H3
+          </button>
 
           <button
             class="menubar__button"
@@ -172,7 +178,6 @@
 
 <script>
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { mapMutations, mapActions, mapGetters, mapState } from "vuex";
 import { namespace } from "vuex-class";
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
 import {
@@ -365,6 +370,3 @@ symbol {
   border-radius: 4px;
 }
 </style>
-
-
-

@@ -18,7 +18,7 @@ import { Vue, Component } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 
 @Component({
-  computed: { ...mapGetters(["isLoggedIn"]) },
+  computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class AppMain extends Vue {}
 </script>

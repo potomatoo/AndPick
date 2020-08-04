@@ -30,12 +30,12 @@ interface UpdateData {
 
 @Component({
   methods: {
-    ...mapActions(["updateUser"]),
-  },
+    ...mapActions(["updateUser"])
+  }
 })
 export default class UpdateUserView extends Vue {
   updateData: UpdateData = {
-    userName: null,
+    userName: null
   };
 }
 </script>

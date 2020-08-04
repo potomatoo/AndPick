@@ -59,7 +59,13 @@
               >
                 <v-hover v-slot:default="{ hover }" open-delay="200">
                   <router-link
-                    :to="{ name: 'EditPost', params: { postDirId: $route.params.postDirId, postId: post.postId } }"
+                    :to="{
+                      name: 'EditPost',
+                      params: {
+                        postDirId: $route.params.postDirId,
+                        postId: post.postId
+                      }
+                    }"
                     class="router-link"
                   >
                     <v-card
@@ -70,7 +76,8 @@
                     >
                       <v-card-text
                         class="font-weight-medium mt-12 text-center subtitle-1"
-                      >{{ post.postTitle }}</v-card-text>
+                        >{{ post.postTitle }}</v-card-text
+                      >
                       <hr class="mt-0" />
                       <div class="text--primary text-left ml-3">
                         <p v-html="post.postContent"></p>

@@ -42,7 +42,7 @@ import { mapMutations, mapGetters } from "vuex";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
-  computed: { ...mapGetters(["isLoggedIn"]) },
+  computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class AppNavbar extends Vue {}
 </script>

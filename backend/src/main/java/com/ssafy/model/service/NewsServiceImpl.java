@@ -1,12 +1,12 @@
 package com.ssafy.model.service;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.News;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.repository.BoardRepository;
 import com.ssafy.model.repository.NewsRepository;
 import com.ssafy.model.response.BasicResponse;
 
@@ -14,32 +14,21 @@ import com.ssafy.model.response.BasicResponse;
 public class NewsServiceImpl implements NewsService {
 	@Autowired
 	private NewsRepository newsRepository;
+	@Autowired
+	private BoardRepository boardRepository;
 
 	@Override
-	public BasicResponse saveNews(User user, String newsTitle, String newsLink, Date newsDate, String newsDescription,
-			long boardId) {
+	public BasicResponse saveNews(User user, News news) {
 		// TODO Auto-generated method stub
 		BasicResponse response = new BasicResponse();
 
-		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
+		Board board = boardRepository.findOneByBoardId(news.getBoardId());
+
+		if (board.getUserNo() != user.getUserNo()) {
 			response.status = false;
+			response.message = "보드 정보가 일치하지 않습니다.";
 			return response;
 		}
-
-		if (newsTitle == null || newsLink == null || newsDate == null || newsDescription == null) {
-			response.message = "잘못된 요정 정보 입니다.";
-			response.status = false;
-			return response;
-		}
-
-		News news = new News();
-		news.setNewsTitle(newsTitle);
-		news.setNewsLink(newsLink);
-		news.setNewsDate(newsDate);
-		news.setNewsDescription(newsDescription);
-		news.setBoardId(boardId);
-		news.setUserNo(user.getUserNo());
 
 		response.data = newsRepository.save(news);
 		response.status = (response.data != null) ? true : false;
@@ -53,7 +42,7 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public BasicResponse deleteNews(User user, long newsId) {
+	public BasicResponse deleteNews(User user, News news) {
 		// TODO Auto-generated method stub
 		BasicResponse response = new BasicResponse();
 
@@ -63,7 +52,15 @@ public class NewsServiceImpl implements NewsService {
 			return response;
 		}
 
-		newsRepository.deleteById(newsId);
+		news = newsRepository.findOneByNewsId(news.getNewsId());
+
+		if (news.getUserNo() != user.getUserNo()) {
+			response.status = false;
+			response.message = "뉴스 정보가 일치하지 않습니다.";
+			return response;
+		}
+
+		newsRepository.deleteById(news.getNewsId());
 
 		response.status = true;
 		if (response.status) {
@@ -78,67 +75,77 @@ public class NewsServiceImpl implements NewsService {
 	@Override
 	public BasicResponse findAllNews(User user) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
-		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
-		}
-
-		response.data = newsRepository.findByUserNo(user.getUserNo());
-		response.status = (response.data != null) ? true : false;
-		if (response.status) {
-			response.message = "보드 조회에 성공하였습니다.";
+		result.data = newsRepository.findByUserNo(user.getUserNo());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "보드 조회에 성공하였습니다.";
 		} else {
-			response.message = "보드 조회에 실패하였습니다.";
+			result.message = "보드 조회에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 	@Override
-	public BasicResponse findAllByBoardId(User user, long boardId) {
+	public BasicResponse findAllByBoardId(User user, Board board) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
 		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
+			result.status = false;
+			result.message = "잘못된 사용자 정보입니다.";
+			return result;
 		}
 
-		response.data = newsRepository.findByBoardId(boardId);
-		response.status = (response.data != null) ? true : false;
-		if (response.status) {
-			response.message = "보드 조회에 성공하였습니다.";
+		board = boardRepository.findOneByBoardId(board.getBoardId());
+
+		if (user.getUserNo() != board.getUserNo()) {
+			result.status = false;
+			result.message = "잘못된 보드 정보입니다.";
+			return result;
+		}
+
+		result.data = newsRepository.findByBoardId(board.getBoardId());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "보드 조회에 성공하였습니다.";
 		} else {
-			response.message = "보드 조회에 실패하였습니다.";
+			result.message = "보드 조회에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 	@Override
-	public BasicResponse findOneById(User user, long newsId) {
+	public BasicResponse findOneById(User user, News news) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
 		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
+			result.message = "잘못된 사용자 정보입니다.";
+			result.status = false;
+			return result;
 		}
 
-		response.data = newsRepository.findOneByNewsId(newsId);
-		response.status = (response.data != null) ? true : false;
-		if (response.status) {
-			response.message = "보드 조회에 성공하였습니다.";
+		news = newsRepository.findOneByNewsId(news.getNewsId());
+
+		if (user.getUserNo() != news.getUserNo()) {
+			result.message = "잘못된 뉴스 정보입니다.";
+			result.status = false;
+			return result;
+		}
+
+		result.data = news;
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "보드 조회에 성공하였습니다.";
 		} else {
-			response.message = "보드 조회에 실패하였습니다.";
+			result.message = "보드 조회에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 }

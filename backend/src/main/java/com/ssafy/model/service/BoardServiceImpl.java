@@ -3,10 +3,10 @@ package com.ssafy.model.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.BoardRepository;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public class BoardServiceImpl implements BoardService {

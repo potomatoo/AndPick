@@ -14,145 +14,114 @@ public class BoardServiceImpl implements BoardService {
 	private BoardRepository boardRepository;
 
 	@Override
-	public BasicResponse svaeBoard(User user, String boardName) {
+	public BasicResponse svaeBoard(User user, Board board) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
-		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
+		if (boardRepository.findOneByBoardName(board.getBoardName()) != null) {
+			result.message = "중복된 보드 이름입니다.";
+			result.status = false;
+			return result;
 		}
 
-		if (boardName == null) {
-			response.message = "보드 이름을 입력해 주세요";
-			response.status = false;
-			return response;
-		}
-
-		if (boardRepository.findOneByBoardName(boardName) != null) {
-			response.message = "중복된 보드 이름입니다.";
-			response.status = false;
-			return response;
-		}
-
-		Board board = new Board();
-		board.setUserNo(user.getUserNo());
-		board.setBoardName(boardName);
-
-		response.data = boardRepository.save(board);
-		response.status = (response.data != null) ? true : false;
-		if (response.status) {
-			response.message = "보드 저장에 성공하였습니다.";
+		result.data = boardRepository.save(board);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "보드 저장에 성공하였습니다.";
 		} else {
-			response.message = "보드 저장에 실패하였습니다.";
+			result.message = "보드 저장에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 	@Override
 	public BasicResponse findAllBoard(User user) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
-		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
-		}
-
-		response.data = boardRepository.findAllByUserNo(user.getUserNo());
-		response.status = (response.data != null) ? true : false;
-		if (response.status) {
-			response.message = "보드 조회에 성공하였습니다.";
+		result.data = boardRepository.findAllByUserNo(user.getUserNo());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "보드 조회에 성공하였습니다.";
 		} else {
-			response.message = "보드 조회에 실패하였습니다.";
+			result.message = "보드 조회에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 	@Override
-	public BasicResponse findOneBoard(User user, long boardId) {
+	public BasicResponse findOneBoard(User user, Board board) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
-		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
-		}
-
-		response.data = boardRepository.findOneByBoardId(boardId);
-		response.status = (response.data != null) ? true : false;
-		if (response.status) {
-			response.message = "보드 조회에 성공하였습니다.";
+		result.data = boardRepository.findOneByBoardId(board.getBoardId());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "보드 조회에 성공하였습니다.";
 		} else {
-			response.message = "보드 조회에 실패하였습니다.";
+			result.message = "보드 조회에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 	@Override
-	public BasicResponse updateBoard(User user, long boardId, String boardName) {
+	public BasicResponse updateBoard(User user, Board board) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
-		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
+		Board checkBoard = boardRepository.findOneByBoardId(board.getBoardId());
+
+		if (checkBoard.getUserNo() != user.getUserNo()) {
+			result.status = false;
+			result.message = "보드 정보가 일치하지 않습니다.";
+			return result;
 		}
 
-		if (boardName == null) {
-			response.message = "보드 이름을 입력해 주세요";
-			response.status = false;
-			return response;
-		}
+		checkBoard.setBoardName(board.getBoardName());
 
-		Board board = boardRepository.findOneByBoardId(boardId);
-		if (board == null) {
-			response.message = "해당 보드가 없습니다.";
-			response.status = false;
-			return response;
-		}
-
-		board.setBoardName(boardName);
-		response.data = boardRepository.save(board);
-
-		response.status = (response.data != null) ? true : false;
-		if (response.status) {
-			response.message = "보드 수정에 성공하였습니다.";
+		result.data = boardRepository.save(checkBoard);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "보드 수정에 성공하였습니다.";
 		} else {
-			response.message = "보드 수정에 실패하였습니다.";
+			result.message = "보드 수정에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 	@Override
-	public BasicResponse deleteBoard(User user, long boardId) {
+	public BasicResponse deleteBoard(User user, Board board) {
 		// TODO Auto-generated method stub
-		BasicResponse response = new BasicResponse();
+		BasicResponse result = new BasicResponse();
 
 		if (user == null) {
-			response.message = "잘못된 사용자 정보입니다.";
-			response.status = false;
-			return response;
+			result.message = "잘못된 사용자 정보입니다.";
+			result.status = false;
+			return result;
 		}
 
-		boardRepository.deleteById(boardId);
+		board = boardRepository.findOneByBoardId(board.getBoardId());
 
-		response.status = true;
-		if (response.status) {
-			response.message = "보드 삭제에 성공하였습니다.";
+		if (board.getBoardId() != user.getUserNo()) {
+			result.status = false;
+			result.message = "보드 정보가 일치하지 않습니다.";
+			return result;
+		}
+
+		boardRepository.deleteById(board.getBoardId());
+
+		result.status = true;
+		if (result.status) {
+			result.message = "보드 삭제에 성공하였습니다.";
 		} else {
-			response.message = "보드 삭제에 실패하였습니다.";
+			result.message = "보드 삭제에 실패하였습니다.";
 		}
 
-		return response;
+		return result;
 	}
 
 }

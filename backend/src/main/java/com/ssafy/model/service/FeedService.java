@@ -1,16 +1,18 @@
 package com.ssafy.model.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Feed;
+import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface FeedService {
-	public Feed save(Feed feed);
+	public BasicResponse saveFeed(User user, Feed feed);
 
-	public List<Feed> findAllByuser(Long userNo);
+	public BasicResponse findAllByuser(User user);
 
-	public void deleteFeed(Long feedId);
+	public BasicResponse deleteFeed(User user, Feed feed);
+
+	public BasicResponse updateFeed(User user, Feed feed);
 }

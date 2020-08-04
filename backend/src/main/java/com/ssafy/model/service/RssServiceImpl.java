@@ -10,10 +10,12 @@ import com.ssafy.model.dto.Category;
 import com.ssafy.model.dto.Feed;
 import com.ssafy.model.dto.Rss;
 import com.ssafy.model.dto.Subscribe;
+import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.CategoryRepository;
 import com.ssafy.model.repository.FeedRepository;
 import com.ssafy.model.repository.RssRepository;
 import com.ssafy.model.repository.SubscribeRepository;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public class RssServiceImpl implements RssService {
@@ -28,55 +30,113 @@ public class RssServiceImpl implements RssService {
 	private SubscribeRepository subscribeRepository;
 
 	@Override
-	public List<Rss> findAll() {
-		return rssRepository.findAll();
-	}
-
-	@Override
-	public List<Rss> findByCategoryName(String categoryName) {
+	public BasicResponse findAll() {
 		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
 
-		Category category = categoryRepository.findOneByCategoryName(categoryName);
-
-		if (category == null) {
-			return null;
+		result.data = rssRepository.findAll();
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "모든 RSS 조회에 성공하였습니다.";
+		} else {
+			result.message = "모든 RSS 조회에 실패하였습니다.";
 		}
 
-		return rssRepository.findByCategory(category);
+		return result;
 	}
 
 	@Override
-	public List<Rss> findByRssName(String rssName) {
+	public BasicResponse findByCategoryName(String categoryName) {
 		// TODO Auto-generated method stub
-		return rssRepository.findByRssNameLike('%' + rssName + '%');
-	}
-
-	@Override
-	public Rss saveRss(Rss rss, String categoryName) {
-		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
 
 		Category category = categoryRepository.findOneByCategoryName(categoryName);
-
 		if (category == null) {
-			category = new Category();
-			category.setCategoryName(categoryName);
-
-			category = categoryRepository.save(category);
+			result.status = false;
+			result.message = "해당 카테고리가 없습니다.";
+			return result;
 		}
+
+		result.data = rssRepository.findByCategory(category);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "카테고리별 RRS 조회에 성공하였습니다.";
+		} else {
+			result.message = "카테고리별 RRS 조회에 실패하였습니다.";
+		}
+
+		return result;
+	}
+
+	@Override
+	public BasicResponse findByRssName(String rssName) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		result.data = rssRepository.findByRssNameLike('%' + rssName + '%');
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "카테고리별 RRS 조회에 성공하였습니다.";
+		} else {
+			result.message = "카테고리별 RRS 조회에 실패하였습니다.";
+		}
+
+		return result;
+	}
+
+	@Override
+	public BasicResponse saveRss(Rss rss, Category category) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		Rss checkDublicate = rssRepository.findOneByRssUrl(rss.getRssUrl());
+
+		if (checkDublicate != null) {
+			result.status = false;
+			result.message = "해당 url의 rss가 존재합니다.";
+			return result;
+		}
+
+		Category checkCategory = categoryRepository.findOneByCategoryName(category.getCategoryName());
+
+		if (checkCategory == null) {
+			category = categoryRepository.save(checkCategory);
+		}
+
 		rss.setCategory(category);
 
-		if (rssRepository.findOneByRssUrl(rss.getRssUrl()) != null)
-			return null;
+		result.data = rssRepository.save(rss);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "RSS 저장에 성공하였습니다.";
+		} else {
+			result.message = "RSS 저장에 실패하였습니다.";
+		}
 
-		return rssRepository.save(rss);
+		return result;
 	}
 
 	@Override
-	public List<Rss> findItemByFeed(long feedId) {
+	public BasicResponse findItemByFeed(User user, Feed feed) {
 		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
 
-		List<Subscribe> subscribe = subscribeRepository.findByFeedId(feedId);
+		Feed checkFeed = feedRepository.findOneByFeedId(feed.getFeedId());
 
+		if (checkFeed == null) {
+			result.status = false;
+			result.message = "해당 피드가 없습니다.";
+			return result;
+		}
+		
+		if(checkFeed.getUserNo() != user.getUserNo()) {
+			result.status = false;
+			result.message = "사용자 정보와 피드 정보가 일치하지 않습니다.";
+			return result;		
+		}
+		
+
+		List<Subscribe> subscribe = subscribeRepository.findByFeedId(feed.getFeedId());
 		List<Rss> list = new ArrayList<Rss>();
 
 		for (Subscribe item : subscribe) {
@@ -85,22 +145,41 @@ public class RssServiceImpl implements RssService {
 			list.add(rss);
 		}
 
-		return list;
+		if (list.size() == 0) {
+			result.status = false;
+			result.message = "피드에 rss가 없습니다.";
+		} else {
+			result.status = true;
+			result.message = "RSS 목록입니다.";
+			result.data = list;
+		}
+
+		return result;
 	}
 
 	@Override
-	public List<Rss> findItemBySubscribe(long subscribeId) {
+	public BasicResponse findItemBySubscribe(User user, Subscribe subscribe) {
 		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
 
-		List<Rss> list = new ArrayList<Rss>();
+		Subscribe checkSubscribe = subscribeRepository.findOneBySubscribeId(subscribe.getSubscribeId());
+		if (checkSubscribe == null) {
+			result.status = false;
+			result.message = "해당 구독 정보가 없습니다.";
+			return result;
+		}
 
-		Subscribe subscribe = subscribeRepository.findOneBySubscribeId(subscribeId);
-		Rss rss = subscribe.getRss();
-		rss.setRssName(subscribe.getSubscribeName());
+		if(checkSubscribe.getUserNo() != user.getUserNo()) {
+			result.status = false;
+			result.message = "사용자 정보와 구독 정보가 일치하지 않습니다.";
+			return result;		
+		}
+		
 
-		list.add(rss);
-
-		return list;
+		result.status = true;
+		result.data = checkSubscribe;
+		result.message = "해당 구독에 대한 RSS입니다.";
+		return result;
 	}
 
 }

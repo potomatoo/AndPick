@@ -124,7 +124,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 			}
 		}
 
-		Rss checkRss = rssRepository.findOneByRssUrl(subscribe.getRss().getRssUrl());
+		Rss checkRss = rssRepository.findOneByRssId(subscribe.getRss().getRssId());
 		if (checkRss == null) {
 			result.status = false;
 			result.message = "해당 RSS가 존재하지 않습니다.";

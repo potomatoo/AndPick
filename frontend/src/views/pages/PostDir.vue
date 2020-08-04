@@ -15,8 +15,8 @@
           <v-list-item @click="click">
             <v-list-item-title>Oldest</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="click">
-            <v-list-item-title>More Settings</v-list-item-title>
+          <v-list-item @click="updatePostDir()">
+            <v-list-item-title>Rename</v-list-item-title>
           </v-list-item>
           <v-list-item @click="deletePostDir()">
             <v-list-item-title>
@@ -32,7 +32,7 @@
     </div>
     <v-divider></v-divider>
     <router-link
-      :to="{ name: 'EditArticle', params: { postDirName: $route.params.postDirId } }"
+      :to="{ name: 'NewPost', params: { postDirId: $route.params.postDirId } }"
       class="router-link"
     >
       <v-btn small outlined color="secondary" class>
@@ -41,12 +41,12 @@
     </router-link>
     <div class="container">
       <div class="row">
-        <draggable :list="dragList" :options="{animation:200}" class="row wrap sortable-list">
+        <draggable :list="dragList" class="row wrap sortable-list">
           <v-flex v-for="item in dragList" :key="item.length" class="sortable">
             <draggable
-              :list="postDir.postId"
-              :group="{ name: 'postDir' }"
+              :list="postDir.postList"
               class="row justify-content-start row-sm-12"
+              @change="changeDrag"
             >
               <v-flex
                 v-for="post in postDir.postList"
@@ -59,7 +59,7 @@
               >
                 <v-hover v-slot:default="{ hover }" open-delay="200">
                   <router-link
-                    :to="{ name: 'EditArticle', params: { postDirName: $route.params.postDirId } }"
+                    :to="{ name: 'EditPost', params: { postDirId: $route.params.postDirId, postId: post.postId } }"
                     class="router-link"
                   >
                     <v-card
@@ -73,7 +73,7 @@
                       >{{ post.postTitle }}</v-card-text>
                       <hr class="mt-0" />
                       <div class="text--primary text-left ml-3">
-                        {{ post.postContetnt }}
+                        <p v-html="post.postContent"></p>
                         <br />
                       </div>
                     </v-card>
@@ -104,9 +104,13 @@ const mypageModule = namespace("mypageModule");
 export default class FolderMain extends Vue {
   @mypageModule.State postDir!: [];
   @mypageModule.State postDirId!: number | null;
+  @mypageModule.State postDirName!: string | null;
   @mypageModule.Mutation SELECT_POSTDIR: any;
   @mypageModule.Action FETCH_POSTDIR: any;
   @mypageModule.Action DELETE_POSTDIR: any;
+  @mypageModule.Action UPDATE_POSTDIR: any;
+
+  changeDirName = "내가 원하는 제목이 안나와요!!!!!";
 
   click() {
     console.log("click");
@@ -120,6 +124,17 @@ export default class FolderMain extends Vue {
 
   deletePostDir() {
     this.DELETE_POSTDIR(this.$route.params.postDirId);
+  }
+
+  changeDrag() {
+    this.FETCH_POSTDIR(this.postDir);
+  }
+
+  updatePostDir() {
+    this.UPDATE_POSTDIR({
+      postDirId: Number(this.$route.params.postDirId),
+      postDirName: this.changeDirName
+    });
   }
 
   @Watch("$route", { immediate: true })

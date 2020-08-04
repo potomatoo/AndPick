@@ -1,5 +1,5 @@
 export interface PostDir {
-    postDirID: number;
+    postDirId: number;
     userNo: number;
     postDirName: string;
     postList: Post[]
@@ -8,7 +8,7 @@ export interface PostDir {
 export interface Post {
     postId: number;
     userNo: number;
-    postDirID: number;
+    postDirId: number;
     postTitle: string
     postContent: string;
     postDate: string;
@@ -19,7 +19,9 @@ export interface MypageModule {
     isSidebarActive: boolean;
     postDirList: PostDir[];
     postDir: Post[];
-    post: Post | null;
+    post: Post | null,
     postDirId: number | null;
+    postId: number | null;
+    postDirName: string | null;
 }
 

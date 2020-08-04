@@ -13,6 +13,8 @@ const module: Module<MypageModule, RootState> = {
     postDir: [],
     post: null,
     postDirId: null,
+    postId: null,
+    postDirName: null,
   },
 
   getters: {},
@@ -24,6 +26,7 @@ const module: Module<MypageModule, RootState> = {
 
     SET_POSTDIR_LIST(state, postDirList: PostDir[]) {
       state.postDirList = postDirList;
+
     },
 
     ADD_POSTDIR(state, postDir: PostDir) {
@@ -37,6 +40,14 @@ const module: Module<MypageModule, RootState> = {
 
     SELECT_POSTDIR(state, { postDirId }) {
       state.postDirId = postDirId
+    },
+
+    SET_POST(state, post: Post) {
+      state.post = post;
+    },
+
+    SELECT_POST(state, { postId }) {
+      state.postId = postId
     }
   },
 
@@ -64,6 +75,20 @@ const module: Module<MypageModule, RootState> = {
         .catch(err => console.error(err))
     },
 
+    FETCH_POST({ commit }, postId: number) {
+      const postData = {
+        params: {
+          postId
+        }
+      }
+      Axios.instance
+        .get("/api/post/find/postid", postData)
+        .then(({ data }) => {
+          commit("SET_POST", data.data)
+        })
+        .catch(err => console.error(err))
+    },
+
     ADD_POSTDIR({ dispatch }, postDirName: string) {
       const postDirData = {
         params: {
@@ -74,12 +99,63 @@ const module: Module<MypageModule, RootState> = {
         .post("/api/postdir/save", null, postDirData)
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR_LIST");
-          return data.data.postDirName;
+          return data.data.postDirId;
         })
-        .then(postDirName => {
-          router.push({ name: "PostDir", params: { postDirName } });
+        .then(postDirId => {
+          router.push({ name: "PostDir", params: { postDirId } });
         })
         .catch(err => console.error(err));
+    },
+
+    UPDATE_POSTDIR({ dispatch }, { postDirId, postDirName }: { postDirId: number, postDirName: string }) {
+      const postDirData = {
+        params: {
+          postDirId, postDirName
+        }
+      }
+      Axios.instance
+        .put("/api/postdir/update", null, postDirData)
+        .then(({ data }) => {
+          dispatch("FETCH_POSTDIR_LIST");
+          dispatch("FETCH_POSTDIR", data.data.postDirId)
+          return data.data.postDirId
+        })
+        .catch(err => console.error(err))
+
+    },
+
+    ADD_POST({ dispatch }, { postContent, postDirId, postTitle }: { postContent: string, postDirId: number, postTitle: string }) {
+      const postData = {
+        params: {
+          postContent, postDirId, postTitle
+        }
+      }
+      Axios.instance
+        .post("/api/post/save", null, postData)
+        .then(({ data }) => {
+          dispatch("FETCH_POSTDIR", data.data.postDirId);
+          return data.data.postDirId
+        })
+        .then((postDirId) => {
+          router.push({ name: "PostDir", params: { postDirId } });
+        })
+        .catch(err => console.error(err))
+    },
+
+    UPDATE_POST({ dispatch },
+      { postContent, postDirId, postId, postTitle }:
+        { postContent: string, postDirId: number, postId: number, postTitle: string }) {
+      const postData = {
+        params: {
+          postContent, postDirId, postId, postTitle
+        }
+      }
+      Axios.instance
+        .put("/api/post/update", null, postData)
+        .then(({ data }) => {
+          dispatch("FETCH_POSTDIR", data.data.postDirId)
+        })
+        .catch(err => console.error(err))
     },
 
     DELETE_POSTDIR({ dispatch }, postDirId: number) {
@@ -92,7 +168,6 @@ const module: Module<MypageModule, RootState> = {
         .delete("/api/postdir/delete", postDirData)
         .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
-
         })
         .then(() => {
           router.push({ name: "Home" });

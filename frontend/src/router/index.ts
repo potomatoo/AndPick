@@ -13,7 +13,6 @@ import BoardList from "@/views/feeds/BoardList.vue";
 import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
 import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
 import ArticleDetailInFeed from "@/views/feeds/ArticleDetailInFeed.vue";
-import MypageMain from "@/views/pages/MypageMain.vue";
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
@@ -83,8 +82,14 @@ const routes: Array<RouteConfig> = [
   },
 
   {
-    path: "/mypage/:postDirName/post",
-    name: "EditArticle",
+    path: "/mypage/:postDirId/newpost",
+    name: "NewPost",
+    component: EditArticle,
+  },
+
+  {
+    path: "/mypage/:postDirId/:postId/post",
+    name: "EditPost",
     component: EditArticle,
   },
 

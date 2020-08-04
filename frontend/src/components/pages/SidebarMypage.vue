@@ -35,12 +35,6 @@ const mypageModule = namespace("mypageModule");
 })
 export default class SidebarMypage extends Vue {
   @mypageModule.State postDirList!: [];
-  @mypageModule.Action FETCH_POSTDIR_LIST: any;
-
-  @Watch("postDirList", { immediate: true })
-  fetchPostDirList() {
-    this.FETCH_POSTDIR_LIST();
-  }
 }
 </script>
 

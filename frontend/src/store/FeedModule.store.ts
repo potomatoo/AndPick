@@ -9,7 +9,7 @@ import {
   Rss,
   Feed
 } from "./Feed.interface";
-import { Axios, LocalAxios } from "@/service/axios.service";
+import { Axios } from "@/service/axios.service";
 import router from "@/router";
 
 const module: Module<FeedModule, RootState> = {
@@ -106,10 +106,7 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    SUBSCRIBE_RSS(
-      { dispatch, state },
-      { feedId, rss }: { feedId: number; rss: Rss }
-    ) {
+    SUBSCRIBE_RSS({ dispatch }, { feedId, rss }: { feedId: number; rss: Rss }) {
       const feedData = {
         params: {
           feedId
@@ -117,8 +114,7 @@ const module: Module<FeedModule, RootState> = {
       };
       const subscribeData = {
         params: {
-          categoryName: rss.category.categoryName,
-          rssUrl: rss.rssUrl,
+          rssId: rss.rssId,
           subscribeName:
             rss.rssName ||
             ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1],
@@ -195,6 +191,16 @@ const module: Module<FeedModule, RootState> = {
     UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
       Axios.instance
         .delete("api/subscribe/delete", { params: { subscribeId } })
+        .then(() => dispatch("FETCH_FEED"))
+        .catch(err => console.error(err));
+    },
+
+    FOLLOW_SUBSCRIPTION({ dispatch }, { feedId, rssId, subscribeName }) {
+      const followData = {
+        params: { feedId, rssId, subscribeName }
+      };
+      Axios.instance
+        .post("api/subscribe/save", null, followData)
         .then(() => dispatch("FETCH_FEED"))
         .catch(err => console.error(err));
     }

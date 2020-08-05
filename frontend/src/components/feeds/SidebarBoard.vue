@@ -11,7 +11,10 @@
           </v-list-item-icon>
           <v-list-item-content>
             <router-link
-              :to="{ name: 'BoardList', params: { boardName: board.title } }"
+              :to="{
+                name: 'BoardArticleList',
+                params: { boardId: board.boardId }
+              }"
               class="router-link"
             >
               <v-list-item-title v-text="board.boardName"></v-list-item-title>
@@ -58,7 +61,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import { SidebarList, Board } from "../../store/Feed.interface";
+import { Board } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
@@ -88,6 +91,7 @@ export default class SidebarBoard extends Vue {
     if (this.boardList.length) {
       return this.boardList.some((board: Board) => board.boardName === name);
     }
+    return false;
   }
 
   closeModal() {

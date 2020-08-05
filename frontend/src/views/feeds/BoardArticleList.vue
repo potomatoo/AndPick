@@ -2,9 +2,9 @@
   <div class="mt-10">
     <v-container>
       <v-layout>
-        <v-flex>
+        <v-flex v-if="board">
           <div class="caption">BOARD</div>
-          <h1>{{ $route.params.boardName }}</h1>
+          <h1>{{ board.boardName }}</h1>
         </v-flex>
         <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
@@ -30,10 +30,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { namespace } from "vuex-class";
+import { Board } from "../../store/Feed.interface";
+
+const feedModule = namespace("feedModule");
 
 @Component
-export default class BoardList extends Vue {}
+export default class BoardArticleList extends Vue {
+  @feedModule.State board!: Board;
+  @feedModule.Action FETCH_ARTICLE_LIST_IN_BOARD: any;
+
+  @Watch("$route", { immediate: true })
+  fetchData() {
+    this.FETCH_ARTICLE_LIST_IN_BOARD(this.$route.params.boardId);
+  }
+}
 </script>
 
 <style></style>

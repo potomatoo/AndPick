@@ -19,6 +19,7 @@ const module: Module<FeedModule, RootState> = {
     boardList: [],
     article: null,
     feed: null,
+    board: null,
     subscribeId: null,
     articleList: [],
     subsContextMenu: {
@@ -50,6 +51,10 @@ const module: Module<FeedModule, RootState> = {
 
     SET_BOARD_LIST(state, boardList: Board[]) {
       state.boardList = boardList;
+    },
+
+    SET_BOARD(state, board: Board) {
+      state.board = board;
     },
 
     SET_RSS_LIST(state, rssList: Rss[]) {
@@ -261,6 +266,13 @@ const module: Module<FeedModule, RootState> = {
       Axios.instance
         .post("/api/board/save", null, { params: { boardName } })
         .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_ARTICLE_LIST_IN_BOARD({ commit }, boardId) {
+      Axios.instance
+        .get("/api/board/find/id", { params: { boardId } })
+        .then(({ data }) => commit("SET_BOARD", data.data))
         .catch(err => console.error(err));
     }
   }

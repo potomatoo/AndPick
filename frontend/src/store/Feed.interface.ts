@@ -54,6 +54,7 @@ export interface FeedModule {
   boardList: Board[];
   article: Article | null;
   feed: FeedList | null;
+  board: Board | null;
   subscribeId: number | null;
   articleList: Article[];
   subsContextMenu: Context;

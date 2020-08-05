@@ -54,6 +54,7 @@ public class PostController {
 		post.setPostTitle(postTitle);
 		post.setPostContent(postContent);
 		post.setPostDate(new Date());
+		post.setUserNo(user.getUserNo());
 
 		result = postService.savePost(user, post);
 		if (result.status) {

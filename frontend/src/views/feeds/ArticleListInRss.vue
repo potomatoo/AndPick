@@ -64,13 +64,6 @@ export default class ArticleListInRss extends Vue {
 
   rssTitle: string | null = null;
 
-  // @Watch("$route", { immediate: true })
-  // selectSub() {
-  //   this.SELECT_SUBSCRIBE({
-  //     subscribeId: this.$route.params.subscribeId
-  //   });
-  // }
-
   selectArticle(article: Article) {
     this.SELECT_ARTICLE(article);
   }

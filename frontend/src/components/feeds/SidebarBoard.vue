@@ -11,7 +11,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <router-link
-              :to="{ name: 'BoardList', params: { boardname: board.title } }"
+              :to="{ name: 'BoardList', params: { boardName: board.title } }"
               class="router-link"
             >
               <v-list-item-title v-text="board.title"></v-list-item-title>

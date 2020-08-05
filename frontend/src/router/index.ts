@@ -40,7 +40,7 @@ const routes: Array<RouteConfig> = [
     component: AddRss
   },
   {
-    path: "/feeds/:feedName/:feedId",
+    path: "/feed/:feedId",
     name: "Feed",
     component: FeedPage
   },
@@ -55,12 +55,12 @@ const routes: Array<RouteConfig> = [
     component: ArticleDetail
   },
   {
-    path: "/feed/:feedName/:feedId/article/:articleId",
+    path: "/feed/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
     component: ArticleDetailInFeed
   },
   {
-    path: "/boards/:boardName",
+    path: "/board/:boardName",
     name: "BoardList",
     component: BoardList
   }

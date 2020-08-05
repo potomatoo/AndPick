@@ -12,7 +12,7 @@
           <router-link
             :to="{
               name: 'Feed',
-              params: { feedName: feed.feedName, feedId: feed.feedId }
+              params: { feedId: feed.feedId }
             }"
             class="router-link"
           >
@@ -75,7 +75,7 @@
         </v-form>
       </v-card>
     </v-dialog>
-    <feed-context-menu :item="feedItem" />
+    <feed-context-menu :feedItem="feedItem" />
     <subs-context-menu :subsItem="subsItem" :feedItem="feedItem" />
   </div>
 </template>

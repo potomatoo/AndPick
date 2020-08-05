@@ -16,6 +16,7 @@ import ArticleDetailInFeed from "@/views/feeds/ArticleDetailInFeed.vue";
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
+import SocialLoginView from "@/views/accounts/SocialLoginView.vue";
 import LogoutView from "@/views/accounts/LogoutView.vue";
 import UpdateUserView from "@/views/accounts/UpdateUserView.vue";
 import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
@@ -45,6 +46,11 @@ const routes: Array<RouteConfig> = [
     path: "/accounts/login",
     name: "Login",
     component: LoginView
+  },
+  {
+    path: "/accounts/social",
+    name: "SocialLogin",
+    component: SocialLoginView,
   },
   {
     path: "/accounts/logout",
@@ -119,7 +125,7 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: "/feeds/:feedName/:feedId",
+    path: "/feed/:feedId",
     name: "Feed",
     component: FeedPage,
     meta: {
@@ -143,7 +149,7 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: "/feed/:feedName/:feedId/article/:articleId",
+    path: "/feed/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
     component: ArticleDetailInFeed,
     meta: {
@@ -151,7 +157,7 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: "/boards/:boardName",
+    path: "/board/:boardName",
     name: "BoardList",
     component: BoardList,
     meta: {

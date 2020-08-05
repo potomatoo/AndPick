@@ -65,9 +65,13 @@
       </div>
     </form>
     <a
-      href="https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Faccounts%2Flogin&client_id=476248660063-e2gk89ukcim2la7mbttisi10pq9ck5r6.apps.googleusercontent.com"
+      href="https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Faccounts%2Flogin&client_id=476248660063-e2gk89ukcim2la7mbttisi10pq9ck5r6.apps.googleusercontent.com"
       ><img src="@/assets/google.png" style="width: 120px; height: auto;" />
     </a>
+    <hr />
+    <!-- <router-link :to="{ name: 'SocialLogin' }"
+      ><img src="@/assets/google.png" style="width: 120px; height: auto;"
+    /></router-link> -->
   </div>
 </template>
 
@@ -127,11 +131,11 @@ export default class LoginView extends Vue {
       console.log("데이터 검증 성공");
     }
   }
-  created() {
-    if (window.location.href.split("&")[1]) {
-      this.$store.dispatch("social", this.socialData);
-    }
-  }
+  // created() {
+  //   if (window.location.href.split("&")[1]) {
+  //     this.$store.dispatch("social", this.socialData);
+  //   }
+  // }
 }
 </script>
 

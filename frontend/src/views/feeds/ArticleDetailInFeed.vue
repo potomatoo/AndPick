@@ -46,7 +46,6 @@ export default class ArticleDetail extends Vue {
       this.$router.replace({
         name: "Feed",
         params: {
-          feedName: this.$route.params.feedName,
           feedId: this.$route.params.feedId
         }
       });

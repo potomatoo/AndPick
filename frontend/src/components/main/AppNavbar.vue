@@ -6,8 +6,8 @@
       style="width: 100%"
     >
       <router-link :to="{ name: 'Home' }">
-        <a class="navbar-brand"
-          ><img src="@/assets/logo.png" width="90px" height="auto"
+        <a
+          ><img class="mdi" src="@/assets/logo.png" width="90px" height="auto"
         /></a>
       </router-link>
       <router-link
@@ -17,20 +17,30 @@
       >
         <v-btn color="#5cb85c">로그인</v-btn>
       </router-link>
+
       <div v-if="isLoggedIn" class="mt-2">
-        <router-link
-          v-if="isLoggedIn"
-          :to="{ name: 'UpdateUser' }"
-          class="mr-1 router-link"
-          ><span style="width: 100px" class="mdi mdi-account-edit"></span
-        ></router-link>
-        |
-        <router-link
-          v-if="isLoggedIn"
-          :to="{ name: 'Logout' }"
-          class="mr-5 ml-1 router-link letters"
-          >로그아웃</router-link
-        >
+        <div>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on }">
+              <span class="mdi mdi-account-edit mr-3 p-2" v-on="on"></span>
+            </template>
+            <v-list class="p-3">
+              <router-link
+                v-if="isLoggedIn"
+                :to="{ name: 'UpdateUser' }"
+                class="router-link"
+                >정보수정</router-link
+              >
+              <hr />
+              <router-link
+                v-if="isLoggedIn"
+                :to="{ name: 'Logout' }"
+                class="router-link"
+                >로그아웃</router-link
+              >
+            </v-list>
+          </v-menu>
+        </div>
       </div>
     </v-toolbar-title>
   </v-app-bar>
@@ -55,7 +65,8 @@ export default class AppNavbar extends Vue {}
   text-decoration: none;
   color: inherit;
 }
-.letters {
-  font-size: 18px;
+.mdi:hover {
+  cursor: pointer;
+  background: rgba(230, 235, 229, 0.986);
 }
 </style>

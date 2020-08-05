@@ -231,7 +231,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 			return result;
 		}
 
-		result.data = subscribeRepository.findByFeedId(user.getUserNo());
+		result.data = subscribeRepository.findByFeedId(feed.getFeedId());
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "조회에 완료하였습니다.";

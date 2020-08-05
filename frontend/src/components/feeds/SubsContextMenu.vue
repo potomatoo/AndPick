@@ -20,8 +20,8 @@
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item @click="unfollowModal = true">
-          <v-icon class="mr-3">mdi-trash-can-outline</v-icon>
-          <v-list-item-title>Unfollow</v-list-item-title>
+          <v-icon class="mr-3" color="error">mdi-trash-can-outline</v-icon>
+          <v-list-item-title class="red--text">Unfollow</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -43,8 +43,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="saveName">SAVE</v-btn>
-            <v-btn text color="error" @click="closeFeedModal">CANCLE</v-btn>
+            <v-btn color="success" @click="saveName">SAVE</v-btn>
+            <v-btn outlined color="grey" @click="closeFeedModal">CANCLE</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
@@ -54,40 +54,47 @@
     <v-dialog v-model="moveToModal" max-width="450px">
       <v-card>
         <v-card-title>You've selected 1 source</v-card-title>
-        <v-chip class="mx-6" outlined label>
+        <v-chip class="mx-6 mt-5" outlined label>
           <v-avatar left>
             <v-icon>mdi-checkbox-marked-circle</v-icon>
           </v-avatar>
           {{ subsItem.subscribeName }}
         </v-chip>
 
-        <v-card-text>
+        <v-card-text class="mt-10">
           ADDED IN
         </v-card-text>
-        <v-checkbox
-          v-for="feed in selectedFeed"
-          :key="feed.feed.feedId"
-          v-model="addedFeed"
-          :label="feed.feed.feedName"
-          :value="feed.feed.feedId"
-        ></v-checkbox>
+        <v-card-text>
+          <v-checkbox
+            v-for="feed in selectedFeed"
+            :key="feed.feed.feedId"
+            v-model="addedFeed"
+            :label="feed.feed.feedName"
+            :value="feed.feed.feedId"
+            class="mt-0"
+          ></v-checkbox>
+        </v-card-text>
 
         <v-card-text>
           PERSONAL FEEDS
         </v-card-text>
-
-        <v-checkbox
-          v-for="feed in othersFeed"
-          :key="feed.feedId"
-          v-model="selectMoveToFeed"
-          :label="feed.feedName"
-          :value="feed.feedId"
-        ></v-checkbox>
+        <v-card-text>
+          <v-checkbox
+            v-for="feed in othersFeed"
+            :key="feed.feedId"
+            v-model="selectMoveToFeed"
+            :label="feed.feedName"
+            :value="feed.feedId"
+            class="mt-0"
+          ></v-checkbox>
+        </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="moveToFeed">SAVE</v-btn>
-          <v-btn text color="error" @click="moveToModal = false">CANCLE</v-btn>
+          <v-btn color="success" @click="moveToFeed">SAVE</v-btn>
+          <v-btn outlined color="grey" @click="moveToModal = false"
+            >CANCLE</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -104,8 +111,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="unfollowSubs">YES</v-btn>
-          <v-btn text color="error" @click="unfollowModal = false"
+          <v-btn color="error" @click="unfollowSubs">YES</v-btn>
+          <v-btn outlined color="grey" @click="unfollowModal = false"
             >CANCLE</v-btn
           >
         </v-card-actions>

@@ -69,8 +69,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addFeeds">Create</v-btn>
-            <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+            <v-btn color="success" @click="addFeeds">Create</v-btn>
+            <v-btn outlined color="grey" @click="closeModal">Cancle</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>

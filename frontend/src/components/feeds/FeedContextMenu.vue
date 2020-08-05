@@ -14,14 +14,14 @@
           <!-- </v-list-item-icon> -->
           <v-list-item-title>Rename</v-list-item-title>
         </v-list-item>
-        <v-list-item>
+        <!-- <v-list-item>
           <v-icon class="mr-3">mdi-rss</v-icon>
           <v-list-item-title>Manage Sources</v-list-item-title>
-        </v-list-item>
+        </v-list-item> -->
         <v-divider></v-divider>
         <v-list-item @click="deleteModal = true">
-          <v-icon class="mr-3">mdi-trash-can-outline</v-icon>
-          <v-list-item-title>Delete</v-list-item-title>
+          <v-icon class="mr-3" color="error">mdi-trash-can-outline</v-icon>
+          <v-list-item-title class="red--text">Delete</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -43,8 +43,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="saveName">SAVE</v-btn>
-            <v-btn text color="error" @click="closeFeedModal">CANCLE</v-btn>
+            <v-btn color="success" @click="saveName">SAVE</v-btn>
+            <v-btn outlined color="grey" @click="closeFeedModal">CANCLE</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
@@ -60,8 +60,10 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="deleteFeed">DELETE</v-btn>
-          <v-btn text color="error" @click="deleteModal = false">CANCLE</v-btn>
+          <v-btn color="error" @click="deleteFeed">DELETE</v-btn>
+          <v-btn outlined color="grey" @click="deleteModal = false"
+            >CANCLE</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>

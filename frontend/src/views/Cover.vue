@@ -1,13 +1,46 @@
 <template>
-  <div class="container mt-5">
-    <div class="row py-5">
-      <ServiceDescription />
-      <RssImage />
+  <div>
+    <v-parallax id="view" dark src="@/assets/cover.jpg" height="750">
+      <div class="container">
+        <!--Grid row-->
+        <div class="row mt-5">
+          <!--Grid column-->
+          <div
+            class="col-md-6 mb-5 mt-md-0 mt-5 text-white text-center text-md-left"
+          >
+            <h1
+              class="h1-responsive font-weight-bold wow fadeInLeft"
+              data-wow-delay="0.3s"
+            >
+              Sign up right now!
+            </h1>
+            <hr class="hr-light wow fadeInLeft" data-wow-delay="0.3s" />
+            <h6 class="mb-3 wow fadeInLeft" data-wow-delay="0.3s">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem
+              repellendus quasi fuga nesciunt dolorum nulla magnam veniam
+              sapiente, fugiat! Commodi sequi non animi ea dolor molestiae,
+              quisquam iste, maiores. Nulla.
+            </h6>
+            <a
+              class="btn btn-outline-white wow fadeInLeft"
+              data-wow-delay="0.3s"
+              >Learn more</a
+            >
+          </div>
+        </div>
+      </div>
+    </v-parallax>
+
+    <div class="container mt-5">
+      <div class="row py-5">
+        <ServiceDescription />
+        <RssImage />
+      </div>
+      <hr />
+      <ServiceStep />
+      <hr />
+      <UserInformation />
     </div>
-    <hr />
-    <ServiceStep />
-    <hr />
-    <UserInformation />
   </div>
 </template>
 
@@ -29,4 +62,9 @@ import ServiceStep from "@/components/cover/ServiceStep.vue";
 export default class Cover extends Vue {}
 </script>
 
-<style></style>
+<style>
+.v-parallax__image-container {
+  transform: none !important;
+  width: 100% !important;
+}
+</style>

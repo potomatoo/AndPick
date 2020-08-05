@@ -1,15 +1,13 @@
 <template>
   <v-main>
-    <v-container fluid>
-      <v-layout>
-        <v-flex v-if="isLoggedIn" offset-lg3 lg6>
-          <router-view></router-view>
-        </v-flex>
-        <v-flex v-if="!isLoggedIn">
-          <router-view></router-view>
-        </v-flex>
-      </v-layout>
-    </v-container>
+    <v-layout>
+      <v-flex v-if="isLoggedIn" offset-lg3 lg6>
+        <router-view></router-view>
+      </v-flex>
+      <v-flex v-if="!isLoggedIn">
+        <router-view></router-view>
+      </v-flex>
+    </v-layout>
   </v-main>
 </template>
 

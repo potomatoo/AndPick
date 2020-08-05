@@ -147,6 +147,7 @@ public class RssServiceImpl implements RssService {
 		if (list.size() == 0) {
 			result.status = true;
 			result.message = "피드에 rss가 없습니다.";
+			result.data = list;
 		} else {
 			result.status = true;
 			result.message = "RSS 목록입니다.";

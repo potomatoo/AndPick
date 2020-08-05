@@ -17,6 +17,7 @@ import MypageMain from "@/views/pages/MypageMain.vue";
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
+import SocialLoginView from "@/views/accounts/SocialLoginView.vue";
 import LogoutView from "@/views/accounts/LogoutView.vue";
 import UpdateUserView from "@/views/accounts/UpdateUserView.vue";
 import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
@@ -46,6 +47,11 @@ const routes: Array<RouteConfig> = [
     path: "/accounts/login",
     name: "Login",
     component: LoginView,
+  },
+  {
+    path: "/accounts/social",
+    name: "SocialLogin",
+    component: SocialLoginView,
   },
   {
     path: "/accounts/logout",

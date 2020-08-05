@@ -154,7 +154,8 @@ public class SubscribeServiceImpl implements SubscribeService {
 			return result;
 		}
 
-		Subscribe checkSubscribe = subscribeRepository.getOne(subscribe.getSubscribeId());
+		System.out.println(subscribe);
+		Subscribe checkSubscribe = subscribeRepository.findOneBySubscribeId(subscribe.getSubscribeId());
 
 		if (checkSubscribe == null || checkSubscribe.getFeedId() != subscribe.getFeedId()
 				|| checkSubscribe.getUserNo() != user.getUserNo()) {
@@ -163,15 +164,15 @@ public class SubscribeServiceImpl implements SubscribeService {
 			return result;
 		}
 
-		checkSubscribe.setSubscribeName(subscribe.getSubscribeName());
 
 		for (Subscribe item : checkFeed.getSubscribeList()) {
-			if (item.getSubscribeName().equals(checkSubscribe.getSubscribeName())) {
+			if (item.getSubscribeName().equals(subscribe.getSubscribeName())) {
 				result.status = false;
 				result.message = "같은 이름이 피드에 존재합니다.";
 				return result;
 			}
 		}
+		checkSubscribe.setSubscribeName(subscribe.getSubscribeName());
 
 		result.data = subscribeRepository.save(checkSubscribe);
 		result.status = (result.data != null) ? true : false;
@@ -188,7 +189,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
-		Subscribe checkSubscribe = subscribeRepository.findOneBySubscribeId(subscribe.getSubscribeId());
+		subscribe = subscribeRepository.findOneBySubscribeId(subscribe.getSubscribeId());
 
 		if (subscribe == null || subscribe.getUserNo() != user.getUserNo()) {
 			result.status = false;
@@ -196,7 +197,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 			return result;
 		}
 
-		subscribeRepository.deleteById(checkSubscribe.getSubscribeId());
+		subscribeRepository.deleteById(subscribe.getSubscribeId());
 		result.status = true;
 		result.message = "구독 삭제에 성공하였습니다.";
 

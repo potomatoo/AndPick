@@ -3,7 +3,7 @@ import Vuex, { StoreOptions } from "vuex";
 import feedModule from "./FeedModule.store";
 import mypageModule from "./MypageModule.store";
 
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 import router from "@/router";
 import SERVER from "@/api/spr";
@@ -47,7 +47,6 @@ const store: StoreOptions<RootState> = {
           // },
         })
         .then((res) => {
-          console.log(res);
           commit("SET_TOKEN", res.data.data["userPassword"]);
           router.push("/");
         })
@@ -83,16 +82,27 @@ const store: StoreOptions<RootState> = {
       dispatch("postAuthData", info);
     },
 
+    social({ dispatch }, socialData) {
+      const info = {
+        data: socialData,
+        location: SERVER.ROUTES.social,
+      };
+      console.log("소셜데이터", socialData);
+      dispatch("postAuthData", info);
+    },
+
     logout({ getters, commit }) {
-      console.log("로그아웃");
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.logout, null, getters.config)
-        .then(() => {
-          commit("SET_TOKEN", null);
-          STORAGE.removeItem("jwt-token");
-          router.push("/");
-        })
-        .catch((err) => console.log(err.response));
+      // axios
+      //   .post(SERVER.URL + SERVER.ROUTES.logout, null, getters.config)
+      //   .then(() => {
+      //     commit("SET_TOKEN", null);
+      //     STORAGE.removeItem("jwt-token");
+      //     router.push("/");
+      //   })
+      //   .catch((err) => console.log(err.response));
+      commit("SET_TOKEN", null);
+      STORAGE.removeItem("jwt-token");
+      router.push("/");
     },
 
     updateUser({ getters, commit }, updateData) {
@@ -106,7 +116,6 @@ const store: StoreOptions<RootState> = {
     },
 
     deleteUser({ getters, commit }) {
-      console.log("회원탈퇴");
       axios
         .post(SERVER.URL + SERVER.ROUTES.deleteUser, null, getters.config)
         .then(() => {

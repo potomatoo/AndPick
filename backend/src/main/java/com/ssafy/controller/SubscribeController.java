@@ -172,6 +172,8 @@ public class SubscribeController {
 		Subscribe subscribe = new Subscribe();
 		subscribe.setSubscribeId(subscribeId);
 
+		result = subscribeService.deleteSubscribe(user, subscribe);
+
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

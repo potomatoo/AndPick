@@ -15,4 +15,6 @@ public interface FeedService {
 	public BasicResponse deleteFeed(User user, Feed feed);
 
 	public BasicResponse updateFeed(User user, Feed feed);
+
+	public BasicResponse findOneByFeedId(User user, Feed feed);
 }

@@ -5,33 +5,41 @@
         Mypage
         <create-folder />
       </v-subheader>
-
-      <v-list-item v-for="(item, i) in MyFolderList" :key="i" @click="click">
-        <v-list-item-content>
-          <router-link :to="{ name: 'MypageMain' }" class="router-link">
-            <v-list-item-title v-text="item.title"></v-list-item-title>
-          </router-link>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list-item-group>
+        <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
+          <v-list-item-content>
+            <router-link
+              :to="{ name: 'PostDir', params: { postDirId: postDir.postDirId } }"
+              class="router-link"
+            >
+              <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
+            </router-link>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
     </v-list>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
 
-import { mapState } from "vuex";
+const mypageModule = namespace("mypageModule");
 
 @Component({
   components: {
     CreateFolder
-  },
-  computed: mapState("mypageModule", ["MyFolderList"])
+  }
 })
 export default class SidebarMypage extends Vue {
-  click() {
-    console.log("click");
+  @mypageModule.State postDirList!: [];
+  @mypageModule.Action FETCH_POSTDIR_LIST: any;
+
+  @Watch("postDirList", { immediate: true })
+  fetchPostDirList() {
+    this.FETCH_POSTDIR_LIST();
   }
 }
 </script>

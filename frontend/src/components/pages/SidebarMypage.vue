@@ -27,7 +27,7 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <post-dir-menu :postDirItem="postDirItem" :postDirList="postDirList" />
+    <post-dir-context-menu :postDirItem="postDirItem" />
   </div>
 </template>
 
@@ -35,7 +35,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
-import PostDirMenu from "@/components/pages/PostDirMenu.vue";
+import PostDirContextMenu from "@/components/pages/PostDirContextMenu.vue";
 import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
@@ -43,7 +43,7 @@ const mypageModule = namespace("mypageModule");
 @Component({
   components: {
     CreateFolder,
-    PostDirMenu
+    PostDirContextMenu
   }
 })
 export default class SidebarMypage extends Vue {

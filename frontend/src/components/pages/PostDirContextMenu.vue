@@ -42,7 +42,9 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="savePostDirName">SAVE</v-btn>
-            <v-btn text color="error" @click="closeFeedModal">CANCLE</v-btn>
+            <v-btn text color="error" @click="renameModal = false"
+              >CANCLE</v-btn
+            >
           </v-card-actions>
         </v-form>
       </v-card>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="postDir">
     <div class="row">
       <h6 class="pl-3 text-secondary font-weight-light mb-3 col-10">Mypage</h6>
       <v-menu offset-y>
@@ -35,10 +35,41 @@
       :to="{ name: 'NewPost', params: { postDirId: $route.params.postDirId } }"
       class="router-link"
     >
-      <v-btn small outlined color="secondary" class>
+      <v-btn
+        small
+        outlined
+        color="secondary"
+        v-if="postDir.postList && postDir.postList.length"
+      >
         <v-icon left>mdi-plus</v-icon>New
       </v-btn>
     </router-link>
+
+    <div
+      v-if="postDir.postList && !postDir.postList.length"
+      class="text-center"
+    >
+      <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
+      <h4 class="mt-10">
+        Save post to here
+      </h4>
+
+      <p class="text-center">
+        When you find an news in your Subscribe you want to keep and editing
+        with your think, click
+        <router-link
+          :to="{
+            name: 'NewPost',
+            params: { postDirId: $route.params.postDirId }
+          }"
+          class="router-link"
+        >
+          <v-btn small outlined color="secondary" class>
+            <v-icon left>mdi-plus</v-icon>New
+          </v-btn>
+        </router-link>
+      </p>
+    </div>
     <div class="container">
       <div class="row">
         <draggable :list="dragList" class="row wrap sortable-list">
@@ -57,7 +88,7 @@
                 pa-3
                 class="row-v"
               >
-                <v-hover v-slot:default="{ hover }" open-delay="200">
+                <v-hover v-slot:default="{ hover }">
                   <router-link
                     :to="{
                       name: 'EditPost',
@@ -70,7 +101,8 @@
                   >
                     <v-card
                       id="cursor_test"
-                      :elevation="hover ? 16 : 2"
+                      :elevation="hover ? 12 : 2"
+                      :class="{ 'on-hover': hover }"
                       height="350"
                       max-width="350"
                     >

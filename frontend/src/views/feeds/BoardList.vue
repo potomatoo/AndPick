@@ -4,7 +4,7 @@
       <v-layout>
         <v-flex>
           <div class="caption">BOARD</div>
-          <h1>{{ $route.params.boardname }}</h1>
+          <h1>{{ $route.params.boardName }}</h1>
         </v-flex>
         <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>

@@ -27,6 +27,7 @@ import AppFooter from "@/components/main/AppFooter.vue";
 export default class Home extends Vue {
   created() {
     this.$store.dispatch("feedModule/FETCH_FEED_LIST");
+    this.$store.dispatch("feedModule/FETCH_BOARD_LIST");
   }
 }
 </script>

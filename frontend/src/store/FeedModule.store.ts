@@ -2,11 +2,11 @@ import { Module } from "vuex";
 import { RootState } from "./index";
 import {
   FeedModule,
-  SidebarList,
   Article,
   FeedList,
   Rss,
-  Feed
+  Feed,
+  Board
 } from "./Feed.interface";
 import { Axios } from "@/service/axios.service";
 import router from "@/router";
@@ -48,7 +48,7 @@ const module: Module<FeedModule, RootState> = {
       state.feed = feed;
     },
 
-    SET_BOARD_LIST(state, boardList: SidebarList[]) {
+    SET_BOARD_LIST(state, boardList: Board[]) {
       state.boardList = boardList;
     },
 
@@ -58,11 +58,6 @@ const module: Module<FeedModule, RootState> = {
 
     SET_SELECTED_SUBSCRIPTION(state, subscribeId: number) {
       state.subscribeId = subscribeId;
-    },
-
-    // 보드 처리하는 api 아직 없음
-    ADD_BOARD(state, board: SidebarList) {
-      state.boardList.push(board);
     },
 
     SELECT_ARTICLE(state, article: Article) {
@@ -103,6 +98,13 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
+    FETCH_BOARD_LIST({ commit }) {
+      Axios.instance
+        .get("/api/board/find/all")
+        .then(({ data }) => commit("SET_BOARD_LIST", data.data))
+        .catch(err => console.error(err));
+    },
+
     ADD_FEED({ dispatch }, feedName) {
       const data = {
         params: {
@@ -129,7 +131,7 @@ const module: Module<FeedModule, RootState> = {
         }
       };
       Axios.instance
-        .put("api/feed/put", null, updateData)
+        .put("/api/feed/put", null, updateData)
         .then(() => {
           dispatch("FETCH_FEED_LIST");
         })
@@ -143,7 +145,7 @@ const module: Module<FeedModule, RootState> = {
 
     DELETE_FEED({ dispatch }, feedId) {
       Axios.instance
-        .delete("api/feed/delete", { params: { feedId } })
+        .delete("/api/feed/delete", { params: { feedId } })
         .then(() => dispatch("FETCH_FEED_LIST"))
         .catch(err => console.error(err));
     },
@@ -228,7 +230,7 @@ const module: Module<FeedModule, RootState> = {
         }
       };
       Axios.instance
-        .put("api/subscribe/update", null, updateData)
+        .put("/api/subscribe/update", null, updateData)
         .then(() => dispatch("FETCH_FEED_LIST"))
         .then(() => {
           if (state.subscribeId === subscribeId) {
@@ -240,7 +242,7 @@ const module: Module<FeedModule, RootState> = {
 
     UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
       Axios.instance
-        .delete("api/subscribe/delete", { params: { subscribeId } })
+        .delete("/api/subscribe/delete", { params: { subscribeId } })
         .then(() => dispatch("FETCH_FEED_LIST"))
         .catch(err => console.error(err));
     },
@@ -250,8 +252,15 @@ const module: Module<FeedModule, RootState> = {
         params: { feedId, rssId, subscribeName }
       };
       Axios.instance
-        .post("api/subscribe/save", null, followData)
+        .post("/api/subscribe/save", null, followData)
         .then(() => dispatch("FETCH_FEED_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    ADD_BOARD({ dispatch }, boardName) {
+      Axios.instance
+        .post("/api/board/save", null, { params: { boardName } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));
     }
   }

@@ -1,16 +1,3 @@
-// dummy
-export interface SidebarItem {
-  id: number;
-  title: string;
-  url?: string;
-}
-// dummy
-export interface SidebarList {
-  title: string;
-  icon?: string;
-  active?: boolean;
-  items?: SidebarItem[];
-}
 // api data
 export interface Category {
   categoryId: number;
@@ -54,10 +41,17 @@ export interface Context {
   y: number;
 }
 
+export interface Board {
+  boardId: number;
+  userNo: number;
+  boardName: string;
+  newsList: [];
+}
+
 export interface FeedModule {
   rssList: Rss[];
   feedList: FeedList[];
-  boardList: SidebarList[];
+  boardList: Board[];
   article: Article | null;
   feed: FeedList | null;
   subscribeId: number | null;
@@ -65,12 +59,7 @@ export interface FeedModule {
   subsContextMenu: Context;
   feedContextMenu: Context;
 }
-// dummy
-export interface RssList {
-  id: number;
-  title: string;
-  url: string;
-}
+
 // dummy
 export interface Article {
   title: string;

@@ -14,7 +14,7 @@
               :to="{ name: 'BoardList', params: { boardName: board.title } }"
               class="router-link"
             >
-              <v-list-item-title v-text="board.title"></v-list-item-title>
+              <v-list-item-title v-text="board.boardName"></v-list-item-title>
             </router-link>
           </v-list-item-content>
         </v-list-item>
@@ -44,8 +44,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="addBoards">Create</v-btn>
-              <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+              <v-btn color="success" @click="addBoards">Create</v-btn>
+              <v-btn outlined color="grey" @click="closeModal">Cancle</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -58,14 +58,14 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import { SidebarList } from "../../store/Feed.interface";
+import { SidebarList, Board } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
 export default class SidebarBoard extends Vue {
   @feedModule.State boardList!: [];
-  @feedModule.Mutation ADD_BOARD: any;
+  @feedModule.Action ADD_BOARD: any;
 
   newBoardName = null;
 
@@ -86,7 +86,7 @@ export default class SidebarBoard extends Vue {
 
   checkDuplication(name: string | null) {
     if (this.boardList.length) {
-      return this.boardList.some((feed: SidebarList) => feed.title === name);
+      return this.boardList.some((board: Board) => board.boardName === name);
     }
   }
 
@@ -97,7 +97,7 @@ export default class SidebarBoard extends Vue {
 
   addBoards() {
     if (this.newBoardName && !this.checkDuplication(this.newBoardName)) {
-      this.ADD_BOARD({ title: this.newBoardName });
+      this.ADD_BOARD(this.newBoardName);
       this.closeModal();
     }
   }

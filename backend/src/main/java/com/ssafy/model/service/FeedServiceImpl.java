@@ -115,4 +115,28 @@ public class FeedServiceImpl implements FeedService {
 		return result;
 	}
 
+	@Override
+	public BasicResponse findOneByFeedId(User user, Feed feed) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		feed = feedRepository.findOneByFeedId(feed.getFeedId());
+
+		if (feed == null || user.getUserNo() != feed.getUserNo()) {
+			result.status = false;
+			result.message = "피드 정보가 일치하지 않습니다.";
+			return result;
+		}
+
+		result.data = feed;
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "피드 조회에 성공하였습니다.";
+		} else {
+			result.message = "피드 조회에 실패하였습니다.";
+		}
+
+		return result;
+	}
+
 }

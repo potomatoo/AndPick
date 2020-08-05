@@ -138,4 +138,32 @@ public class FeedController {
 
 		return response;
 	}
+
+	@GetMapping(value = "/api/feed/feedid")
+	public Object findFeedByFeedid(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("feedId") Long feedId) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		Feed feed = new Feed();
+		feed.setFeedId(feedId);
+
+		result = feedService.findOneByFeedId(user, feed);
+		System.out.println(result);
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
 }

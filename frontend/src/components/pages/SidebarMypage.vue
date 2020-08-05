@@ -27,7 +27,7 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <post-dir-menu :item="postDirItem" />
+    <post-dir-menu :postDirItem="postDirItem" :postDirList="postDirList" />
   </div>
 </template>
 
@@ -50,10 +50,12 @@ export default class SidebarMypage extends Vue {
   @mypageModule.State postDirList!: [];
   @mypageModule.Mutation SET_POSTDIR_CONTEXT_MENU: any;
 
+  postDirListItem = {};
   postDirItem = {};
 
   showPostDirCtx(e: MouseEvent, postDir: Post[]) {
     this.postDirItem = postDir;
+
     const ctx = {
       showCtx: true,
       x: e.clientX,

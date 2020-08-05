@@ -19,7 +19,7 @@
           <v-list-item-title>Manage Sources</v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item>
+        <v-list-item @click="deleteModal = true">
           <v-icon class="mr-3">mdi-trash-can-outline</v-icon>
           <v-list-item-title>Delete</v-list-item-title>
         </v-list-item>
@@ -49,6 +49,22 @@
         </v-form>
       </v-card>
     </v-dialog>
+
+    <!-- 피드 삭제 모달 -->
+    <v-dialog v-model="deleteModal" max-width="450px">
+      <v-card>
+        <v-card-title>Delete {{ feedItem.feedName }} Feed</v-card-title>
+        <v-card-text>
+          Are you sure you want to delete feed? This operation cannot be undone.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="deleteFeed">DELETE</v-btn>
+          <v-btn text color="error" @click="deleteModal = false">CANCLE</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -74,6 +90,7 @@ export default class FeedContextMenu extends Vue {
 
   inputFeedName = "";
   renameModal = false;
+  deleteModal = false;
 
   rules = [
     (value: string) => !!value || "this field is required.",
@@ -82,9 +99,8 @@ export default class FeedContextMenu extends Vue {
   ];
 
   checkDuplication(name: string | null) {
-    if (this.feedItem.feedName === this.inputFeedName) return false;
-    return this.feedList.filter(feed => feed.feedName === this.inputFeedName)
-      .length;
+    if (this.feedItem.feedName === name) return false;
+    return this.feedList.filter(feed => feed.feedName === name).length;
   }
 
   setTitle() {
@@ -108,6 +124,11 @@ export default class FeedContextMenu extends Vue {
   }
   closeFeedModal() {
     this.renameModal = false;
+  }
+
+  deleteFeed() {
+    this.DELETE_FEED(this.feedItem.feedId);
+    this.deleteModal = false;
   }
 }
 </script>

@@ -104,7 +104,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="unfollowSubs">OK</v-btn>
+          <v-btn text color="primary" @click="unfollowSubs">YES</v-btn>
           <v-btn text color="error" @click="unfollowModal = false"
             >CANCLE</v-btn
           >

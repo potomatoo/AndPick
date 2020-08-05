@@ -143,7 +143,7 @@ const module: Module<FeedModule, RootState> = {
 
     DELETE_FEED({ dispatch }, feedId) {
       Axios.instance
-        .delete("api/feed/delete", feedId)
+        .delete("api/feed/delete", { params: { feedId } })
         .then(() => dispatch("FETCH_FEED_LIST"))
         .catch(err => console.error(err));
     },

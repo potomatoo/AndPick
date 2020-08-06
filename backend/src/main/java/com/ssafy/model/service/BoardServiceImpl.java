@@ -1,17 +1,22 @@
 package com.ssafy.model.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.BoardRepository;
+import com.ssafy.model.repository.NewsRepository;
 import com.ssafy.model.response.BasicResponse;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardRepository boardRepository;
+	@Autowired
+	private NewsRepository newsRepository;
 
 	@Override
 	public BasicResponse svaeBoard(User user, Board board) {
@@ -94,6 +99,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse deleteBoard(User user, Board board) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -112,8 +118,9 @@ public class BoardServiceImpl implements BoardService {
 			return result;
 		}
 
-		boardRepository.deleteNews(board.getBoardId());
+		newsRepository.deleteNews(board.getBoardId());
 		boardRepository.deleteById(board.getBoardId());
+
 		result.status = true;
 		if (result.status) {
 			result.message = "보드 삭제에 성공하였습니다.";

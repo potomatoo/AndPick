@@ -19,7 +19,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 	public List<Board> findAllByUserNo(long userNo);
 
-	@Modifying
-	@Query(value = "delete from SSAFYDB.news where board_id=:board_id", nativeQuery = true)
-	public void deleteNews(@Param("board_id") Long board_id);
 }

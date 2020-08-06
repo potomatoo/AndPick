@@ -1,6 +1,7 @@
 package com.ssafy.model.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -48,17 +49,19 @@ public class PostServiceImpl implements PostService {
 		post = postRepository.save(post);
 
 		List<PostTag> list = new ArrayList<PostTag>(tags.length);
-		for (String tagName : tags) {
-			Tag tag = new Tag();
-			tag.setTagName(tagName);
+		if (tags != null || tags.length != 0) {
+			for (String tagName : tags) {
+				Tag tag = new Tag();
+				tag.setTagName(tagName);
 
-			tag = tagRepository.save(tag);
+				tag = tagRepository.save(tag);
 
-			PostTag postTag = new PostTag();
-			postTag.setPostId(post.getPostId());
-			postTag.setTagName(tag.getTagName());
+				PostTag postTag = new PostTag();
+				postTag.setPostId(post.getPostId());
+				postTag.setTagName(tag.getTagName());
 
-			list.add(postTagRepository.save(postTag));
+				list.add(postTagRepository.save(postTag));
+			}
 		}
 		post.setTagList(list);
 		result.data = post;
@@ -132,6 +135,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse updatePost(User user, Post post, String[] tags) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -144,7 +148,29 @@ public class PostServiceImpl implements PostService {
 			return result;
 		}
 
+		for (PostTag postTag : checkPost.getTagList()) {
+			postTagRepository.deleteById(postTag.getPostTagId());
+		}
+		List<PostTag> list = new ArrayList<PostTag>(tags.length);
+		if (tags != null || tags.length != 0) {
+			System.out.println(Arrays.toString(tags));
+			
+			for (String tagName : tags) {
+				Tag tag = new Tag();
+				tag.setTagName(tagName);
+
+				tag = tagRepository.save(tag);
+
+				PostTag postTag = new PostTag();
+				postTag.setPostId(post.getPostId());
+				postTag.setTagName(tag.getTagName());
+
+				list.add(postTagRepository.save(postTag));
+			}
+		}
+		
 		result.data = postRepository.save(post);
+		
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "게시글 조회를 완료하였습니다.";

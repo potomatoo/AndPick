@@ -19,7 +19,7 @@ public class PostServiceImpl implements PostService {
 	private PostDirRepository postDirRepository;
 
 	@Override
-	public BasicResponse savePost(User user, Post post) {
+	public BasicResponse savePost(User user, Post post, String[] tags) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
@@ -102,7 +102,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public BasicResponse updatePost(User user, Post post) {
+	public BasicResponse updatePost(User user, Post post, String[] tags) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 

@@ -9,7 +9,7 @@ import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface PostService {
-	public BasicResponse savePost(User user, Post post);
+	public BasicResponse savePost(User user, Post post, String[] tags);
 
 	public BasicResponse findByUser(User user);
 
@@ -17,7 +17,7 @@ public interface PostService {
 
 	public BasicResponse findByPostId(User user, Post post);
 
-	public BasicResponse updatePost(User user, Post post);
+	public BasicResponse updatePost(User user, Post post, String[] tags);
 
 	public BasicResponse deletePost(User user, Post post);
 

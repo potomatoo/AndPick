@@ -13,6 +13,4 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
 	public List<Tag> findByTagNameLike(String tagName);
 
-	public Tag findOneByTagId(long tagId);
-
 }

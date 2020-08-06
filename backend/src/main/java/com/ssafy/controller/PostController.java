@@ -1,6 +1,8 @@
 package com.ssafy.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.model.dto.Post;
 import com.ssafy.model.dto.PostDir;
+import com.ssafy.model.dto.PostTag;
+import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.PostService;
@@ -30,7 +34,7 @@ public class PostController {
 	@PostMapping(value = "/api/post/save")
 	public Object savePostDir(@RequestHeader("Authorization") String jwtToken,
 			@RequestParam("postDirId") long postDirId, @RequestParam("postTitle") String postTitle,
-			@RequestParam("postContent") String postContent) {
+			@RequestParam("postContent") String postContent, @RequestParam("tagList") String[] tags) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -56,7 +60,7 @@ public class PostController {
 		post.setPostDate(new Date());
 		post.setUserNo(user.getUserNo());
 
-		result = postService.savePost(user, post);
+		result = postService.savePost(user, post, tags);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -145,7 +149,8 @@ public class PostController {
 	@PutMapping(value = "/api/post/update")
 	public Object updatePostDir(@RequestHeader("Authorization") String jwtToken,
 			@RequestParam("postDirId") long postDirId, @RequestParam("postId") long postId,
-			@RequestParam("postTitle") String postTitle, @RequestParam("postContent") String postContent) {
+			@RequestParam("postTitle") String postTitle, @RequestParam("postContent") String postContent,
+			@RequestParam("tagList") String[] tags) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -165,13 +170,15 @@ public class PostController {
 		}
 
 		Post post = new Post();
+
 		post.setPostId(postId);
 		post.setPostDirId(postDirId);
 		post.setPostTitle(postTitle);
 		post.setPostContent(postContent);
+		post.setUserNo(user.getUserNo());
 		post.setPostDate(new Date());
 
-		result = postService.savePost(user, post);
+		result = postService.savePost(user, post, tags);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

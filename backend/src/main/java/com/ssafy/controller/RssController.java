@@ -40,7 +40,7 @@ public class RssController {
 		if (user == null) {
 			result.status = false;
 			result.message = "잘못된 사용자 입니다.";
-			response = new ResponseEntity<>(result, HttpStatus.OK);
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 			return response;
 		}
 

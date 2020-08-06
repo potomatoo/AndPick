@@ -11,19 +11,8 @@ import javax.persistence.Table;
 @Table(name = "tag")
 public class Tag {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "tag_id")
-	private long tagId;
 	@Column(name = "tag_name")
 	private String tagName;
-
-	public long getTagId() {
-		return tagId;
-	}
-
-	public void setTagId(long tagId) {
-		this.tagId = tagId;
-	}
 
 	public String getTagName() {
 		return tagName;
@@ -35,7 +24,7 @@ public class Tag {
 
 	@Override
 	public String toString() {
-		return "Tag [tagId=" + tagId + ", tagName=" + tagName + "]";
+		return "Tag [tagName=" + tagName + "]";
 	}
 
 }

@@ -16,8 +16,8 @@ public class PostTag {
 	private long postTagId;
 	@Column(name = "post_id")
 	private long postId;
-	@Column(name = "tag_id")
-	private long tagId;
+	@Column(name = "tag_name")
+	private String tagName;
 
 	public long getPostTagId() {
 		return postTagId;
@@ -35,17 +35,17 @@ public class PostTag {
 		this.postId = postId;
 	}
 
-	public long getTagId() {
-		return tagId;
+	public String getTagName() {
+		return tagName;
 	}
 
-	public void setTagId(long tagId) {
-		this.tagId = tagId;
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 
 	@Override
 	public String toString() {
-		return "PostTag [postTagId=" + postTagId + ", postId=" + postId + ", tagId=" + tagId + "]";
+		return "PostTag [postTagId=" + postTagId + ", postId=" + postId + ", tagName=" + tagName + "]";
 	}
 
 }

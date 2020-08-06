@@ -46,7 +46,6 @@ export default class ArticleDetail extends Vue {
       this.$router.replace({
         name: "ArticleListInRss",
         params: {
-          feedName: this.$route.params.feedName,
           subscribeId: this.$route.params.subscribeId
         }
       });

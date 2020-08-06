@@ -2,8 +2,8 @@
   <div class="mt-10">
     <v-container>
       <v-layout>
-        <v-flex>
-          <h1>{{ $route.params.feedName }}</h1>
+        <v-flex v-if="feed">
+          <h1>{{ feed.feedName }}</h1>
         </v-flex>
         <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
@@ -66,18 +66,24 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { Article } from "../../store/Feed.interface";
+import { Article, FeedList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
 export default class FeedPage extends Vue {
   @feedModule.State articleList!: Article[];
+  @feedModule.State feedTitle!: string;
+  @feedModule.State feed!: FeedList;
   @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Action FETCH_FEED: any;
   @feedModule.Action FETCH_ARTICLE_LIST_IN_FEED!: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
+    // console.log("hihi");
+    // this.FETCH_FEED(this.$route.params.feedId);
+    // console.log("hihi");
     this.FETCH_ARTICLE_LIST_IN_FEED(this.$route.params.feedId);
   }
 

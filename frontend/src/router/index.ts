@@ -120,7 +120,7 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/feeds/:feedName/:feedId",
+    path: "/feed/:feedId",
     name: "Feed",
     component: FeedPage,
     meta: {
@@ -144,7 +144,7 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/feed/:feedName/:feedId/article/:articleId",
+    path: "/feed/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
     component: ArticleDetailInFeed,
     meta: {
@@ -152,7 +152,7 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/boards/:boardName",
+    path: "/board/:boardName",
     name: "BoardList",
     component: BoardList,
     meta: {

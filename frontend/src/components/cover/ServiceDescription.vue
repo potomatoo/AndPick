@@ -18,13 +18,16 @@ export default {};
 <style scoped>
 .title1 {
   font-size: 60px;
+  color: white;
 }
 .title2 {
   font-size: 45px;
+  color: white;
 }
 .description {
   opacity: 0.6;
   font-weight: 600;
   font-size: 20px;
+  color: white;
 }
 </style>

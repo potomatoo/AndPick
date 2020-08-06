@@ -2,7 +2,7 @@
   <div class="mt-5">
     <div>
       <div class="row">
-        <div class="col-lg-3 offset-lg-1">
+        <div class="col-lg-2 offset-lg-1">
           <img
             src="@/assets/jobseeker1.png"
             class="card-img-top"
@@ -18,7 +18,7 @@
             </p>
           </div>
         </div>
-        <div class="col-lg-3 offset-lg-1">
+        <div class="col-lg-2 offset-lg-2">
           <img
             src="@/assets/business1.png"
             class="card-img-top"
@@ -32,7 +32,7 @@
             <p class="description">BUSINESSES</p>
           </div>
         </div>
-        <div class="col-lg-3 offset-lg-1">
+        <div class="col-lg-2 offset-lg-2">
           <img
             src="@/assets/industry1.png"
             class="card-img-top"

@@ -1,6 +1,6 @@
 <template>
-  <div class="container mt-5">
-    <div class="row py-5">
+  <div>
+    <div class="back row py-5" style="height:500px">
       <ServiceDescription />
       <RssImage />
     </div>
@@ -29,4 +29,9 @@ import ServiceStep from "@/components/cover/ServiceStep.vue";
 export default class Cover extends Vue {}
 </script>
 
-<style></style>
+<style>
+.back {
+  background-image: url("https://images.unsplash.com/photo-1556888335-95371827d5fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80");
+  background-size: 100% 100%;
+}
+</style>

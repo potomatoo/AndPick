@@ -49,6 +49,7 @@ public class RssServiceImpl implements RssService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findByCategoryName(String categoryName) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -72,6 +73,7 @@ public class RssServiceImpl implements RssService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findByRssName(String rssName) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -88,6 +90,7 @@ public class RssServiceImpl implements RssService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse saveRss(Rss rss, Category category) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -120,6 +123,7 @@ public class RssServiceImpl implements RssService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findItemByFeed(User user, Feed feed) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -161,6 +165,7 @@ public class RssServiceImpl implements RssService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findItemBySubscribe(User user, Subscribe subscribe) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

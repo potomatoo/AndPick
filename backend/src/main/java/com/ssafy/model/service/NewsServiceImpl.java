@@ -1,5 +1,7 @@
 package com.ssafy.model.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class NewsServiceImpl implements NewsService {
 	private BoardRepository boardRepository;
 
 	@Override
+	@Transactional
 	public BasicResponse saveNews(User user, News news) {
 		// TODO Auto-generated method stub
 		BasicResponse response = new BasicResponse();
@@ -42,6 +45,7 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse deleteNews(User user, News news) {
 		// TODO Auto-generated method stub
 		BasicResponse response = new BasicResponse();
@@ -73,6 +77,7 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findAllNews(User user) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -89,6 +94,7 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findAllByBoardId(User user, Board board) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -119,6 +125,7 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findOneById(User user, News news) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

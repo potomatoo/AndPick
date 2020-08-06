@@ -20,6 +20,7 @@ public class FeedServiceImpl implements FeedService {
 	private SubscribeRepository subscribeRepository;
 
 	@Override
+	@Transactional
 	public BasicResponse saveFeed(User user, Feed feed) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -45,6 +46,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findAllByuser(User user) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -60,6 +62,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse updateFeed(User user, Feed feed) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -116,6 +119,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findOneByFeedId(User user, Feed feed) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

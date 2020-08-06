@@ -75,6 +75,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findByUser(User user) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -90,6 +91,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findByDirId(User user, PostDir postDir) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -113,6 +115,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findByPostId(User user, Post post) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -180,6 +183,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse deletePost(User user, Post post) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

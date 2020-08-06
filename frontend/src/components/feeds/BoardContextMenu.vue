@@ -78,10 +78,9 @@ const feedModule = namespace("feedModule");
 
 @Component
 export default class BoardContextMenu extends Vue {
-  @feedModule.State boardList!: Board;
+  @feedModule.State boardList!: Board[];
   @feedModule.State boardContextMenu!: Context;
-  @feedModule.Action UPDATE_FEED: any;
-  // @feedModule.Action DELETE_BOARD: any;
+  @feedModule.Action UPDATE_BOARD: any;
 
   @Prop({ type: Object }) readonly boardItem!: Board;
 
@@ -89,44 +88,44 @@ export default class BoardContextMenu extends Vue {
   renameModal = false;
   deleteModal = false;
 
-  // rules = [
-  //   (value: string) => !!value || "this field is required.",
-  //   (value: string) =>
-  //     !this.checkDuplication(value) || "동일한 보드가 존재합니다."
-  // ];
+  rules = [
+    (value: string) => !!value || "this field is required.",
+    (value: string) =>
+      !this.checkDuplication(value) || "동일한 보드가 존재합니다."
+  ];
 
-  // checkDuplication(name: string | null) {
-  //   if (this.boardItem.boardName === name) return false;
-  //   return this.boardList.filter(board => board.baordName === name).length;
-  // }
+  checkDuplication(name: string | null) {
+    if (this.boardItem.boardName === name) return false;
+    return this.boardList.filter(board => board.boardName === name).length;
+  }
 
   setTitle() {
     this.inputBoardName = this.boardItem.boardName;
   }
 
-  // activeRenameModal() {
-  //   this.setTitle();
-  //   this.renameModal = true;
-  // }
+  activeRenameModal() {
+    this.inputBoardName = "";
+    this.setTitle();
+    this.renameModal = true;
+  }
 
-  // saveName() {
-  //   if (this.checkDuplication(this.inputBoardName)) return;
-  //   if (this.boardItem.boardName !== this.inputBoardName) {
-  //     this.UPDATE_FEED({
-  //       feedId: this.boardList.boardId,
-  //       feedName: this.inputBoardName
-  //     });
-  //   }
-  //   this.closeFeedModal();
-  // }
-  // closeFeedModal() {
-  //   this.renameModal = false;
-  // }
+  saveName() {
+    if (this.checkDuplication(this.inputBoardName)) return;
+    if (this.boardItem.boardName !== this.inputBoardName) {
+      this.UPDATE_BOARD({
+        boardId: this.boardItem.boardId,
+        boardName: this.inputBoardName
+      });
+    }
+    this.closeFeedModal();
+  }
+  closeFeedModal() {
+    this.renameModal = false;
+  }
 
-  // deleteBoard() {
-  //   this.DELETE_BOARD(this.boardItem.boardId);
-  //   this.deleteModal = false;
-  // }
+  deleteBoard() {
+    console.log("delete");
+  }
 }
 </script>
 

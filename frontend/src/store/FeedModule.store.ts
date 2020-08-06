@@ -283,17 +283,22 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    // DELETE_BOARD({ dispatch }, boardId) {
-    //   Axios.instance
-    //     .delete("/api/board/delete", { params: { boardId } })
-    //     .then(() => dispatch("FETCH_BOARD_LIST"))
-    //     .catch(err => console.error(err));
-    // },
-
     FETCH_ARTICLE_LIST_IN_BOARD({ commit }, boardId) {
       Axios.instance
         .get("/api/board/find/id", { params: { boardId } })
         .then(({ data }) => commit("SET_BOARD", data.data))
+        .catch(err => console.error(err));
+    },
+
+    UPDATE_BOARD({ dispatch, state }, { boardId, boardName }) {
+      Axios.instance
+        .put("/api/board/update", null, { params: { boardId, boardName } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .then(() => {
+          if (state.board && state.board.boardId === boardId) {
+            dispatch("FETCH_ARTICLE_LIST_IN_BOARD", boardId);
+          }
+        })
         .catch(err => console.error(err));
     }
   }

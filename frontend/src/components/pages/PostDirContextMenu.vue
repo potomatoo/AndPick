@@ -75,7 +75,7 @@ import { Context, PostDir } from "../../store/MypageInterface";
 const mypageModule = namespace("mypageModule");
 
 @Component({})
-export default class PostDirMenu extends Vue {
+export default class PostDirContextMenu extends Vue {
   @mypageModule.State postDirList!: PostDir[];
   @mypageModule.State postDirContextMenu!: Context;
   @mypageModule.Action UPDATE_POSTDIR!: any;

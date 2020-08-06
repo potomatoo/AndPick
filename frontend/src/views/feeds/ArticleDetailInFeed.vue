@@ -33,7 +33,14 @@
               >
                 <v-icon left>mdi-plus</v-icon> ADD
               </v-btn>
-              <v-btn v-else class="ml-3" outlined color="error" small>
+              <v-btn
+                v-else
+                class="ml-3"
+                outlined
+                color="error"
+                small
+                @click="deleteArticle(board.newsList, article.link)"
+              >
                 <v-icon left>mdi-window-close</v-icon> REMOVE
               </v-btn>
             </v-list-item>
@@ -74,6 +81,7 @@ export default class ArticleDetail extends Vue {
   @feedModule.State article!: Article;
   @feedModule.State boardList!: Board[];
   @feedModule.Action SAVE_IN_BOARD: any;
+  @feedModule.Action DELETE_IN_BOARD: any;
 
   checkArticle() {
     if (!this.article) {
@@ -100,8 +108,12 @@ export default class ArticleDetail extends Vue {
   }
 
   checkInBoard(newsList: News[], link: string) {
-    console.log(newsList.some(news => news.newsLink === link));
     return !(newsList.length && newsList.some(news => news.newsLink === link));
+  }
+
+  deleteArticle(newsList: News[], link: string) {
+    const newsId = newsList.filter(news => news.newsLink === link)[0].newsId;
+    this.DELETE_IN_BOARD(newsId);
   }
 }
 </script>

@@ -283,13 +283,6 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    DELETE_BOARD({ dispatch }, boardId) {
-      Axios.instance
-        .delete("/api/board/delete", { params: { boardId } })
-        .then(() => dispatch("FETCH_BOARD_LIST"))
-        .catch(err => console.error(err));
-    },
-
     FETCH_ARTICLE_LIST_IN_BOARD({ commit }, boardId) {
       Axios.instance
         .get("/api/board/find/id", { params: { boardId } })
@@ -319,10 +312,17 @@ const module: Module<FeedModule, RootState> = {
           newsTitle: article.title
         }
       };
-      console.log(data);
       Axios.instance
         .post("/api/news/save", null, data)
-        .then(res => dispatch("FETCH_BOARD_LIST"))
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    DELETE_IN_BOARD({ dispatch }, newsId) {
+      console.log(newsId);
+      Axios.instance
+        .delete("/api/news/delete", { params: { newsId } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));
     }
   }

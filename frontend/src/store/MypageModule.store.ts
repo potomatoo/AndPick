@@ -1,8 +1,9 @@
 import { Module } from "vuex";
 import { RootState } from "./index";
-import { MypageModule, PostDir, Post } from "@/store/MypageInterface.ts";
+import { MypageModule, PostDir, Post, Tag } from "@/store/MypageInterface.ts";
 import { Axios, LocalAxios } from "@/service/axios.service";
 import router from "@/router";
+import QueryString from "qs";
 
 const module: Module<MypageModule, RootState> = {
   namespaced: true,
@@ -16,6 +17,11 @@ const module: Module<MypageModule, RootState> = {
     postId: null,
     postDirName: null,
     postDirContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
+    },
+    postContextMenu: {
       showCtx: false,
       x: 0,
       y: 0
@@ -56,6 +62,11 @@ const module: Module<MypageModule, RootState> = {
     SET_POSTDIR_CONTEXT_MENU(state, ctx) {
       state.postDirContextMenu.showCtx = false;
       state.postDirContextMenu = ctx;
+    },
+
+    SET_POST_CONTEXT_MENU(state, ctx) {
+      state.postContextMenu.showCtx = false;
+      state.postContextMenu = ctx;
     }
   },
 
@@ -140,18 +151,40 @@ const module: Module<MypageModule, RootState> = {
       {
         postContent,
         postDirId,
-        postTitle
-      }: { postContent: string; postDirId: number; postTitle: string }
+        postTitle,
+        tagList
+      }: {
+        postContent: string;
+        postDirId: number;
+        postTitle: string;
+        tagList: string[];
+      }
     ) {
-      const postData = {
-        params: {
-          postContent,
-          postDirId,
-          postTitle
-        }
-      };
+      console.log(
+        QueryString.stringify(
+          {
+            postContent: postContent,
+            postDirId: postDirId,
+            postTitle: postTitle,
+            tagList: tagList
+          },
+          { indices: false }
+        )
+      );
+
       Axios.instance
-        .post("/api/post/save", null, postData)
+        .post(
+          "/api/post/save",
+          QueryString.stringify(
+            {
+              postContent: postContent,
+              postDirId: postDirId,
+              postTitle: postTitle,
+              tagList: tagList
+            },
+            { indices: false }
+          )
+        )
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
           return data.data.postDirId;
@@ -168,24 +201,30 @@ const module: Module<MypageModule, RootState> = {
         postContent,
         postDirId,
         postId,
-        postTitle
+        postTitle,
+        tagList
       }: {
         postContent: string;
         postDirId: number;
         postId: number;
         postTitle: string;
+        tagList: [];
       }
     ) {
-      const postData = {
-        params: {
-          postContent,
-          postDirId,
-          postId,
-          postTitle
-        }
-      };
       Axios.instance
-        .put("/api/post/update", null, postData)
+        .put(
+          "/api/post/update",
+          QueryString.stringify(
+            {
+              postContent: postContent,
+              postDirId: postDirId,
+              postId: postId,
+              postTitle: postTitle,
+              tagList: tagList
+            },
+            { indices: false }
+          )
+        )
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
         })
@@ -205,6 +244,23 @@ const module: Module<MypageModule, RootState> = {
         })
         .then(() => {
           router.push({ name: "Home" });
+        })
+        .catch(err => console.error(err));
+    },
+
+    DELETE_POST(
+      { dispatch },
+      { postId, postDirId }: { postId: number; postDirId: number }
+    ) {
+      const postData = {
+        params: {
+          postId
+        }
+      };
+      Axios.instance
+        .delete("/api/post/delete", postData)
+        .then(() => {
+          dispatch("FETCH_POSTDIR", postDirId);
         })
         .catch(err => console.error(err));
     }

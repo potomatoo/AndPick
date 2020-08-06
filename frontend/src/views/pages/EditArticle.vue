@@ -7,6 +7,15 @@
       class="font-weight-bold font-size: 3rem"
     ></v-text-field>
 
+    <v-combobox
+      v-model="nowTagList"
+      hint="Maximum of 5 tags"
+      label="Add some tags"
+      multiple
+      small-chips
+    >
+    </v-combobox>
+
     <div class="editor">
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
@@ -171,6 +180,15 @@
         <v-btn small outlined color="secondary" class="mt-10" @click="addPost">
           <v-icon left>mdi-plus</v-icon>SAVE
         </v-btn>
+        <v-snackbar v-model="snackbar" timeout="2000">
+          게시글이 저장되었습니다.
+
+          <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-flex>
     </div>
   </div>
@@ -180,6 +198,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
+
 import {
   Blockquote,
   CodeBlock,
@@ -218,6 +237,10 @@ export default class EditArticle extends Vue {
   @mypageModule.Action UPDATE_POST;
 
   title = "";
+  snackbar = false;
+  nowTagList = [];
+
+  search = null;
 
   setContent() {
     this.editor.setContent(
@@ -234,7 +257,17 @@ export default class EditArticle extends Vue {
   setTitle() {
     this.title = this.post.postTitle;
     this.html = this.post.postContent;
+    this.post.tagList.forEach(element => {
+      this.nowTagList.push(element.tagName);
+    });
     this.editor.setContent(this.post.postContent);
+  }
+
+  @Watch("nowTagList")
+  maxTag() {
+    if (this.nowTagList.length > 5) {
+      this.$nextTick(() => this.nowTagList.pop());
+    }
   }
 
   data() {
@@ -277,15 +310,20 @@ export default class EditArticle extends Vue {
       this.ADD_POST({
         postContent: this.html,
         postDirId: Number(this.$route.params.postDirId),
-        postTitle: this.title
+        postTitle: this.title,
+        tagList: this.nowTagList
       });
+      this.snackbar = true;
     } else {
+      console.log(this.nowTagList);
       this.UPDATE_POST({
         postContent: this.html,
         postDirId: Number(this.$route.params.postDirId),
         postId: Number(this.$route.params.postId),
-        postTitle: this.title
+        postTitle: this.title,
+        tagList: this.nowTagList
       });
+      this.snackbar = true;
     }
   }
 

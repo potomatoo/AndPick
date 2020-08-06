@@ -13,6 +13,13 @@ export interface Post {
   postContent: string;
   postDate: string;
   postFavorite: boolean;
+  tagList: Tag[];
+}
+
+export interface Tag {
+  postTagId: number;
+  postId: number;
+  tagName: string;
 }
 
 export interface Context {
@@ -30,4 +37,5 @@ export interface MypageModule {
   postId: number | null;
   postDirName: string | null;
   postDirContextMenu: Context;
+  postContextMenu: Context;
 }

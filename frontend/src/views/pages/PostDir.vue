@@ -87,6 +87,7 @@
                 md4
                 pa-3
                 class="row-v"
+                @contextmenu.prevent="showPostCtx($event, post)"
               >
                 <v-hover v-slot:default="{ hover }">
                   <router-link
@@ -111,9 +112,15 @@
                         >{{ post.postTitle }}</v-card-text
                       >
                       <hr class="mt-0" />
-                      <div class="text--primary text-left ml-3">
-                        <p v-html="post.postContent"></p>
-                        <br />
+
+                      <div class="container row">
+                        <div
+                          class="ma-3"
+                          v-for="tag in post.tagList"
+                          :key="tag.tagId"
+                        >
+                          <v-btn rounded depressed>#{{ tag.tagName }}</v-btn>
+                        </div>
                       </div>
                     </v-card>
                   </router-link>
@@ -122,6 +129,7 @@
             </draggable>
           </v-flex>
         </draggable>
+        <post-context-menu :postItem="postItem" />
       </div>
     </div>
   </div>
@@ -132,12 +140,15 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 
 import draggable from "vuedraggable";
 import { namespace } from "vuex-class";
+import PostContextMenu from "@/components/pages/PostContextMenu.vue";
+import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
 @Component({
   components: {
-    draggable
+    draggable,
+    PostContextMenu
   }
 })
 export default class FolderMain extends Vue {
@@ -145,6 +156,7 @@ export default class FolderMain extends Vue {
   @mypageModule.State postDirId!: number | null;
   @mypageModule.State postDirName!: string | null;
   @mypageModule.Mutation SELECT_POSTDIR: any;
+  @mypageModule.Mutation SET_POST_CONTEXT_MENU: any;
   @mypageModule.Action FETCH_POSTDIR: any;
   @mypageModule.Action DELETE_POSTDIR: any;
   @mypageModule.Action UPDATE_POSTDIR: any;
@@ -160,6 +172,19 @@ export default class FolderMain extends Vue {
       length: 1
     }
   ];
+
+  postItem = {};
+
+  showPostCtx(e: MouseEvent, post: Post) {
+    this.postItem = post;
+
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_POST_CONTEXT_MENU(ctx);
+  }
 
   deletePostDir() {
     this.DELETE_POSTDIR(this.$route.params.postDirId);

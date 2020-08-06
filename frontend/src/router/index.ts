@@ -3,9 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
-import PostDir from "@/views/pages/PostDir.vue";
 
-import EditArticle from "@/views/pages/EditArticle.vue";
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
 import FeedPage from "@/views/feeds/FeedPage.vue";
@@ -20,6 +18,9 @@ import SocialLoginView from "@/views/accounts/SocialLoginView.vue";
 import LogoutView from "@/views/accounts/LogoutView.vue";
 import UpdateUserView from "@/views/accounts/UpdateUserView.vue";
 import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
+
+import PostDir from "@/views/pages/PostDir.vue";
+import EditArticle from "@/views/pages/EditArticle.vue";
 
 Vue.use(VueRouter);
 
@@ -50,7 +51,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/accounts/social",
     name: "SocialLogin",
-    component: SocialLoginView,
+    component: SocialLoginView
   },
   {
     path: "/accounts/logout",
@@ -104,16 +105,16 @@ const routes: Array<RouteConfig> = [
   {
     path: "/mypage/:postDirId/newpost",
     name: "NewPost",
-    component: EditArticle
+    component: EditArticle,
+    meta: {
+      authRequired: true
+    }
   },
 
   {
     path: "/mypage/:postDirId/:postId/post",
     name: "EditPost",
-    component: EditArticle,
-    meta: {
-      authRequired: true
-    }
+    component: EditArticle
   },
 
   {

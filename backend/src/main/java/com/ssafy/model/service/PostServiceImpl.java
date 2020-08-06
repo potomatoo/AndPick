@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
 
 		post = postRepository.save(post);
 
-		List<PostTag> list = new ArrayList<PostTag>(tags.length);
+		List<PostTag> list = new ArrayList<PostTag>();
 		if (tags != null || tags.length != 0) {
 			for (String tagName : tags) {
 				Tag tag = new Tag();
@@ -153,7 +153,7 @@ public class PostServiceImpl implements PostService {
 		}
 
 		post = postRepository.save(post);
-		List<PostTag> list = new ArrayList<PostTag>(tags.length);
+		List<PostTag> list = new ArrayList<PostTag>();
 		if (tags != null || tags.length != 0) {
 			for (String tagName : tags) {
 				Tag tag = new Tag();

@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-5" style="width: 600px">
+  <div class="container my-5" style="width: 400px">
     <h1>Signup</h1>
     <div class="form-group">
       <label for="userId">이메일</label>
@@ -32,6 +32,7 @@
         class="form-control"
         id="userName"
         type="text"
+        placeholder="닉네임"
         :class="{
           'is-invalid': $v.signupData.userName.$error,
           'is-valid': !$v.signupData.userName.$invalid,
@@ -60,6 +61,7 @@
         class="form-control"
         id="userPassword"
         type="password"
+        placeholder="비밀번호"
         :class="{
           'is-invalid': $v.signupData.userPassword.$error,
           'is-valid': !$v.signupData.userPassword.$invalid,
@@ -85,6 +87,7 @@
         class="form-control"
         id="userPasswordCheck"
         type="password"
+        placeholder="비밀번호 확인"
         :class="{
           'is-invalid': $v.signupData.userPasswordCheck.$error,
           'is-valid':
@@ -105,9 +108,17 @@
       <input v-model="signupData.userType" id="userType" type="hidden" />
     </div>
     <div>
-      <button type="submit" @click="submitForm" @keyup.enter="submitForm">
+      <!-- <button type="submit" @click="submitForm" @keyup.enter="submitForm">
         Signup
-      </button>
+      </button> -->
+      <v-btn
+        style="width: 100%"
+        large
+        color="success"
+        @click.prevent="submitForm"
+        @keyup.enter="submitForm"
+        >회원가입</v-btn
+      >
     </div>
   </div>
 </template>

@@ -19,6 +19,7 @@ public class BoardServiceImpl implements BoardService {
 	private NewsRepository newsRepository;
 
 	@Override
+	@Transactional
 	public BasicResponse svaeBoard(User user, Board board) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -41,6 +42,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findAllBoard(User user) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -57,6 +59,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findOneBoard(User user, Board board) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -73,6 +76,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse updateBoard(User user, Board board) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

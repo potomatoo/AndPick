@@ -1,5 +1,7 @@
 package com.ssafy.model.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ public class CategoryServiceImpl implements CategoryService {
 	private CategoryRepository categoryRepository;
 
 	@Override
+	@Transactional
 	public BasicResponse findAll() {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -30,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findByCategoryNameLike(String categoryName) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -52,6 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findByName(String categoryName) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -74,6 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse save(String categoryName) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

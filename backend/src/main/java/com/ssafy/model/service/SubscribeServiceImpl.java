@@ -90,6 +90,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse saveSubscribe(User user, Subscribe subscribe) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -142,6 +143,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse updateSubscribe(User user, Subscribe subscribe) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -185,6 +187,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse deleteSubscribe(User user, Subscribe subscribe) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -205,6 +208,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findSubscribeByUser(User user) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -221,6 +225,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findSubscribeByFeed(User user, Feed feed) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -244,6 +249,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 	}
 
 	@Override
+	@Transactional
 	public BasicResponse findSubscribeBySubscribe(User user, Subscribe subscribe) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

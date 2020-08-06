@@ -2,6 +2,8 @@ package com.ssafy.model.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ public class PostDirServiceImpl implements PostDirService {
 	PostDirRepository postDirRepository;
 
 	@Override
+	@Transactional
 	public PostDir save(User user, PostDir postDir) {
 		// TODO Auto-generated method stub
 		if (user == null || postDir.getPostDirName() == null)
@@ -26,6 +29,7 @@ public class PostDirServiceImpl implements PostDirService {
 	}
 
 	@Override
+	@Transactional
 	public PostDir update(User user, long postDirId, String postDirName) {
 		// TODO Auto-generated method stub
 		if (user == null || postDirName == null)
@@ -39,6 +43,7 @@ public class PostDirServiceImpl implements PostDirService {
 	}
 
 	@Override
+	@Transactional
 	public List<PostDir> findPostDirByUSer(User user) {
 		// TODO Auto-generated method stub
 		if (user == null)
@@ -48,6 +53,7 @@ public class PostDirServiceImpl implements PostDirService {
 	}
 
 	@Override
+	@Transactional
 	public PostDir findPostDirByID(User user, long postDirId) {
 		// TODO Auto-generated method stub
 		if (user == null)
@@ -57,6 +63,7 @@ public class PostDirServiceImpl implements PostDirService {
 	}
 
 	@Override
+	@Transactional
 	public boolean deletePostDir(User user, long postDirId) {
 		// TODO Auto-generated method stub
 		if (user == null)

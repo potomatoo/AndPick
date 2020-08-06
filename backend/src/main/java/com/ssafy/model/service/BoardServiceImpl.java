@@ -106,14 +106,14 @@ public class BoardServiceImpl implements BoardService {
 
 		board = boardRepository.findOneByBoardId(board.getBoardId());
 
-		if (board.getBoardId() != user.getUserNo()) {
+		if (board.getUserNo() != user.getUserNo()) {
 			result.status = false;
 			result.message = "보드 정보가 일치하지 않습니다.";
 			return result;
 		}
 
+		boardRepository.deleteNews(board.getBoardId());
 		boardRepository.deleteById(board.getBoardId());
-
 		result.status = true;
 		if (result.status) {
 			result.message = "보드 삭제에 성공하였습니다.";

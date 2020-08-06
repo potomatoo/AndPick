@@ -54,8 +54,8 @@ public class NewsController {
 		news.setNewsLink(newsLink);
 		news.setNewsDescription(newsDescription);
 		news.setNewsDate(newsDate);
-
 		news.setBoardId(boardId);
+		news.setUserNo(user.getUserNo());
 
 		result = newsService.saveNews(user, news);
 

@@ -151,10 +151,10 @@ public class PostServiceImpl implements PostService {
 		for (PostTag postTag : checkPost.getTagList()) {
 			postTagRepository.deleteById(postTag.getPostTagId());
 		}
+
+		post = postRepository.save(post);
 		List<PostTag> list = new ArrayList<PostTag>(tags.length);
 		if (tags != null || tags.length != 0) {
-			System.out.println(Arrays.toString(tags));
-			
 			for (String tagName : tags) {
 				Tag tag = new Tag();
 				tag.setTagName(tagName);
@@ -168,9 +168,8 @@ public class PostServiceImpl implements PostService {
 				list.add(postTagRepository.save(postTag));
 			}
 		}
-		
-		result.data = postRepository.save(post);
-		
+		post.setTagList(list);
+		result.data = post;
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "게시글 조회를 완료하였습니다.";

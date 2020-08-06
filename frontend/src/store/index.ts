@@ -4,6 +4,7 @@ import feedModule from "./FeedModule.store";
 import mypageModule from "./MypageModule.store";
 
 import axios from "axios";
+// import { Axios } from "@/service/axios.service";
 
 import router from "@/router";
 import SERVER from "@/api/spr";
@@ -108,8 +109,8 @@ const store: StoreOptions<RootState> = {
     updateUser({ getters, commit }, updateData) {
       axios
         .put(SERVER.URL + SERVER.ROUTES.updateUser, updateData, getters.config)
-        .then((res) => {
-          commit("SET_TOKEN", res.data.data["Authorization"]);
+        .then(() => {
+          // commit("SET_TOKEN", res.data.data["Authorization"]);
           router.push("/");
         })
         .catch((err) => console.log("err", err));

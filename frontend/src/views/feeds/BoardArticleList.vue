@@ -3,15 +3,15 @@
     <v-container>
       <v-layout>
         <v-flex v-if="board">
-          <div class="caption">BOARD</div>
+          <div class="caption mb-3">BOARD</div>
           <h1>{{ board.boardName }}</h1>
         </v-flex>
-        <v-flex class="text-right">
+        <!-- <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
           <v-icon class="ml-3" @click="console.log('hi')"
             >mdi-replay mdi-flip-h</v-icon
           >
-        </v-flex>
+        </v-flex> -->
       </v-layout>
     </v-container>
     <v-divider></v-divider>

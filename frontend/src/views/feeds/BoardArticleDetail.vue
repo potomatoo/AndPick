@@ -8,16 +8,11 @@
         <!-- ADD BOARD 메뉴 -->
         <v-menu offset-x :close-on-content-click="false" min-width="300px">
           <template v-slot:activator="{ on, attrs }">
-            <v-icon v-bind="attrs" v-on="on">mdi-star-box-outline</v-icon>
-            <!-- <v-icon
-              outlined
-              color="success"
-              v-bind="attrs"
-              v-on="on"
-              class="float-right"
-            >
-              FOLLOW
-            </v-icon> -->
+            <v-btn icon large>
+              <v-icon v-bind="attrs" v-on="on">
+                mdi-star-box-outline
+              </v-icon>
+            </v-btn>
           </template>
           <v-list>
             <v-list-item v-for="board in boardList" :key="board.boardId">
@@ -46,8 +41,6 @@
             </v-list-item>
           </v-list>
         </v-menu>
-
-        <v-icon class="ml-3">mdi-replay mdi-flip-h</v-icon>
       </div>
       <!-- </v-layout> -->
     </v-container>

@@ -1,5 +1,7 @@
 package com.ssafy.controller;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -111,6 +113,7 @@ public class BoardController {
 	}
 
 	@PutMapping(value = "/api/board/update")
+	@Transactional
 	public Object updateBoard(@RequestHeader("Authorization") String jwtToken, @RequestParam("boardId") long boardId,
 			@RequestParam("boardName") String boardName) {
 		ResponseEntity response = null;

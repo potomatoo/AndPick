@@ -31,6 +31,11 @@ const module: Module<FeedModule, RootState> = {
       showCtx: false,
       x: 0,
       y: 0
+    },
+    boardContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
     }
   },
 
@@ -72,13 +77,22 @@ const module: Module<FeedModule, RootState> = {
     SET_SUB_CONTEXT_MENU(state, ctx) {
       state.subsContextMenu.showCtx = false;
       state.feedContextMenu.showCtx = false;
+      state.boardContextMenu.showCtx = false;
       state.subsContextMenu = ctx;
     },
 
     SET_FEED_CONTEXT_MENU(state, ctx) {
       state.feedContextMenu.showCtx = false;
       state.subsContextMenu.showCtx = false;
+      state.boardContextMenu.showCtx = false;
       state.feedContextMenu = ctx;
+    },
+
+    SET_BOARD_CONTEXT_MENU(state, ctx) {
+      state.feedContextMenu.showCtx = false;
+      state.subsContextMenu.showCtx = false;
+      state.boardContextMenu.showCtx = false;
+      state.boardContextMenu = ctx;
     }
   },
   actions: {
@@ -268,6 +282,13 @@ const module: Module<FeedModule, RootState> = {
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));
     },
+
+    // DELETE_BOARD({ dispatch }, boardId) {
+    //   Axios.instance
+    //     .delete("/api/board/delete", { params: { boardId } })
+    //     .then(() => dispatch("FETCH_BOARD_LIST"))
+    //     .catch(err => console.error(err));
+    // },
 
     FETCH_ARTICLE_LIST_IN_BOARD({ commit }, boardId) {
       Axios.instance

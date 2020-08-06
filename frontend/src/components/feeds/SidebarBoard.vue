@@ -3,7 +3,11 @@
     <v-list>
       <v-subheader>Board</v-subheader>
       <v-list-item-group>
-        <v-list-item v-for="board in boardList" :key="board.title">
+        <v-list-item
+          v-for="board in boardList"
+          :key="board.title"
+          @contextmenu.prevent="showBoardCtx($event, board)"
+        >
           <v-list-item-icon>
             <v-icon>
               mdi-star-outline
@@ -54,6 +58,7 @@
         </v-card>
       </v-dialog>
     </v-list>
+    <board-context-menu :boardItem="boardItem" />
   </div>
 </template>
 
@@ -62,17 +67,25 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import { Board } from "../../store/Feed.interface";
+import BoardContextMenu from "@/components/feeds/BoardContextMenu.vue";
 
 const feedModule = namespace("feedModule");
 
-@Component
+@Component({
+  components: {
+    BoardContextMenu
+  }
+})
 export default class SidebarBoard extends Vue {
   @feedModule.State boardList!: [];
   @feedModule.Action ADD_BOARD: any;
+  @feedModule.Mutation SET_BOARD_CONTEXT_MENU: any;
 
   newBoardName = null;
 
   modalActive = false;
+
+  boardItem = {};
 
   rules = [
     (value: any) => !!value || "this filed is required.",
@@ -104,6 +117,16 @@ export default class SidebarBoard extends Vue {
       this.ADD_BOARD(this.newBoardName);
       this.closeModal();
     }
+  }
+
+  showBoardCtx(e: MouseEvent, board: Board) {
+    this.boardItem = board;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_BOARD_CONTEXT_MENU(ctx);
   }
 }
 </script>

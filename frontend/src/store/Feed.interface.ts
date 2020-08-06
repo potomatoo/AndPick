@@ -59,6 +59,7 @@ export interface FeedModule {
   articleList: Article[];
   subsContextMenu: Context;
   feedContextMenu: Context;
+  boardContextMenu: Context;
 }
 
 // dummy

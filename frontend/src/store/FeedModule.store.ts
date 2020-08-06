@@ -6,7 +6,8 @@ import {
   FeedList,
   Rss,
   Feed,
-  Board
+  Board,
+  News
 } from "./Feed.interface";
 import { Axios } from "@/service/axios.service";
 import router from "@/router";
@@ -20,6 +21,7 @@ const module: Module<FeedModule, RootState> = {
     article: null,
     feed: null,
     board: null,
+    news: null,
     subscribeId: null,
     articleList: [],
     subsContextMenu: {
@@ -60,6 +62,10 @@ const module: Module<FeedModule, RootState> = {
 
     SET_BOARD(state, board: Board) {
       state.board = board;
+    },
+
+    SET_NEWS(state, news: News) {
+      state.news = news;
     },
 
     SET_RSS_LIST(state, rssList: Rss[]) {
@@ -309,16 +315,30 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    SAVE_IN_BOARD({ dispatch }, { boardId, article }) {
-      const data = {
-        params: {
-          boardId,
-          newsDate: article.pubDate || new Date().toString(),
-          newsDescription: article.description.substr(0, 190),
-          newsLink: article.link,
-          newsTitle: article.title
-        }
-      };
+    SAVE_IN_BOARD({ dispatch }, { boardId, article, from }) {
+      let data = null;
+      if (from) {
+        data = {
+          params: {
+            boardId,
+            newsDate: new Date(article.newsDate).toString(),
+            newsDescription: article.newsDescription,
+            newsLink: article.newsLink,
+            newsTitle: article.newsTitle
+          }
+        };
+      } else {
+        data = {
+          params: {
+            boardId,
+            newsDate: article.pubDate || new Date().toString(),
+            newsDescription: article.description.substr(0, 190),
+            newsLink: article.link,
+            newsTitle: article.title
+          }
+        };
+      }
+
       Axios.instance
         .post("/api/news/save", null, data)
         .then(() => dispatch("FETCH_BOARD_LIST"))
@@ -326,10 +346,16 @@ const module: Module<FeedModule, RootState> = {
     },
 
     DELETE_IN_BOARD({ dispatch }, newsId) {
-      console.log(newsId);
       Axios.instance
         .delete("/api/news/delete", { params: { newsId } })
         .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_ARTICLE_IN_BOARD({ commit }, newsId) {
+      Axios.instance
+        .get("/api/news/find/id", { params: { newsId } })
+        .then(({ data }) => commit("SET_NEWS", data.data))
         .catch(err => console.error(err));
     }
   }

@@ -37,12 +37,12 @@
       <v-list three-line>
         <v-list-item-group>
           <v-list-item v-for="news in board.newsList" :key="news.newsId">
-            <v-list-item-content @click="selectArticle(article)">
+            <v-list-item-content>
               <router-link
                 class="router-link"
                 :to="{
-                  name: 'ArticleDetailInFeed',
-                  params: {}
+                  name: 'BoardArticleDetail',
+                  params: { boardId: board.boardId, newsId: news.newsId }
                 }"
               >
                 <v-list-item-content class="mt-3">

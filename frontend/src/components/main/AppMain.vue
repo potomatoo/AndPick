@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-main class="v-main">
     <v-layout>
       <v-flex v-if="isLoggedIn" offset-lg3 lg6>
         <router-view></router-view>
@@ -20,3 +20,4 @@ import { mapGetters } from "vuex";
 })
 export default class AppMain extends Vue {}
 </script>
+<style scoped></style>

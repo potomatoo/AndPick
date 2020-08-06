@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left>
+  <v-app-bar app clipped-left class="mb-0">
     <v-app-bar-nav-icon @click="TOGGLE_SIDEBAR()" />
     <v-toolbar-title
       class="mr-5 d-flex justify-content-between"

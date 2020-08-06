@@ -5,10 +5,42 @@
       <h3>{{ article.title }}</h3>
       <div class="subtitle-1 text--secondary">{{ article.pubDate }}</div>
       <div class="text-right">
-        <v-icon @click="console.log('hi')">mdi-star-box-outline</v-icon>
-        <v-icon class="ml-3" @click="console.log('hi')"
-          >mdi-replay mdi-flip-h</v-icon
-        >
+        <!-- ADD BOARD 메뉴 -->
+        <v-menu offset-x :close-on-content-click="false" min-width="300px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon v-bind="attrs" v-on="on">mdi-star-box-outline</v-icon>
+            <!-- <v-icon
+              outlined
+              color="success"
+              v-bind="attrs"
+              v-on="on"
+              class="float-right"
+            >
+              FOLLOW
+            </v-icon> -->
+          </template>
+          <v-list>
+            <v-list-item v-for="board in boardList" :key="board.boardId">
+              <v-icon color="grey" class="mr-2">mdi-star-outline</v-icon>
+              <v-list-item-title>{{ board.boardName }}</v-list-item-title>
+              <v-btn
+                v-if="checkInBoard(board.newsList, article.link)"
+                class="ml-3"
+                outlined
+                color="success"
+                small
+                @click="saveArticle(board.boardId, article)"
+              >
+                <v-icon left>mdi-plus</v-icon> ADD
+              </v-btn>
+              <v-btn v-else class="ml-3" outlined color="error" small>
+                <v-icon left>mdi-window-close</v-icon> REMOVE
+              </v-btn>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-icon class="ml-3">mdi-replay mdi-flip-h</v-icon>
       </div>
       <!-- </v-layout> -->
     </v-container>
@@ -33,13 +65,15 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { Article } from "../../store/Feed.interface";
+import { Article, Board, News } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
 export default class ArticleDetail extends Vue {
   @feedModule.State article!: Article;
+  @feedModule.State boardList!: Board[];
+  @feedModule.Action SAVE_IN_BOARD: any;
 
   checkArticle() {
     if (!this.article) {
@@ -59,6 +93,15 @@ export default class ArticleDetail extends Vue {
   created() {
     // 새로고침시 article state가 초기화되면 상위 페이지로 이동
     this.checkArticle();
+  }
+
+  saveArticle(boardId: number, article: Article) {
+    this.SAVE_IN_BOARD({ boardId, article });
+  }
+
+  checkInBoard(newsList: News[], link: string) {
+    console.log(newsList.some(news => news.newsLink === link));
+    return !(newsList.length && newsList.some(news => news.newsLink === link));
   }
 }
 </script>

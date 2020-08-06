@@ -41,11 +41,21 @@ export interface Context {
   y: number;
 }
 
+export interface News {
+  newsId: number;
+  newsTitle: string;
+  newsLink: string;
+  newsDate: string;
+  newsDescription: string;
+  boardId: number;
+  userNo: 16;
+}
+
 export interface Board {
   boardId: number;
   userNo: number;
   boardName: string;
-  newsList: [];
+  newsList: News[];
 }
 
 export interface FeedModule {

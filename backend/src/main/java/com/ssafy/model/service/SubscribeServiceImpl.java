@@ -156,7 +156,6 @@ public class SubscribeServiceImpl implements SubscribeService {
 			return result;
 		}
 
-		System.out.println(subscribe);
 		Subscribe checkSubscribe = subscribeRepository.findOneBySubscribeId(subscribe.getSubscribeId());
 
 		if (checkSubscribe == null || checkSubscribe.getFeedId() != subscribe.getFeedId()

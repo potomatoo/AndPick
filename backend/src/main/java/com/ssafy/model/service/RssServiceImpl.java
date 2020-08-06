@@ -3,6 +3,8 @@ package com.ssafy.model.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class RssServiceImpl implements RssService {
 	private SubscribeRepository subscribeRepository;
 
 	@Override
+	@Transactional
 	public BasicResponse findAll() {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

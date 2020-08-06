@@ -1,13 +1,22 @@
 package com.ssafy.model.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Post;
 import com.ssafy.model.dto.PostDir;
+import com.ssafy.model.dto.PostTag;
+import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.PostDirRepository;
 import com.ssafy.model.repository.PostRepository;
+import com.ssafy.model.repository.PostTagRepository;
+import com.ssafy.model.repository.TagRepository;
 import com.ssafy.model.response.BasicResponse;
 
 @Service
@@ -17,8 +26,13 @@ public class PostServiceImpl implements PostService {
 	private PostRepository postRepository;
 	@Autowired
 	private PostDirRepository postDirRepository;
+	@Autowired
+	private TagRepository tagRepository;
+	@Autowired
+	private PostTagRepository postTagRepository;
 
 	@Override
+	@Transactional
 	public BasicResponse savePost(User user, Post post, String[] tags) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -31,7 +45,23 @@ public class PostServiceImpl implements PostService {
 			return result;
 		}
 
-		result.data = postRepository.save(post);
+		post = postRepository.save(post);
+
+		List<PostTag> list = new ArrayList<PostTag>(tags.length);
+		for (String tagName : tags) {
+			Tag tag = new Tag();
+			tag.setTagName(tagName);
+
+			tag = tagRepository.save(tag);
+
+			PostTag postTag = new PostTag();
+			postTag.setPostId(post.getPostId());
+			postTag.setTagName(tag.getTagName());
+
+			list.add(postTagRepository.save(postTag));
+		}
+		post.setTagList(list);
+		result.data = post;
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "게시글 저장에 완료하였습니다.";

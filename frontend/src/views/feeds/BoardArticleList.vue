@@ -15,7 +15,9 @@
       </v-layout>
     </v-container>
     <v-divider></v-divider>
-    <v-container class="text-center">
+
+    <!-- 기사 없을때 -->
+    <v-container v-if="board && !board.newsList.length" class="text-center">
       <v-layout justify-center>
         <h4>Save articles to this board</h4>
       </v-layout>
@@ -25,6 +27,43 @@
           icon to save it to this<br />board.
         </p>
       </v-layout>
+    </v-container>
+
+    <!-- 기사 있을때 -->
+    <v-container
+      v-else-if="board && board.newsList.length"
+      class="offset-lg3 lg6"
+    >
+      <v-list three-line>
+        <v-list-item-group>
+          <v-list-item v-for="news in board.newsList" :key="news.newsId">
+            <v-list-item-content @click="selectArticle(article)">
+              <router-link
+                class="router-link"
+                :to="{
+                  name: 'ArticleDetailInFeed',
+                  params: {}
+                }"
+              >
+                <v-list-item-content class="mt-3">
+                  <div class="h4">
+                    {{ news.newsTitle }}
+                  </div>
+                  <div class="sumtitle-1 text--secondary">
+                    {{ news.newsDate }}
+                  </div>
+                  <!-- <div class="sumtitle-1 text--secondary">
+                    {{ article.rssTitle }}
+                  </div> -->
+                  <v-list-item-subtitle>
+                    {{ news.newsDescription }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </router-link>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
     </v-container>
   </div>
 </template>
@@ -48,4 +87,9 @@ export default class BoardArticleList extends Vue {
 }
 </script>
 
-<style></style>
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

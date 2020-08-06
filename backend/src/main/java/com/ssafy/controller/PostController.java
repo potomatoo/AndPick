@@ -34,7 +34,8 @@ public class PostController {
 	@PostMapping(value = "/api/post/save")
 	public Object savePostDir(@RequestHeader("Authorization") String jwtToken,
 			@RequestParam("postDirId") long postDirId, @RequestParam("postTitle") String postTitle,
-			@RequestParam("postContent") String postContent, @RequestParam("tagList") String[] tags) {
+			@RequestParam("postContent") String postContent,
+			@RequestParam(value = "tagList", required = false) String[] tags) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -147,10 +148,10 @@ public class PostController {
 	}
 
 	@PutMapping(value = "/api/post/update")
-	public Object updatePostDir(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam("postDirId") long postDirId, @RequestParam("postId") long postId,
-			@RequestParam("postTitle") String postTitle, @RequestParam("postContent") String postContent,
-			@RequestParam("tagList") String[] tags) {
+	public Object updatePost(@RequestHeader("Authorization") String jwtToken, @RequestParam("postDirId") long postDirId,
+			@RequestParam("postId") long postId, @RequestParam("postTitle") String postTitle,
+			@RequestParam("postContent") String postContent,
+			@RequestParam(name = "tagList", required = false) String[] tags) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -178,7 +179,7 @@ public class PostController {
 		post.setUserNo(user.getUserNo());
 		post.setPostDate(new Date());
 
-		result = postService.savePost(user, post, tags);
+		result = postService.updatePost(user, post, tags);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

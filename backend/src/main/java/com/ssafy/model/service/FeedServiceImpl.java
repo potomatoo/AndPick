@@ -84,8 +84,8 @@ public class FeedServiceImpl implements FeedService {
 				return result;
 			}
 		}
-
-		result.data = feedRepository.save(feed);
+		checkFeed.setFeedName(feed.getFeedName());
+		result.data = feedRepository.save(checkFeed);
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "피드 수정를 완료하였습니다.";

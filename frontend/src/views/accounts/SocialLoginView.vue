@@ -18,6 +18,7 @@ export default {
           });
         })
         .then((response) => {
+          console.log("소셜");
           //and then
         })
         .catch((error) => {

@@ -81,6 +81,7 @@ export default class BoardContextMenu extends Vue {
   @feedModule.State boardList!: Board[];
   @feedModule.State boardContextMenu!: Context;
   @feedModule.Action UPDATE_BOARD: any;
+  @feedModule.Action DELETE_BOARD: any;
 
   @Prop({ type: Object }) readonly boardItem!: Board;
 
@@ -124,7 +125,8 @@ export default class BoardContextMenu extends Vue {
   }
 
   deleteBoard() {
-    console.log("delete");
+    this.DELETE_BOARD(this.boardItem.boardId);
+    this.deleteModal = false;
   }
 }
 </script>

@@ -302,6 +302,13 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
+    DELETE_BOARD({ dispatch }, boardId) {
+      Axios.instance
+        .delete("/api/board/delete", { params: { boardId } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
     SAVE_IN_BOARD({ dispatch }, { boardId, article }) {
       const data = {
         params: {

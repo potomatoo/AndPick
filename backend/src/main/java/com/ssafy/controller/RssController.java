@@ -231,7 +231,8 @@ public class RssController {
 
 		RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(resultSubscribe.getRss().getRssUrl());
 		for (RssItem cur : channel.getItems()) {
-			cur.setRssTitle(resultSubscribe.getSubscribeName());
+			cur.setRssTitle(resultSubscribe.getRss().getRssName());
+			cur.setSubscribeName(resultSubscribe.getSubscribeName());
 			rssItem.add(cur);
 		}
 

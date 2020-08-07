@@ -1,17 +1,8 @@
 <template>
-  <div
-    class="view text-white"
-    style="background-image: url('https://images.unsplash.com/photo-1556888335-95371827d5fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80'); background-repeat: no-repeat; background-size: cover; background-position: center center;"
-  >
-    <div class="container">
-      <div class="row py-5">
-        <ServiceDescription />
-        <!-- <RssImage /> -->
-      </div>
-      <hr />
-      <ServiceStep />
-      <hr />
-      <UserInformation />
+  <div>
+    <div class="back row py-5" style="height:500px">
+      <ServiceDescription />
+      <RssImage />
     </div>
   </div>
 </template>
@@ -35,9 +26,8 @@ export default class Cover extends Vue {}
 </script>
 
 <style>
-.view {
-  background-attachment: fixed;
-  background-size: auto;
-  height: 1300px;
+.back {
+  background-image: url("https://images.unsplash.com/photo-1556888335-95371827d5fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80");
+  background-size: 100% 100%;
 }
 </style>

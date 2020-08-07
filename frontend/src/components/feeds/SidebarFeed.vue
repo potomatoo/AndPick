@@ -3,7 +3,7 @@
     <v-subheader>Feed</v-subheader>
     <v-list-group
       v-for="feed in feedList"
-      :key="feed.feedName"
+      :key="feed.feedId"
       no-action
       sub-group
     >
@@ -23,7 +23,7 @@
 
       <v-list-item
         v-for="subItem in feed.subscribeList"
-        :key="subItem.title"
+        :key="subItem.subscribeId"
         @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
       >
         <v-list-item-content>

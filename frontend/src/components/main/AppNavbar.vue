@@ -1,24 +1,28 @@
 <template>
-  <v-app-bar app clipped-left class="mb-0">
+  <v-app-bar app clipped-left style="height: 70px">
     <v-app-bar-nav-icon @click="TOGGLE_SIDEBAR()" />
     <v-toolbar-title
-      class="mr-5 d-flex justify-content-between"
+      class="a mr-5 mt-4 d-flex justify-content-between"
       style="width: 100%"
     >
       <router-link :to="{ name: 'Home' }">
         <a
-          ><img class="mdi" src="@/assets/logo.png" width="90px" height="auto"
+          ><img
+            class="mdi ml-5"
+            src="@/assets/title.png"
+            width="140px"
+            height="auto"
         /></a>
       </router-link>
       <router-link
         v-if="!isLoggedIn"
         :to="{ name: 'Login' }"
-        class="router-link ml-5 mt-1"
+        class="router-link ml-5"
       >
-        <v-btn color="#5cb85c">로그인</v-btn>
+        <v-btn outlined color="success">로그인</v-btn>
       </router-link>
 
-      <div v-if="isLoggedIn" class="mt-2">
+      <div v-if="isLoggedIn" class="mt-1">
         <div>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
@@ -67,6 +71,8 @@ export default class AppNavbar extends Vue {}
 }
 .mdi:hover {
   cursor: pointer;
-  background: rgba(230, 235, 229, 0.986);
+}
+.a {
+  background-color: whitesmoke;
 }
 </style>

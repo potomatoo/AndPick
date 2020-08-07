@@ -7,7 +7,8 @@ import Today from "@/views/feeds/TodayFeedList.vue";
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
 import FeedPage from "@/views/feeds/FeedPage.vue";
-import BoardList from "@/views/feeds/BoardList.vue";
+import BoardArticleList from "@/views/feeds/BoardArticleList.vue";
+import BoardArticleDetail from "@/views/feeds/BoardArticleDetail.vue";
 import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
 import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
 import ArticleDetailInFeed from "@/views/feeds/ArticleDetailInFeed.vue";
@@ -158,9 +159,17 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: "/board/:boardName",
-    name: "BoardList",
-    component: BoardList,
+    path: "/board/:boardId",
+    name: "BoardArticleList",
+    component: BoardArticleList,
+    meta: {
+      authRequired: true
+    }
+  },
+  {
+    path: "/board/:boardId/news/:newsId",
+    name: "BoardArticleDetail",
+    component: BoardArticleDetail,
     meta: {
       authRequired: true
     }

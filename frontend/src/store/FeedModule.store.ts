@@ -2,11 +2,12 @@ import { Module } from "vuex";
 import { RootState } from "./index";
 import {
   FeedModule,
-  SidebarList,
   Article,
   FeedList,
   Rss,
-  Feed
+  Feed,
+  Board,
+  News
 } from "./Feed.interface";
 import { Axios } from "@/service/axios.service";
 import router from "@/router";
@@ -19,6 +20,8 @@ const module: Module<FeedModule, RootState> = {
     boardList: [],
     article: null,
     feed: null,
+    board: null,
+    news: null,
     subscribeId: null,
     articleList: [],
     subsContextMenu: {
@@ -27,6 +30,11 @@ const module: Module<FeedModule, RootState> = {
       y: 0
     },
     feedContextMenu: {
+      showCtx: false,
+      x: 0,
+      y: 0
+    },
+    boardContextMenu: {
       showCtx: false,
       x: 0,
       y: 0
@@ -48,8 +56,16 @@ const module: Module<FeedModule, RootState> = {
       state.feed = feed;
     },
 
-    SET_BOARD_LIST(state, boardList: SidebarList[]) {
+    SET_BOARD_LIST(state, boardList: Board[]) {
       state.boardList = boardList;
+    },
+
+    SET_BOARD(state, board: Board) {
+      state.board = board;
+    },
+
+    SET_NEWS(state, news: News) {
+      state.news = news;
     },
 
     SET_RSS_LIST(state, rssList: Rss[]) {
@@ -60,11 +76,6 @@ const module: Module<FeedModule, RootState> = {
       state.subscribeId = subscribeId;
     },
 
-    // 보드 처리하는 api 아직 없음
-    ADD_BOARD(state, board: SidebarList) {
-      state.boardList.push(board);
-    },
-
     SELECT_ARTICLE(state, article: Article) {
       state.article = article;
     },
@@ -72,13 +83,22 @@ const module: Module<FeedModule, RootState> = {
     SET_SUB_CONTEXT_MENU(state, ctx) {
       state.subsContextMenu.showCtx = false;
       state.feedContextMenu.showCtx = false;
+      state.boardContextMenu.showCtx = false;
       state.subsContextMenu = ctx;
     },
 
     SET_FEED_CONTEXT_MENU(state, ctx) {
       state.feedContextMenu.showCtx = false;
       state.subsContextMenu.showCtx = false;
+      state.boardContextMenu.showCtx = false;
       state.feedContextMenu = ctx;
+    },
+
+    SET_BOARD_CONTEXT_MENU(state, ctx) {
+      state.feedContextMenu.showCtx = false;
+      state.subsContextMenu.showCtx = false;
+      state.boardContextMenu.showCtx = false;
+      state.boardContextMenu = ctx;
     }
   },
   actions: {
@@ -100,6 +120,13 @@ const module: Module<FeedModule, RootState> = {
       Axios.instance
         .get("/api/feed/feedid", { params: { feedId } })
         .then(({ data }) => commit("SET_FEED", data.data))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_BOARD_LIST({ commit }) {
+      Axios.instance
+        .get("/api/board/find/all")
+        .then(({ data }) => commit("SET_BOARD_LIST", data.data))
         .catch(err => console.error(err));
     },
 
@@ -129,7 +156,7 @@ const module: Module<FeedModule, RootState> = {
         }
       };
       Axios.instance
-        .put("api/feed/put", null, updateData)
+        .put("/api/feed/put", null, updateData)
         .then(() => {
           dispatch("FETCH_FEED_LIST");
         })
@@ -143,7 +170,7 @@ const module: Module<FeedModule, RootState> = {
 
     DELETE_FEED({ dispatch }, feedId) {
       Axios.instance
-        .delete("api/feed/delete", { params: { feedId } })
+        .delete("/api/feed/delete", { params: { feedId } })
         .then(() => dispatch("FETCH_FEED_LIST"))
         .catch(err => console.error(err));
     },
@@ -228,7 +255,7 @@ const module: Module<FeedModule, RootState> = {
         }
       };
       Axios.instance
-        .put("api/subscribe/update", null, updateData)
+        .put("/api/subscribe/update", null, updateData)
         .then(() => dispatch("FETCH_FEED_LIST"))
         .then(() => {
           if (state.subscribeId === subscribeId) {
@@ -240,7 +267,7 @@ const module: Module<FeedModule, RootState> = {
 
     UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
       Axios.instance
-        .delete("api/subscribe/delete", { params: { subscribeId } })
+        .delete("/api/subscribe/delete", { params: { subscribeId } })
         .then(() => dispatch("FETCH_FEED_LIST"))
         .catch(err => console.error(err));
     },
@@ -250,8 +277,85 @@ const module: Module<FeedModule, RootState> = {
         params: { feedId, rssId, subscribeName }
       };
       Axios.instance
-        .post("api/subscribe/save", null, followData)
+        .post("/api/subscribe/save", null, followData)
         .then(() => dispatch("FETCH_FEED_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    ADD_BOARD({ dispatch }, boardName) {
+      Axios.instance
+        .post("/api/board/save", null, { params: { boardName } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_ARTICLE_LIST_IN_BOARD({ commit }, boardId) {
+      Axios.instance
+        .get("/api/board/find/id", { params: { boardId } })
+        .then(({ data }) => commit("SET_BOARD", data.data))
+        .catch(err => console.error(err));
+    },
+
+    UPDATE_BOARD({ dispatch, state }, { boardId, boardName }) {
+      Axios.instance
+        .put("/api/board/update", null, { params: { boardId, boardName } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .then(() => {
+          if (state.board && state.board.boardId === boardId) {
+            dispatch("FETCH_ARTICLE_LIST_IN_BOARD", boardId);
+          }
+        })
+        .catch(err => console.error(err));
+    },
+
+    DELETE_BOARD({ dispatch }, boardId) {
+      Axios.instance
+        .delete("/api/board/delete", { params: { boardId } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    SAVE_IN_BOARD({ dispatch }, { boardId, article, from }) {
+      let data = null;
+      if (from) {
+        data = {
+          params: {
+            boardId,
+            newsDate: new Date(article.newsDate).toString(),
+            newsDescription: article.newsDescription,
+            newsLink: article.newsLink,
+            newsTitle: article.newsTitle
+          }
+        };
+      } else {
+        data = {
+          params: {
+            boardId,
+            newsDate: article.pubDate || new Date().toString(),
+            newsDescription: article.description.substr(0, 190),
+            newsLink: article.link,
+            newsTitle: article.title
+          }
+        };
+      }
+
+      Axios.instance
+        .post("/api/news/save", null, data)
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    DELETE_IN_BOARD({ dispatch }, newsId) {
+      Axios.instance
+        .delete("/api/news/delete", { params: { newsId } })
+        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_ARTICLE_IN_BOARD({ commit }, newsId) {
+      Axios.instance
+        .get("/api/news/find/id", { params: { newsId } })
+        .then(({ data }) => commit("SET_NEWS", data.data))
         .catch(err => console.error(err));
     }
   }

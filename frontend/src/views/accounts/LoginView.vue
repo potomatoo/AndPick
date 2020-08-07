@@ -1,6 +1,9 @@
 <template>
-  <div class="container my-5" style="width: 600px">
-    <h2><b>Welcome to JG!!</b></h2>
+  <div class="container my-5" style="width: 400px">
+    <div class="d-flex">
+      <h2><b>Welcome to JG!!</b></h2>
+      <img src="@/assets/logo.png" width="90px" height="45px" />
+    </div>
     <form>
       <div class="form-group">
         <label for="userId">이메일</label>
@@ -52,23 +55,33 @@
           >
         </div>
       </div>
-      <div class="d-flex justify-content-between mb-2">
-        <button type="button" class="ml-1" @click.prevent="submitForm">
-          <b style="color: #5cb85c">Login</b>
-        </button>
-        <p class="my-auto">
-          계정이 없으신가요?
-          <router-link :to="{ name: 'Signup' }">
-            <b style="color: #5cb85c">Signup</b>
-          </router-link>
-        </p>
+      <div class="mb-2">
+        <v-btn
+          style="width: 100%"
+          large
+          color="success"
+          @click.prevent="submitForm"
+          >Login</v-btn
+        >
       </div>
     </form>
+    <hr />
     <a
       href="https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Faccounts%2Flogin&client_id=476248660063-e2gk89ukcim2la7mbttisi10pq9ck5r6.apps.googleusercontent.com"
-      ><img src="@/assets/google.png" style="width: 120px; height: auto;" />
+      ><img src="@/assets/google.png" style="width: 380px; height:40px" />
     </a>
-    <hr />
+    <p>
+      계정이 없으신가요?
+      <router-link :to="{ name: 'Signup' }">
+        <b style="color: #5cb85c">Signup</b>
+      </router-link>
+    </p>
+    <!-- <div
+      class="g-signin2"
+      data-width="376px"
+      data-height="30"
+      data-longtitle="true"
+    ></div> -->
     <!-- <router-link :to="{ name: 'SocialLogin' }"
       ><img src="@/assets/google.png" style="width: 120px; height: auto;"
     /></router-link> -->

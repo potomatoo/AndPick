@@ -32,9 +32,10 @@ public class UserController {
 	public Object signup(@RequestParam(value = "userId") String userId,
 			@RequestParam(value = "userPassword") String userPassword,
 			@RequestParam(value = "userName") String userName, @RequestParam(value = "userType") int userType) {
+		System.out.println(userPassword);
 
 		User user = userService.Signup(new User(userId, encoder.encode(userPassword), userName, userType));
-
+		user.setUserPassword(null);
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 

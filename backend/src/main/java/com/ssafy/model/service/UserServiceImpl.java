@@ -24,9 +24,7 @@ public class UserServiceImpl implements UserService {
 		if (userRepository.findByUserId(user.getUserId()) != null) {
 			return null;
 		}
-
 		User result = userRepository.save(user);
-		result.setUserPassword(null);
 		return result;
 	}
 

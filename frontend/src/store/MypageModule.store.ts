@@ -160,18 +160,6 @@ const module: Module<MypageModule, RootState> = {
         tagList: string[];
       }
     ) {
-      console.log(
-        QueryString.stringify(
-          {
-            postContent: postContent,
-            postDirId: postDirId,
-            postTitle: postTitle,
-            tagList: tagList
-          },
-          { indices: false }
-        )
-      );
-
       Axios.instance
         .post(
           "/api/post/save",

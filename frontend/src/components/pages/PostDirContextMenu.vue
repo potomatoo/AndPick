@@ -18,8 +18,8 @@
         <v-divider></v-divider>
 
         <v-list-item @click="deleteModal = true">
-          <v-icon class="mr-3">mdi-trash-can-outline</v-icon>
-          <v-list-item-title>Delete</v-list-item-title>
+          <v-icon class="mr-3" color="error">mdi-trash-can-outline</v-icon>
+          <v-list-item-title class="red--text">Delete</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>

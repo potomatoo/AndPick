@@ -8,16 +8,14 @@
             <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>
           </v-btn>
         </template>
-        <v-list>
+        <v-list dense>
           <v-list-item @click="click">
             <v-list-item-title>Latest</v-list-item-title>
           </v-list-item>
           <v-list-item @click="click">
             <v-list-item-title>Oldest</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="updatePostDir()">
-            <v-list-item-title>Rename</v-list-item-title>
-          </v-list-item>
+          <v-divider></v-divider>
           <v-list-item @click="deletePostDir()">
             <v-list-item-title>
               <v-icon small left>mdi-delete</v-icon>Delete
@@ -161,8 +159,6 @@ export default class FolderMain extends Vue {
   @mypageModule.Action DELETE_POSTDIR: any;
   @mypageModule.Action UPDATE_POSTDIR: any;
 
-  changeDirName = "내가 원하는 제목이 안나와요!!!!!";
-
   click() {
     console.log("click");
   }
@@ -192,13 +188,6 @@ export default class FolderMain extends Vue {
 
   changeDrag() {
     this.FETCH_POSTDIR(this.postDir);
-  }
-
-  updatePostDir() {
-    this.UPDATE_POSTDIR({
-      postDirId: Number(this.$route.params.postDirId),
-      postDirName: this.changeDirName
-    });
   }
 
   @Watch("$route", { immediate: true })

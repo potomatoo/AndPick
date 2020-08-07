@@ -184,13 +184,15 @@ public class RssController {
 
 		List<RssItem> rssItem = new LinkedList<RssItem>();
 
-		for (Rss item : (List<Rss>) result.data) {
-			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRssUrl());
+		for (Subscribe item : (List<Subscribe>) result.data) {
+			RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(item.getRss().getRssUrl());
 
 			for (RssItem cur : channel.getItems()) {
-				cur.setRssTitle(item.getRssName());
+				cur.setRssTitle(item.getRss().getRssName());
+				cur.setSubscribeName(item.getSubscribeName());
 				rssItem.add(cur);
 			}
+
 		}
 
 		// sort과정
@@ -229,7 +231,8 @@ public class RssController {
 
 		RssChannel channel = (RssChannel) redisTemplate.opsForValue().get(resultSubscribe.getRss().getRssUrl());
 		for (RssItem cur : channel.getItems()) {
-			cur.setRssTitle(resultSubscribe.getSubscribeName());
+			cur.setRssTitle(resultSubscribe.getRss().getRssName());
+			cur.setSubscribeName(resultSubscribe.getSubscribeName());
 			rssItem.add(cur);
 		}
 

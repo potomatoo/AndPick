@@ -42,26 +42,28 @@
             <div class="float-left">Word of the Day</div>
 
             <!-- ADD 버튼 메뉴 -->
-            <v-menu offset-x :close-on-content-click="false" min-width="250px">
+            <v-menu offset-x :close-on-content-click="false" min-width="300px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  text
-                  color="deep-purple accent-4"
+                  outlined
+                  color="success"
                   v-bind="attrs"
                   v-on="on"
                   class="float-right"
                 >
-                  Add
+                  FOLLOW
                 </v-btn>
               </template>
               <v-list>
                 <v-list-item v-for="(feed, i) in feedList" :key="i">
+                  <v-icon color="grey" class="mr-2">mdi-rss</v-icon>
                   <v-list-item-title>{{ feed.feedName }}</v-list-item-title>
                   <v-btn
                     v-if="checkSubscribe(feed.subscribeList, rss)"
                     class="ml-3"
                     outlined
                     color="success"
+                    small
                     @click="addRss(feed.feedId, rss)"
                   >
                     <v-icon left>mdi-plus</v-icon> ADD
@@ -71,6 +73,7 @@
                     class="ml-3"
                     outlined
                     color="error"
+                    small
                     @click="addRss(feed.feedId, rss)"
                   >
                     <v-icon left>mdi-window-close</v-icon> REMOVE

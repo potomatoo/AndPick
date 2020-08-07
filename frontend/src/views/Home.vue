@@ -37,7 +37,8 @@ export default class Home extends Vue {
     }
   }
   created() {
-    this.$store.dispatch("feedModule/FETCH_FEED");
+    this.$store.dispatch("feedModule/FETCH_FEED_LIST");
+    this.$store.dispatch("feedModule/FETCH_BOARD_LIST");
     this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
   }
 }

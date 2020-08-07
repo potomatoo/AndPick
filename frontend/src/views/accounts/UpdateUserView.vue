@@ -1,40 +1,42 @@
 <template>
-  <div class="container my-5">
-    <h1>회원정보수정</h1>
-    <div class="form-group">
-      <label for="userName">닉네임</label>
-      <input
-        v-model="updateData.userName"
-        class="form-control"
-        id="userName"
-        type="text"
-        placeholder="이메일"
-      />
-    </div>
-    <div>
-      <button @click="updateUser(updateData)">수정</button>
+  <div class="container my-5" style="width: 600px">
+    <h2 align="center">회원정보수정</h2>
+    <hr />
+    <NameUpdate />
+    <hr />
+    <PasswordUpdate />
+    <hr />
+    <div class="form-group py-5">
+      <h4>회원 탈퇴</h4>
+      <p>회원 탈퇴시 모든 데이터가 사라집니다.</p>
+      <router-link
+        :to="{ name: 'DeleteUser' }"
+        class="router-link d-flex justify-content-end"
+        ><v-btn color="error">회원탈퇴</v-btn></router-link
+      >
+      <hr />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { mapActions } from "vuex";
 
-interface UpdateData {
-  userName: string | null;
-}
+import NameUpdate from "@/components/accounts/NameUpdate.vue";
+import PasswordUpdate from "@/components/accounts/PasswordUpdate.vue";
 
 @Component({
-  methods: {
-    ...mapActions(["updateUser"]),
-  },
+  components: {
+    NameUpdate,
+    PasswordUpdate
+  }
 })
-export default class UpdateUserView extends Vue {
-  updateData: UpdateData = {
-    userName: null,
-  };
-}
+export default class UpdateUserView extends Vue {}
 </script>
 
-<style></style>
+<style>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

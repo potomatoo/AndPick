@@ -1,30 +1,51 @@
 <template>
-  <v-app-bar app clipped-left>
+  <v-app-bar app clipped-left style="height: 70px">
     <v-app-bar-nav-icon @click="TOGGLE_SIDEBAR()" />
-    <v-toolbar-title class="mt-2">
+    <v-toolbar-title
+      class="a mr-5 mt-4 d-flex justify-content-between"
+      style="width: 100%"
+    >
       <router-link :to="{ name: 'Home' }">
-        <a class="navbar-brand">Junho</a>
+        <a
+          ><img
+            class="mdi ml-5"
+            src="@/assets/title.png"
+            width="140px"
+            height="auto"
+        /></a>
       </router-link>
       <router-link
         v-if="!isLoggedIn"
         :to="{ name: 'Login' }"
         class="router-link ml-5"
       >
-        <v-btn color="#5cb85c">Login</v-btn>
+        <v-btn outlined color="success">로그인</v-btn>
       </router-link>
-      <router-link
-        v-if="isLoggedIn"
-        :to="{ name: 'Logout' }"
-        class="mr-2 router-link"
-        >Logout</router-link
-      >
-      <router-link
-        v-if="isLoggedIn"
-        :to="{ name: 'UpdateUser' }"
-        class="mr-2 router-link"
-        >회원정보수정</router-link
-      >
-      <!-- <router-link v-if="isLoggedIn" :to="{ name: 'DeleteUser' }">회원탈퇴</router-link> -->
+
+      <div v-if="isLoggedIn" class="mt-1">
+        <div>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on }">
+              <span class="mdi mdi-account-edit mr-3 p-2" v-on="on"></span>
+            </template>
+            <v-list class="p-3">
+              <router-link
+                v-if="isLoggedIn"
+                :to="{ name: 'UpdateUser' }"
+                class="router-link"
+                >정보수정</router-link
+              >
+              <hr />
+              <router-link
+                v-if="isLoggedIn"
+                :to="{ name: 'Logout' }"
+                class="router-link"
+                >로그아웃</router-link
+              >
+            </v-list>
+          </v-menu>
+        </div>
+      </div>
     </v-toolbar-title>
   </v-app-bar>
 </template>
@@ -35,7 +56,7 @@ import { mapMutations, mapGetters } from "vuex";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
-  computed: { ...mapGetters(["isLoggedIn"]) },
+  computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class AppNavbar extends Vue {}
 </script>
@@ -47,5 +68,11 @@ export default class AppNavbar extends Vue {}
 .router-link {
   text-decoration: none;
   color: inherit;
+}
+.mdi:hover {
+  cursor: pointer;
+}
+.a {
+  background-color: whitesmoke;
 }
 </style>

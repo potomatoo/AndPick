@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-5" style="width: 600px">
+  <div class="container my-5" style="width: 400px">
     <h1>Signup</h1>
     <div class="form-group">
       <label for="userId">이메일</label>
@@ -11,7 +11,7 @@
         placeholder="이메일"
         :class="{
           'is-invalid': $v.signupData.userId.$error,
-          'is-valid': !$v.signupData.userId.$invalid,
+          'is-valid': !$v.signupData.userId.$invalid
         }"
       />
       <div class="valid-feedback">Your ID is valid</div>
@@ -32,9 +32,10 @@
         class="form-control"
         id="userName"
         type="text"
+        placeholder="닉네임"
         :class="{
           'is-invalid': $v.signupData.userName.$error,
-          'is-valid': !$v.signupData.userName.$invalid,
+          'is-valid': !$v.signupData.userName.$invalid
         }"
       />
       <div class="valid-feedback">Your nickname is valid</div>
@@ -60,9 +61,10 @@
         class="form-control"
         id="userPassword"
         type="password"
+        placeholder="비밀번호"
         :class="{
           'is-invalid': $v.signupData.userPassword.$error,
-          'is-valid': !$v.signupData.userPassword.$invalid,
+          'is-valid': !$v.signupData.userPassword.$invalid
         }"
       />
       <div class="valid-feedback">Your Password is valid</div>
@@ -85,12 +87,13 @@
         class="form-control"
         id="userPasswordCheck"
         type="password"
+        placeholder="비밀번호 확인"
         :class="{
           'is-invalid': $v.signupData.userPasswordCheck.$error,
           'is-valid':
             signupData.userPassword != null
               ? !$v.signupData.userPasswordCheck.$invalid
-              : null,
+              : null
         }"
       />
       <div class="valid-feedback">Your password is identical!</div>
@@ -105,9 +108,17 @@
       <input v-model="signupData.userType" id="userType" type="hidden" />
     </div>
     <div>
-      <button type="submit" @click="submitForm" @keyup.enter="submitForm">
+      <!-- <button type="submit" @click="submitForm" @keyup.enter="submitForm">
         Signup
-      </button>
+      </button> -->
+      <v-btn
+        style="width: 100%"
+        large
+        color="success"
+        @click.prevent="submitForm"
+        @keyup.enter="submitForm"
+        >회원가입</v-btn
+      >
     </div>
   </div>
 </template>
@@ -120,7 +131,7 @@ import {
   minLength,
   maxLength,
   email,
-  sameAs,
+  sameAs
 } from "vuelidate/lib/validators";
 
 interface SignupData {
@@ -133,7 +144,7 @@ interface SignupData {
 
 @Component({
   methods: {
-    ...mapActions(["signup"]),
+    ...mapActions(["signup"])
   },
   validations: {
     signupData: {
@@ -144,28 +155,28 @@ interface SignupData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
           });
-        },
+        }
       },
       userName: {
         required,
         minLength: minLength(2),
-        maxLength: maxLength(20),
+        maxLength: maxLength(20)
       },
       userPassword: {
         required,
-        minLength: minLength(4),
+        minLength: minLength(4)
       },
       userPasswordCheck: {
         minLength: minLength(4),
-        sameAsPassword: sameAs("userPassword"),
-      },
-    },
-  },
+        sameAsPassword: sameAs("userPassword")
+      }
+    }
+  }
 })
 export default class SignupView extends Vue {
   signupData: SignupData = {
@@ -173,7 +184,7 @@ export default class SignupView extends Vue {
     userName: null,
     userPassword: null,
     userPasswordCheck: null,
-    userType: 0,
+    userType: 0
   };
   submitForm() {
     this.$v.$touch();

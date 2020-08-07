@@ -1,16 +1,3 @@
-// dummy
-export interface SidebarItem {
-  id: number;
-  title: string;
-  url?: string;
-}
-// dummy
-export interface SidebarList {
-  title: string;
-  icon?: string;
-  active?: boolean;
-  items?: SidebarItem[];
-}
 // api data
 export interface Category {
   categoryId: number;
@@ -48,20 +35,44 @@ export interface Feed {
   rss: Rss;
 }
 
+export interface Context {
+  showCtx: boolean;
+  x: number;
+  y: number;
+}
+
+export interface News {
+  newsId: number;
+  newsTitle: string;
+  newsLink: string;
+  newsDate: string;
+  newsDescription: string;
+  boardId: number;
+  userNo: 16;
+}
+
+export interface Board {
+  boardId: number;
+  userNo: number;
+  boardName: string;
+  newsList: News[];
+}
+
 export interface FeedModule {
   rssList: Rss[];
   feedList: FeedList[];
-  boardList: SidebarList[];
+  boardList: Board[];
   article: Article | null;
+  feed: FeedList | null;
+  board: Board | null;
+  news: News | null;
   subscribeId: number | null;
   articleList: Article[];
+  subsContextMenu: Context;
+  feedContextMenu: Context;
+  boardContextMenu: Context;
 }
-// dummy
-export interface RssList {
-  id: number;
-  title: string;
-  url: string;
-}
+
 // dummy
 export interface Article {
   title: string;
@@ -69,4 +80,5 @@ export interface Article {
   link: string;
   pubDate: string;
   rssTitle: string;
+  subscribeName: string;
 }

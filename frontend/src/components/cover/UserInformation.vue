@@ -1,49 +1,52 @@
 <template>
-  <div>
-    <div class="row mx-5 p-5">
-      <div class="col mx-3" style="width: 10rem;">
-        <img
-          src="@/assets/news.png"
-          class="card-img-top"
-          height="auto"
-          width="auto"
-        />
-        <div>
-          <!-- <p class="d-flex justify-content-center">JOBSEEKER</p> -->
-          <h3 class="description d-flex justify-content-center">
-            JOBSEEKER
-          </h3>
-          <!-- <p class="description">JOBSEEKER JOBSEEKER</p> -->
+  <div class="mt-5">
+    <div>
+      <div class="row">
+        <div class="col-lg-2 offset-lg-1">
+          <img
+            src="@/assets/jobseeker1.png"
+            class="card-img-top"
+            height="auto"
+            width="auto"
+          />
+          <div>
+            <h5 class="description d-flex justify-content-center">
+              JOBSEEKER
+            </h5>
+            <p class="description">
+              취업준비생들의 면접준비를 위해 도움을 제공합니다.
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="col mx-3" style="width: 10rem;">
-        <img
-          src="@/assets/network.png"
-          class="card-img-top"
-          height="auto"
-          width="auto"
-        />
-        <div>
-          <!-- <p class="d-flex justify-content-center">BUSINESSES</p> -->
-          <h3 class="description d-flex justify-content-center">
-            BUSINESSES
-          </h3>
-          <!-- <p class="description">BUSINESSES</p> -->
+        <div class="col-lg-2 offset-lg-2">
+          <img
+            src="@/assets/business1.png"
+            class="card-img-top"
+            height="auto"
+            width="auto"
+          />
+          <div>
+            <h5 class="description d-flex justify-content-center">
+              BUSINESSES
+            </h5>
+            <p class="description">BUSINESSES</p>
+          </div>
         </div>
-      </div>
-      <div class="col mx-3" style="width: 10rem;">
-        <img
-          src="@/assets/value.png"
-          class="card-img-top"
-          height="auto"
-          width="auto"
-        />
-        <div>
-          <!-- <p class="d-flex justify-content-center">INDUSTRY</p> -->
-          <h3 class="description d-flex justify-content-center">
-            INDUSTRY
-          </h3>
-          <!-- <p class="description">INDUSTRY</p> -->
+        <div class="col-lg-2 offset-lg-2">
+          <img
+            src="@/assets/industry1.png"
+            class="card-img-top"
+            height="auto"
+            width="auto"
+          />
+          <div>
+            <h5 class="description d-flex justify-content-center">
+              INDUSTRY
+            </h5>
+            <p class="description">
+              최신 산업 트렌드에 관한 기사를 읽어보세요!
+            </p>
+          </div>
         </div>
       </div>
     </div>

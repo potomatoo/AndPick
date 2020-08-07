@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="postDir">
     <div class="row">
       <h6 class="pl-3 text-secondary font-weight-light mb-3 col-10">Mypage</h6>
       <v-menu offset-y>
@@ -8,16 +8,14 @@
             <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>
           </v-btn>
         </template>
-        <v-list>
+        <v-list dense>
           <v-list-item @click="click">
             <v-list-item-title>Latest</v-list-item-title>
           </v-list-item>
           <v-list-item @click="click">
             <v-list-item-title>Oldest</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="click">
-            <v-list-item-title>More Settings</v-list-item-title>
-          </v-list-item>
+          <v-divider></v-divider>
           <v-list-item @click="deletePostDir()">
             <v-list-item-title>
               <v-icon small left>mdi-delete</v-icon>Delete
@@ -32,21 +30,52 @@
     </div>
     <v-divider></v-divider>
     <router-link
-      :to="{ name: 'EditArticle', params: { postDirName: $route.params.postDirId } }"
+      :to="{ name: 'NewPost', params: { postDirId: $route.params.postDirId } }"
       class="router-link"
     >
-      <v-btn small outlined color="secondary" class>
+      <v-btn
+        small
+        outlined
+        color="secondary"
+        v-if="postDir.postList && postDir.postList.length"
+      >
         <v-icon left>mdi-plus</v-icon>New
       </v-btn>
     </router-link>
+
+    <div
+      v-if="postDir.postList && !postDir.postList.length"
+      class="text-center"
+    >
+      <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
+      <h4 class="mt-10">
+        Save post to here
+      </h4>
+
+      <p class="text-center">
+        When you find an news in your Subscribe you want to keep and editing
+        with your think, click
+        <router-link
+          :to="{
+            name: 'NewPost',
+            params: { postDirId: $route.params.postDirId }
+          }"
+          class="router-link"
+        >
+          <v-btn small outlined color="secondary" class>
+            <v-icon left>mdi-plus</v-icon>New
+          </v-btn>
+        </router-link>
+      </p>
+    </div>
     <div class="container">
       <div class="row">
-        <draggable :list="dragList" :options="{animation:200}" class="row wrap sortable-list">
+        <draggable :list="dragList" class="row wrap sortable-list">
           <v-flex v-for="item in dragList" :key="item.length" class="sortable">
             <draggable
-              :list="postDir.postId"
-              :group="{ name: 'postDir' }"
+              :list="postDir.postList"
               class="row justify-content-start row-sm-12"
+              @change="changeDrag"
             >
               <v-flex
                 v-for="post in postDir.postList"
@@ -56,25 +85,40 @@
                 md4
                 pa-3
                 class="row-v"
+                @contextmenu.prevent="showPostCtx($event, post)"
               >
-                <v-hover v-slot:default="{ hover }" open-delay="200">
+                <v-hover v-slot:default="{ hover }">
                   <router-link
-                    :to="{ name: 'EditArticle', params: { postDirName: $route.params.postDirId } }"
+                    :to="{
+                      name: 'EditPost',
+                      params: {
+                        postDirId: $route.params.postDirId,
+                        postId: post.postId
+                      }
+                    }"
                     class="router-link"
                   >
                     <v-card
                       id="cursor_test"
-                      :elevation="hover ? 16 : 2"
+                      :elevation="hover ? 12 : 2"
+                      :class="{ 'on-hover': hover }"
                       height="350"
                       max-width="350"
                     >
                       <v-card-text
                         class="font-weight-medium mt-12 text-center subtitle-1"
-                      >{{ post.postTitle }}</v-card-text>
+                        >{{ post.postTitle }}</v-card-text
+                      >
                       <hr class="mt-0" />
-                      <div class="text--primary text-left ml-3">
-                        {{ post.postContetnt }}
-                        <br />
+
+                      <div class="container row">
+                        <div
+                          class="ma-3"
+                          v-for="tag in post.tagList"
+                          :key="tag.tagId"
+                        >
+                          <v-btn rounded depressed>#{{ tag.tagName }}</v-btn>
+                        </div>
                       </div>
                     </v-card>
                   </router-link>
@@ -83,6 +127,7 @@
             </draggable>
           </v-flex>
         </draggable>
+        <post-context-menu :postItem="postItem" />
       </div>
     </div>
   </div>
@@ -93,20 +138,26 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 
 import draggable from "vuedraggable";
 import { namespace } from "vuex-class";
+import PostContextMenu from "@/components/pages/PostContextMenu.vue";
+import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
 @Component({
   components: {
-    draggable
+    draggable,
+    PostContextMenu
   }
 })
 export default class FolderMain extends Vue {
   @mypageModule.State postDir!: [];
   @mypageModule.State postDirId!: number | null;
+  @mypageModule.State postDirName!: string | null;
   @mypageModule.Mutation SELECT_POSTDIR: any;
+  @mypageModule.Mutation SET_POST_CONTEXT_MENU: any;
   @mypageModule.Action FETCH_POSTDIR: any;
   @mypageModule.Action DELETE_POSTDIR: any;
+  @mypageModule.Action UPDATE_POSTDIR: any;
 
   click() {
     console.log("click");
@@ -118,8 +169,25 @@ export default class FolderMain extends Vue {
     }
   ];
 
+  postItem = {};
+
+  showPostCtx(e: MouseEvent, post: Post) {
+    this.postItem = post;
+
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_POST_CONTEXT_MENU(ctx);
+  }
+
   deletePostDir() {
     this.DELETE_POSTDIR(this.$route.params.postDirId);
+  }
+
+  changeDrag() {
+    this.FETCH_POSTDIR(this.postDir);
   }
 
   @Watch("$route", { immediate: true })

@@ -142,23 +142,16 @@ public class RssServiceImpl implements RssService {
 			return result;
 		}
 
-		List<Subscribe> subscribe = subscribeRepository.findByFeedId(feed.getFeedId());
-		List<Rss> list = new ArrayList<Rss>();
+		List<Subscribe> subscribe = checkFeed.getSubscribeList();
 
-		for (Subscribe item : subscribe) {
-			Rss rss = item.getRss();
-			rss.setRssName(item.getSubscribeName());
-			list.add(rss);
-		}
-
-		if (list.size() == 0) {
+		if (subscribe.size() == 0) {
 			result.status = true;
 			result.message = "피드에 rss가 없습니다.";
-			result.data = list;
+			result.data = subscribe;
 		} else {
 			result.status = true;
 			result.message = "RSS 목록입니다.";
-			result.data = list;
+			result.data = subscribe;
 		}
 
 		return result;

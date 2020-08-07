@@ -12,6 +12,8 @@ public class RssItem implements Serializable {
 	// 식별용
 	private String rssTitle;
 
+	private String subscribeName;
+
 	public String getTitle() {
 		return title;
 	}
@@ -51,4 +53,19 @@ public class RssItem implements Serializable {
 	public void setRssTitle(String rssTitle) {
 		this.rssTitle = rssTitle;
 	}
+
+	public String getSubscribeName() {
+		return subscribeName;
+	}
+
+	public void setSubscribeName(String subscribeName) {
+		this.subscribeName = subscribeName;
+	}
+
+	@Override
+	public String toString() {
+		return "RssItem [title=" + title + ", description=" + description + ", link=" + link + ", pubDate=" + pubDate
+				+ ", rssTitle=" + rssTitle + ", subscribeName=" + subscribeName + "]";
+	}
+
 }

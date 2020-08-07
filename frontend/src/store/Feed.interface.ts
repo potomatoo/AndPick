@@ -80,4 +80,5 @@ export interface Article {
   link: string;
   pubDate: string;
   rssTitle: string;
+  subscribeName: string;
 }

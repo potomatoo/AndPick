@@ -31,15 +31,13 @@
                 }"
               >
                 <v-list-item-content class="mt-3">
-                  <div class="h4">
-                    {{ article.title }}
-                  </div>
+                  <div class="h4">{{ article.title }}</div>
                   <div class="sumtitle-1 text--secondary">
                     {{ article.pubDate }}
                   </div>
-                  <v-list-item-subtitle>
-                    {{ article.description }}
-                  </v-list-item-subtitle>
+                  <v-list-item-subtitle>{{
+                    article.description
+                  }}</v-list-item-subtitle>
                 </v-list-item-content>
               </router-link>
             </v-list-item-content>

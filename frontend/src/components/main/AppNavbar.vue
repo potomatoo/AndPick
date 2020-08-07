@@ -1,20 +1,78 @@
 <template>
-  <v-app-bar app clipped-left>
-    <v-app-bar-nav-icon @click="toggleSidebar()" />
-    <v-toolbar-title>
+  <v-app-bar app clipped-left style="height: 70px">
+    <v-app-bar-nav-icon @click="TOGGLE_SIDEBAR()" />
+    <v-toolbar-title
+      class="a mr-5 mt-4 d-flex justify-content-between"
+      style="width: 100%"
+    >
       <router-link :to="{ name: 'Home' }">
-        <a class="navbar-brand">Junho</a>
+        <a
+          ><img
+            class="mdi ml-5"
+            src="@/assets/title.png"
+            width="140px"
+            height="auto"
+        /></a>
       </router-link>
+      <router-link
+        v-if="!isLoggedIn"
+        :to="{ name: 'Login' }"
+        class="router-link ml-5"
+      >
+        <v-btn outlined color="success">로그인</v-btn>
+      </router-link>
+
+      <div v-if="isLoggedIn" class="mt-1">
+        <div>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on }">
+              <span class="mdi mdi-account-edit mr-3 p-2" v-on="on"></span>
+            </template>
+            <v-list class="p-3">
+              <router-link
+                v-if="isLoggedIn"
+                :to="{ name: 'UpdateUser' }"
+                class="router-link"
+                >정보수정</router-link
+              >
+              <hr />
+              <router-link
+                v-if="isLoggedIn"
+                :to="{ name: 'Logout' }"
+                class="router-link"
+                >로그아웃</router-link
+              >
+            </v-list>
+          </v-menu>
+        </div>
+      </div>
     </v-toolbar-title>
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 @Component({
-  methods: mapMutations("mypageModule", ["toggleSidebar"])
+  methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
+  computed: { ...mapGetters(["isLoggedIn"]) },
 })
 export default class AppNavbar extends Vue {}
 </script>
+
+<style scoped>
+.sidebarBtn {
+  outline: none;
+}
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+.mdi:hover {
+  cursor: pointer;
+}
+.a {
+  background-color: whitesmoke;
+}
+</style>

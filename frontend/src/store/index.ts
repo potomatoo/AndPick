@@ -22,21 +22,21 @@ export interface RootState {
 const store: StoreOptions<RootState> = {
   modules: {
     feedModule,
-    mypageModule,
+    mypageModule
   },
   state: {
-    JWT: STORAGE.getItem("jwt-token"),
+    JWT: STORAGE.getItem("jwt-token")
   },
   getters: {
-    isLoggedIn: (state) => !!state.JWT,
-    config: (state) => ({ headers: { Authorization: `${state.JWT}` } }),
+    isLoggedIn: state => !!state.JWT,
+    config: state => ({ headers: { Authorization: `${state.JWT}` } })
   },
   mutations: {
     SET_TOKEN(state, token) {
       state.JWT = token;
       STORAGE.setItem("jwt-token", token);
       axios.defaults.headers.common["Authorization"] = token;
-    },
+    }
   },
   actions: {
     postAuthData({ commit }, info) {
@@ -44,14 +44,14 @@ const store: StoreOptions<RootState> = {
         .post(SERVER.URL + info.location, qs.stringify(info.data), {
           // headers: {
           // "Access-Control-Allow-Origin": "*",
-          withCredentials: true,
+          withCredentials: true
           // },
         })
-        .then((res) => {
+        .then(res => {
           commit("SET_TOKEN", res.data.data["userPassword"]);
           router.push("/");
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("err", err);
           alert("아이디 또는 비밀번호가 옳지 않습니다.");
         });
@@ -62,14 +62,14 @@ const store: StoreOptions<RootState> = {
         .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData), {
           // headers: {
           // "Access-Control-Allow-Origin": "*",
-          withCredentials: true,
+          withCredentials: true
           // },
         })
-        .then((res) => {
+        .then(res => {
           console.log("회원가입 성공", res);
           router.push("/");
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("err", err);
           alert("회원가입 실패입니다.");
         });
@@ -78,7 +78,7 @@ const store: StoreOptions<RootState> = {
     login({ dispatch }, loginData) {
       const info = {
         data: loginData,
-        location: SERVER.ROUTES.login,
+        location: SERVER.ROUTES.login
       };
       dispatch("postAuthData", info);
     },
@@ -86,7 +86,7 @@ const store: StoreOptions<RootState> = {
     social({ dispatch }, socialData) {
       const info = {
         data: socialData,
-        location: SERVER.ROUTES.social,
+        location: SERVER.ROUTES.social
       };
       console.log("소셜데이터", socialData);
       dispatch("postAuthData", info);
@@ -113,7 +113,7 @@ const store: StoreOptions<RootState> = {
           // commit("SET_TOKEN", res.data.data["Authorization"]);
           router.push("/");
         })
-        .catch((err) => console.log("err", err));
+        .catch(err => console.log("err", err));
     },
 
     deleteUser({ getters, commit }) {
@@ -124,9 +124,9 @@ const store: StoreOptions<RootState> = {
           STORAGE.removeItem("jwt-token");
           router.push("/");
         })
-        .catch((err) => console.log(err.response));
-    },
-  },
+        .catch(err => console.log(err.response));
+    }
+  }
 };
 
 export default new Vuex.Store(store);

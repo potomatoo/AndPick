@@ -8,8 +8,8 @@ import { mapActions } from "vuex";
 
 @Component({
   methods: {
-    ...mapActions(["deleteUser"]),
-  },
+    ...mapActions(["deleteUser"])
+  }
 })
 export default class DeleteUserView extends Vue {
   mounted() {

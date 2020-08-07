@@ -38,5 +38,4 @@ import SidebarMypage from "@/components/pages/SidebarMypage.vue";
 export default class AppSidebar extends Vue {}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

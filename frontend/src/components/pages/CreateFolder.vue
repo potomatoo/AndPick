@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-icon class="ml-3" style="color: black;" @click="modalActive = !modalActive">mdi-folder-plus</v-icon>
+    <v-icon
+      class="ml-3"
+      style="color: black;"
+      @click="modalActive = !modalActive"
+      >mdi-folder-plus</v-icon
+    >
 
     <v-dialog v-model="modalActive" max-width="500px">
       <v-card>

@@ -23,8 +23,8 @@ import ServiceStep from "@/components/cover/ServiceStep.vue";
     ServiceDescription,
     RssImage,
     UserInformation,
-    ServiceStep,
-  },
+    ServiceStep
+  }
 })
 export default class Cover extends Vue {}
 </script>

@@ -4,6 +4,10 @@
       <ServiceDescription />
       <RssImage />
     </div>
+    <hr />
+    <ServiceStep />
+    <hr />
+    <UserInformation />
   </div>
 </template>
 

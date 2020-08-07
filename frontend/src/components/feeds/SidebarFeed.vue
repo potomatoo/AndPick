@@ -1,7 +1,12 @@
 <template>
   <div>
     <v-subheader>Feed</v-subheader>
-    <v-list-group v-for="feed in feedList" :key="feed.feedName" no-action sub-group>
+    <v-list-group
+      v-for="feed in feedList"
+      :key="feed.feedId"
+      no-action
+      sub-group
+    >
       <template v-slot:activator>
         <v-list-item-content @contextmenu.prevent="showFeedCtx($event, feed)">
           <router-link
@@ -18,7 +23,7 @@
 
       <v-list-item
         v-for="subItem in feed.subscribeList"
-        :key="subItem.title"
+        :key="subItem.subscribeId"
         @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
       >
         <v-list-item-content>
@@ -32,7 +37,9 @@
             }"
             class="router-link"
           >
-            <v-list-item-title v-text="subItem.subscribeName"></v-list-item-title>
+            <v-list-item-title
+              v-text="subItem.subscribeName"
+            ></v-list-item-title>
           </router-link>
         </v-list-item-content>
       </v-list-item>

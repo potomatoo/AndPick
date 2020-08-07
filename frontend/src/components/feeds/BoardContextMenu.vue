@@ -1,17 +1,15 @@
 <template>
   <div>
     <v-menu
-      v-model="feedContextMenu.showCtx"
-      :position-x="feedContextMenu.x"
-      :position-y="feedContextMenu.y"
+      v-model="boardContextMenu.showCtx"
+      :position-x="boardContextMenu.x"
+      :position-y="boardContextMenu.y"
       offset-y
       absolute
     >
       <v-list dense width="170px">
         <v-list-item @click="activeRenameModal">
-          <!-- <v-list-item-icon> -->
           <v-icon class="mr-3">mdi-cursor-text</v-icon>
-          <!-- </v-list-item-icon> -->
           <v-list-item-title>Rename</v-list-item-title>
         </v-list-item>
         <!-- <v-list-item>
@@ -32,7 +30,7 @@
         <v-form onsubmit="return false;">
           <v-card-text>
             <v-text-field
-              v-model="inputFeedName"
+              v-model="inputBoardName"
               autofocus
               clearable
               :rules="rules"
@@ -53,14 +51,15 @@
     <!-- 피드 삭제 모달 -->
     <v-dialog v-model="deleteModal" max-width="450px">
       <v-card>
-        <v-card-title>Delete {{ feedItem.feedName }} Feed</v-card-title>
+        <v-card-title>Delete {{ boardItem.boardName }} board</v-card-title>
         <v-card-text>
-          Are you sure you want to delete feed? This operation cannot be undone.
+          Are you sure you want to delete board? This operation cannot be
+          undone.
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" @click="deleteFeed">DELETE</v-btn>
+          <v-btn color="error" @click="deleteBoard">DELETE</v-btn>
           <v-btn outlined color="grey" @click="deleteModal = false"
             >CANCLE</v-btn
           >
@@ -73,49 +72,50 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { Context, FeedList } from "../../store/Feed.interface";
+import { Context, Board } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
-export default class FeedContextMenu extends Vue {
-  @feedModule.State feedList!: FeedList[];
-  @feedModule.State feedContextMenu!: Context;
-  @feedModule.Action UPDATE_FEED: any;
-  @feedModule.Action DELETE_FEED: any;
+export default class BoardContextMenu extends Vue {
+  @feedModule.State boardList!: Board[];
+  @feedModule.State boardContextMenu!: Context;
+  @feedModule.Action UPDATE_BOARD: any;
+  @feedModule.Action DELETE_BOARD: any;
 
-  @Prop({ type: Object }) readonly feedItem!: FeedList;
+  @Prop({ type: Object }) readonly boardItem!: Board;
 
-  inputFeedName = "";
+  inputBoardName = "";
   renameModal = false;
   deleteModal = false;
 
   rules = [
     (value: string) => !!value || "this field is required.",
     (value: string) =>
-      !this.checkDuplication(value) || "동일한 피드가 존재합니다."
+      !this.checkDuplication(value) || "동일한 보드가 존재합니다."
   ];
 
   checkDuplication(name: string | null) {
-    if (this.feedItem.feedName === name) return false;
-    return this.feedList.filter(feed => feed.feedName === name).length;
+    if (this.boardItem.boardName === name) return false;
+    return this.boardList.filter(board => board.boardName === name).length;
   }
 
   setTitle() {
-    this.inputFeedName = this.feedItem.feedName;
+    this.inputBoardName = this.boardItem.boardName;
   }
 
   activeRenameModal() {
+    this.inputBoardName = "";
     this.setTitle();
     this.renameModal = true;
   }
 
   saveName() {
-    if (this.checkDuplication(this.inputFeedName)) return;
-    if (this.feedItem.feedName !== this.inputFeedName) {
-      this.UPDATE_FEED({
-        feedId: this.feedItem.feedId,
-        feedName: this.inputFeedName
+    if (this.checkDuplication(this.inputBoardName)) return;
+    if (this.boardItem.boardName !== this.inputBoardName) {
+      this.UPDATE_BOARD({
+        boardId: this.boardItem.boardId,
+        boardName: this.inputBoardName
       });
     }
     this.closeFeedModal();
@@ -124,8 +124,8 @@ export default class FeedContextMenu extends Vue {
     this.renameModal = false;
   }
 
-  deleteFeed() {
-    this.DELETE_FEED(this.feedItem.feedId);
+  deleteBoard() {
+    this.DELETE_BOARD(this.boardItem.boardId);
     this.deleteModal = false;
   }
 }

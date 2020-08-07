@@ -6,8 +6,12 @@
           <h1 v-if="articleList[0]">{{ articleList[0].rssTitle }}</h1>
         </v-flex>
         <v-flex class="text-right">
-          <v-icon @click="console.log('hi')">mdi-check</v-icon>
-          <v-icon class="ml-3" @click="console.log('hi')">mdi-replay mdi-flip-h</v-icon>
+          <!-- <v-icon @click="console.log('hi')">mdi-check</v-icon> -->
+          <v-btn icon large @click="fetchData">
+            <v-icon>
+              mdi-replay mdi-flip-h
+            </v-icon>
+          </v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -28,8 +32,12 @@
               >
                 <v-list-item-content class="mt-3">
                   <div class="h4">{{ article.title }}</div>
-                  <div class="sumtitle-1 text--secondary">{{ article.pubDate }}</div>
-                  <v-list-item-subtitle>{{ article.description }}</v-list-item-subtitle>
+                  <div class="sumtitle-1 text--secondary">
+                    {{ article.pubDate }}
+                  </div>
+                  <v-list-item-subtitle>{{
+                    article.description
+                  }}</v-list-item-subtitle>
                 </v-list-item-content>
               </router-link>
             </v-list-item-content>

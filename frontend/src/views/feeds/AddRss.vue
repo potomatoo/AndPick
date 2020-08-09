@@ -42,7 +42,12 @@
             <div class="float-left">Word of the Day</div>
 
             <!-- ADD 버튼 메뉴 -->
-            <v-menu offset-x :close-on-content-click="false" min-width="300px">
+            <v-menu
+              offset-x
+              :close-on-content-click="false"
+              min-width="300px"
+              :close-on-click="closeMenu"
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   outlined
@@ -114,7 +119,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Rss, SubscribeList } from "../../store/Feed.interface";
 
@@ -135,6 +140,8 @@ export default class AddRss extends Vue {
   @feedModule.Action ADD_FEED: any;
 
   modalActive = false;
+
+  closeMenu = true;
 
   addRss(feedId: number, rss: Rss) {
     this.SUBSCRIBE_RSS({ feedId, rss });
@@ -158,6 +165,15 @@ export default class AddRss extends Vue {
 
   created() {
     this.FETCH_RSS();
+  }
+
+  @Watch("modalActive")
+  prevent() {
+    if (this.modalActive) {
+      this.closeMenu = false;
+    } else {
+      this.closeMenu = true;
+    }
   }
 }
 </script>

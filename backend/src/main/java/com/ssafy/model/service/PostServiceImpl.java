@@ -1,19 +1,20 @@
 package com.ssafy.model.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.transaction.Transactional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.model.dto.Post;
+import com.ssafy.model.dto.PostDetail;
 import com.ssafy.model.dto.PostDir;
 import com.ssafy.model.dto.PostTag;
 import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.repository.PostDetailRepository;
 import com.ssafy.model.repository.PostDirRepository;
 import com.ssafy.model.repository.PostRepository;
 import com.ssafy.model.repository.PostTagRepository;
@@ -31,6 +32,8 @@ public class PostServiceImpl implements PostService {
 	private TagRepository tagRepository;
 	@Autowired
 	private PostTagRepository postTagRepository;
+	@Autowired
+	private PostDetailRepository postDetailRepository;
 
 	@Override
 	@Transactional
@@ -43,6 +46,19 @@ public class PostServiceImpl implements PostService {
 		if (postdir == null || postdir.getUserNo() != user.getUserNo()) {
 			result.status = false;
 			result.message = "폴더의 정보가 일치하지 않습니다.";
+			return result;
+		}
+
+		String postDetailKey = UUID.randomUUID().toString();
+		PostDetail postDetail = new PostDetail();
+		postDetail.setId(postDetailKey);
+		postDetail.setContent(post.getPostContent());
+
+		post.setPostContent(postDetail.getId());
+		postDetail = postDetailRepository.save(postDetail);
+		if (postDetail == null) {
+			result.status = false;
+			result.message = "몽고디비 저장에 실패하였습니다.";
 			return result;
 		}
 
@@ -115,7 +131,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public BasicResponse findByPostId(User user, Post post) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -127,6 +143,16 @@ public class PostServiceImpl implements PostService {
 			result.message = "사용자 정보가 다릅니다.";
 			return result;
 		}
+
+		PostDetail postDetail = postDetailRepository.findById(post.getPostContent()).get();
+
+		if (postDetail == null) {
+			result.status = false;
+			result.message = "게시글 상세 조회에 실패하였습니다.";
+			return result;
+		}
+		post.setPostContent(postDetail.getContent());
+
 		result.data = post;
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
@@ -155,7 +181,20 @@ public class PostServiceImpl implements PostService {
 			postTagRepository.deleteById(postTag.getPostTagId());
 		}
 
+		PostDetail postDetail = new PostDetail();
+		postDetail.setId(checkPost.getPostContent());
+		postDetail.setContent(post.getPostContent());
+
+		postDetail = postDetailRepository.save(postDetail);
+		if (postDetail == null) {
+			result.status = false;
+			result.message = "몽고디비 저장에 실패하였습니다.";
+			return result;
+		}
+
+		post.setPostContent(postDetail.getId());
 		post = postRepository.save(post);
+
 		List<PostTag> list = new ArrayList<PostTag>();
 		if (tags != null && tags.length != 0) {
 			for (String tagName : tags) {
@@ -187,7 +226,6 @@ public class PostServiceImpl implements PostService {
 	public BasicResponse deletePost(User user, Post post) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
-
 		post = postRepository.findByPostId(post.getPostId());
 
 		if (post == null || post.getUserNo() != user.getUserNo()) {
@@ -197,9 +235,28 @@ public class PostServiceImpl implements PostService {
 		}
 
 		postRepository.delete(post);
+		postDetailRepository.deleteById(post.getPostContent());
 
 		result.status = true;
 		result.message = "삭제에 성공하였습니다.";
+
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public BasicResponse getPostDetailByDetailKey(String key) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		result.data = postDetailRepository.findById(key);
+		result.status = (result.data != null) ? true : false;
+
+		if (result.status) {
+			result.message = "게시글 상세조회를 완료하였습니다.";
+		} else {
+			result.message = "게시글 상세조회에 실패하였습니다.";
+		}
 
 		return result;
 	}

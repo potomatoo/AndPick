@@ -135,7 +135,7 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: "/:feedName/subscription/:subscribeId",
+    path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
     component: ArticleListInRss,
     meta: {
@@ -143,7 +143,7 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: "/:feedName/subscription/:subscribeId/:articleId",
+    path: "/feed/:feedId/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail,
     meta: {

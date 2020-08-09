@@ -79,9 +79,10 @@ export default class ArticleDetail extends Vue {
   checkArticle() {
     if (!this.article) {
       this.$router.replace({
-        name: "Feed",
+        name: "ArticleListInRss",
         params: {
-          feedId: this.$route.params.feedId
+          feedId: this.$route.params.feedId,
+          subscribeId: this.$route.params.subscribeId
         }
       });
     }
@@ -91,7 +92,7 @@ export default class ArticleDetail extends Vue {
     window.open(link);
   }
 
-  created() {
+  updated() {
     // 새로고침시 article state가 초기화되면 상위 페이지로 이동
     this.checkArticle();
   }

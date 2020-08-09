@@ -1,21 +1,31 @@
 document.querySelector("#getBtn").addEventListener("click", function() {
     chrome.storage.sync.get(function(data) {
-        document.querySelector("#selectText").innerText = data.postContent
+        if (data.postContent !== undefined) {
+            document.querySelector("#selectText").innerText = data.postContent
+        }
     })
 })
-    
 
-
-
+document.querySelector("#clearBtn").addEventListener("click", function() {
+    chrome.storage.sync.clear()
+})
 
 document.querySelector("#saveBtn").addEventListener("click", function() {
     chrome.tabs.executeScript({
         code: "document.getSelection().anchorNode.textContent"
-    }, function(selectText) {
-        document.querySelector("#selectText").innerText = selectText[0]
-        chrome.storage.sync.set({
-            postContent: selectText[0]
-        })
-        window.open("http://i3b107.p.ssafy.io/accounts/login", "_blank")
+    }, function(selectText) {                
+        chrome.storage.sync.get(function(data) {
+            if (data.postContent !== undefined) {
+                const nowData = data.postContent
+                chrome.storage.sync.set({
+                    postContent: nowData + selectText[0]
+                })
+            }
+            else{
+                chrome.storage.sync.set({
+                    postContent: selectText[0]
+                })
+            }
+        })       
     });
 })

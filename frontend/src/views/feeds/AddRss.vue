@@ -54,7 +54,7 @@
                   FOLLOW
                 </v-btn>
               </template>
-              <v-list>
+              <v-list class="py-0">
                 <v-list-item v-for="(feed, i) in feedList" :key="i">
                   <v-icon color="grey" class="mr-2">mdi-rss</v-icon>
                   <v-list-item-title>{{ feed.feedName }}</v-list-item-title>
@@ -79,6 +79,13 @@
                     <v-icon left>mdi-window-close</v-icon> REMOVE
                   </v-btn>
                 </v-list-item>
+                <hr class="ma-0" />
+                <v-list-item @click="modalActive = !modalActive">
+                  <v-icon color="success" class="mr-2">mdi-plus</v-icon>
+                  <v-list-item-title class="success--text"
+                    >NEW FEED</v-list-item-title
+                  >
+                </v-list-item>
               </v-list>
             </v-menu>
 
@@ -98,6 +105,11 @@
       </v-col>
       <!-- </v-row> -->
     </v-container>
+    <create-feed-modal
+      :modalActive.sync="modalActive"
+      @addFeed="addFeeds"
+      @closeModal="closeModal"
+    />
   </div>
 </template>
 
@@ -106,14 +118,23 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Rss, SubscribeList } from "../../store/Feed.interface";
 
+import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
+
 const feedModule = namespace("feedModule");
 
-@Component
+@Component({
+  components: {
+    CreateFeedModal
+  }
+})
 export default class AddRss extends Vue {
   @feedModule.State rssList!: [];
   @feedModule.State feedList!: [];
   @feedModule.Action FETCH_RSS: any;
   @feedModule.Action SUBSCRIBE_RSS: any;
+  @feedModule.Action ADD_FEED: any;
+
+  modalActive = false;
 
   addRss(feedId: number, rss: Rss) {
     this.SUBSCRIBE_RSS({ feedId, rss });
@@ -124,6 +145,15 @@ export default class AddRss extends Vue {
       subscribedList.length &&
       subscribedList.some(el => el.rss.rssId === rss.rssId)
     );
+  }
+
+  closeModal() {
+    this.modalActive = false;
+  }
+
+  addFeeds(feedName: string) {
+    this.ADD_FEED(feedName);
+    this.closeModal();
   }
 
   created() {

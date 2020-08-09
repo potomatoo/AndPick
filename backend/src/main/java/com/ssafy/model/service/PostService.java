@@ -21,4 +21,6 @@ public interface PostService {
 
 	public BasicResponse deletePost(User user, Post post);
 
+	public BasicResponse getPostDetailByDetailKey(String key);
+
 }

@@ -1,8 +1,6 @@
 package com.ssafy.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.model.dto.Post;
 import com.ssafy.model.dto.PostDir;
-import com.ssafy.model.dto.PostTag;
-import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.PostService;
@@ -215,4 +211,5 @@ public class PostController {
 
 		return response;
 	}
+
 }

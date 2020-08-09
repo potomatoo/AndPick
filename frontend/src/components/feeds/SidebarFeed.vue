@@ -45,14 +45,14 @@
       </v-list-item>
     </v-list-group>
 
-    <v-list-item @click="modalActive = true">
+    <v-list-item @click="modalActive = !modalActive">
       <v-list-item-content class="text-center">
         <v-list-item-title>Create New Feed</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
     <create-feed-modal
-      :modalActive="modalActive"
+      :modalActive.sync="modalActive"
       @addFeed="addFeeds"
       @closeModal="closeModal"
     />
@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import { FeedList, SubscribeList } from "../../store/Feed.interface";
@@ -93,13 +93,6 @@ export default class SidebarFeed extends Vue {
   subsItem = {};
 
   feedItem = {};
-
-  @Watch("modalActive")
-  onModalClose(isActive: boolean) {
-    if (isActive && this.$refs.form) {
-      (this.$refs.form as HTMLFormElement).reset();
-    }
-  }
 
   closeModal() {
     this.modalActive = false;

@@ -1,7 +1,7 @@
 <template>
-  <v-dialog v-model="modalActive" max-width="500px">
+  <v-dialog v-model="isActive" max-width="500px">
     <v-card>
-      <v-form ref="form" onsubmit="return false;">
+      <v-form ref="form" onsubmit="return false;" :blur="closeModal">
         <v-card-text>
           <v-text-field
             v-model="newFeedName"
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Watch, PropSync } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { FeedList } from "@/store/Feed.interface";
 
@@ -36,7 +36,7 @@ const feedModule = namespace("feedModule");
 export default class CreateFeedModal extends Vue {
   @feedModule.State feedList!: [];
 
-  @Prop({ type: Boolean }) readonly modalActive!: boolean;
+  @PropSync("modalActive", { type: Boolean }) readonly isActive!: boolean;
 
   newFeedName = null;
 
@@ -45,6 +45,13 @@ export default class CreateFeedModal extends Vue {
     (value: string) =>
       !this.checkDuplication(value) || "동일한 피드가 존재합니다."
   ];
+
+  @Watch("isActive")
+  onModalClose(isActive: boolean) {
+    if (isActive && this.$refs.form) {
+      (this.$refs.form as HTMLFormElement).reset();
+    }
+  }
 
   checkDuplication(name: string | null) {
     if (this.feedList.length) {

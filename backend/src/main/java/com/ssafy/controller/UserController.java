@@ -7,12 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.model.dto.PostDir;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.UserService;
@@ -104,7 +106,9 @@ public class UserController {
 		user.setUserName(userName);
 
 		User update = userService.UpdateUser(user);
+		this.redisTemplate.opsForValue().set(jwtToken, user);
 
+		update.setUserPassword("");
 		if (update != null) {
 			result.status = true;
 			result.message = "회원정보 수정에 성공하였습니다.";
@@ -114,6 +118,32 @@ public class UserController {
 			result.status = false;
 			result.message = "회원정보 수정에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.CONFLICT);
+		}
+
+		return response;
+	}
+
+	@GetMapping(value = "/api/user/detail")
+	public Object userDetail(@RequestHeader("Authorization") String jwtToken) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+		user.setUserPassword("");
+		result.data = user;
+		result.status = true;
+		if (result.status) {
+			result.message = "회원 정보 조회에 성공하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "회원 정보 조회에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
 		return response;

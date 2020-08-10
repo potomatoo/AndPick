@@ -122,7 +122,7 @@ export default class ArticleDetail extends Vue {
     window.open(link);
   }
 
-  updated() {
+  mounted() {
     // 새로고침시 article state가 초기화되면 상위 페이지로 이동
     this.checkArticle();
   }

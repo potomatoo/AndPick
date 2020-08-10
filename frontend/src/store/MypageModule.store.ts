@@ -149,14 +149,11 @@ const module: Module<MypageModule, RootState> = {
           dispatch("FETCH_POSTDIR_LIST");
           return data.data.postDirId;
         })
-        .then(postDirId => {
-          router.push({ name: "PostDir", params: { postDirId } });
-        })
         .catch(err => console.error(err));
     },
 
     UPDATE_POSTDIR(
-      { dispatch },
+      { dispatch, state },
       { postDirId, postDirName }: { postDirId: number; postDirName: string }
     ) {
       const postDirData = {
@@ -167,10 +164,13 @@ const module: Module<MypageModule, RootState> = {
       };
       Axios.instance
         .put("/api/postdir/update", null, postDirData)
-        .then(({ data }) => {
+        .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
-          dispatch("FETCH_POSTDIR", data.data.postDirId);
-          return data.data.postDirId;
+        })
+        .then(() => {
+          if (state.postDirId === postDirId) {
+            dispatch("FETCH_POSTDIR", postDirId);
+          }
         })
         .catch(err => console.error(err));
     },
@@ -204,10 +204,6 @@ const module: Module<MypageModule, RootState> = {
         )
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
-          return data.data.postDirId;
-        })
-        .then(postDirId => {
-          router.push({ name: "PostDir", params: { postDirId } });
         })
         .catch(err => console.error(err));
     },

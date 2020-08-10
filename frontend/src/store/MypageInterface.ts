@@ -30,6 +30,7 @@ export interface Context {
 
 export interface MypageModule {
   isSidebarActive: boolean;
+  isCreateFolderModalActive: boolean;
   postDirList: PostDir[];
   postDir: Post[];
   post: Post | null;

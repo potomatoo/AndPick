@@ -10,6 +10,7 @@ const module: Module<MypageModule, RootState> = {
 
   state: {
     isSidebarActive: true,
+    isCreateFolderModalActive: false,
     postDirList: [],
     postDir: [],
     post: null,
@@ -33,6 +34,10 @@ const module: Module<MypageModule, RootState> = {
   mutations: {
     TOGGLE_SIDEBAR(state) {
       state.isSidebarActive = !state.isSidebarActive;
+    },
+
+    TOGGLE_CREATEFOLDERMODAL(state) {
+      state.isCreateFolderModalActive = !state.isCreateFolderModalActive;
     },
 
     SET_POSTDIR_LIST(state, postDirList: PostDir[]) {

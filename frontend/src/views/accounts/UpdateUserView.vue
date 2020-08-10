@@ -28,13 +28,13 @@ import PasswordUpdate from "@/components/accounts/PasswordUpdate.vue";
 @Component({
   components: {
     NameUpdate,
-    PasswordUpdate
-  }
+    PasswordUpdate,
+  },
 })
 export default class UpdateUserView extends Vue {}
 </script>
 
-<style>
+<style scoped>
 .router-link {
   text-decoration: none;
   color: inherit;

@@ -29,7 +29,7 @@ const store: StoreOptions<RootState> = {
   state: {
     JWT: STORAGE.getItem("jwt-token"),
     duplicate: false,
-    userName: null,
+    userName: STORAGE.getItem("name"),
   },
   getters: {
     isLoggedIn: (state) => !!state.JWT,
@@ -43,6 +43,7 @@ const store: StoreOptions<RootState> = {
 
     SET_NAME(state, userName: string) {
       state.userName = userName;
+      STORAGE.setItem("name", userName);
     },
 
     CHECK_DUPLICATE(state) {
@@ -57,6 +58,7 @@ const store: StoreOptions<RootState> = {
         })
         .then((res) => {
           commit("SET_TOKEN", res.data.data["userPassword"]);
+          commit("SET_NAME", res.data.data.userName);
           router.push("/");
         })
         .catch((err) => {
@@ -112,7 +114,9 @@ const store: StoreOptions<RootState> = {
 
     logout({ getters, commit }) {
       commit("SET_TOKEN", null);
+      commit("SET_NAME", null);
       STORAGE.removeItem("jwt-token");
+      STORAGE.removeItem("name");
       router.push("/");
     },
 
@@ -125,15 +129,15 @@ const store: StoreOptions<RootState> = {
       Axios.instance
         .put(SERVER.URL + SERVER.ROUTES.updateUser, null, newData)
         .then(() => {
-          router.push("/");
           commit("SET_NAME", userName);
+          router.push("/");
         })
         .catch((err) => console.log("err", err));
     },
 
     deleteUser({ getters, commit }) {
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.deleteUser, null, getters.config)
+      Axios.instance
+        .delete(SERVER.URL + SERVER.ROUTES.deleteUser)
         .then(() => {
           commit("SET_TOKEN", null);
           STORAGE.removeItem("jwt-token");

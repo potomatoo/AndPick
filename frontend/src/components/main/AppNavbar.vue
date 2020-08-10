@@ -59,20 +59,16 @@ import { Axios } from "@/service/axios.service";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
-  computed: { ...mapGetters(["isLoggedIn"]) }
+  computed: { ...mapGetters(["isLoggedIn"]) },
 })
 export default class AppNavbar extends Vue {
   userName: string | null = null;
 
   setName() {
-    Axios.instance
-      .get("/api/user/detail")
-      .then((res) => {
-        this.userName = res.data.data.userName;
-      })
-      .catch((err) => console.log(err));
+    this.userName = this.$store.state.userName;
   }
-  created() {
+
+  mounted() {
     this.setName();
   }
 

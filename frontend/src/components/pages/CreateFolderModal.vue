@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isCreateFolderModalActive" max-width="500px">
+  <v-dialog v-model="isActive" max-width="500px">
     <v-card>
       <v-form ref="form" onsubmit="return false;">
         <v-card-text>
@@ -36,8 +36,10 @@ const mypageModule = namespace("mypageModule");
 export default class CreateFolderModeal extends Vue {
   @mypageModule.State isCreateFolderModalActive!: boolean;
   @mypageModule.State postDirList!: [];
-  @mypageModule.Action ADD_POSTDIR: any;
   @mypageModule.Mutation TOGGLE_CREATEFOLDERMODAL: any;
+  @mypageModule.Action ADD_POSTDIR: any;
+
+  @Prop({ type: Boolean }) isActive!: boolean;
 
   newPostDirName = null;
 
@@ -47,7 +49,7 @@ export default class CreateFolderModeal extends Vue {
       !this.checkDuplication(value) || "동일한 폴더가 존재합니다."
   ];
 
-  @Watch("modalActive")
+  @Watch("isActive")
   onModalClose(isActive: boolean) {
     if (isActive && this.$refs.form) {
       (this.$refs.form as HTMLFormElement).reset();
@@ -64,7 +66,7 @@ export default class CreateFolderModeal extends Vue {
 
   closeModal() {
     this.newPostDirName = null;
-    this.TOGGLE_CREATEFOLDERMODAL();
+    this.isActive = false;
   }
 
   addPostDir() {

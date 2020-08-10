@@ -13,9 +13,11 @@ const module: Module<MypageModule, RootState> = {
     isCreateFolderModalActive: false,
     postDirList: [],
     postDir: [],
+    tagDir: [],
     post: null,
     postDirId: null,
     postId: null,
+    tagName: null,
     postDirName: null,
     postDirContextMenu: {
       showCtx: false,
@@ -54,6 +56,14 @@ const module: Module<MypageModule, RootState> = {
 
     SELECT_POSTDIR(state, { postDirId }) {
       state.postDirId = postDirId;
+    },
+
+    SELECT_TAGDIR(state, { tagName }) {
+      state.tagName = tagName;
+    },
+
+    SET_TAGDIR(state, tagDir: Post[]) {
+      state.tagDir = tagDir;
     },
 
     SET_POST(state, post: Post) {
@@ -95,6 +105,20 @@ const module: Module<MypageModule, RootState> = {
         .get("/api/postdir/find/postdir", postData)
         .then(({ data }) => {
           commit("SET_POSTDIR", data.data);
+        })
+        .catch(err => console.error(err));
+    },
+
+    FETCH_TAGDIR({ commit }, tagName: string) {
+      const tagData = {
+        params: {
+          tagName
+        }
+      };
+      Axios.instance
+        .get("/api/post/find/tagname", tagData)
+        .then(({ data }) => {
+          commit("SET_TAGDIR", data.data);
         })
         .catch(err => console.error(err));
     },

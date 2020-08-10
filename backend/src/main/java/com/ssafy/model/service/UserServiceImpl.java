@@ -1,12 +1,12 @@
 package com.ssafy.model.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.UserRepository;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User UpdateUser(User user) {
 		User result = userRepository.save(user);
-		result.setUserPassword(null);
 		return result;
 	}
+
 }

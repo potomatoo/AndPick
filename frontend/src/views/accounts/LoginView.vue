@@ -15,7 +15,7 @@
           placeholder="이메일"
           :class="{
             'is-invalid': $v.loginData.userId.$error,
-            'is-valid': !$v.loginData.userId.$invalid,
+            'is-valid': !$v.loginData.userId.$invalid
           }"
         />
         <div class="invalid-feedback">
@@ -38,7 +38,7 @@
           placeholder="비밀번호"
           :class="{
             'is-invalid': $v.loginData.userPassword.$error,
-            'is-valid': !$v.loginData.userPassword.$invalid,
+            'is-valid': !$v.loginData.userPassword.$invalid
           }"
           @keypress.enter="submitForm"
         />
@@ -110,28 +110,28 @@ interface SocialData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
           });
-        },
+        }
       },
       userPassword: {
         required,
-        minLength: minLength(4),
-      },
-    },
-  },
+        minLength: minLength(4)
+      }
+    }
+  }
 })
 export default class LoginView extends Vue {
   loginData: LoginData = {
     userId: null,
-    userPassword: null,
+    userPassword: null
   };
   socialData: SocialData = {
     accessToken: window.location.href.split("&")[1],
-    userType: 1,
+    userType: 1
   };
   submitForm() {
     this.$v.$touch();

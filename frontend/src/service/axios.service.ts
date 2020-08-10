@@ -14,5 +14,6 @@ export class Axios {
   });
 }
 
-Axios.instance.defaults.headers.common["Authorization"] =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsImV4cCI6MTU5NzQ3MjcxOX0.ts86pJWkYeEB4VqB-fhQTsa8gnXhaHXEaTrrt4N-u4YOBKCYFygs3JhfTPF_wyg4GEf0zJ5lP9G3872W274TdA";
+Axios.instance.defaults.headers.common[
+  "Authorization"
+] = window.sessionStorage.getItem("jwt-token");

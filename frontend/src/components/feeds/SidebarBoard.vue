@@ -3,7 +3,11 @@
     <v-list>
       <v-subheader>Board</v-subheader>
       <v-list-item-group>
-        <v-list-item v-for="board in boardList" :key="board.title">
+        <v-list-item
+          v-for="board in boardList"
+          :key="board.title"
+          @contextmenu.prevent="showBoardCtx($event, board)"
+        >
           <v-list-item-icon>
             <v-icon>
               mdi-star-outline
@@ -11,10 +15,13 @@
           </v-list-item-icon>
           <v-list-item-content>
             <router-link
-              :to="{ name: 'BoardList', params: { boardName: board.title } }"
+              :to="{
+                name: 'BoardArticleList',
+                params: { boardId: board.boardId }
+              }"
               class="router-link"
             >
-              <v-list-item-title v-text="board.title"></v-list-item-title>
+              <v-list-item-title v-text="board.boardName"></v-list-item-title>
             </router-link>
           </v-list-item-content>
         </v-list-item>
@@ -44,13 +51,14 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="addBoards">Create</v-btn>
-              <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+              <v-btn color="success" @click="addBoards">Create</v-btn>
+              <v-btn outlined color="grey" @click="closeModal">Cancle</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
       </v-dialog>
     </v-list>
+    <board-context-menu :boardItem="boardItem" />
   </div>
 </template>
 
@@ -58,18 +66,26 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import { SidebarList } from "../../store/Feed.interface";
+import { Board } from "../../store/Feed.interface";
+import BoardContextMenu from "@/components/feeds/BoardContextMenu.vue";
 
 const feedModule = namespace("feedModule");
 
-@Component
+@Component({
+  components: {
+    BoardContextMenu
+  }
+})
 export default class SidebarBoard extends Vue {
   @feedModule.State boardList!: [];
-  @feedModule.Mutation ADD_BOARD: any;
+  @feedModule.Action ADD_BOARD: any;
+  @feedModule.Mutation SET_BOARD_CONTEXT_MENU: any;
 
   newBoardName = null;
 
   modalActive = false;
+
+  boardItem = {};
 
   rules = [
     (value: any) => !!value || "this filed is required.",
@@ -86,8 +102,9 @@ export default class SidebarBoard extends Vue {
 
   checkDuplication(name: string | null) {
     if (this.boardList.length) {
-      return this.boardList.some((feed: SidebarList) => feed.title === name);
+      return this.boardList.some((board: Board) => board.boardName === name);
     }
+    return false;
   }
 
   closeModal() {
@@ -97,9 +114,19 @@ export default class SidebarBoard extends Vue {
 
   addBoards() {
     if (this.newBoardName && !this.checkDuplication(this.newBoardName)) {
-      this.ADD_BOARD({ title: this.newBoardName });
+      this.ADD_BOARD(this.newBoardName);
       this.closeModal();
     }
+  }
+
+  showBoardCtx(e: MouseEvent, board: Board) {
+    this.boardItem = board;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_BOARD_CONTEXT_MENU(ctx);
   }
 }
 </script>

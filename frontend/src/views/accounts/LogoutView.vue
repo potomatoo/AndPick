@@ -8,8 +8,8 @@ import { mapActions } from "vuex";
 
 @Component({
   methods: {
-    ...mapActions(["logout"]),
-  },
+    ...mapActions(["logout"])
+  }
 })
 export default class LogoutView extends Vue {
   mounted() {

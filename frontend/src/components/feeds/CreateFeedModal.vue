@@ -10,7 +10,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text color="primary" @click="clearCreateFolder">clear</v-btn>
-        <v-btn text color="primary" @click="createFolder(FolderName)">Create</v-btn>
+        <v-btn text color="primary" @click="createFolder(FolderName)"
+          >Create</v-btn
+        >
         <v-btn text color="primary" @click="exit">exit</v-btn>
       </v-card-actions>
     </v-card>

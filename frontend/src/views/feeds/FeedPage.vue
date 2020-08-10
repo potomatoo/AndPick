@@ -6,10 +6,12 @@
           <h1>{{ feed.feedName }}</h1>
         </v-flex>
         <v-flex class="text-right">
-          <v-icon @click="console.log('hi')">mdi-check</v-icon>
-          <v-icon class="ml-3" @click="console.log('hi')"
-            >mdi-replay mdi-flip-h</v-icon
-          >
+          <!-- <v-icon @click="console.log('hi')">mdi-check</v-icon> -->
+          <v-btn icon large @click="fetchData">
+            <v-icon>
+              mdi-replay mdi-flip-h
+            </v-icon>
+          </v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -81,9 +83,6 @@ export default class FeedPage extends Vue {
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    // console.log("hihi");
-    // this.FETCH_FEED(this.$route.params.feedId);
-    // console.log("hihi");
     this.FETCH_ARTICLE_LIST_IN_FEED(this.$route.params.feedId);
   }
 

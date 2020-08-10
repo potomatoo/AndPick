@@ -4,7 +4,6 @@
       <ServiceDescription />
       <RssImage />
     </div>
-    <hr />
     <ServiceStep />
     <hr />
     <UserInformation />

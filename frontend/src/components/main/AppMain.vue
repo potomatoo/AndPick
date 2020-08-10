@@ -1,13 +1,26 @@
 <template>
-  <v-main class="v-main">
-    <v-layout>
-      <v-flex v-if="isLoggedIn" offset-lg3 lg6>
-        <router-view></router-view>
-      </v-flex>
-      <v-flex v-if="!isLoggedIn">
-        <router-view></router-view>
-      </v-flex>
-    </v-layout>
+  <v-main>
+    <v-container fluid>
+      <v-layout>
+        <v-flex v-if="isLoggedIn" offset-lg3 lg6>
+          <router-view></router-view>
+        </v-flex>
+        <v-flex v-if="!isLoggedIn">
+          <router-view></router-view>
+        </v-flex>
+      </v-layout>
+      <v-btn
+        v-if="isLoggedIn"
+        @click="scrollToTop"
+        class="button-bottom"
+        dark
+        fab
+        small
+        color="success"
+      >
+        <v-icon dark>mdi-menu-up</v-icon>
+      </v-btn>
+    </v-container>
   </v-main>
 </template>
 
@@ -16,8 +29,19 @@ import { Vue, Component } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 
 @Component({
-  computed: { ...mapGetters(["isLoggedIn"]) }
+  computed: { ...mapGetters(["isLoggedIn"]) },
+  methods: {
+    scrollToTop: function() {
+      scroll(0, 0);
+    },
+  },
 })
 export default class AppMain extends Vue {}
 </script>
-<style scoped></style>
+<style>
+.button-bottom {
+  position: fixed;
+  right: 7vw;
+  bottom: 20vh;
+}
+</style>

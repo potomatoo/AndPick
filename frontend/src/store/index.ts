@@ -4,7 +4,7 @@ import feedModule from "./FeedModule.store";
 import mypageModule from "./MypageModule.store";
 
 import axios from "axios";
-// import { Axios } from "@/service/axios.service";
+import { Axios } from "@/service/axios.service";
 
 import router from "@/router";
 import SERVER from "@/api/spr";
@@ -17,6 +17,8 @@ Vue.use(Vuex);
 
 export interface RootState {
   JWT: string | null;
+  duplicate: boolean;
+  userName: string | null;
 }
 
 const store: StoreOptions<RootState> = {
@@ -26,26 +28,32 @@ const store: StoreOptions<RootState> = {
   },
   state: {
     JWT: STORAGE.getItem("jwt-token"),
+    duplicate: false,
+    userName: null,
   },
   getters: {
     isLoggedIn: (state) => !!state.JWT,
     config: (state) => ({ headers: { Authorization: `${state.JWT}` } }),
   },
   mutations: {
-    SET_TOKEN(state, token) {
+    SET_TOKEN(state, token: string) {
       state.JWT = token;
       STORAGE.setItem("jwt-token", token);
-      axios.defaults.headers.common["Authorization"] = token;
+    },
+
+    SET_NAME(state, userName: string) {
+      state.userName = userName;
+    },
+
+    CHECK_DUPLICATE(state) {
+      state.duplicate = true;
     },
   },
   actions: {
     postAuthData({ commit }, info) {
       axios
         .post(SERVER.URL + info.location, qs.stringify(info.data), {
-          // headers: {
-          // "Access-Control-Allow-Origin": "*",
           withCredentials: true,
-          // },
         })
         .then((res) => {
           commit("SET_TOKEN", res.data.data["userPassword"]);
@@ -60,18 +68,28 @@ const store: StoreOptions<RootState> = {
     signup(context, signupData) {
       axios
         .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData), {
-          // headers: {
-          // "Access-Control-Allow-Origin": "*",
           withCredentials: true,
-          // },
         })
         .then((res) => {
-          console.log("회원가입 성공", res);
           router.push("/");
         })
         .catch((err) => {
           console.log("err", err);
           alert("회원가입 실패입니다.");
+        });
+    },
+
+    checkId({ commit }, signupData) {
+      axios
+        .post(SERVER.URL + SERVER.ROUTES.checkid, qs.stringify(signupData), {
+          withCredentials: true,
+        })
+        .then((res) => {
+          commit("CHECK_DUPLICATE");
+          alert("사용가능한 이메일 입니다.");
+        })
+        .catch((err) => {
+          alert("이미 가입된 이메일 입니다.");
         });
     },
 
@@ -93,25 +111,22 @@ const store: StoreOptions<RootState> = {
     },
 
     logout({ getters, commit }) {
-      // axios
-      //   .post(SERVER.URL + SERVER.ROUTES.logout, null, getters.config)
-      //   .then(() => {
-      //     commit("SET_TOKEN", null);
-      //     STORAGE.removeItem("jwt-token");
-      //     router.push("/");
-      //   })
-      //   .catch((err) => console.log(err.response));
       commit("SET_TOKEN", null);
       STORAGE.removeItem("jwt-token");
       router.push("/");
     },
 
-    updateUser({ getters, commit }, updateData) {
-      axios
-        .put(SERVER.URL + SERVER.ROUTES.updateUser, updateData, getters.config)
+    updateUser({ commit }, userName) {
+      const newData = {
+        params: {
+          userName,
+        },
+      };
+      Axios.instance
+        .put(SERVER.URL + SERVER.ROUTES.updateUser, null, newData)
         .then(() => {
-          // commit("SET_TOKEN", res.data.data["Authorization"]);
           router.push("/");
+          commit("SET_NAME", userName);
         })
         .catch((err) => console.log("err", err));
     },

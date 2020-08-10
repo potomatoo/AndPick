@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app clipped-left style="height: 70px">
-    <v-app-bar-nav-icon @click="TOGGLE_SIDEBAR()" />
+    <v-app-bar-nav-icon v-if="isLoggedIn" @click="TOGGLE_SIDEBAR()" />
     <v-toolbar-title
       class="a mr-5 mt-4 d-flex justify-content-between"
       style="width: 100%"
@@ -21,9 +21,11 @@
       >
         <v-btn outlined color="success">로그인</v-btn>
       </router-link>
-
-      <div v-if="isLoggedIn" class="mt-1">
-        <div>
+      <div v-if="isLoggedIn" class="mt-1 d-flex">
+        <div class="cheer p-1">
+          <b>{{ userName }}</b> 님의 취업성공을 응원합니다!
+        </div>
+        <div class="ml-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
               <span class="mdi mdi-account-edit mr-3 p-2" v-on="on"></span>
@@ -51,14 +53,34 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { mapMutations, mapGetters } from "vuex";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { mapMutations, mapGetters, mapState } from "vuex";
+import { Axios } from "@/service/axios.service";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
   computed: { ...mapGetters(["isLoggedIn"]) },
 })
-export default class AppNavbar extends Vue {}
+export default class AppNavbar extends Vue {
+  userName: string | null = null;
+
+  setName() {
+    Axios.instance
+      .get("/api/user/detail")
+      .then((res) => {
+        this.userName = res.data.data.userName;
+      })
+      .catch((err) => console.log(err));
+  }
+  created() {
+    this.setName();
+  }
+
+  @Watch("$store.state.userName")
+  newName(name: string) {
+    this.userName = name;
+  }
+}
 </script>
 
 <style scoped>
@@ -74,5 +96,8 @@ export default class AppNavbar extends Vue {}
 }
 .a {
   background-color: whitesmoke;
+}
+.cheer {
+  font-size: 16px;
 }
 </style>

@@ -154,6 +154,13 @@ const routes: Array<RouteConfig> = [
     path: "/feed/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
     component: ArticleDetailInFeed,
+    children: [
+      {
+        path: "scrap/:postId",
+        name: "Scrap",
+        component: EditArticle
+      }
+    ],
     meta: {
       authRequired: true
     }

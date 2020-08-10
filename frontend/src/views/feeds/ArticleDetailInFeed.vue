@@ -1,146 +1,162 @@
 <template>
   <div class="mt-10" v-if="article">
-    <v-container>
-      <!-- <v-layout> -->
-      <h3>{{ article.title }}</h3>
-      <div class="subtitle-1 text--secondary">{{ article.pubDate }}</div>
-      <div class="text-right">
-        <!-- ADD BOARD 메뉴 -->
-        <v-menu
-          offset-x
-          :close-on-content-click="false"
-          min-width="300px"
-          :close-on-click="closeMenu"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon large>
-              <v-icon v-bind="attrs" v-on="on">
-                mdi-star-box-outline
-              </v-icon>
-            </v-btn>
-          </template>
-          <v-list class="py-0">
-            <v-list-item v-for="board in boardList" :key="board.boardId">
-              <v-icon color="grey" class="mr-2">mdi-star-outline</v-icon>
-              <v-list-item-title>{{ board.boardName }}</v-list-item-title>
-              <v-btn
-                v-if="checkInBoard(board.newsList, article.link)"
-                class="ml-3"
-                outlined
-                color="success"
-                small
-                @click="saveArticle(board.boardId, article)"
-              >
-                <v-icon left>mdi-plus</v-icon> ADD
+    <div :class="{ left: onEdit }">
+      <v-container>
+        <!-- <v-layout> -->
+        <h3>{{ article.title }}</h3>
+        <div class="subtitle-1 text--secondary">{{ article.pubDate }}</div>
+        <div class="text-right">
+          <!-- ADD BOARD 메뉴 -->
+          <v-menu
+            offset-x
+            :close-on-content-click="false"
+            min-width="300px"
+            :close-on-click="closeMenu"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon large>
+                <v-icon v-bind="attrs" v-on="on">
+                  mdi-star-box-outline
+                </v-icon>
               </v-btn>
-              <v-btn
-                v-else
-                class="ml-3"
-                outlined
-                color="error"
-                small
-                @click="deleteArticle(board.newsList, article.link)"
-              >
-                <v-icon left>mdi-window-close</v-icon> REMOVE
-              </v-btn>
-            </v-list-item>
+            </template>
+            <v-list class="py-0">
+              <v-list-item v-for="board in boardList" :key="board.boardId">
+                <v-icon color="grey" class="mr-2">mdi-star-outline</v-icon>
+                <v-list-item-title>{{ board.boardName }}</v-list-item-title>
+                <v-btn
+                  v-if="checkInBoard(board.newsList, article.link)"
+                  class="ml-3"
+                  outlined
+                  color="success"
+                  small
+                  @click="saveArticle(board.boardId, article)"
+                >
+                  <v-icon left>mdi-plus</v-icon> ADD
+                </v-btn>
+                <v-btn
+                  v-else
+                  class="ml-3"
+                  outlined
+                  color="error"
+                  small
+                  @click="deleteArticle(board.newsList, article.link)"
+                >
+                  <v-icon left>mdi-window-close</v-icon> REMOVE
+                </v-btn>
+              </v-list-item>
 
-            <hr class="ma-0" />
-            <v-list-item @click="boardModalActive = !boardModalActive">
-              <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-              <v-list-item-title class="success--text"
-                >NEW BOARD</v-list-item-title
-              >
-            </v-list-item>
-          </v-list>
-        </v-menu>
+              <hr class="ma-0" />
+              <v-list-item @click="boardModalActive = !boardModalActive">
+                <v-icon color="success" class="mr-2">mdi-plus</v-icon>
+                <v-list-item-title class="success--text"
+                  >NEW BOARD</v-list-item-title
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
 
-        <!-- postDir 메뉴 -->
-        <v-menu offset-x :close-on-content-click="false" min-width="100px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon large v-bind="attrs" v-on="on">
-              <!-- <v-icon v-bind="attrs" v-on="on">
+          <!-- postDir 메뉴 -->
+          <v-menu offset-x :close-on-content-click="false" min-width="100px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon large v-bind="attrs" v-on="on">
+                <!-- <v-icon v-bind="attrs" v-on="on">
                 mdi-star-box-outline
               </v-icon> -->
-              EDIT
-            </v-btn>
-          </template>
-          <v-list class="py-0">
-            <!-- post 메뉴 -->
-            <v-menu
-              offset-x
-              :close-on-content-click="false"
-              min-width="100px"
-              open-on-click
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-list-item
-                  v-for="postDir in postDirList"
-                  :key="postDir.postDirId"
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="selectPost(postDir)"
-                >
-                  <v-list-item-title>{{
-                    postDir.postDirName
-                  }}</v-list-item-title>
-                </v-list-item>
-              </template>
-
-              <v-list class="py-0" v-if="selectPostDir">
-                <v-list-item
-                  v-for="post in selectPostDir.postList"
-                  :key="post.postId"
-                >
-                  <v-list-item-title>{{ post.postTitle }}</v-list-item-title>
-                </v-list-item>
-
-                <hr class="ma-0" />
-                <v-list-item>
-                  <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-                  <v-list-item-title class="success--text"
-                    >NEW Post</v-list-item-title
-                  >
-                </v-list-item>
-              </v-list>
-            </v-menu>
-
-            <hr class="ma-0" />
-            <v-list-item @click="dirModalActive = !dirModalActive">
-              <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-              <v-list-item-title class="success--text"
-                >NEW PAGE</v-list-item-title
+                EDIT
+              </v-btn>
+            </template>
+            <v-list class="py-0">
+              <!-- post 메뉴 -->
+              <v-menu
+                offset-x
+                :close-on-content-click="false"
+                min-width="100px"
+                open-on-click
               >
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
-      <!-- </v-layout> -->
-    </v-container>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-list-item
+                    v-for="postDir in postDirList"
+                    :key="postDir.postDirId"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="selectPost(postDir)"
+                  >
+                    <v-list-item-title>{{
+                      postDir.postDirName
+                    }}</v-list-item-title>
+                  </v-list-item>
+                </template>
 
-    <v-divider></v-divider>
+                <v-list class="py-0" v-if="selectPostDir">
+                  <v-list-item
+                    v-for="post in selectPostDir.postList"
+                    :key="post.postId"
+                    @click="setEdit"
+                  >
+                    <router-link
+                      class="router-link"
+                      :to="{ name: 'Scrap', params: { postId: post.postId } }"
+                    >
+                      <v-list-item-title>{{
+                        post.postTitle
+                      }}</v-list-item-title>
+                    </router-link>
+                  </v-list-item>
 
-    <v-container class="text-center">
-      <p :v-html="article.description" @mouseup="drag">
-        {{ article.description }}
-      </p>
-      <v-btn
-        color="grey"
-        outlined
-        dark
-        block
-        tile
-        @click="openPage(article.link)"
-        >VISIT WEBSITE</v-btn
-      >
-    </v-container>
+                  <hr class="ma-0" />
+                  <router-link class="router-link" :to="{ name: 'Scrap' }">
+                    <v-list-item @click="setEdit">
+                      <v-icon color="success" class="mr-2">mdi-plus</v-icon>
+                      <v-list-item-title class="success--text"
+                        >NEW Post</v-list-item-title
+                      >
+                    </v-list-item>
+                  </router-link>
+                </v-list>
+              </v-menu>
 
-    <create-board-modal
-      :modalActive.sync="boardModalActive"
-      @addBoard="addBoards"
-      @closeModal="closeModal"
-    />
-    <create-folder />
+              <hr class="ma-0" />
+              <v-list-item @click="TOGGLE_CREATEFOLDERMODAL()">
+                <v-icon color="success" class="mr-2">mdi-plus</v-icon>
+                <v-list-item-title class="success--text"
+                  >NEW PAGE</v-list-item-title
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+        <!-- </v-layout> -->
+      </v-container>
+
+      <v-divider></v-divider>
+
+      <v-container class="text-center">
+        <p :v-html="article.description" @mouseup="drag">
+          {{ article.description }}
+        </p>
+        <v-btn
+          color="grey"
+          outlined
+          dark
+          block
+          tile
+          @click="openPage(article.link)"
+          >VISIT WEBSITE</v-btn
+        >
+      </v-container>
+
+      <create-board-modal
+        :modalActive.sync="boardModalActive"
+        @addBoard="addBoards"
+        @closeModal="closeModal"
+      />
+      <create-folder-modal />
+    </div>
+    <div :class="{ vl: onEdit }"></div>
+    <div :class="{ right: onEdit }">
+      <router-view @save="saveEdit" />
+    </div>
   </div>
 </template>
 
@@ -151,7 +167,7 @@ import { Article, Board, News } from "../../store/Feed.interface";
 import { PostDir, Post } from "@/store/MypageInterface";
 
 import CreateBoardModal from "@/components/feeds/CreateBoardModal.vue";
-import CreateFolder from "@/components/pages/CreateFolder.vue";
+import CreateFolderModal from "@/components/pages/CreateFolderModal.vue";
 
 const feedModule = namespace("feedModule");
 
@@ -160,7 +176,7 @@ const mypageModule = namespace("mypageModule");
 @Component({
   components: {
     CreateBoardModal,
-    CreateFolder
+    CreateFolderModal
   }
 })
 export default class ArticleDetailFeed extends Vue {
@@ -170,6 +186,7 @@ export default class ArticleDetailFeed extends Vue {
   @feedModule.Action DELETE_IN_BOARD: any;
   @feedModule.Action ADD_BOARD: any;
   @mypageModule.State postDirList!: PostDir;
+  @mypageModule.Mutation TOGGLE_CREATEFOLDERMODAL: any;
 
   boardModalActive = false;
 
@@ -180,6 +197,8 @@ export default class ArticleDetailFeed extends Vue {
   closeMenu = true;
 
   showPostMenu = false;
+
+  onEdit = false;
 
   selectText = "";
 
@@ -249,7 +268,45 @@ export default class ArticleDetailFeed extends Vue {
     this.selectPostDir = null;
     this.selectPostDir = post;
   }
+
+  setEdit() {
+    this.onEdit = true;
+  }
+
+  saveEdit() {
+    this.$router.replace({
+      name: "ArticleDetailInFeed",
+      params: {
+        feedId: this.$route.params.feedId,
+        articleId: this.$route.params.articleId
+      }
+    });
+    this.onEdit = false;
+  }
 }
 </script>
 
-<style></style>
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.left {
+  width: 50%;
+  float: left;
+}
+
+.right {
+  width: 50%;
+  float: right;
+}
+
+.vl {
+  border-left: 4px solid lightgrey;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  margin-left: -2px;
+}
+</style>

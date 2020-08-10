@@ -309,7 +309,7 @@ export default class EditArticle extends Vue {
     if (isNaN(this.postId)) {
       this.ADD_POST({
         postContent: this.html,
-        postDirId: Number(this.$route.params.postDirId),
+        postDirId: this.post.postDirId,
         postTitle: this.title,
         tagList: this.nowTagList
       });
@@ -318,13 +318,14 @@ export default class EditArticle extends Vue {
       console.log(this.nowTagList);
       this.UPDATE_POST({
         postContent: this.html,
-        postDirId: Number(this.$route.params.postDirId),
+        postDirId: this.post.postDirId,
         postId: Number(this.$route.params.postId),
         postTitle: this.title,
         tagList: this.nowTagList
       });
       this.snackbar = true;
     }
+    this.$emit("save");
   }
 
   @Watch("$route", { immediate: true })

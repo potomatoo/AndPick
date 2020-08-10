@@ -261,4 +261,19 @@ public class PostServiceImpl implements PostService {
 		return result;
 	}
 
+	@Override
+	public BasicResponse findByTagName(User user, Tag tag) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		result.data = postRepository.findAllByTagName(tag.getTagName(), user.getUserNo());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "태그를 포함한 게시글 조회를 완료하였습니다.";
+		} else {
+			result.message = "태그를 포함한 게시글 조회에 실패하였습니다.";
+		}
+		return result;
+	}
+
 }

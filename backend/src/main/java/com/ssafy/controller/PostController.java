@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.model.dto.Post;
 import com.ssafy.model.dto.PostDir;
+import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.PostService;
@@ -203,6 +204,33 @@ public class PostController {
 
 		result = postService.deletePost(user, post);
 
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
+	@GetMapping("/api/post/find/tagname")
+	public Object findByTagName(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("tagName") String tagName) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		Tag tag = new Tag();
+		tag.setTagName(tagName);
+
+		result = postService.findByTagName(user, tag);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

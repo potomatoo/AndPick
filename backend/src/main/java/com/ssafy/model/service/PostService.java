@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Post;
 import com.ssafy.model.dto.PostDir;
+import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 
@@ -22,5 +23,7 @@ public interface PostService {
 	public BasicResponse deletePost(User user, Post post);
 
 	public BasicResponse getPostDetailByDetailKey(String key);
+
+	public BasicResponse findByTagName(User user, Tag tag);
 
 }

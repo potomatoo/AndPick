@@ -1,12 +1,9 @@
 <template>
   <div>
-    <v-icon
-      class="ml-3"
-      style="color: black;"
-      @click="TOGGLE_CREATEFOLDERMODAL()"
+    <v-icon class="ml-3" style="color: black;" @click="isActive = !isActive"
       >mdi-folder-plus</v-icon
     >
-    <CreateFolderModal />
+    <CreateFolderModal :isActive="isActive" />
   </div>
 </template>
 
@@ -23,7 +20,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class CreateFolder extends Vue {
-  @mypageModule.Mutation TOGGLE_CREATEFOLDERMODAL: any;
+  isActive = false;
 }
 </script>
 

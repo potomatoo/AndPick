@@ -1,7 +1,7 @@
 document.querySelector("#getBtn").addEventListener("click", function() {
     chrome.storage.sync.get(function(data) {
-        if (data.postContent !== undefined) {
-            document.querySelector("#selectText").innerText = data.postContent
+        if (data.postContent !== undefined) {       
+            document.querySelector("#selectText").innerHTML = data.postContent + "<hr/>"
         }
     })
 })
@@ -18,13 +18,13 @@ document.querySelector("#saveBtn").addEventListener("click", function() {
             if (data.postContent !== undefined) {
                 const nowData = data.postContent
                 chrome.storage.sync.set({
-                    postContent: nowData + selectText[0]
-                })
+                    postContent: nowData + "<hr/>" + selectText[0] + "<br>" + window.location.href
+                })                
             }
             else{
                 chrome.storage.sync.set({
-                    postContent: selectText[0]
-                })
+                    postContent: selectText[0] + "<br>" + window.location.href
+                })                
             }
         })       
     });

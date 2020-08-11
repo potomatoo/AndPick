@@ -117,7 +117,17 @@
                           v-for="tag in post.tagList"
                           :key="tag.tagId"
                         >
-                          <v-btn rounded depressed>#{{ tag.tagName }}</v-btn>
+                          <router-link
+                            :to="{
+                              name: 'HashTag',
+                              params: {
+                                tagName: tag.tagName
+                              }
+                            }"
+                            class="router-link"
+                          >
+                            <v-btn rounded depressed>#{{ tag.tagName }}</v-btn>
+                          </router-link>
                         </div>
                       </div>
                     </v-card>

@@ -22,6 +22,7 @@ import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 
 import PostDir from "@/views/pages/PostDir.vue";
 import EditArticle from "@/views/pages/EditArticle.vue";
+import HashTag from "@/views/pages/HashTag.vue";
 
 Vue.use(VueRouter);
 
@@ -116,6 +117,12 @@ const routes: Array<RouteConfig> = [
     path: "/mypage/:postDirId/:postId/post",
     name: "EditPost",
     component: EditArticle
+  },
+
+  {
+    path: "/mypage/:tagName/hashtag",
+    name: "HashTag",
+    component: HashTag
   },
 
   {

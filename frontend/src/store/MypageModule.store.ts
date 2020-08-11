@@ -13,9 +13,11 @@ const module: Module<MypageModule, RootState> = {
     isCreateFolderModalActive: false,
     postDirList: [],
     postDir: [],
+    tagDir: [],
     post: null,
     postDirId: null,
     postId: null,
+    tagName: null,
     postDirName: null,
     postDirContextMenu: {
       showCtx: false,
@@ -54,6 +56,14 @@ const module: Module<MypageModule, RootState> = {
 
     SELECT_POSTDIR(state, { postDirId }) {
       state.postDirId = postDirId;
+    },
+
+    SELECT_TAGDIR(state, { tagName }) {
+      state.tagName = tagName;
+    },
+
+    SET_TAGDIR(state, tagDir: Post[]) {
+      state.tagDir = tagDir;
     },
 
     SET_POST(state, post: Post) {
@@ -99,6 +109,20 @@ const module: Module<MypageModule, RootState> = {
         .catch(err => console.error(err));
     },
 
+    FETCH_TAGDIR({ commit }, tagName: string) {
+      const tagData = {
+        params: {
+          tagName
+        }
+      };
+      Axios.instance
+        .get("/api/post/find/tagname", tagData)
+        .then(({ data }) => {
+          commit("SET_TAGDIR", data.data);
+        })
+        .catch(err => console.error(err));
+    },
+
     FETCH_POST({ commit }, postId: number) {
       const postData = {
         params: {
@@ -125,14 +149,11 @@ const module: Module<MypageModule, RootState> = {
           dispatch("FETCH_POSTDIR_LIST");
           return data.data.postDirId;
         })
-        .then(postDirId => {
-          router.push({ name: "PostDir", params: { postDirId } });
-        })
         .catch(err => console.error(err));
     },
 
     UPDATE_POSTDIR(
-      { dispatch },
+      { dispatch, state },
       { postDirId, postDirName }: { postDirId: number; postDirName: string }
     ) {
       const postDirData = {
@@ -143,10 +164,13 @@ const module: Module<MypageModule, RootState> = {
       };
       Axios.instance
         .put("/api/postdir/update", null, postDirData)
-        .then(({ data }) => {
+        .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
-          dispatch("FETCH_POSTDIR", data.data.postDirId);
-          return data.data.postDirId;
+        })
+        .then(() => {
+          if (state.postDirId === postDirId) {
+            dispatch("FETCH_POSTDIR", postDirId);
+          }
         })
         .catch(err => console.error(err));
     },
@@ -180,10 +204,6 @@ const module: Module<MypageModule, RootState> = {
         )
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
-          return data.data.postDirId;
-        })
-        .then(postDirId => {
-          router.push({ name: "PostDir", params: { postDirId } });
         })
         .catch(err => console.error(err));
     },

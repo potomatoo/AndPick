@@ -24,7 +24,7 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
-		if (boardRepository.findOneByBoardName(board.getBoardName()) != null) {
+		if (boardRepository.findOneByBoardNameAndUserNo(board.getBoardName(), user.getUserNo()) != null) {
 			result.message = "중복된 보드 이름입니다.";
 			result.status = false;
 			return result;

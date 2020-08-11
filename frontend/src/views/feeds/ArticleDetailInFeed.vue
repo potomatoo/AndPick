@@ -57,7 +57,13 @@
           </v-menu>
 
           <!-- postDir 메뉴 -->
-          <v-menu offset-x :close-on-content-click="false" min-width="100px">
+          <v-menu
+            offset-x
+            :close-on-content-click="false"
+            min-width="100px"
+            :close-on-click="closeMenu"
+            v-model="value"
+          >
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon large v-bind="attrs" v-on="on">
                 <!-- <v-icon v-bind="attrs" v-on="on">
@@ -67,57 +73,51 @@
               </v-btn>
             </template>
             <v-list class="py-0">
-              <!-- post 메뉴 -->
-              <v-menu
-                offset-x
-                :close-on-content-click="false"
-                min-width="100px"
-                open-on-click
+              <v-list-item
+                v-for="postDir in postDirList"
+                :key="postDir.postDirId"
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-list-item
-                    v-for="postDir in postDirList"
-                    :key="postDir.postDirId"
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="selectPost(postDir)"
-                  >
-                    <v-list-item-title>{{
+                <!-- post 메뉴 -->
+                <v-menu offset-x close-on-content-click min-width="100px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-title v-bind="attrs" v-on="on">{{
                       postDir.postDirName
                     }}</v-list-item-title>
-                  </v-list-item>
-                </template>
+                  </template>
 
-                <v-list class="py-0" v-if="selectPostDir">
-                  <v-list-item
-                    v-for="post in selectPostDir.postList"
-                    :key="post.postId"
-                    @click="setEdit"
-                  >
-                    <router-link
-                      class="router-link"
-                      :to="{ name: 'Scrap', params: { postId: post.postId } }"
+                  <v-list class="py-0">
+                    <v-list-item
+                      v-for="post in postDir.postList"
+                      :key="post.postId"
+                      @click="setEdit"
                     >
-                      <v-list-item-title>{{
-                        post.postTitle
-                      }}</v-list-item-title>
-                    </router-link>
-                  </v-list-item>
-
-                  <hr class="ma-0" />
-                  <router-link class="router-link" :to="{ name: 'Scrap' }">
-                    <v-list-item @click="setEdit">
-                      <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-                      <v-list-item-title class="success--text"
-                        >NEW Post</v-list-item-title
+                      <router-link
+                        class="router-link"
+                        :to="{
+                          name: 'EditScrap',
+                          params: { postId: post.postId }
+                        }"
                       >
+                        <v-list-item-title>{{
+                          post.postTitle
+                        }}</v-list-item-title>
+                      </router-link>
                     </v-list-item>
-                  </router-link>
-                </v-list>
-              </v-menu>
 
+                    <hr class="ma-0" />
+                    <router-link class="router-link" :to="{ name: 'NewScrap' }">
+                      <v-list-item @click="setEdit">
+                        <v-icon color="success" class="mr-2">mdi-plus</v-icon>
+                        <v-list-item-title class="success--text"
+                          >NEW Post</v-list-item-title
+                        >
+                      </v-list-item>
+                    </router-link>
+                  </v-list>
+                </v-menu>
+              </v-list-item>
               <hr class="ma-0" />
-              <v-list-item @click="TOGGLE_CREATEFOLDERMODAL()">
+              <v-list-item @click="folderModalActive = !folderModalActive">
                 <v-icon color="success" class="mr-2">mdi-plus</v-icon>
                 <v-list-item-title class="success--text"
                   >NEW PAGE</v-list-item-title
@@ -151,7 +151,7 @@
         @addBoard="addBoards"
         @closeModal="closeModal"
       />
-      <create-folder-modal />
+      <create-folder-modal :folderModalActive.sync="folderModalActive" />
     </div>
     <div :class="{ vl: onEdit }"></div>
     <div :class="{ right: onEdit }">
@@ -164,7 +164,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Article, Board, News } from "../../store/Feed.interface";
-import { PostDir, Post } from "@/store/MypageInterface";
+import { Post } from "@/store/MypageInterface";
 
 import CreateBoardModal from "@/components/feeds/CreateBoardModal.vue";
 import CreateFolderModal from "@/components/pages/CreateFolderModal.vue";
@@ -185,16 +185,18 @@ export default class ArticleDetailFeed extends Vue {
   @feedModule.Action SAVE_IN_BOARD: any;
   @feedModule.Action DELETE_IN_BOARD: any;
   @feedModule.Action ADD_BOARD: any;
-  @mypageModule.State postDirList!: PostDir;
+  @mypageModule.State postDirList!: [];
   @mypageModule.Mutation TOGGLE_CREATEFOLDERMODAL: any;
 
   boardModalActive = false;
 
-  dirModalActive = false;
+  folderModalActive = false;
 
   pageModalActive = false;
 
   closeMenu = true;
+
+  closeContMent = false;
 
   showPostMenu = false;
 
@@ -202,7 +204,7 @@ export default class ArticleDetailFeed extends Vue {
 
   selectText = "";
 
-  selectPostDir: Post | null = null;
+  value = false;
 
   checkArticle() {
     if (!this.article) {
@@ -247,8 +249,17 @@ export default class ArticleDetailFeed extends Vue {
   }
 
   @Watch("boardModalActive")
-  prevent() {
+  preventBoardMenu() {
     if (this.boardModalActive) {
+      this.closeMenu = false;
+    } else {
+      this.closeMenu = true;
+    }
+  }
+
+  @Watch("folderModalActive")
+  preventPageMenu() {
+    if (this.folderModalActive) {
       this.closeMenu = false;
     } else {
       this.closeMenu = true;
@@ -264,13 +275,9 @@ export default class ArticleDetailFeed extends Vue {
     }
   }
 
-  selectPost(post: Post) {
-    this.selectPostDir = null;
-    this.selectPostDir = post;
-  }
-
   setEdit() {
     this.onEdit = true;
+    this.value = false;
   }
 
   saveEdit() {
@@ -282,6 +289,13 @@ export default class ArticleDetailFeed extends Vue {
       }
     });
     this.onEdit = false;
+  }
+
+  @Watch("$route", { immediate: true })
+  checkRoute() {
+    if (this.$route.name === "ArticleDetailInFeed") {
+      this.onEdit = false;
+    }
   }
 }
 </script>

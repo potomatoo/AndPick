@@ -203,7 +203,7 @@ const module: Module<MypageModule, RootState> = {
           )
         )
         .then(({ data }) => {
-          dispatch("FETCH_POSTDIR", data.data.postDirId);
+          dispatch("FETCH_POSTDIR_LIST");
         })
         .catch(err => console.error(err));
     },

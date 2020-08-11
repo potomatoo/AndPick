@@ -22,6 +22,7 @@ import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 
 import PostDir from "@/views/pages/PostDir.vue";
 import EditArticle from "@/views/pages/EditArticle.vue";
+import HashTag from "@/views/pages/HashTag.vue";
 
 Vue.use(VueRouter);
 
@@ -119,6 +120,12 @@ const routes: Array<RouteConfig> = [
   },
 
   {
+    path: "/mypage/:tagName/hashtag",
+    name: "HashTag",
+    component: HashTag
+  },
+
+  {
     path: "/add",
     name: "AddRss",
     component: AddRss,
@@ -135,15 +142,16 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/:feedName/subscription/:subscribeId",
+    path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
     component: ArticleListInRss,
     meta: {
       authRequired: true,
     },
   },
+
   {
-    path: "/:feedName/subscription/:subscribeId/:articleId",
+    path: "/feed/:feedId/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail,
     meta: {
@@ -154,6 +162,18 @@ const routes: Array<RouteConfig> = [
     path: "/feed/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
     component: ArticleDetailInFeed,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrap",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrap",
+        component: EditArticle
+      }
+    ],
     meta: {
       authRequired: true,
     },

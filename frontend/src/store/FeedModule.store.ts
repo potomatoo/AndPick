@@ -142,9 +142,9 @@ const module: Module<FeedModule, RootState> = {
           dispatch("FETCH_FEED_LIST");
           return { feedName: data.data.feedName, feedId: data.data.feedId };
         })
-        .then(({ feedId }) => {
-          router.push({ name: "Feed", params: { feedId } });
-        })
+        // .then(({ feedId }) => {
+        //   router.push({ name: "Feed", params: { feedId } });
+        // })
         .catch(err => console.error(err));
     },
 

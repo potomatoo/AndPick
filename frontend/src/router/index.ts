@@ -149,11 +149,22 @@ const routes: Array<RouteConfig> = [
       authRequired: true
     }
   },
-
   {
     path: "/feed/:feedId/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInSubs",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInSubs",
+        component: EditArticle
+      }
+    ],
     meta: {
       authRequired: true
     }
@@ -165,12 +176,12 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "scrap",
-        name: "NewScrap",
+        name: "NewScrapInFeed",
         component: EditArticle
       },
       {
         path: "scrap/:postId",
-        name: "EditScrap",
+        name: "EditScrapInFeed",
         component: EditArticle
       }
     ],

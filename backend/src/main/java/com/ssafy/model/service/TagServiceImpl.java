@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Tag;
+import com.ssafy.model.dto.User;
+import com.ssafy.model.repository.PostTagRepository;
 import com.ssafy.model.repository.TagRepository;
 import com.ssafy.model.response.BasicResponse;
 
@@ -14,6 +16,8 @@ public class TagServiceImpl implements TagService {
 
 	@Autowired
 	private TagRepository tagRepository;
+	@Autowired
+	private PostTagRepository postTagRepository;
 
 	@Override
 	@Transactional
@@ -81,6 +85,23 @@ public class TagServiceImpl implements TagService {
 		BasicResponse result = new BasicResponse();
 
 		result.data = tagRepository.findOneByTagName(tag.getTagName());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "태그 조회에 성공하였습니다.";
+		} else {
+			result.message = "태그 조회에 실패하였습니다.";
+		}
+
+		return result;
+	}
+
+	@Override
+	public BasicResponse findAllTagCount(User user) {
+		// TODO Auto-generated method stub
+
+		BasicResponse result = new BasicResponse();
+
+		result.data = postTagRepository.findAllTagCount(user.getUserNo());
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "태그 조회에 성공하였습니다.";

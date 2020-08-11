@@ -3,7 +3,7 @@
     <v-icon class="ml-3" style="color: black;" @click="isActive = !isActive"
       >mdi-folder-plus</v-icon
     >
-    <CreateFolderModal :isActive="isActive" />
+    <create-folder-modal :folderModalActive.sync="isActive" />
   </div>
 </template>
 

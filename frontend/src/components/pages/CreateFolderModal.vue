@@ -26,20 +26,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { Component, Vue, Watch, PropSync } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { PostDir } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
 @Component
-export default class CreateFolderModeal extends Vue {
+export default class CreateFolderModal extends Vue {
   @mypageModule.State isCreateFolderModalActive!: boolean;
   @mypageModule.State postDirList!: [];
   @mypageModule.Mutation TOGGLE_CREATEFOLDERMODAL: any;
   @mypageModule.Action ADD_POSTDIR: any;
 
-  @Prop({ type: Boolean }) isActive!: boolean;
+  @PropSync("folderModalActive", { type: Boolean }) isActive!: boolean;
 
   newPostDirName = null;
 

@@ -103,21 +103,12 @@ const store: StoreOptions<RootState> = {
       dispatch("postAuthData", info);
     },
 
-    social({ dispatch }, socialData) {
-      const info = {
-        data: socialData,
-        location: SERVER.ROUTES.social,
-      };
-      console.log("소셜데이터", socialData);
-      dispatch("postAuthData", info);
-    },
-
     logout({ getters, commit }) {
       commit("SET_TOKEN", null);
       commit("SET_NAME", null);
       STORAGE.removeItem("jwt-token");
       STORAGE.removeItem("name");
-      router.push("/");
+      router.push("/cover");
     },
 
     updateUser({ commit }, userName) {
@@ -130,6 +121,20 @@ const store: StoreOptions<RootState> = {
         .put(SERVER.URL + SERVER.ROUTES.updateUser, null, newData)
         .then(() => {
           commit("SET_NAME", userName);
+          alert("닉네임이 변경되었습니다.");
+          router.push("/");
+        })
+        .catch((err) => console.log("err", err));
+    },
+
+    updateUserPassword({ commit }, userPassword) {
+      Axios.instance
+        .put(
+          SERVER.URL + SERVER.ROUTES.updatePassword,
+          qs.stringify(userPassword)
+        )
+        .then(() => {
+          alert("비밀번호가 변경되었습니다.");
           router.push("/");
         })
         .catch((err) => console.log("err", err));
@@ -141,6 +146,7 @@ const store: StoreOptions<RootState> = {
         .then(() => {
           commit("SET_TOKEN", null);
           STORAGE.removeItem("jwt-token");
+          alert("회원탈퇴가 완료되었습니다.");
           router.push("/");
         })
         .catch((err) => console.log(err.response));

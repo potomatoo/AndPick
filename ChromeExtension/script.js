@@ -1,31 +1,24 @@
 document.querySelector("#getBtn").addEventListener("click", function() {
-    chrome.storage.sync.get(function(data) {
-        if (data.postContent !== undefined) {       
-            document.querySelector("#selectText").innerHTML = data.postContent + "<hr/>"
-        }
-    })
+    var nowData = localStorage.getItem("postContent")       
+    document.querySelector("#selectText").innerHTML = nowData + "<hr/>"
+        
+    
+    // window.open("http://localhost:8080/accounts/login?chorme=true", "_blank")
 })
 
 document.querySelector("#clearBtn").addEventListener("click", function() {
-    chrome.storage.sync.clear()
+    localStorage.removeItem("postContent")
 })
 
 document.querySelector("#saveBtn").addEventListener("click", function() {
     chrome.tabs.executeScript({
         code: "document.getSelection().anchorNode.textContent"
-    }, function(selectText) {                
-        chrome.storage.sync.get(function(data) {
-            if (data.postContent !== undefined) {
-                const nowData = data.postContent
-                chrome.storage.sync.set({
-                    postContent: nowData + "<hr/>" + selectText[0] + "<br>" + window.location.href
-                })                
-            }
-            else{
-                chrome.storage.sync.set({
-                    postContent: selectText[0] + "<br>" + window.location.href
-                })                
-            }
-        })       
-    });
+    }, function(selectText) {
+        var nowData = localStorage.getItem("postContent")
+        if (nowData !== undefined) {
+            localStorage.setItem("postContent", nowData + "<hr/>" + selectText[0] + "<br>" + window.location.href)
+        } else{
+            localStorage.setItem("postContent", selectText[0] + "<br>" + window.location.href)                
+        }
+    })    
 })

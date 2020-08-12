@@ -23,6 +23,8 @@ import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 import PostDir from "@/views/pages/PostDir.vue";
 import EditArticle from "@/views/pages/EditArticle.vue";
 import HashTag from "@/views/pages/HashTag.vue";
+import SelectFromOutSide from "@/views/pages/SelectFromOutside.vue";
+import { nextTick } from "vue/types/umd";
 
 Vue.use(VueRouter);
 
@@ -46,7 +48,7 @@ const routes: Array<RouteConfig> = [
     component: SignupView
   },
   {
-    path: "/accounts/login",
+    path: "/accounts/login/",
     name: "Login",
     component: LoginView
   },
@@ -111,6 +113,12 @@ const routes: Array<RouteConfig> = [
     meta: {
       authRequired: true
     }
+  },
+
+  {
+    path: "/fromothersite/select",
+    name: "SelectFromOutside",
+    component: SelectFromOutSide
   },
 
   {

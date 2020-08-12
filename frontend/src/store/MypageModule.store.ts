@@ -46,10 +46,6 @@ const module: Module<MypageModule, RootState> = {
       state.postDirList = postDirList;
     },
 
-    ADD_POSTDIR(state, postDir: PostDir) {
-      state.postDirList.push(postDir);
-    },
-
     SET_POSTDIR(state, postDir: Post[]) {
       state.postDir = postDir;
     },
@@ -145,9 +141,8 @@ const module: Module<MypageModule, RootState> = {
       };
       Axios.instance
         .post("/api/postdir/save", null, postDirData)
-        .then(({ data }) => {
+        .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
-          return data.data.postDirId;
         })
         .catch(err => console.error(err));
     },

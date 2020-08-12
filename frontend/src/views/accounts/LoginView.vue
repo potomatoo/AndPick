@@ -91,6 +91,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { required, minLength, email } from "vuelidate/lib/validators";
+import router from "../../router";
 
 interface LoginData {
   userId: string | null;
@@ -141,8 +142,18 @@ export default class LoginView extends Vue {
       console.log("데이터 검증 실패");
     } else {
       this.$store.dispatch("login", this.loginData);
+      if (
+        window.location.href ===
+        "http://localhost:8080/accounts/login?chorme=true"
+      ) {
+        router.push({ name: "SelectFromOutside" });
+      }
       console.log("데이터 검증 성공");
     }
+  }
+
+  created() {
+    console.log(this.$route.params.isChrome);
   }
   // created() {
   //   if (window.location.href.split("&")[1]) {

@@ -241,9 +241,17 @@ export default class ArticleDetail extends Vue {
     this.closeModal();
   }
 
-  @Watch("folderModalActive")
+  @Watch("boardModalActive")
   preventBoardMenu() {
-    console.log(this.boardModalActive);
+    if (this.boardModalActive) {
+      this.closeMenu = false;
+    } else {
+      this.closeMenu = true;
+    }
+  }
+
+  @Watch("folderModalActive")
+  preventPageMenu() {
     if (this.folderModalActive) {
       this.closeMenu = false;
     } else {

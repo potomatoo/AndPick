@@ -201,6 +201,18 @@ const routes: Array<RouteConfig> = [
     path: "/board/:boardId/news/:newsId",
     name: "BoardArticleDetail",
     component: BoardArticleDetail,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInBoard",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInBoard",
+        component: EditArticle
+      }
+    ],
     meta: {
       authRequired: true
     }

@@ -7,7 +7,7 @@
         class="form-control"
         id="userPassword"
         type="password"
-        placeholder="새로운 비밀번호"
+        placeholder="현재 비밀번호"
         :class="{
           'is-invalid': $v.updateData.userPassword.$error,
           'is-valid': !$v.updateData.userPassword.$invalid,
@@ -23,27 +23,46 @@
     </div>
     <div class="form-group">
       <input
-        v-model.trim="$v.updateData.userPasswordCheck.$model"
+        v-model.trim="$v.updateData.changePassword.$model"
         class="form-control"
-        id="userPasswordCheck"
+        id="changePassword"
+        type="password"
+        placeholder="새로운 비밀번호"
+        :class="{
+          'is-invalid': $v.updateData.changePassword.$error,
+          'is-valid': !$v.updateData.changePassword.$invalid,
+        }"
+      />
+      <div class="invalid-feedback">
+        <span v-if="!$v.updateData.changePassword.minLength"
+          >비밀번호는
+          {{ $v.updateData.changePassword.$params.minLength.min }}
+          글자 이상으로 입력해주세요.</span
+        >
+      </div>
+    </div>
+    <div class="form-group">
+      <input
+        v-model.trim="$v.updateData.changePasswordCheck.$model"
+        class="form-control"
+        id="changePasswordCheck"
         type="password"
         placeholder="비밀번호 확인"
         :class="{
-          'is-invalid': $v.updateData.userPasswordCheck.$error,
+          'is-invalid': $v.updateData.changePasswordCheck.$error,
           'is-valid':
-            updateData.userPassword != null
-              ? !$v.updateData.userPasswordCheck.$invalid
+            updateData.changePassword != null
+              ? !$v.updateData.changePasswordCheck.$invalid
               : null,
         }"
       />
       <div class="invalid-feedback">
-        <span v-if="!$v.updateData.userPasswordCheck.sameAsPassword"
+        <span v-if="!$v.updateData.changePasswordCheck.sameAsPassword"
           >비밀번호가 일치하지 않습니다.</span
         >
       </div>
     </div>
     <div class="d-flex justify-content-end mt-3">
-      <!-- <v-btn color="success" @click="updateUser(updateData)">수정</v-btn> -->
       <v-btn color="success" @click.prevent="submitPasswordForm">수정</v-btn>
     </div>
   </div>
@@ -51,12 +70,12 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-// import { mapActions } from "vuex";
 import { required, minLength, sameAs } from "vuelidate/lib/validators";
 
 interface UpdateData {
   userPassword: string | null;
-  userPasswordCheck: string | null;
+  changePassword: string | null;
+  changePasswordCheck: string | null;
 }
 
 @Component({
@@ -66,10 +85,14 @@ interface UpdateData {
         required,
         minLength: minLength(4),
       },
-      userPasswordCheck: {
+      changePassword: {
         required,
         minLength: minLength(4),
-        sameAsPassword: sameAs("userPassword"),
+      },
+      changePasswordCheck: {
+        required,
+        minLength: minLength(4),
+        sameAsPassword: sameAs("changePassword"),
       },
     },
   },
@@ -77,15 +100,13 @@ interface UpdateData {
 export default class PasswordUpdate extends Vue {
   updateData: UpdateData = {
     userPassword: null,
-    userPasswordCheck: null,
+    changePassword: null,
+    changePasswordCheck: null,
   };
   submitPasswordForm() {
     this.$v.$touch();
-    if (this.$v.$invalid) {
-      console.log("데이터 검증 실패");
-    } else {
-      //   this.$store.dispatch("", this.updateData);
-      console.log("데이터 검증 성공");
+    if (!this.$v.$invalid) {
+      this.$store.dispatch("updateUserPassword", this.updateData);
     }
   }
 }

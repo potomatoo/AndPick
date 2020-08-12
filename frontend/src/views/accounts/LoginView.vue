@@ -15,7 +15,7 @@
           placeholder="이메일"
           :class="{
             'is-invalid': $v.loginData.userId.$error,
-            'is-valid': !$v.loginData.userId.$invalid
+            'is-valid': !$v.loginData.userId.$invalid,
           }"
         />
         <div class="invalid-feedback">
@@ -38,7 +38,7 @@
           placeholder="비밀번호"
           :class="{
             'is-invalid': $v.loginData.userPassword.$error,
-            'is-valid': !$v.loginData.userPassword.$invalid
+            'is-valid': !$v.loginData.userPassword.$invalid,
           }"
           @keypress.enter="submitForm"
         />
@@ -64,25 +64,19 @@
       </div>
     </form>
     <hr />
-    <a
+    <!-- <a
       href="https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Faccounts%2Flogin&client_id=476248660063-e2gk89ukcim2la7mbttisi10pq9ck5r6.apps.googleusercontent.com"
       ><img src="@/assets/google.png" style="width: 380px; height:40px" />
-    </a>
+    </a> -->
+    <router-link :to="{ name: 'SocialLogin' }"
+      ><img src="@/assets/google.png" style="width: 380px; height: 40px;"
+    /></router-link>
     <p>
       계정이 없으신가요?
       <router-link :to="{ name: 'Signup' }">
         <b style="color: #5cb85c">Signup</b>
       </router-link>
     </p>
-    <!-- <div
-      class="g-signin2"
-      data-width="376px"
-      data-height="30"
-      data-longtitle="true"
-    ></div> -->
-    <!-- <router-link :to="{ name: 'SocialLogin' }"
-      ><img src="@/assets/google.png" style="width: 120px; height: auto;"
-    /></router-link> -->
   </div>
 </template>
 
@@ -93,11 +87,8 @@ import { required, minLength, email } from "vuelidate/lib/validators";
 interface LoginData {
   userId: string | null;
   userPassword: string | null;
-}
-
-interface SocialData {
-  accessToken: string | null;
-  userType: number | null;
+  userType: number;
+  code: string | null;
 }
 
 @Component({
@@ -110,28 +101,26 @@ interface SocialData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
           });
-        }
+        },
       },
       userPassword: {
         required,
-        minLength: minLength(4)
-      }
-    }
-  }
+        minLength: minLength(4),
+      },
+    },
+  },
 })
 export default class LoginView extends Vue {
   loginData: LoginData = {
     userId: null,
-    userPassword: null
-  };
-  socialData: SocialData = {
-    accessToken: window.location.href.split("&")[1],
-    userType: 1
+    userPassword: null,
+    userType: 0,
+    code: null,
   };
   submitForm() {
     this.$v.$touch();
@@ -141,11 +130,6 @@ export default class LoginView extends Vue {
       this.$store.dispatch("login", this.loginData);
     }
   }
-  // created() {
-  //   if (window.location.href.split("&")[1]) {
-  //     this.$store.dispatch("social", this.socialData);
-  //   }
-  // }
 }
 </script>
 

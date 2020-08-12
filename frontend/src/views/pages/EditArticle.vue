@@ -315,7 +315,6 @@ export default class EditArticle extends Vue {
       });
       this.snackbar = true;
     } else {
-      console.log(this.nowTagList);
       this.UPDATE_POST({
         postContent: this.html,
         postDirId: Number(this.$route.params.postDirId),

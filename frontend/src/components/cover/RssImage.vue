@@ -1,9 +1,5 @@
 <template>
-  <div class="col-lg-6 mt-5 d-flex justify-content-center">
-    <!-- <video src="@/assets/Subscribe.mp4" width="490" autoplay muted loop>
-      video 태그
-    </video> -->
-  </div>
+  <div class="col-6 mt-5 d-flex justify-content-center"></div>
 </template>
 
 <script>

@@ -12,17 +12,22 @@ export default {
       this.$gAuth
         .getAuthCode()
         .then((authCode) => {
-          return this.$http.post("http://your-backend-server.com/auth/google", {
+          console.log("code", authCode);
+          return this.$http.post("http://i3b107.p.ssafy.io/api/login", {
+            userId: "",
+            userPassword: "",
+            userType: 1,
             code: authCode,
             redirect_uri: "postmessage",
           });
         })
-        .then((response) => {
-          console.log("소셜");
-          //and then
+        .then((res) => {
+          this.$store.commit("SET_TOKEN", res.data.data["userPassword"]);
+          this.$store.commit("SET_NAME", res.data.data.userName);
+          this.$router.push("/");
         })
-        .catch((error) => {
-          console.log("소셜", error);
+        .catch((err) => {
+          console.log("소셜에러", err);
         });
     },
   },

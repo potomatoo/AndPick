@@ -1,15 +1,16 @@
 <template>
-  <v-app-bar app clipped-left style="height: 70px">
-    <v-app-bar-nav-icon @click="TOGGLE_SIDEBAR()" />
+  <v-app-bar app clipped-left height="70px">
+    <v-app-bar-nav-icon v-if="isLoggedIn" @click="TOGGLE_SIDEBAR()" />
     <v-toolbar-title
-      class="a mr-5 mt-4 d-flex justify-content-between"
+      class="a mr-5 justify-content-between"
+      align="center"
       style="width: 100%"
     >
       <router-link :to="{ name: 'Home' }">
         <a
           ><img
             class="mdi ml-5"
-            src="@/assets/title.png"
+            src="@/assets/title1.jpg"
             width="140px"
             height="auto"
         /></a>
@@ -21,9 +22,11 @@
       >
         <v-btn outlined color="success">로그인</v-btn>
       </router-link>
-
-      <div v-if="isLoggedIn" class="mt-1">
-        <div>
+      <div v-if="isLoggedIn" class="mt-1 d-flex">
+        <div class="cheer p-1">
+          <b>{{ userName }}</b> 님의 취업성공을 응원합니다!
+        </div>
+        <div class="ml-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
               <span class="mdi mdi-account-edit mr-3 p-2" v-on="on"></span>
@@ -51,14 +54,30 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { mapMutations, mapGetters } from "vuex";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { mapMutations, mapGetters, mapState } from "vuex";
+import { Axios } from "@/service/axios.service";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
-  computed: { ...mapGetters(["isLoggedIn"]) }
+  computed: { ...mapGetters(["isLoggedIn"]) },
 })
-export default class AppNavbar extends Vue {}
+export default class AppNavbar extends Vue {
+  userName: string | null = null;
+
+  setName() {
+    this.userName = this.$store.state.userName;
+  }
+
+  mounted() {
+    this.setName();
+  }
+
+  @Watch("$store.state.userName")
+  newName(name: string) {
+    this.userName = name;
+  }
+}
 </script>
 
 <style scoped>
@@ -74,5 +93,10 @@ export default class AppNavbar extends Vue {}
 }
 .a {
   background-color: whitesmoke;
+  display: flex;
+  align-items: center;
+}
+.cheer {
+  font-size: 16px;
 }
 </style>

@@ -257,6 +257,7 @@ export default class EditArticle extends Vue {
   setTitle() {
     this.title = this.post.postTitle;
     this.html = this.post.postContent;
+    this.nowTagList = [];
     this.post.tagList.forEach(element => {
       this.nowTagList.push(element.tagName);
     });
@@ -309,7 +310,7 @@ export default class EditArticle extends Vue {
     if (isNaN(this.postId)) {
       this.ADD_POST({
         postContent: this.html,
-        postDirId: Number(this.$route.params.postDirId),
+        postDirId: this.$route.params.postDirId || this.post.postDirId,
         postTitle: this.title,
         tagList: this.nowTagList
       });
@@ -317,21 +318,28 @@ export default class EditArticle extends Vue {
     } else {
       this.UPDATE_POST({
         postContent: this.html,
-        postDirId: Number(this.$route.params.postDirId),
+        postDirId: this.$route.params.postDirId || this.post.postDirId,
         postId: Number(this.$route.params.postId),
         postTitle: this.title,
         tagList: this.nowTagList
       });
       this.snackbar = true;
     }
+    this.$emit("save");
   }
 
   @Watch("$route", { immediate: true })
   selectPost() {
     this.title = "";
+    this.html = "";
+    this.nowTagList = [];
     this.SELECT_POST({
       postId: Number(this.$route.params.postId)
     });
+    if (this.$route.name === "NewScrap") {
+      const content = document.querySelector(".content");
+      content.querySelector("p").innerText = "";
+    }
   }
 
   @Watch("postId", { immediate: true })

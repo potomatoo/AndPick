@@ -24,7 +24,6 @@
         >
       </div>
       <div class="d-flex justify-content-end mt-3">
-        <!-- <v-btn color="success" @click="updateUser(updateData)">수정</v-btn> -->
         <v-btn color="success" @click.prevent="submitNameForm">수정</v-btn>
       </div>
     </div>
@@ -50,11 +49,8 @@ export default class NameUpdate extends Vue {
 
   submitNameForm() {
     this.$v.$touch();
-    if (this.$v.$invalid) {
-      console.log("데이터 검증 실패");
-    } else {
-      // this.$store.dispatch("", this.userName);
-      console.log("데이터 검증 성공");
+    if (!this.$v.$invalid) {
+      this.$store.dispatch("updateUser", this.userName);
     }
   }
 }

@@ -18,7 +18,6 @@
             'is-valid': !$v.loginData.userId.$invalid
           }"
         />
-        <div class="valid-feedback">Your ID is valid</div>
         <div class="invalid-feedback">
           <span v-if="!$v.loginData.userId.required"
             >ID는 필수(값) 입니다.
@@ -43,7 +42,6 @@
           }"
           @keypress.enter="submitForm"
         />
-        <div class="valid-feedback">Your Password is valid</div>
         <div class="invalid-feedback">
           <span v-if="!$v.loginData.userPassword.required"
             >비밀번호는 필수(값) 입니다.</span
@@ -139,7 +137,7 @@ export default class LoginView extends Vue {
   submitForm() {
     this.$v.$touch();
     if (this.$v.$invalid) {
-      console.log("데이터 검증 실패");
+      alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
       if (

@@ -31,7 +31,7 @@
             :to="{
               name: 'ArticleListInRss',
               params: {
-                feedName: feed.feedName,
+                feedId: feed.feedId,
                 subscribeId: subItem.subscribeId
               }
             }"
@@ -51,50 +51,33 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-dialog v-model="modalActive" max-width="500px">
-      <v-card>
-        <v-form ref="form" onsubmit="return false;">
-          <v-card-text>
-            <v-text-field
-              v-model="newFeedName"
-              label="Feed Name"
-              autofocus
-              clearable
-              :rules="rules"
-              @keypress.enter="addFeeds"
-            ></v-text-field>
+    <create-feed-modal
+      :modalActive.sync="modalActive"
+      @addFeed="addFeeds"
+      @closeModal="closeModal"
+    />
 
-            <small class="grey--text">* Create New Feed</small>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="success" @click="addFeeds">Create</v-btn>
-            <v-btn outlined color="grey" @click="closeModal">Cancle</v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
     <feed-context-menu :feedItem="feedItem" />
     <subs-context-menu :subsItem="subsItem" :feedItem="feedItem" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-// import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
 import { FeedList, SubscribeList } from "../../store/Feed.interface";
 import SubsContextMenu from "@/components/feeds/SubsContextMenu.vue";
 import FeedContextMenu from "@/components/feeds/FeedContextMenu.vue";
+import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
 
 const feedModule = namespace("feedModule");
 
 @Component({
   components: {
     SubsContextMenu,
-    FeedContextMenu
+    FeedContextMenu,
+    CreateFeedModal
   }
 })
 export default class SidebarFeed extends Vue {
@@ -102,8 +85,6 @@ export default class SidebarFeed extends Vue {
   @feedModule.Mutation SET_SUB_CONTEXT_MENU: any;
   @feedModule.Mutation SET_FEED_CONTEXT_MENU: any;
   @feedModule.Action ADD_FEED: any;
-
-  newFeedName = null;
 
   modalActive = false;
 
@@ -113,36 +94,13 @@ export default class SidebarFeed extends Vue {
 
   feedItem = {};
 
-  rules = [
-    (value: any) => !!value || "This field is required.",
-    (value: string) =>
-      !this.checkDuplication(value) || "동일한 피드가 존재합니다."
-  ];
-
-  @Watch("modalActive")
-  onModalClose(isActive: boolean) {
-    if (isActive && this.$refs.form) {
-      (this.$refs.form as HTMLFormElement).reset();
-    }
-  }
-
-  checkDuplication(name: string | null) {
-    if (this.feedList.length) {
-      return this.feedList.some((feed: FeedList) => feed.feedName === name);
-    }
-    return false;
-  }
-
   closeModal() {
-    this.newFeedName = null;
     this.modalActive = false;
   }
 
-  addFeeds() {
-    if (this.newFeedName && !this.checkDuplication(this.newFeedName)) {
-      this.ADD_FEED(this.newFeedName);
-      this.closeModal();
-    }
+  addFeeds(feedName: string) {
+    this.ADD_FEED(feedName);
+    this.closeModal();
   }
 
   showSubsCtx(e: MouseEvent, subsItem: SubscribeList, feedItem: FeedList) {

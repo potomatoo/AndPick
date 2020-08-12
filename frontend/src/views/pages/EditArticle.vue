@@ -310,7 +310,7 @@ export default class EditArticle extends Vue {
     if (isNaN(this.postId)) {
       this.ADD_POST({
         postContent: this.html,
-        postDirId: this.$route.params.postDirId || this.post.postDirId,
+        postDirId: this.$route.params.postDirId,
         postTitle: this.title,
         tagList: this.nowTagList
       });

@@ -30,11 +30,14 @@ export interface Context {
 
 export interface MypageModule {
   isSidebarActive: boolean;
+  isCreateFolderModalActive: boolean;
   postDirList: PostDir[];
   postDir: Post[];
+  tagDir: Post[];
   post: Post | null;
   postDirId: number | null;
   postId: number | null;
+  tagName: string | null;
   postDirName: string | null;
   postDirContextMenu: Context;
   postContextMenu: Context;

@@ -22,6 +22,7 @@ import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 
 import PostDir from "@/views/pages/PostDir.vue";
 import EditArticle from "@/views/pages/EditArticle.vue";
+import HashTag from "@/views/pages/HashTag.vue";
 
 Vue.use(VueRouter);
 
@@ -119,6 +120,12 @@ const routes: Array<RouteConfig> = [
   },
 
   {
+    path: "/mypage/:tagName/hashtag",
+    name: "HashTag",
+    component: HashTag
+  },
+
+  {
     path: "/add",
     name: "AddRss",
     component: AddRss,
@@ -135,7 +142,7 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/:feedName/subscription/:subscribeId",
+    path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
     component: ArticleListInRss,
     meta: {
@@ -143,9 +150,21 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/:feedName/subscription/:subscribeId/:articleId",
+    path: "/feed/:feedId/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInSubs",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInSubs",
+        component: EditArticle
+      }
+    ],
     meta: {
       authRequired: true,
     },
@@ -154,6 +173,18 @@ const routes: Array<RouteConfig> = [
     path: "/feed/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
     component: ArticleDetailInFeed,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInFeed",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInFeed",
+        component: EditArticle
+      }
+    ],
     meta: {
       authRequired: true,
     },
@@ -170,6 +201,18 @@ const routes: Array<RouteConfig> = [
     path: "/board/:boardId/news/:newsId",
     name: "BoardArticleDetail",
     component: BoardArticleDetail,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInBoard",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInBoard",
+        component: EditArticle
+      }
+    ],
     meta: {
       authRequired: true,
     },

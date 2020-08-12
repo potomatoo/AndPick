@@ -1,15 +1,16 @@
 <template>
-  <v-app-bar app clipped-left style="height: 70px">
+  <v-app-bar app clipped-left height="70px">
     <v-app-bar-nav-icon v-if="isLoggedIn" @click="TOGGLE_SIDEBAR()" />
     <v-toolbar-title
-      class="a mr-5 mt-4 d-flex justify-content-between"
+      class="a mr-5 justify-content-between"
+      align="center"
       style="width: 100%"
     >
       <router-link :to="{ name: 'Home' }">
         <a
           ><img
             class="mdi ml-5"
-            src="@/assets/title.png"
+            src="@/assets/title1.jpg"
             width="140px"
             height="auto"
         /></a>
@@ -92,6 +93,8 @@ export default class AppNavbar extends Vue {
 }
 .a {
   background-color: whitesmoke;
+  display: flex;
+  align-items: center;
 }
 .cheer {
   font-size: 16px;

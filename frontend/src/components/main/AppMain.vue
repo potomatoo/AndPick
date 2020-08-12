@@ -1,26 +1,24 @@
 <template>
   <v-main>
-    <v-container fluid>
-      <v-layout>
-        <v-flex v-if="isLoggedIn" offset-lg3 lg6>
-          <router-view></router-view>
-        </v-flex>
-        <v-flex v-if="!isLoggedIn">
-          <router-view></router-view>
-        </v-flex>
-      </v-layout>
-      <v-btn
-        v-if="isLoggedIn"
-        @click="scrollToTop"
-        class="button-bottom"
-        dark
-        fab
-        small
-        color="success"
-      >
-        <v-icon dark>mdi-menu-up</v-icon>
-      </v-btn>
-    </v-container>
+    <v-layout>
+      <v-flex v-if="isLoggedIn" offset-lg3 lg6>
+        <router-view></router-view>
+      </v-flex>
+      <v-flex v-if="!isLoggedIn">
+        <router-view></router-view>
+      </v-flex>
+    </v-layout>
+    <v-btn
+      v-if="isLoggedIn"
+      @click="scrollToTop"
+      class="button-bottom"
+      dark
+      fab
+      small
+      color="success"
+    >
+      <v-icon dark>mdi-menu-up</v-icon>
+    </v-btn>
   </v-main>
 </template>
 

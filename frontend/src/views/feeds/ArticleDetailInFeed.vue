@@ -94,7 +94,7 @@
                       <router-link
                         class="router-link"
                         :to="{
-                          name: 'EditScrap',
+                          name: 'EditScrapInFeed',
                           params: { postId: post.postId }
                         }"
                       >
@@ -105,7 +105,10 @@
                     </v-list-item>
 
                     <hr class="ma-0" />
-                    <router-link class="router-link" :to="{ name: 'NewScrap' }">
+                    <router-link
+                      class="router-link"
+                      :to="{ name: 'NewScrapInFeed' }"
+                    >
                       <v-list-item @click="setEdit">
                         <v-icon color="success" class="mr-2">mdi-plus</v-icon>
                         <v-list-item-title class="success--text"
@@ -185,20 +188,13 @@ export default class ArticleDetailFeed extends Vue {
   @feedModule.Action SAVE_IN_BOARD: any;
   @feedModule.Action DELETE_IN_BOARD: any;
   @feedModule.Action ADD_BOARD: any;
-  @mypageModule.State postDirList!: [];
-  @mypageModule.Mutation TOGGLE_CREATEFOLDERMODAL: any;
+  @mypageModule.State postDirList!: Post[];
 
   boardModalActive = false;
 
   folderModalActive = false;
 
-  pageModalActive = false;
-
   closeMenu = true;
-
-  closeContMent = false;
-
-  showPostMenu = false;
 
   onEdit = false;
 
@@ -221,7 +217,7 @@ export default class ArticleDetailFeed extends Vue {
     window.open(link);
   }
 
-  created() {
+  mounted() {
     // 새로고침시 article state가 초기화되면 상위 페이지로 이동
     this.checkArticle();
   }
@@ -271,7 +267,7 @@ export default class ArticleDetailFeed extends Vue {
     if (select && select.toString()) {
       this.selectText = select.toString();
       console.log(select.toString());
-      this.showPostMenu = true;
+      // this.showPostMenu = true;
     }
   }
 
@@ -295,6 +291,11 @@ export default class ArticleDetailFeed extends Vue {
   checkRoute() {
     if (this.$route.name === "ArticleDetailInFeed") {
       this.onEdit = false;
+    } else if (
+      this.$route.name === "NewScrapInFeed" ||
+      this.$route.name === "EditScrapInFeed"
+    ) {
+      this.onEdit = true;
     }
   }
 }

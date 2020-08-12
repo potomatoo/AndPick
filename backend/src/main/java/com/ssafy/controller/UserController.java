@@ -105,7 +105,7 @@ public class UserController {
 		User user = (User) this.redisTemplate.opsForValue().get(jwtToken);
 		user.setUserName(userName);
 
-		User update = userService.UpdateUser(user);
+		User update = userService.updateUser(user);
 		this.redisTemplate.opsForValue().set(jwtToken, user);
 
 		update.setUserPassword("");
@@ -143,6 +143,48 @@ public class UserController {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.message = "회원 정보 조회에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
+	@PutMapping("/api/update/user/password")
+	public Object upateUserPassword(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("userPassword") String userPassword, @RequestParam("changePassword") String changePassword) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		if (userPassword == null || changePassword == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		if (!encoder.matches(userPassword, user.getUserPassword())) {
+			result.status = false;
+			result.message = "기존 비밀번호가 다릅니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		user.setUserPassword(encoder.encode(changePassword));
+		result.data = userService.updateUser(user);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "비밀번호 변경에 성공하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "비밀번호 변경에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 

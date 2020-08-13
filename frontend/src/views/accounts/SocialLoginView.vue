@@ -1,11 +1,11 @@
 <template>
-  <div>
-    소셜로그인
-  </div>
+  <div></div>
 </template>
 
 <script>
 import axios from "axios";
+import qs from "qs";
+import { helpers } from "vuelidate/lib/validators";
 
 export default {
   name: "test",
@@ -13,40 +13,20 @@ export default {
     handleClickGetAuth() {
       this.$gAuth
         .getAuthCode()
-        .then((authCode) => {
-          // console.log("code", authCode);
-          // return this.$http.get(
-          //   "http://i3b107.p.ssafy.io/api/public/google/login",
-          //   {
-          //     // userId: "",
-          //     // userPassword: "",
-          //     // userType: 1,
-          //     authToken: authCode,
-          //     // redirect_uri: "postmessage",
-          //   }
-          // );
-          console.log(authCode);
-          axios
-            .post("http://i3b107.p.ssafy.io/api/public/google/login", {
-              authToken: authCode,
-            })
-            .then((res) => {
-              console.log(res);
-
-              alert("사용가능한 이메일 입니다.");
-            })
-            .catch((err) => {
-              console.log("에러", err);
-            });
+        .then((authToken) => {
+          return this.$http.post(
+            "http://i3b107.p.ssafy.io:8080/api/public/google/login",
+            authToken
+          );
         })
-        // .then((res) => {
-        //   console.log(res.data)
-        //   // this.$store.commit("SET_TOKEN", res.data.data["userPassword"]);
-        //   // this.$store.commit("SET_NAME", res.data.data.userName);
-        //   // this.$router.push("/");
-        // })
+        .then((res) => {
+          this.$store.commit("SET_TOKEN", res.data.data["userPassword"]);
+          this.$store.commit("SET_NAME", res.data.data.userName);
+          this.$router.push("/");
+        })
         .catch((err) => {
           console.log("소셜에러", err);
+          this.$router.push("/");
         });
     },
   },

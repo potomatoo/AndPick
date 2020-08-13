@@ -64,20 +64,9 @@
       </div>
     </form>
     <hr />
-    <!-- <a
-      href="https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Faccounts%2Flogin&client_id=476248660063-e2gk89ukcim2la7mbttisi10pq9ck5r6.apps.googleusercontent.com"
-      ><img src="@/assets/google.png" style="width: 380px; height:40px" />
-    </a> -->
-    <button @click="test1()">
-      <img src="@/assets/google.png" style="width: 380px; height:40px" />
-    </button>
-    <hr />
-    <button @click="test2()">
-      <img src="@/assets/google.png" style="width: 380px; height:40px" />
-    </button>
-    <!-- <router-link :to="{ name: 'SocialLogin' }"
+    <router-link :to="{ name: 'SocialLogin' }"
       ><img src="@/assets/google.png" style="width: 380px; height: 40px;"
-    /></router-link> -->
+    /></router-link>
     <p>
       계정이 없으신가요?
       <router-link :to="{ name: 'Signup' }">
@@ -90,7 +79,6 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { required, minLength, email } from "vuelidate/lib/validators";
-import axios from "axios";
 
 interface LoginData {
   userId: string | null;
@@ -130,7 +118,6 @@ export default class LoginView extends Vue {
     userType: 0,
     code: null,
   };
-  URL: string | null = null;
   submitForm() {
     this.$v.$touch();
     if (this.$v.$invalid) {
@@ -138,31 +125,6 @@ export default class LoginView extends Vue {
     } else {
       this.$store.dispatch("login", this.loginData);
     }
-  }
-  test1() {
-    if (this.URL) {
-      axios
-        .get(this.URL, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .then((res) => console.log("1성공", res))
-        .catch((err) => console.log("1에러", err));
-    }
-  }
-  test2() {
-    if (this.URL) {
-      axios
-        .get(this.URL)
-        .then((res) => console.log("2성공", res))
-        .catch((err) => console.log("2에러", err));
-    }
-  }
-  created() {
-    axios
-      .get("http://i3b107.p.ssafy.io/api/public/google")
-      .then((res) => (this.URL = res.data.data));
   }
 }
 </script>

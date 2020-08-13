@@ -25,14 +25,28 @@ export default {
           //     // redirect_uri: "postmessage",
           //   }
           // );
+          console.log(authCode);
           axios
-            .get("http://i3b107.p.ssafy.io/api/public/google/login", {
-              authToken: authCode,
+            .post(
+              "http://i3b107.p.ssafy.io/api/public/google/login",
+              {
+                authToken: authCode,
+              },
+              {
+                withCredentials: true,
+              }
+            )
+            .then((res) => {
+              console.log(res);
+
+              alert("사용가능한 이메일 입니다.");
             })
-            .then((res) => console.log(res));
+            .catch((err) => {
+              console.log("에러", err);
+            });
         })
         // .then((res) => {
-        //   console.log(res.data);
+        //   console.log(res.data)
         //   // this.$store.commit("SET_TOKEN", res.data.data["userPassword"]);
         //   // this.$store.commit("SET_NAME", res.data.data.userName);
         //   // this.$router.push("/");

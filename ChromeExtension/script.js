@@ -52,10 +52,11 @@ document.querySelector("#openbrowser").addEventListener("click", function() {
     
     var httpRequest = new XMLHttpRequest()
     var scrapData = {
-        key: key,
+        id: key,
         scrap: scrap
     }
     httpRequest.open("POST", "http://i3b107.p.ssafy.io:8080/api/public/scrap/save/", true)
-    httpRequest.setRequestHeader('Content-Type', 'application/json');    
-    httpRequest.send(JSON.stringify(scrapData));    
+    httpRequest.setRequestHeader('Content-Type', 'application/json');        
+    httpRequest.send(JSON.stringify(scrapData));        
+    window.open(`http://localhost:8080/accounts/login?${key}`, "_blank")
 })

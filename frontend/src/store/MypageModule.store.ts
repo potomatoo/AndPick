@@ -135,12 +135,10 @@ const module: Module<MypageModule, RootState> = {
 
     ADD_POSTDIR({ dispatch }, postDirName: string) {
       const postDirData = {
-        params: {
-          postDirName
-        }
+        postDirName
       };
       Axios.instance
-        .post("/api/postdir/save", null, postDirData)
+        .post("/api/postdir/save", postDirData)
         .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
         })
@@ -185,18 +183,12 @@ const module: Module<MypageModule, RootState> = {
       }
     ) {
       Axios.instance
-        .post(
-          "/api/post/save",
-          QueryString.stringify(
-            {
-              postContent: postContent,
-              postDirId: postDirId,
-              postTitle: postTitle,
-              tagList: tagList
-            },
-            { indices: false }
-          )
-        )
+        .post("/api/post/save", {
+          postContent: postContent,
+          postDirId: postDirId,
+          postTitle: postTitle,
+          tagList: tagList
+        })
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR_LIST");
         })
@@ -269,6 +261,21 @@ const module: Module<MypageModule, RootState> = {
         .delete("/api/post/delete", postData)
         .then(() => {
           dispatch("FETCH_POSTDIR", postDirId);
+        })
+        .catch(err => console.error(err));
+    },
+
+    SAVE_SCRAPDATA({ dispatch }, key: string) {
+      const scrapData = {
+        params: {
+          key: key
+        }
+      };
+      Axios.instance
+        .get("/api/scrap/load", scrapData)
+        .then(({ data }) => {
+          console.log(data);
+          localStorage.setItem("scrapData", data.scrap);
         })
         .catch(err => console.error(err));
     }

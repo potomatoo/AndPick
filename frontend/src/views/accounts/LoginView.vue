@@ -139,12 +139,6 @@ export default class LoginView extends Vue {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
-      if (
-        window.location.href ===
-        "http://localhost:8080/accounts/login?chorme=true"
-      ) {
-        router.push({ name: "SelectFromOutside" });
-      }
       console.log("데이터 검증 성공");
     }
   }

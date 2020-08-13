@@ -8,17 +8,19 @@
         <router-view></router-view>
       </v-flex>
     </v-layout>
-    <v-btn
-      v-if="isLoggedIn"
-      @click="scrollToTop"
-      class="button-bottom"
-      dark
-      fab
-      small
-      color="success"
-    >
-      <v-icon dark>mdi-menu-up</v-icon>
-    </v-btn>
+    <transition name="slide-fade">
+      <v-btn
+        v-if="showbtn"
+        @click="scrollToTop"
+        class="button-bottom"
+        dark
+        fab
+        small
+        color="success"
+      >
+        <v-icon dark>mdi-menu-up</v-icon>
+      </v-btn>
+    </transition>
   </v-main>
 </template>
 
@@ -34,7 +36,19 @@ import { mapGetters } from "vuex";
     }
   }
 })
-export default class AppMain extends Vue {}
+export default class AppMain extends Vue {
+  showbtn = false;
+  handleScroll() {
+    if (document.documentElement.scrollTop > 300) {
+      this.showbtn = true;
+    } else {
+      this.showbtn = false;
+    }
+  }
+  created() {
+    window.addEventListener("scroll", this.handleScroll);
+  }
+}
 </script>
 <style>
 .button-bottom {
@@ -45,5 +59,16 @@ export default class AppMain extends Vue {}
   color: inherit;
   border: 0;
   outline: none !important;
+}
+.slide-fade-enter-active {
+  transition: all 1s ease;
+}
+.slide-fade-leave-active {
+  transition: all 1.5s ease;
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
 }
 </style>

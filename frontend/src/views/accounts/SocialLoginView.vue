@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "test",
   methods: {
@@ -12,17 +14,39 @@ export default {
       this.$gAuth
         .getAuthCode()
         .then((authCode) => {
-          return this.$http.post("http://your-backend-server.com/auth/google", {
-            code: authCode,
-            redirect_uri: "postmessage",
-          });
+          // console.log("code", authCode);
+          // return this.$http.get(
+          //   "http://i3b107.p.ssafy.io/api/public/google/login",
+          //   {
+          //     // userId: "",
+          //     // userPassword: "",
+          //     // userType: 1,
+          //     authToken: authCode,
+          //     // redirect_uri: "postmessage",
+          //   }
+          // );
+          console.log(authCode);
+          axios
+            .post("http://i3b107.p.ssafy.io/api/public/google/login", {
+              authToken: authCode,
+            })
+            .then((res) => {
+              console.log(res);
+
+              alert("사용가능한 이메일 입니다.");
+            })
+            .catch((err) => {
+              console.log("에러", err);
+            });
         })
-        .then((response) => {
-          console.log("소셜");
-          //and then
-        })
-        .catch((error) => {
-          console.log("소셜", error);
+        // .then((res) => {
+        //   console.log(res.data)
+        //   // this.$store.commit("SET_TOKEN", res.data.data["userPassword"]);
+        //   // this.$store.commit("SET_NAME", res.data.data.userName);
+        //   // this.$router.push("/");
+        // })
+        .catch((err) => {
+          console.log("소셜에러", err);
         });
     },
   },

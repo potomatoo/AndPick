@@ -14,7 +14,7 @@ export default {
         .then((authCode) => {
           console.log("code", authCode);
           return this.$http.get(
-            "http://i3b107.p.ssafy.io/api/pubplic/google/login",
+            "http://i3b107.p.ssafy.io/api/public/google/login",
             {
               // userId: "",
               // userPassword: "",

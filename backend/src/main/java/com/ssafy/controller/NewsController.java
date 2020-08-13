@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,9 +29,7 @@ public class NewsController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/news/save")
-	public Object saveNews(@RequestHeader("Authorization") String jwtToken, @RequestParam("newsTitle") String newsTitle,
-			@RequestParam("newsLink") String newsLink, @RequestParam("newsDate") Date newsDate,
-			@RequestParam("newsDescription") String newsDescription, @RequestParam("boardId") long boardId) {
+	public Object saveNews(@RequestHeader("Authorization") String jwtToken, @RequestBody News news) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -42,22 +41,23 @@ public class NewsController {
 			return response;
 		}
 
-		if (newsTitle == null || newsLink == null || newsDate == null || newsDescription == null) {
+		if (news.getNewsTitle() == null || news.getNewsLink() == null || news.getNewsDate() == null
+				|| news.getNewsDescription() == null) {
 			result.status = false;
 			result.message = "필수 값을 입력하세요";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 			return response;
 		}
 
-		News news = new News();
-		news.setNewsTitle(newsTitle);
-		news.setNewsLink(newsLink);
-		news.setNewsDescription(newsDescription);
-		news.setNewsDate(newsDate);
-		news.setBoardId(boardId);
-		news.setUserNo(user.getUserNo());
+		News newsDto = new News();
+		newsDto.setNewsTitle(news.getNewsTitle());
+		newsDto.setNewsLink(news.getNewsLink());
+		newsDto.setNewsDescription(news.getNewsDescription());
+		newsDto.setNewsDate(news.getNewsDate());
+		newsDto.setBoardId(news.getBoardId());
+		newsDto.setUserNo(user.getUserNo());
 
-		result = newsService.saveNews(user, news);
+		result = newsService.saveNews(user, newsDto);
 
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);

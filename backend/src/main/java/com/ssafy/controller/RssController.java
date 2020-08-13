@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -117,8 +118,7 @@ public class RssController {
 	}
 
 	@PostMapping(value = "/api/rss/save")
-	public Object saveRss(@RequestHeader("Authorization") String jwtToken, @RequestParam("rssName") String rssName,
-			@RequestParam("rssUrl") String rssUrl, @RequestParam("categoryName") String categoryName) {
+	public Object saveRss(@RequestHeader("Authorization") String jwtToken, @RequestBody Rss rss) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -130,22 +130,22 @@ public class RssController {
 			return response;
 		}
 
-		if (rssName == null || rssUrl == null || categoryName == null) {
+		if (rss.getRssName() == null || rss.getRssUrl() == null || rss.getCategory().getCategoryName() == null) {
 			result.status = false;
 			result.message = "필수값을 입력하세요.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 			return response;
 		}
 
-		Rss rss = new Rss();
+		Rss rssDto = new Rss();
 
-		rss.setRssName(rssName);
-		rss.setRssUrl(rssUrl);
+		rssDto.setRssName(rss.getRssName());
+		rssDto.setRssUrl(rss.getRssUrl());
 
 		Category category = new Category();
-		category.setCategoryName(categoryName);
+		category.setCategoryName(rss.getCategory().getCategoryName());
 
-		result.data = rssService.saveRss(rss, category);
+		result.data = rssService.saveRss(rssDto, category);
 		result.status = (result.data != null) ? true : false;
 
 		if (result.status) {

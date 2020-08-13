@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,11 +24,11 @@ public class ScrapController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping("/api/public/scrap/save")
-	public Object SaveScrap(@RequestParam("key") String key, @RequestParam("scrap") String scrap) {
+	public Object SaveScrap(@RequestBody Scrap scrap) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		if (key == null || scrap == null) {
+		if (scrap.getId() == null || scrap.getScrap() == null) {
 			result.status = false;
 			result.message = "필수 값을 입력하세요 ";
 			response = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
@@ -35,8 +36,8 @@ public class ScrapController {
 		}
 
 		Scrap scrapdto = new Scrap();
-		scrapdto.setId(key);
-		scrapdto.setScrap(scrap);
+		scrapdto.setId(scrap.getId());
+		scrapdto.setScrap(scrap.getScrap());
 		result = scrapService.saveScrap(scrapdto);
 
 		if (result.status) {

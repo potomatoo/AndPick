@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,20 +32,18 @@ public class UserController {
 	RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping("/api/public/signup")
-	public Object signup(@RequestParam(value = "userId") String userId,
-			@RequestParam(value = "userPassword") String userPassword,
-			@RequestParam(value = "userName") String userName, @RequestParam(value = "userType") int userType) {
-		System.out.println(userPassword);
+	public Object signup(@RequestBody User user) {
 
-		User user = userService.Signup(new User(userId, encoder.encode(userPassword), userName, userType));
-		user.setUserPassword(null);
+		User userDto = userService.Signup(new User(user.getUserId(), encoder.encode(user.getUserPassword()),
+				user.getUserName(), user.getUserType()));
+		userDto.setUserPassword(null);
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		if (user != null) {
+		if (userDto != null) {
 			result.status = true;
 			result.message = "Sign up success";
-			result.data = user;
+			result.data = userDto;
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.status = false;

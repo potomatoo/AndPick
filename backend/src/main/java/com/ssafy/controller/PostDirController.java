@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -25,17 +26,16 @@ public class PostDirController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/postdir/save")
-	public Object savePostDir(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam("postDirName") String postDirName) {
+	public Object savePostDir(@RequestHeader("Authorization") String jwtToken, @RequestBody PostDir postdir) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
 
-		PostDir postDir = new PostDir();
-		postDir.setPostDirName(postDirName);
+		PostDir postDirDto = new PostDir();
+		postDirDto.setPostDirName(postdir.getPostDirName());
 
-		result.data = postDirService.save(user, postDir);
+		result.data = postDirService.save(user, postDirDto);
 		result.status = (result.data != null) ? true : false;
 
 		if (result.status) {
@@ -115,7 +115,8 @@ public class PostDirController {
 	}
 
 	@DeleteMapping(value = "/api/postdir/delete")
-	public Object deleteDir(@RequestHeader("Authorization") String jwtToken, @RequestParam("postDirId") long postDirId) {
+	public Object deleteDir(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("postDirId") long postDirId) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,7 +24,7 @@ public class TagController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping("/api/tag/save")
-	public Object saveTag(@RequestHeader("Authorization") String jwtToken, @RequestParam("tagName") String tagName) {
+	public Object saveTag(@RequestHeader("Authorization") String jwtToken, @RequestBody Tag tag) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -35,17 +36,17 @@ public class TagController {
 			return response;
 		}
 
-		if (tagName == null) {
+		if (tag.getTagName() == null) {
 			result.status = false;
 			result.message = "필수값을 입력하세요";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 			return response;
 		}
 
-		Tag tag = new Tag();
-		tag.setTagName(tagName);
+		Tag tagDto = new Tag();
+		tagDto.setTagName(tag.getTagName());
 
-		result = tagService.saveTag(tag);
+		result = tagService.saveTag(tagDto);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

@@ -1,5 +1,4 @@
 <template>
-  <!-- <div> -->
   <v-menu
     offset-x
     :close-on-content-click="false"
@@ -52,7 +51,6 @@
       @closeModal="closeModal"
     />
   </v-menu>
-  <!-- </div> -->
 </template>
 
 <script lang="ts">

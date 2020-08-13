@@ -28,37 +28,23 @@
             <v-list-item
               v-for="post in postDir.postList"
               :key="post.postId"
-              @click="setEdit"
+              @click="setEdit(post.postId, null)"
             >
-              <router-link
-                class="router-link"
-                :to="{
-                  name: 'EditScrapInSubs',
-                  params: { postId: post.postId }
-                }"
-              >
-                <v-list-item-title>{{ post.postTitle }}</v-list-item-title>
-              </router-link>
+              <v-list-item-title>{{ post.postTitle }}</v-list-item-title>
             </v-list-item>
 
             <hr class="ma-0" />
-            <router-link
-              class="router-link"
-              :to="{
-                name: 'NewScrapInSubs',
-                params: { postDirId: postDir.postDirId }
-              }"
-            >
-              <v-list-item @click="setEdit">
-                <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-                <v-list-item-title class="success--text"
-                  >NEW Post</v-list-item-title
-                >
-              </v-list-item>
-            </router-link>
+
+            <v-list-item @click="setEdit(null, postDir.postDirId)">
+              <v-icon color="success" class="mr-2">mdi-plus</v-icon>
+              <v-list-item-title class="success--text"
+                >NEW Post</v-list-item-title
+              >
+            </v-list-item>
           </v-list>
         </v-menu>
       </v-list-item>
+
       <hr class="ma-0" />
       <v-list-item @click="folderModalActive = !folderModalActive">
         <v-icon color="success" class="mr-2">mdi-plus</v-icon>
@@ -93,8 +79,13 @@ export default class AddScrapMenu extends Vue {
 
   value = false;
 
-  setEdit() {
+  setEdit(postId: number, postDirId: number) {
     this.value = false;
+    if (postId && !postDirId) {
+      this.$emit("onPost", postId);
+    } else if (postDirId && !postId) {
+      this.$emit("onNewPost", postDirId);
+    }
   }
 
   @Watch("folderModalActive")

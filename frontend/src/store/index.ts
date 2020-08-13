@@ -103,7 +103,7 @@ const store: StoreOptions<RootState> = {
       //   .catch((err) => console.log(err.response));
       commit("SET_TOKEN", null);
       STORAGE.removeItem("jwt-token");
-      router.push("/");
+      router.push({ name: "Cover" });
     },
 
     updateUser({ getters, commit }, updateData) {

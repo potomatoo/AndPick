@@ -30,10 +30,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Home",
-    component: Home,
-    meta: {
-      authRequired: true
-    }
+    component: Home
   },
   {
     path: "/cover",
@@ -58,59 +55,38 @@ const routes: Array<RouteConfig> = [
   {
     path: "/accounts/logout",
     name: "Logout",
-    component: LogoutView,
-    meta: {
-      authRequired: true
-    }
+    component: LogoutView
   },
   {
     path: "/accounts/delete",
     name: "DeleteUser",
-    component: DeleteUserView,
-    meta: {
-      authRequired: true
-    }
+    component: DeleteUserView
   },
   {
     path: "/accounts/update",
     name: "UpdateUser",
-    component: UpdateUserView,
-    meta: {
-      authRequired: true
-    }
+    component: UpdateUserView
   },
   {
     path: "/today",
     name: "Today",
-    component: Today,
-    meta: {
-      authRequired: true
-    }
+    component: Today
   },
   {
     path: "/later",
     name: "Later",
-    component: Later,
-    meta: {
-      authRequired: true
-    }
+    component: Later
   },
   {
     path: "/mypage/:postDirId",
     name: "PostDir",
-    component: PostDir,
-    meta: {
-      authRequired: true
-    }
+    component: PostDir
   },
 
   {
     path: "/mypage/:postDirId/newpost",
     name: "NewPost",
-    component: EditArticle,
-    meta: {
-      authRequired: true
-    }
+    component: EditArticle
   },
 
   {
@@ -128,26 +104,17 @@ const routes: Array<RouteConfig> = [
   {
     path: "/add",
     name: "AddRss",
-    component: AddRss,
-    meta: {
-      authRequired: true
-    }
+    component: AddRss
   },
   {
     path: "/feed/:feedId",
     name: "Feed",
-    component: FeedPage,
-    meta: {
-      authRequired: true
-    }
+    component: FeedPage
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
-    component: ArticleListInRss,
-    meta: {
-      authRequired: true
-    }
+    component: ArticleListInRss
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId/:articleId",
@@ -164,10 +131,7 @@ const routes: Array<RouteConfig> = [
         name: "EditScrapInSubs",
         component: EditArticle
       }
-    ],
-    meta: {
-      authRequired: true
-    }
+    ]
   },
   {
     path: "/feed/:feedId/article/:articleId",
@@ -184,18 +148,12 @@ const routes: Array<RouteConfig> = [
         name: "EditScrapInFeed",
         component: EditArticle
       }
-    ],
-    meta: {
-      authRequired: true
-    }
+    ]
   },
   {
     path: "/board/:boardId",
     name: "BoardArticleList",
-    component: BoardArticleList,
-    meta: {
-      authRequired: true
-    }
+    component: BoardArticleList
   },
   {
     path: "/board/:boardId/news/:newsId",
@@ -212,10 +170,7 @@ const routes: Array<RouteConfig> = [
         name: "EditScrapInBoard",
         component: EditArticle
       }
-    ],
-    meta: {
-      authRequired: true
-    }
+    ]
   }
 ];
 
@@ -228,20 +183,15 @@ const router = new VueRouter({
   }
 });
 
-router.beforeEach(function(to, from, next) {
-  if (!window.sessionStorage.getItem("jwt-token")) {
-    if (
-      to.matched.some(function(routeInfo) {
-        return routeInfo.meta.authRequired;
-      })
-    ) {
-      next("/cover");
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
+router.beforeEach((to, from, next) => {
+  const publicPages = ["Cover", "Signup", "Login", "SocialLogin"];
+  const authRequired = !publicPages.includes(to.name!);
+  const isLogedIn = !!window.sessionStorage.getItem("jwt-token");
+  const unAuthRequiredPages = ["Signup", "Login", "SocialLogin"];
+  const unAuthRequired = unAuthRequiredPages.includes(to.name!);
+
+  authRequired && !isLogedIn ? next({ name: "Login" }) : next();
+  unAuthRequired && isLogedIn ? next({ name: "Cover" }) : next();
 });
 
 export default router;

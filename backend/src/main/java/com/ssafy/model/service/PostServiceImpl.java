@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public BasicResponse savePost(User user, Post post, String[] tags) {
+	public BasicResponse savePost(User user, Post post, List<PostTag> tags) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
@@ -65,8 +65,9 @@ public class PostServiceImpl implements PostService {
 		post = postRepository.save(post);
 
 		List<PostTag> list = new ArrayList<PostTag>();
-		if (tags != null && tags.length != 0) {
-			for (String tagName : tags) {
+		if (tags != null && tags.size() != 0) {
+			for (PostTag tagitem : tags) {
+				String tagName = tagitem.getTagName();
 				Tag tag = new Tag();
 				tag.setTagName(tagName);
 

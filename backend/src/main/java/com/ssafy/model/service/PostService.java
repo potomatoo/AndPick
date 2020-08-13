@@ -1,16 +1,19 @@
 package com.ssafy.model.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Post;
 import com.ssafy.model.dto.PostDir;
+import com.ssafy.model.dto.PostTag;
 import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface PostService {
-	public BasicResponse savePost(User user, Post post, String[] tags);
+	public BasicResponse savePost(User user, Post post, List<PostTag> tags);
 
 	public BasicResponse findByUser(User user);
 

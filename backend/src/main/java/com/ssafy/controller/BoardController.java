@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,8 +29,7 @@ public class BoardController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/board/save")
-	public Object saveBoard(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam("boardName") String boardName) {
+	public Object saveBoard(@RequestHeader("Authorization") String jwtToken, @RequestBody Board board) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -41,18 +41,18 @@ public class BoardController {
 			return response;
 		}
 
-		if (boardName == null) {
+		if (board.getBoardName() == null) {
 			result.status = false;
 			result.message = "필수 값을 입력하세요";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 			return response;
 		}
 
-		Board board = new Board();
-		board.setBoardName(boardName);
-		board.setUserNo(user.getUserNo());
+		Board boardDto = new Board();
+		boardDto.setBoardName(board.getBoardName());
+		boardDto.setUserNo(user.getUserNo());
 
-		result = boardService.svaeBoard(user, board);
+		result = boardService.svaeBoard(user, boardDto);
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);
 		} else {

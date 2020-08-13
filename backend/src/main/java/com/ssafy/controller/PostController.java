@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,10 +30,7 @@ public class PostController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/post/save")
-	public Object savePostDir(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam("postDirId") long postDirId, @RequestParam("postTitle") String postTitle,
-			@RequestParam("postContent") String postContent,
-			@RequestParam(value = "tagList", required = false) String[] tags) {
+	public Object savePostDir(@RequestHeader("Authorization") String jwtToken, @RequestBody Post post) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -44,21 +42,21 @@ public class PostController {
 			return response;
 		}
 
-		if (postTitle == null || postContent == null) {
+		if (post.getPostTitle() == null || post.getPostContent() == null) {
 			result.status = false;
 			result.message = "필수값을 입력하세요.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 			return response;
 		}
 
-		Post post = new Post();
-		post.setPostDirId(postDirId);
-		post.setPostTitle(postTitle);
-		post.setPostContent(postContent);
-		post.setPostDate(new Date());
-		post.setUserNo(user.getUserNo());
+		Post postDto = new Post();
+		postDto.setPostDirId(post.getPostDirId());
+		postDto.setPostTitle(post.getPostTitle());
+		postDto.setPostContent(post.getPostContent());
+		postDto.setPostDate(new Date());
+		postDto.setUserNo(user.getUserNo());
 
-		result = postService.savePost(user, post, tags);
+		result = postService.savePost(user, postDto, post.getTagList());
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

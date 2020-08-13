@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,9 +30,7 @@ public class SubscribeController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/subscribe/new")
-	public Object saveSubscribeNew(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedId") long feedId,
-			@RequestParam("subscribeName") String subscribeName, @RequestParam("rssUrl") String rssUrl,
-			@RequestParam("categoryName") String categoryName) {
+	public Object saveSubscribeNew(@RequestHeader("Authorization") String jwtToken, @RequestBody Subscribe subscribe) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -43,7 +42,8 @@ public class SubscribeController {
 			return response;
 		}
 
-		if (subscribeName == null || rssUrl == null || categoryName == null) {
+		if (subscribe.getSubscribeName() == null || subscribe.getRss().getRssUrl() == null
+				|| subscribe.getRss().getCategory().getCategoryName() == null) {
 			result.status = false;
 			result.message = "필수 값을 입력하세요 ";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
@@ -51,20 +51,20 @@ public class SubscribeController {
 		}
 
 		Category category = new Category();
-		category.setCategoryName(categoryName);
+		category.setCategoryName(subscribe.getRss().getCategory().getCategoryName());
 
 		Rss rss = new Rss();
-		rss.setRssUrl(rssUrl);
+		rss.setRssUrl(subscribe.getRss().getRssUrl());
 		rss.setCategory(category);
 
-		Subscribe subscribe = new Subscribe();
-		subscribe.setSubscribeName(subscribeName);
-		subscribe.setFeedId(feedId);
-		subscribe.setUserNo(user.getUserNo());
+		Subscribe subscribeDto = new Subscribe();
+		subscribeDto.setSubscribeName(subscribe.getSubscribeName());
+		subscribeDto.setFeedId(subscribe.getFeedId());
+		subscribeDto.setUserNo(user.getUserNo());
 
-		subscribe.setRss(rss);
+		subscribeDto.setRss(rss);
 
-		result = subscribeService.saveSubscribe(user, subscribe);
+		result = subscribeService.saveSubscribe(user, subscribeDto);
 
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
@@ -76,8 +76,7 @@ public class SubscribeController {
 	}
 
 	@PostMapping(value = "/api/subscribe/save")
-	public Object saveSubscribe(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedId") long feedId,
-			@RequestParam("subscribeName") String subscribeName, @RequestParam("rssId") long rssId) {
+	public Object saveSubscribe(@RequestHeader("Authorization") String jwtToken, @RequestBody Subscribe subscribe) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -89,7 +88,7 @@ public class SubscribeController {
 			return response;
 		}
 
-		if (subscribeName == null) {
+		if (subscribe.getSubscribeName() == null) {
 			result.status = false;
 			result.message = "필수 값을 입력하세요 ";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
@@ -97,16 +96,16 @@ public class SubscribeController {
 		}
 
 		Rss rss = new Rss();
-		rss.setRssId(rssId);
+		rss.setRssId(subscribe.getRss().getRssId());
 
-		Subscribe subscribe = new Subscribe();
-		subscribe.setSubscribeName(subscribeName);
-		subscribe.setFeedId(feedId);
-		subscribe.setUserNo(user.getUserNo());
+		Subscribe subscribeDto = new Subscribe();
+		subscribeDto.setSubscribeName(subscribe.getSubscribeName());
+		subscribeDto.setFeedId(subscribe.getFeedId());
+		subscribeDto.setUserNo(user.getUserNo());
 
-		subscribe.setRss(rss);
+		subscribeDto.setRss(rss);
 
-		result = subscribeService.saveSubscribe(user, subscribe);
+		result = subscribeService.saveSubscribe(user, subscribeDto);
 
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);

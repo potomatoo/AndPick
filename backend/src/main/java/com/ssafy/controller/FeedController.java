@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,7 +28,7 @@ public class FeedController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/feed/save")
-	public Object saveFeed(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedName") String feedName) {
+	public Object saveFeed(@RequestHeader("Authorization") String jwtToken, @RequestBody Feed feed) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -39,18 +40,18 @@ public class FeedController {
 			return response;
 		}
 
-		if (feedName == null) {
+		if (feed.getFeedName() == null) {
 			result.status = false;
 			result.message = "필수값을 입력해 주세요.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 			return response;
 		}
 
-		Feed feed = new Feed();
-		feed.setFeedName(feedName);
-		feed.setUserNo(user.getUserNo());
+		Feed feedDto = new Feed();
+		feedDto.setFeedName(feed.getFeedName());
+		feedDto.setUserNo(user.getUserNo());
 
-		result = feedService.saveFeed(user, feed);
+		result = feedService.saveFeed(user, feedDto);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

@@ -1,6 +1,6 @@
 <template>
   <v-menu
-    offset-x
+    offset-y
     :close-on-content-click="false"
     min-width="300px"
     :close-on-click="closeMenu"
@@ -8,7 +8,7 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn icon large>
         <v-icon v-bind="attrs" v-on="on">
-          mdi-star-box-outline
+          mdi-star-outline
         </v-icon>
       </v-btn>
     </template>

@@ -7,11 +7,10 @@
     v-model="value"
   >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn icon large v-bind="attrs" v-on="on">
-        <!-- <v-icon v-bind="attrs" v-on="on">
-                mdi-star-box-outline
-              </v-icon> -->
-        SCRAP
+      <v-btn icon large>
+        <v-icon v-bind="attrs" v-on="on">
+          mdi-note-plus-outline
+        </v-icon>
       </v-btn>
     </template>
     <v-list class="py-0">
@@ -19,6 +18,7 @@
         <!-- post 메뉴 -->
         <v-menu offset-x close-on-content-click min-width="100px">
           <template v-slot:activator="{ on, attrs }">
+            <v-icon color="grey" class="mr-2">mdi-folder-outline</v-icon>
             <v-list-item-title v-bind="attrs" v-on="on">{{
               postDir.postDirName
             }}</v-list-item-title>
@@ -30,6 +30,7 @@
               :key="post.postId"
               @click="setEdit(post.postId, null)"
             >
+              <v-icon color="grey" class="mr-2">mdi-note-outline</v-icon>
               <v-list-item-title>{{ post.postTitle }}</v-list-item-title>
             </v-list-item>
 

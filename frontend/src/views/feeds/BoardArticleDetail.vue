@@ -2,18 +2,16 @@
   <div class="mt-10" v-if="news">
     <div :class="{ left: onEdit }">
       <v-container>
-        <!-- <v-layout> -->
-        <h3>{{ news.newsTitle }}</h3>
-        <div class="subtitle-1 text--secondary">{{ news.newsDate }}</div>
-        <div class="text-right">
+        <div class="text-left">
           <add-board-menu />
           <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
         </div>
+        <v-divider class="mt-1"></v-divider>
+        <h3>{{ news.newsTitle }}</h3>
+        <div class="subtitle-1 text--secondary">{{ news.newsDate }}</div>
       </v-container>
 
-      <v-divider></v-divider>
-
-      <v-container class="text-center">
+      <v-container class="text-center mt-16">
         <p :v-html="news.newsDescription" :class="{ desc: !onEdit }">
           {{ news.newsDescription }}
         </p>

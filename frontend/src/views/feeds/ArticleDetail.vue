@@ -2,17 +2,17 @@
   <div class="mt-10" v-if="article">
     <div :class="{ left: onEdit }">
       <v-container>
-        <h3>{{ article.title }}</h3>
-        <div class="subtitle-1 text--secondary">{{ article.pubDate }}</div>
-        <div class="text-right">
+        <div class="text-left">
           <add-board-menu />
           <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
         </div>
+        <v-divider class="mt-1"></v-divider>
+        <h3>{{ article.title }}</h3>
+        <div class="subtitle-1 text--secondary">{{ article.pubDate }}</div>
+        <div class="text-left mt-8"></div>
       </v-container>
 
-      <v-divider></v-divider>
-
-      <v-container class="text-center">
+      <v-container class="text-center mt-16">
         <p :v-html="article.description" :class="{ desc: !onEdit }">
           {{ article.description }}
         </p>

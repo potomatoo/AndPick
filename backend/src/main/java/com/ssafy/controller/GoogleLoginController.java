@@ -1,5 +1,11 @@
 package com.ssafy.controller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.client.HttpClient;
@@ -40,7 +46,7 @@ public class GoogleLoginController {
 	GoogleLoginService googleLoginService;
 
 	@GetMapping("/api/public/google")
-	public Object googleSignOnButton() {
+	public Object googleSignOnButton() throws URISyntaxException, MalformedURLException, IOException {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -54,7 +60,8 @@ public class GoogleLoginController {
 			result.message = "Fall Create Googl Login Code";
 			response = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
-		return response;
+		String url = (String) result.data;
+		return "redirect:" + url;
 	}
 
 	@GetMapping("/api/public/google/redirect")

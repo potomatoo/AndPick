@@ -60,8 +60,7 @@ public class GoogleLoginController {
 			result.message = "Fall Create Googl Login Code";
 			response = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
-		String url = (String) result.data;
-		return "redirect:" + url;
+		return response;
 	}
 
 	@GetMapping("/api/public/google/redirect")

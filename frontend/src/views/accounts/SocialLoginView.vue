@@ -19,7 +19,7 @@ export default {
               // userId: "",
               // userPassword: "",
               // userType: 1,
-              code: authCode,
+              authToken: authCode,
               // redirect_uri: "postmessage",
             }
           );

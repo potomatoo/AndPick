@@ -73,7 +73,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		configuration.addAllowedOrigin("http://localhost:8080");
 		configuration.addAllowedOrigin("http://i3b107.p.ssafy.io");
-		configuration.addAllowedOriginPattern("**");
+		configuration.addAllowedOrigin("https://accounts.google.com/o/oauth2/auth");
+		configuration.addAllowedOrigin("https://www.googleapis.com/auth/userinfo.email");
+		configuration.addAllowedOrigin("https://www.googleapis.com/auth/userinfo.profile");
+		configuration.addAllowedOrigin("https://accounts.google.com/o/oauth2/token");
+
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
 		configuration.setAllowCredentials(true);

@@ -31,8 +31,8 @@ import { mapGetters } from "vuex";
   methods: {
     scrollToTop: function() {
       scroll(0, 0);
-    },
-  },
+    }
+  }
 })
 export default class AppMain extends Vue {}
 </script>
@@ -41,5 +41,9 @@ export default class AppMain extends Vue {}
   position: fixed;
   right: 7vw;
   bottom: 20vh;
+  text-decoration: none;
+  color: inherit;
+  border: 0;
+  outline: none !important;
 }
 </style>

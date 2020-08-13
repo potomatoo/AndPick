@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "@/views/Cover.vue";
+import Home from "@/views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 
@@ -34,76 +34,76 @@ const routes: Array<RouteConfig> = [
     name: "Home",
     component: Home,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/cover",
     name: "Cover",
-    component: Cover,
+    component: Cover
   },
   {
     path: "/accounts/signup",
     name: "Signup",
-    component: SignupView,
+    component: SignupView
   },
   {
     path: "/accounts/login/",
     name: "Login",
-    component: LoginView,
+    component: LoginView
   },
   {
     path: "/accounts/social",
     name: "SocialLogin",
-    component: SocialLoginView,
+    component: SocialLoginView
   },
   {
     path: "/accounts/logout",
     name: "Logout",
     component: LogoutView,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/accounts/delete",
     name: "DeleteUser",
     component: DeleteUserView,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/accounts/update",
     name: "UpdateUser",
     component: UpdateUserView,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/today",
     name: "Today",
     component: Today,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/later",
     name: "Later",
     component: Later,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/mypage/:postDirId",
     name: "PostDir",
     component: PostDir,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
 
   {
@@ -111,8 +111,8 @@ const routes: Array<RouteConfig> = [
     name: "NewPost",
     component: EditArticle,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
 
   {
@@ -124,7 +124,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/mypage/:postDirId/:postId/post",
     name: "EditPost",
-    component: EditArticle,
+    component: EditArticle
   },
 
   {
@@ -138,24 +138,24 @@ const routes: Array<RouteConfig> = [
     name: "AddRss",
     component: AddRss,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/feed/:feedId",
     name: "Feed",
     component: FeedPage,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
     component: ArticleListInRss,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId/:articleId",
@@ -174,8 +174,8 @@ const routes: Array<RouteConfig> = [
       }
     ],
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/feed/:feedId/article/:articleId",
@@ -194,16 +194,16 @@ const routes: Array<RouteConfig> = [
       }
     ],
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/board/:boardId",
     name: "BoardArticleList",
     component: BoardArticleList,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
   },
   {
     path: "/board/:boardId/news/:newsId",
@@ -222,9 +222,9 @@ const routes: Array<RouteConfig> = [
       }
     ],
     meta: {
-      authRequired: true,
-    },
-  },
+      authRequired: true
+    }
+  }
 ];
 
 const router = new VueRouter({
@@ -233,7 +233,7 @@ const router = new VueRouter({
   routes,
   scrollBehavior(to, from, savedPositin) {
     return { x: 0, y: 0 };
-  },
+  }
 });
 
 router.beforeEach(function(to, from, next) {

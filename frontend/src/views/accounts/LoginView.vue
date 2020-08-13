@@ -90,6 +90,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { required, minLength, email } from "vuelidate/lib/validators";
 import router from "../../router";
+import { stringify } from "qs";
 
 interface LoginData {
   userId: string | null;
@@ -150,9 +151,6 @@ export default class LoginView extends Vue {
     }
   }
 
-  created() {
-    console.log(this.$route.params.isChrome);
-  }
   // created() {
   //   if (window.location.href.split("&")[1]) {
   //     this.$store.dispatch("social", this.socialData);

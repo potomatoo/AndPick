@@ -16,13 +16,13 @@
     "background": {
       "scripts": ["eventPage.js"],
       "persistent": false
-    },
+    },    
 
     "permissions": [
       "activeTab",
       "storage",
       "notifications",
-      "contextMenus"        
+      "contextMenus"           
     ]
   }
   

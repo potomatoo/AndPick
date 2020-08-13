@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -63,6 +65,54 @@ public class GoogleLoginController {
 		parma.add("client_id", GoogleLoginConfig.GOOGLE_CLIENT_ID);
 		parma.add("client_secret", GoogleLoginConfig.GOOGLE_SECRIT_ID);
 		parma.add("redirect_uri", "http://i3b107.p.ssafy.io:8080/api/public/google/redirect");
+		parma.add("grant_type", "authorization_code");
+
+		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		factory.setReadTimeout(5000);
+		factory.setConnectTimeout(3000);
+		HttpClient httpClient = HttpClientBuilder.create().setMaxConnTotal(100).setMaxConnPerRoute(5).build();
+		factory.setHttpClient(httpClient);
+
+		RestTemplate restTemplate = new RestTemplate(factory);
+		String url = "https://accounts.google.com/o/oauth2/token";
+		String obj = restTemplate.postForEntity(url, parma, String.class).getBody();
+
+		JsonParser jsonParser = new JsonParser();
+		JsonObject result = jsonParser.parse(obj).getAsJsonObject();
+
+		String id_token = result.get("id_token").getAsString();
+		String access_token = result.get("access_token").getAsString();
+
+		DecodedJWT decodedJwt = JWT.decode(id_token);
+		String email = decodedJwt.getClaim("email").asString();
+
+		User user = googleLoginService.googleLogin(email);
+
+		if (user == null) {
+			BasicResponse basicResponse = new BasicResponse();
+			basicResponse.data = null;
+			basicResponse.status = false;
+			basicResponse.message = "이미 가입된 이메일 입니다.";
+
+			return new ResponseEntity<>(basicResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		rediAttributes.addAttribute("userId", user.getUserId());
+		rediAttributes.addAttribute("userPassword", user.getUserId());
+		rediAttributes.addAttribute("type", user.getUserType());
+
+		String redirectUrl = "redirect:/api/public/login";
+
+		return redirectUrl;
+	}
+
+	@GetMapping("/api/public/google/login")
+	public Object googleLogin(@RequestParam("authToken") String authToken, RedirectAttributes rediAttributes) {
+		MultiValueMap<String, String> parma = new LinkedMultiValueMap<String, String>();
+		parma.add("code", authToken);
+		parma.add("client_id", GoogleLoginConfig.GOOGLE_CLIENT_ID);
+		parma.add("client_secret", GoogleLoginConfig.GOOGLE_SECRIT_ID);
+		parma.add("redirect_uri", "postmessage");
 		parma.add("grant_type", "authorization_code");
 
 		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();

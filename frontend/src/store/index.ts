@@ -112,13 +112,8 @@ const store: StoreOptions<RootState> = {
     },
 
     updateUser({ commit }, userName) {
-      const newData = {
-        params: {
-          userName,
-        },
-      };
       Axios.instance
-        .put(SERVER.URL + SERVER.ROUTES.updateUser, null, newData)
+        .put(SERVER.URL + SERVER.ROUTES.updateUser, qs.stringify({ userName }))
         .then(() => {
           commit("SET_NAME", userName);
           alert("닉네임이 변경되었습니다.");

@@ -6,10 +6,12 @@
         <div class="subtitle-1 text--secondary">{{ article.pubDate }}</div>
         <div class="text-right">
           <add-board-menu />
-          <add-scrap-menu />
+          <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
         </div>
       </v-container>
+
       <v-divider></v-divider>
+
       <v-container class="text-center">
         <p :v-html="article.description" :class="{ desc: !onEdit }">
           {{ article.description }}
@@ -98,6 +100,20 @@ export default class ArticleDetail extends Vue {
     ) {
       this.onEdit = true;
     }
+  }
+
+  onPost(postId: number) {
+    this.$router.push({
+      name: "EditScrapInSubs",
+      params: { postId: postId.toString() }
+    });
+  }
+
+  onNewPost(postDirId: number) {
+    this.$router.push({
+      name: "NewScrapInSubs",
+      params: { postDirId: postDirId.toString() }
+    });
   }
 }
 </script>

@@ -13,7 +13,11 @@
       </v-btn>
     </template>
 
-    <v-list class="py-0">
+    <!-- 피드에서 접근 -->
+    <v-list
+      v-if="['ArticleDetail', 'ArticleDetailInFeed'].includes(this.$route.name)"
+      class="py-0"
+    >
       <v-list-item v-for="board in boardList" :key="board.boardId">
         <v-icon color="grey" class="mr-2">mdi-star-outline</v-icon>
         <v-list-item-title>{{ board.boardName }}</v-list-item-title>
@@ -34,6 +38,40 @@
           color="error"
           small
           @click="deleteArticle(board.newsList, article.link)"
+        >
+          <v-icon left>mdi-window-close</v-icon> REMOVE
+        </v-btn>
+      </v-list-item>
+
+      <hr class="ma-0" />
+      <v-list-item @click="boardModalActive = !boardModalActive">
+        <v-icon color="success" class="mr-2">mdi-plus</v-icon>
+        <v-list-item-title class="success--text">NEW BOARD</v-list-item-title>
+      </v-list-item>
+    </v-list>
+
+    <!-- 보드에서 접근 -->
+    <v-list v-else-if="this.$route.name === 'BoardArticleDetail'" class="py-0">
+      <v-list-item v-for="board in boardList" :key="board.boardId">
+        <v-icon color="grey" class="mr-2">mdi-star-outline</v-icon>
+        <v-list-item-title>{{ board.boardName }}</v-list-item-title>
+        <v-btn
+          v-if="checkInBoard(board.newsList, news.newsLink)"
+          class="ml-3"
+          outlined
+          color="success"
+          small
+          @click="saveArticle(board.boardId, news)"
+        >
+          <v-icon left>mdi-plus</v-icon> ADD
+        </v-btn>
+        <v-btn
+          v-else
+          class="ml-3"
+          outlined
+          color="error"
+          small
+          @click="deleteArticle(board.newsList, news.newsLink)"
         >
           <v-icon left>mdi-window-close</v-icon> REMOVE
         </v-btn>
@@ -70,6 +108,7 @@ const feedModule = namespace("feedModule");
 export default class AddBoardMenu extends Vue {
   @feedModule.State boardList!: Board[];
   @feedModule.State article!: Article;
+  @feedModule.State news!: News;
   @feedModule.Action SAVE_IN_BOARD: any;
   @feedModule.Action DELETE_IN_BOARD: any;
   @feedModule.Action ADD_BOARD: any;
@@ -83,7 +122,11 @@ export default class AddBoardMenu extends Vue {
   }
 
   saveArticle(boardId: number, article: Article) {
-    this.SAVE_IN_BOARD({ boardId, article });
+    if (this.$route.name === "BoardArticleDetail") {
+      this.SAVE_IN_BOARD({ boardId, article, from: "board" });
+    } else {
+      this.SAVE_IN_BOARD({ boardId, article });
+    }
   }
 
   deleteArticle(newsList: News[], link: string) {

@@ -137,7 +137,10 @@ export default class LoginView extends Vue {
   }
   test() {
     if (this.URL) {
-      axios.get(this.URL).then((res) => console.log(res));
+      axios
+        .get(this.URL)
+        .then((res) => console.log("성공", res))
+        .catch((err) => console.log("에러", err));
     }
   }
   created() {

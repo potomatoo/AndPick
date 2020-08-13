@@ -27,15 +27,9 @@ export default {
           // );
           console.log(authCode);
           axios
-            .post(
-              "http://i3b107.p.ssafy.io/api/public/google/login",
-              {
-                authToken: authCode,
-              },
-              {
-                withCredentials: true,
-              }
-            )
+            .post("http://i3b107.p.ssafy.io/api/public/google/login", {
+              authToken: authCode,
+            })
             .then((res) => {
               console.log(res);
 

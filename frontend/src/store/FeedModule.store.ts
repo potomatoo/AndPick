@@ -131,13 +131,8 @@ const module: Module<FeedModule, RootState> = {
     },
 
     ADD_FEED({ dispatch }, feedName) {
-      const data = {
-        params: {
-          feedName
-        }
-      };
       Axios.instance
-        .post("/api/feed/save", null, data)
+        .post("/api/feed/save", { feedName })
         .then(({ data }) => {
           dispatch("FETCH_FEED_LIST");
           return { feedName: data.data.feedName, feedId: data.data.feedId };
@@ -182,13 +177,11 @@ const module: Module<FeedModule, RootState> = {
         }
       };
       const subscribeData = {
-        params: {
-          rssId: rss.rssId,
-          subscribeName:
-            rss.rssName ||
-            ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1],
-          feedId
-        }
+        rssId: rss.rssId,
+        subscribeName:
+          rss.rssName ||
+          ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1],
+        feedId
       };
 
       let deleteId: number | null = null;
@@ -216,7 +209,7 @@ const module: Module<FeedModule, RootState> = {
           } else {
             // subscribe
             Axios.instance
-              .post("/api/subscribe/save", null, subscribeData)
+              .post("/api/subscribe/save", subscribeData)
               .then(() => dispatch("FETCH_FEED_LIST"))
               .catch(err => console.error(err));
           }
@@ -273,18 +266,15 @@ const module: Module<FeedModule, RootState> = {
     },
 
     FOLLOW_SUBSCRIPTION({ dispatch }, { feedId, rssId, subscribeName }) {
-      const followData = {
-        params: { feedId, rssId, subscribeName }
-      };
       Axios.instance
-        .post("/api/subscribe/save", null, followData)
+        .post("/api/subscribe/save", { feedId, rssId, subscribeName })
         .then(() => dispatch("FETCH_FEED_LIST"))
         .catch(err => console.error(err));
     },
 
     ADD_BOARD({ dispatch }, boardName) {
       Axios.instance
-        .post("/api/board/save", null, { params: { boardName } })
+        .post("/api/board/save", { boardName })
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));
     },
@@ -316,31 +306,31 @@ const module: Module<FeedModule, RootState> = {
     },
 
     SAVE_IN_BOARD({ dispatch }, { boardId, article, from }) {
-      let data = null;
+      let data = {};
       if (from) {
         data = {
-          params: {
-            boardId,
-            newsDate: new Date(article.newsDate).toString(),
-            newsDescription: article.newsDescription,
-            newsLink: article.newsLink,
-            newsTitle: article.newsTitle
-          }
+          boardId,
+          newsDate: new Date(article.newsDate),
+          newsDescription: article.newsDescription,
+          newsLink: article.newsLink,
+          newsTitle: article.newsTitle,
+          userId: null,
+          userNo: null
         };
       } else {
         data = {
-          params: {
-            boardId,
-            newsDate: article.pubDate || new Date().toString(),
-            newsDescription: article.description.substr(0, 190),
-            newsLink: article.link,
-            newsTitle: article.title
-          }
+          boardId,
+          newsDate: article.pubDate || new Date(),
+          newsDescription: article.description.substr(0, 190),
+          newsLink: article.link,
+          newsTitle: article.title,
+          userId: null,
+          userNo: null
         };
       }
 
       Axios.instance
-        .post("/api/news/save", null, data)
+        .post("/api/news/save", data)
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));
     },

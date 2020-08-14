@@ -138,13 +138,8 @@ const module: Module<MypageModule, RootState> = {
     },
 
     ADD_POSTDIR({ dispatch }, postDirName: string) {
-      const postDirData = {
-        params: {
-          postDirName
-        }
-      };
       Axios.instance
-        .post("/api/postdir/save", null, postDirData)
+        .post("/api/postdir/save", { postDirName })
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR_LIST");
           return data.data.postDirId;

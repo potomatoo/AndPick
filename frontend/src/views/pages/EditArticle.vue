@@ -318,7 +318,7 @@ export default class EditArticle extends Vue {
       console.log(submitTagList);
       this.ADD_POST({
         postContent: this.html,
-        postDirId: this.$route.params.postDirId || this.post.postDirId,
+        postDirId: this.$route.params.postDirId,
         postTitle: this.title,
         tagList: submitTagList
       });

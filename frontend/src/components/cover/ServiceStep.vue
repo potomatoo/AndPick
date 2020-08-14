@@ -8,15 +8,17 @@
           원하는 페이지를 구독
         </div>
         <div class="step">하면 페이지에서 제공</div>
-        <div class="step">되는 뉴스를 받아볼 수</div>
+        <div class="step">되는 정보를 받아볼 수</div>
         <div class="step">있습니다!</div>
       </div>
+      <div class="vl"></div>
       <div align="center">
         <img src="@/assets/two.png" class="mb-5" />
         <div class="step">관심있거나 다음에 보고</div>
-        <div class="step">싶은 기사를 스크랩하여</div>
-        <div class="step">하고 보관하세요!</div>
+        <div class="step">싶은 기사 및 게시글을</div>
+        <div class="step">스크랩하여 보관하세요!</div>
       </div>
+      <div class="vl"></div>
       <div align="center">
         <img src="@/assets/three.png" class="mb-5" />
         <div class="step">에디터를 사용해 내용을</div>
@@ -35,5 +37,9 @@ export default {};
 .step {
   font-size: large;
   font-weight: bold;
+}
+.vl {
+  border-left: 2px double gray;
+  opacity: 0.3;
 }
 </style>

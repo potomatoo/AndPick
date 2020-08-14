@@ -16,24 +16,19 @@ import AppSidebar from "@/components/main/AppSidebar.vue";
 import AppMain from "@/components/main/AppMain.vue";
 import AppFooter from "@/components/main/AppFooter.vue";
 
-// import { mapGetters } from "vuex";
-
 @Component({
   components: {
     AppNavbar,
     AppSidebar,
     AppMain,
-    AppFooter
-  }
-  // computed: { ...mapGetters(["isLoggedIn"]) },
+    AppFooter,
+  },
 })
 export default class Home extends Vue {
   @Watch("$store.state.JWT")
   stateUpdate() {
     if (this.$store.state.JWT) {
-      console.log("로그인감지");
-    } else {
-      console.log("토큰없음");
+      console.log("login");
     }
   }
   created() {

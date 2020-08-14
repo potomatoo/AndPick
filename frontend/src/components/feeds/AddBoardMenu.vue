@@ -4,6 +4,7 @@
     :close-on-content-click="false"
     min-width="300px"
     :close-on-click="closeMenu"
+    nudge-bottom="5"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn icon large>

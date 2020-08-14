@@ -1,7 +1,7 @@
 <template>
   <v-main class="v-main">
     <v-layout>
-      <v-flex v-if="isLoggedIn" offset-lg3 lg6>
+      <v-flex v-if="isLoggedIn" offset-xs1 xs10>
         <router-view></router-view>
       </v-flex>
       <v-flex v-if="!isLoggedIn">

@@ -5,6 +5,7 @@
     min-width="100px"
     :close-on-click="closeMenu"
     v-model="value"
+    nudge-bottom="5"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn icon large>
@@ -16,7 +17,12 @@
     <v-list class="py-0">
       <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
         <!-- post 메뉴 -->
-        <v-menu offset-x close-on-content-click min-width="100px">
+        <v-menu
+          offset-x
+          close-on-content-click
+          min-width="100px"
+          nudge-right="15"
+        >
           <template v-slot:activator="{ on, attrs }">
             <v-icon color="grey" class="mr-2">mdi-folder-outline</v-icon>
             <v-list-item-title v-bind="attrs" v-on="on">{{

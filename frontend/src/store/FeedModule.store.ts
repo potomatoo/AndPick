@@ -177,7 +177,7 @@ const module: Module<FeedModule, RootState> = {
         }
       };
       const subscribeData = {
-        rssId: rss.rssId,
+        rss,
         subscribeName:
           rss.rssName ||
           ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1],

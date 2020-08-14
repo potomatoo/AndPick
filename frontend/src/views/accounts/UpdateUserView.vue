@@ -3,8 +3,10 @@
     <h2 align="center">회원정보수정</h2>
     <hr />
     <NameUpdate />
-    <hr />
-    <PasswordUpdate />
+    <div v-if="!user.userType">
+      <hr />
+      <PasswordUpdate />
+    </div>
     <hr />
     <div class="form-group py-5">
       <h4>회원 탈퇴</h4>
@@ -25,13 +27,29 @@ import { Vue, Component } from "vue-property-decorator";
 import NameUpdate from "@/components/accounts/NameUpdate.vue";
 import PasswordUpdate from "@/components/accounts/PasswordUpdate.vue";
 
+import axios from "axios";
+
 @Component({
   components: {
     NameUpdate,
     PasswordUpdate,
   },
 })
-export default class UpdateUserView extends Vue {}
+export default class UpdateUserView extends Vue {
+  user = "";
+  fetchUser() {
+    axios
+      .get(
+        "http://i3b107.p.ssafy.io:8080/api/user/detail",
+        this.$store.getters.config
+      )
+      .then((res) => (this.user = res.data.data))
+      .catch((err) => console.log(err));
+  }
+  created() {
+    this.fetchUser();
+  }
+}
 </script>
 
 <style scoped>

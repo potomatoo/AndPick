@@ -69,10 +69,11 @@ const store: StoreOptions<RootState> = {
 
     signup(context, signupData) {
       axios
-        .post(SERVER.URL + SERVER.ROUTES.signup, qs.stringify(signupData), {
+        .post(SERVER.URL + SERVER.ROUTES.signup, signupData, {
           withCredentials: true,
         })
         .then((res) => {
+          alert("회원가입이 완료되었습니다.");
           router.push("/");
         })
         .catch((err) => {

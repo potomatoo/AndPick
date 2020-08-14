@@ -1,8 +1,8 @@
 <template>
-  <div class="row mt-5">
-    <div class="col" align="center">
-      <img src="@/assets/jobseeker1.png" height="auto" width="auto" />
-      <div>
+  <div class="row mt-5 mx-5 px-5">
+    <div class="col-lg-4" align="center">
+      <img src="@/assets/jobseeker1.png" height="auto" width="250px" />
+      <div style="width:250px">
         <h5 class="description d-flex justify-content-center">
           JOBSEEKER
         </h5>
@@ -11,18 +11,18 @@
         </p>
       </div>
     </div>
-    <div class="col" align="center">
-      <img src="@/assets/business1.png" height="auto" width="auto" />
-      <div>
+    <div class="col-lg-4" align="center">
+      <img src="@/assets/business1.png" height="auto" width="250px" />
+      <div style="width:250px">
         <h5 class="description d-flex justify-content-center">
           BUSINESSES
         </h5>
         <p class="description">BUSINESSES</p>
       </div>
     </div>
-    <div class="col" align="center">
-      <img src="@/assets/industry1.png" height="auto" width="auto" />
-      <div>
+    <div class="col-lg-4" align="center">
+      <img src="@/assets/industry1.png" height="auto" width="250px" />
+      <div style="width:250px">
         <h5 class="description d-flex justify-content-center">
           INDUSTRY
         </h5>

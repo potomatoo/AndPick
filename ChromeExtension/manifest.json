@@ -1,7 +1,7 @@
 {
     "name": "NewsClipper",
     "version": "1.0",
-    "description": "Now you can clip news & edit post",
+    "description": "Now you can clip news & edit post in &PICK",
     "manifest_version": 2,
 
     "icons": {

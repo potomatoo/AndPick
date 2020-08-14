@@ -1,28 +1,32 @@
 <template>
-  <div>
-    소셜로그인
-  </div>
+  <div></div>
 </template>
 
 <script>
+import axios from "axios";
+import qs from "qs";
+import { helpers } from "vuelidate/lib/validators";
+
 export default {
   name: "test",
   methods: {
     handleClickGetAuth() {
       this.$gAuth
         .getAuthCode()
-        .then((authCode) => {
-          return this.$http.post("http://your-backend-server.com/auth/google", {
-            code: authCode,
-            redirect_uri: "postmessage",
-          });
+        .then((authToken) => {
+          return this.$http.post(
+            "http://i3b107.p.ssafy.io:8080/api/public/google/login",
+            authToken
+          );
         })
-        .then((response) => {
-          console.log("소셜");
-          //and then
+        .then((res) => {
+          this.$store.commit("SET_TOKEN", res.data.data["userPassword"]);
+          this.$store.commit("SET_NAME", res.data.data.userName);
+          this.$router.push("/");
         })
-        .catch((error) => {
-          console.log("소셜", error);
+        .catch((err) => {
+          console.log("소셜에러", err);
+          this.$router.push("/");
         });
     },
   },

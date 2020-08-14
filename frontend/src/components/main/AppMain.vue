@@ -1,5 +1,5 @@
 <template>
-  <v-main class="v-main">
+  <v-main>
     <v-layout>
       <v-flex v-if="isLoggedIn" offset-xs1 xs10>
         <router-view></router-view>
@@ -8,6 +8,19 @@
         <router-view></router-view>
       </v-flex>
     </v-layout>
+    <transition name="slide-fade">
+      <v-btn
+        v-if="showbtn"
+        @click="scrollToTop"
+        class="button-bottom"
+        dark
+        fab
+        small
+        color="success"
+      >
+        <v-icon dark>mdi-menu-up</v-icon>
+      </v-btn>
+    </transition>
   </v-main>
 </template>
 
@@ -16,8 +29,42 @@ import { Vue, Component } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 
 @Component({
-  computed: { ...mapGetters(["isLoggedIn"]) }
+  computed: { ...mapGetters(["isLoggedIn"]) },
+  methods: {
+    scrollToTop: function() {
+      scroll(0, 0);
+    },
+  },
 })
-export default class AppMain extends Vue {}
+export default class AppMain extends Vue {
+  showbtn = false;
+  handleScroll() {
+    if (document.documentElement.scrollTop > 300) {
+      this.showbtn = true;
+    } else {
+      this.showbtn = false;
+    }
+  }
+  created() {
+    window.addEventListener("scroll", this.handleScroll);
+  }
+}
 </script>
-<style scoped></style>
+<style>
+.button-bottom {
+  position: fixed;
+  right: 7vw;
+  bottom: 20vh;
+}
+.slide-fade-enter-active {
+  transition: all 1s ease;
+}
+.slide-fade-leave-active {
+  transition: all 1.5s ease;
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
+}
+</style>

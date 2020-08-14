@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "@/views/main/a.vue";
+import Home from "@/views/Cover.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 
@@ -35,22 +35,22 @@ const routes: Array<RouteConfig> = [
   {
     path: "/cover",
     name: "Cover",
-    component: Cover
+    component: Cover,
   },
   {
     path: "/accounts/signup",
     name: "Signup",
-    component: SignupView
+    component: SignupView,
   },
   {
     path: "/accounts/login",
     name: "Login",
-    component: LoginView
+    component: LoginView,
   },
   {
     path: "/accounts/social",
     name: "SocialLogin",
-    component: SocialLoginView
+    component: SocialLoginView,
   },
   {
     path: "/accounts/logout",
@@ -92,7 +92,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/mypage/:postDirId/:postId/post",
     name: "EditPost",
-    component: EditArticle
+    component: EditArticle,
   },
 
   {
@@ -180,7 +180,7 @@ const router = new VueRouter({
   routes,
   scrollBehavior(to, from, savedPositin) {
     return { x: 0, y: 0 };
-  }
+  },
 });
 
 router.beforeEach((to, from, next) => {

@@ -79,6 +79,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { required, minLength, email } from "vuelidate/lib/validators";
+import router from "../../router";
 
 interface LoginData {
   userId: string | null;
@@ -124,6 +125,11 @@ export default class LoginView extends Vue {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
+      if (window.location.href.length > 50) {
+        const scrapKey = window.location.href.slice(37, 53);
+        localStorage.setItem("scrapKey", scrapKey);
+        router.push({ name: "SelectFromOutside" });
+      }
       console.log("데이터 검증 성공");
     }
   }

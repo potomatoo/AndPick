@@ -182,13 +182,14 @@ const module: Module<MypageModule, RootState> = {
         tagList: string[];
       }
     ) {
+      const postData = {
+        postContent,
+        postDirId,
+        postTitle,
+        tagList
+      };
       Axios.instance
-        .post("/api/post/save", {
-          postContent: postContent,
-          postDirId: postDirId,
-          postTitle: postTitle,
-          tagList: tagList
-        })
+        .post("/api/post/save", postData)
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR_LIST");
         })
@@ -275,7 +276,7 @@ const module: Module<MypageModule, RootState> = {
         .get("/api/scrap/load", scrapData)
         .then(({ data }) => {
           console.log(data);
-          localStorage.setItem("scrapData", data.scrap);
+          localStorage.setItem("scrapData", data.data.scrap);
         })
         .catch(err => console.error(err));
     }

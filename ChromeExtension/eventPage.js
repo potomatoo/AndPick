@@ -7,24 +7,20 @@ chrome.contextMenus.create(contextMenuItem, () => chrome.runtime.lastError)
 
 chrome.contextMenus.onClicked.addListener(function(clickData) {
     chrome.tabs.executeScript({
-        code: "document.getSelection().anchorNode.textContent"
+        code: "document.getSelection().toString()"
     }, function(selectText) {
         chrome.tabs.executeScript({
             code: "window.location.href"
         }, function(url) {
-            chrome.storage.sync.get(function(data) {
-                if (data.postContent !== undefined) {
-                    const nowData = data.postContent
-                    chrome.storage.sync.set({
-                        postContent: nowData + "<hr/>" + selectText[0] + "<br>" + url[0]
-                    })                 
-                }
-                else{
-                    chrome.storage.sync.set({
-                        postContent: selectText[0] + "<br>" + url[0]
-                    })                
-                }
-            })       
-        })                
-    });
-})
+            var nowData = localStorage.getItem("postContent")
+            if (nowData !== null) {
+            localStorage.setItem("postContent", nowData + "<hr/>" + selectText[0] + "<br>" + url[0])
+            } else{
+            localStorage.setItem("postContent", selectText[0] + "<br>" + url[0])                
+            }
+        })       
+    })   
+})        
+       
+
+

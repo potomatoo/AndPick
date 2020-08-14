@@ -1,6 +1,6 @@
 var contextMenuItem = {
     "id": "JunhoCatchJob",
-    "title": "SaveJunho",
+    "title": "NPICK에서 '뉴스 스크랩하기'",
     "contexts": ["selection"]
 };
 chrome.contextMenus.create(contextMenuItem, () => chrome.runtime.lastError)

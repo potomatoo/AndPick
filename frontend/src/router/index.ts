@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "@/views/Cover.vue";
+import Home from "@/views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 
@@ -23,6 +23,8 @@ import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 import PostDir from "@/views/pages/PostDir.vue";
 import EditArticle from "@/views/pages/EditArticle.vue";
 import HashTag from "@/views/pages/HashTag.vue";
+import SelectFromOutSide from "@/views/pages/SelectFromOutside.vue";
+import { nextTick } from "vue/types/umd";
 
 Vue.use(VueRouter);
 
@@ -30,78 +32,57 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Home",
-    component: Home,
-    meta: {
-      authRequired: true,
-    },
+    component: Home
   },
   {
     path: "/cover",
     name: "Cover",
-    component: Cover,
+    component: Cover
   },
   {
     path: "/accounts/signup",
     name: "Signup",
-    component: SignupView,
+    component: SignupView
   },
   {
-    path: "/accounts/login",
+    path: "/accounts/login/",
     name: "Login",
-    component: LoginView,
+    component: LoginView
   },
   {
     path: "/accounts/social",
     name: "SocialLogin",
-    component: SocialLoginView,
+    component: SocialLoginView
   },
   {
     path: "/accounts/logout",
     name: "Logout",
-    component: LogoutView,
-    meta: {
-      authRequired: true,
-    },
+    component: LogoutView
   },
   {
     path: "/accounts/delete",
     name: "DeleteUser",
-    component: DeleteUserView,
-    meta: {
-      authRequired: true,
-    },
+    component: DeleteUserView
   },
   {
     path: "/accounts/update",
     name: "UpdateUser",
-    component: UpdateUserView,
-    meta: {
-      authRequired: true,
-    },
+    component: UpdateUserView
   },
   {
     path: "/today",
     name: "Today",
-    component: Today,
-    meta: {
-      authRequired: true,
-    },
+    component: Today
   },
   {
     path: "/later",
     name: "Later",
-    component: Later,
-    meta: {
-      authRequired: true,
-    },
+    component: Later
   },
   {
     path: "/mypage/:postDirId",
     name: "PostDir",
-    component: PostDir,
-    meta: {
-      authRequired: true,
-    },
+    component: PostDir
   },
 
   {
@@ -109,14 +90,20 @@ const routes: Array<RouteConfig> = [
     name: "NewPost",
     component: EditArticle,
     meta: {
-      authRequired: true,
-    },
+      authRequired: true
+    }
+  },
+
+  {
+    path: "/fromothersite/select",
+    name: "SelectFromOutside",
+    component: SelectFromOutSide
   },
 
   {
     path: "/mypage/:postDirId/:postId/post",
     name: "EditPost",
-    component: EditArticle,
+    component: EditArticle
   },
 
   {
@@ -128,26 +115,17 @@ const routes: Array<RouteConfig> = [
   {
     path: "/add",
     name: "AddRss",
-    component: AddRss,
-    meta: {
-      authRequired: true,
-    },
+    component: AddRss
   },
   {
     path: "/feed/:feedId",
     name: "Feed",
-    component: FeedPage,
-    meta: {
-      authRequired: true,
-    },
+    component: FeedPage
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
-    component: ArticleListInRss,
-    meta: {
-      authRequired: true,
-    },
+    component: ArticleListInRss
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId/:articleId",
@@ -164,10 +142,7 @@ const routes: Array<RouteConfig> = [
         name: "EditScrapInSubs",
         component: EditArticle
       }
-    ],
-    meta: {
-      authRequired: true,
-    },
+    ]
   },
   {
     path: "/feed/:feedId/article/:articleId",
@@ -184,18 +159,12 @@ const routes: Array<RouteConfig> = [
         name: "EditScrapInFeed",
         component: EditArticle
       }
-    ],
-    meta: {
-      authRequired: true,
-    },
+    ]
   },
   {
     path: "/board/:boardId",
     name: "BoardArticleList",
-    component: BoardArticleList,
-    meta: {
-      authRequired: true,
-    },
+    component: BoardArticleList
   },
   {
     path: "/board/:boardId/news/:newsId",
@@ -212,11 +181,8 @@ const routes: Array<RouteConfig> = [
         name: "EditScrapInBoard",
         component: EditArticle
       }
-    ],
-    meta: {
-      authRequired: true,
-    },
-  },
+    ]
+  }
 ];
 
 const router = new VueRouter({
@@ -225,23 +191,18 @@ const router = new VueRouter({
   routes,
   scrollBehavior(to, from, savedPositin) {
     return { x: 0, y: 0 };
-  },
+  }
 });
 
-router.beforeEach(function(to, from, next) {
-  if (!window.sessionStorage.getItem("jwt-token")) {
-    if (
-      to.matched.some(function(routeInfo) {
-        return routeInfo.meta.authRequired;
-      })
-    ) {
-      next("/cover");
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
+router.beforeEach((to, from, next) => {
+  const publicPages = ["Cover", "Signup", "Login", "SocialLogin"];
+  const authRequired = !publicPages.includes(to.name!);
+  const isLogedIn = !!window.sessionStorage.getItem("jwt-token");
+  const unAuthRequiredPages = ["Signup", "Login", "SocialLogin"];
+  const unAuthRequired = unAuthRequiredPages.includes(to.name!);
+
+  authRequired && !isLogedIn ? next({ name: "Login" }) : next();
+  unAuthRequired && isLogedIn ? next({ name: "Cover" }) : next();
 });
 
 export default router;

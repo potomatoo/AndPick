@@ -1,7 +1,7 @@
 <template>
   <v-main>
     <v-layout>
-      <v-flex v-if="isLoggedIn" offset-lg3 lg6>
+      <v-flex v-if="isLoggedIn" offset-xs1 xs10>
         <router-view></router-view>
       </v-flex>
       <v-flex v-if="!isLoggedIn">
@@ -33,8 +33,8 @@ import { mapGetters } from "vuex";
   methods: {
     scrollToTop: function() {
       scroll(0, 0);
-    },
-  },
+    }
+  }
 })
 export default class AppMain extends Vue {
   showbtn = false;
@@ -55,6 +55,10 @@ export default class AppMain extends Vue {
   position: fixed;
   right: 7vw;
   bottom: 20vh;
+  text-decoration: none;
+  color: inherit;
+  border: 0;
+  outline: none !important;
 }
 .slide-fade-enter-active {
   transition: all 1s ease;

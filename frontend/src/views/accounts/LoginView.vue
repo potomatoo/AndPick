@@ -15,7 +15,7 @@
           placeholder="이메일"
           :class="{
             'is-invalid': $v.loginData.userId.$error,
-            'is-valid': !$v.loginData.userId.$invalid,
+            'is-valid': !$v.loginData.userId.$invalid
           }"
         />
         <div class="invalid-feedback">
@@ -38,7 +38,7 @@
           placeholder="비밀번호"
           :class="{
             'is-invalid': $v.loginData.userPassword.$error,
-            'is-valid': !$v.loginData.userPassword.$invalid,
+            'is-valid': !$v.loginData.userPassword.$invalid
           }"
           @keypress.enter="submitForm"
         />
@@ -64,20 +64,9 @@
       </div>
     </form>
     <hr />
-    <!-- <a
-      href="https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Faccounts%2Flogin&client_id=476248660063-e2gk89ukcim2la7mbttisi10pq9ck5r6.apps.googleusercontent.com"
-      ><img src="@/assets/google.png" style="width: 380px; height:40px" />
-    </a> -->
-    <button @click="test1()">
-      <img src="@/assets/google.png" style="width: 380px; height:40px" />
-    </button>
-    <hr />
-    <button @click="test2()">
-      <img src="@/assets/google.png" style="width: 380px; height:40px" />
-    </button>
-    <!-- <router-link :to="{ name: 'SocialLogin' }"
+    <router-link :to="{ name: 'SocialLogin' }"
       ><img src="@/assets/google.png" style="width: 380px; height: 40px;"
-    /></router-link> -->
+    /></router-link>
     <p>
       계정이 없으신가요?
       <router-link :to="{ name: 'Signup' }">
@@ -90,7 +79,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { required, minLength, email } from "vuelidate/lib/validators";
-import axios from "axios";
+import router from "../../router";
 
 interface LoginData {
   userId: string | null;
@@ -109,60 +98,40 @@ interface LoginData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
           });
-        },
+        }
       },
       userPassword: {
         required,
-        minLength: minLength(4),
-      },
-    },
-  },
+        minLength: minLength(4)
+      }
+    }
+  }
 })
 export default class LoginView extends Vue {
   loginData: LoginData = {
     userId: null,
     userPassword: null,
     userType: 0,
-    code: null,
+    code: null
   };
-  URL: string | null = null;
   submitForm() {
     this.$v.$touch();
     if (this.$v.$invalid) {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
+      if (window.location.href.length > 50) {
+        const scrapKey = window.location.href.slice(37, 53);
+        localStorage.setItem("scrapKey", scrapKey);
+        router.push({ name: "SelectFromOutside" });
+      }
+      console.log("데이터 검증 성공");
     }
-  }
-  test1() {
-    if (this.URL) {
-      axios
-        .get(this.URL, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .then((res) => console.log("1성공", res))
-        .catch((err) => console.log("1에러", err));
-    }
-  }
-  test2() {
-    if (this.URL) {
-      axios
-        .get(this.URL)
-        .then((res) => console.log("2성공", res))
-        .catch((err) => console.log("2에러", err));
-    }
-  }
-  created() {
-    axios
-      .get("http://i3b107.p.ssafy.io/api/public/google")
-      .then((res) => (this.URL = res.data.data));
   }
 }
 </script>

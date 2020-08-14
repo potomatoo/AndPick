@@ -126,7 +126,7 @@ export default class LoginView extends Vue {
     } else {
       this.$store.dispatch("login", this.loginData);
       if (window.location.href.length > 50) {
-        const scrapKey = window.location.href.slice(37, 53);
+        const scrapKey = window.location.href.slice(41, 57);
         localStorage.setItem("scrapKey", scrapKey);
         router.push({ name: "SelectFromOutside" });
       }

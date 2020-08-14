@@ -15,7 +15,7 @@
           placeholder="이메일"
           :class="{
             'is-invalid': $v.loginData.userId.$error,
-            'is-valid': !$v.loginData.userId.$invalid,
+            'is-valid': !$v.loginData.userId.$invalid
           }"
         />
         <div class="invalid-feedback">
@@ -38,7 +38,7 @@
           placeholder="비밀번호"
           :class="{
             'is-invalid': $v.loginData.userPassword.$error,
-            'is-valid': !$v.loginData.userPassword.$invalid,
+            'is-valid': !$v.loginData.userPassword.$invalid
           }"
           @keypress.enter="submitForm"
         />
@@ -79,6 +79,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { required, minLength, email } from "vuelidate/lib/validators";
+import router from "../../router";
 
 interface LoginData {
   userId: string | null;
@@ -97,26 +98,26 @@ interface LoginData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
           });
-        },
+        }
       },
       userPassword: {
         required,
-        minLength: minLength(4),
-      },
-    },
-  },
+        minLength: minLength(4)
+      }
+    }
+  }
 })
 export default class LoginView extends Vue {
   loginData: LoginData = {
     userId: null,
     userPassword: null,
     userType: 0,
-    code: null,
+    code: null
   };
   submitForm() {
     this.$v.$touch();
@@ -124,6 +125,12 @@ export default class LoginView extends Vue {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
+      if (window.location.href.length > 50) {
+        const scrapKey = window.location.href.slice(41, 57);
+        localStorage.setItem("scrapKey", scrapKey);
+        router.push({ name: "SelectFromOutside" });
+      }
+      console.log("데이터 검증 성공");
     }
   }
 }

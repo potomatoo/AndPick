@@ -308,11 +308,19 @@ export default class EditArticle extends Vue {
 
   addPost() {
     if (isNaN(this.postId)) {
+      const submitTagList = [];
+      this.nowTagList.forEach(element => {
+        const oneTagList = {
+          tagName: element
+        };
+        submitTagList.push(oneTagList);
+      });
+      console.log(submitTagList);
       this.ADD_POST({
         postContent: this.html,
         postDirId: this.$route.params.postDirId,
         postTitle: this.title,
-        tagList: this.nowTagList
+        tagList: submitTagList
       });
       this.snackbar = true;
     } else {

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "@/views/Cover.vue";
+import Home from "@/views/main/a.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 
@@ -23,6 +23,8 @@ import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
 import PostDir from "@/views/pages/PostDir.vue";
 import EditArticle from "@/views/pages/EditArticle.vue";
 import HashTag from "@/views/pages/HashTag.vue";
+import SelectFromOutSide from "@/views/pages/SelectFromOutside.vue";
+import { nextTick } from "vue/types/umd";
 
 Vue.use(VueRouter);
 
@@ -35,22 +37,22 @@ const routes: Array<RouteConfig> = [
   {
     path: "/cover",
     name: "Cover",
-    component: Cover,
+    component: Cover
   },
   {
     path: "/accounts/signup",
     name: "Signup",
-    component: SignupView,
+    component: SignupView
   },
   {
-    path: "/accounts/login",
+    path: "/accounts/login/",
     name: "Login",
-    component: LoginView,
+    component: LoginView
   },
   {
     path: "/accounts/social",
     name: "SocialLogin",
-    component: SocialLoginView,
+    component: SocialLoginView
   },
   {
     path: "/accounts/logout",
@@ -86,13 +88,22 @@ const routes: Array<RouteConfig> = [
   {
     path: "/mypage/:postDirId/newpost",
     name: "NewPost",
-    component: EditArticle
+    component: EditArticle,
+    meta: {
+      authRequired: true
+    }
+  },
+
+  {
+    path: "/fromothersite/select",
+    name: "SelectFromOutside",
+    component: SelectFromOutSide
   },
 
   {
     path: "/mypage/:postDirId/:postId/post",
     name: "EditPost",
-    component: EditArticle,
+    component: EditArticle
   },
 
   {
@@ -180,7 +191,7 @@ const router = new VueRouter({
   routes,
   scrollBehavior(to, from, savedPositin) {
     return { x: 0, y: 0 };
-  },
+  }
 });
 
 router.beforeEach((to, from, next) => {

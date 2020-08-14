@@ -21,20 +21,26 @@ import AppFooter from "@/components/main/AppFooter.vue";
     AppNavbar,
     AppSidebar,
     AppMain,
-    AppFooter,
-  },
+    AppFooter
+  }
 })
 export default class Home extends Vue {
+  isLoggedId = this.$store.getters.isLoggedIn;
+
   @Watch("$store.state.JWT")
   stateUpdate() {
     if (this.$store.state.JWT) {
       console.log("login");
     }
   }
-  created() {
-    this.$store.dispatch("feedModule/FETCH_FEED_LIST");
-    this.$store.dispatch("feedModule/FETCH_BOARD_LIST");
-    this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
+
+  @Watch("isLoggedId", { immediate: true })
+  fetchData() {
+    if (this.isLoggedId) {
+      this.$store.dispatch("feedModule/FETCH_FEED_LIST");
+      this.$store.dispatch("feedModule/FETCH_BOARD_LIST");
+      this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
+    }
   }
 }
 </script>

@@ -6,15 +6,15 @@
           <add-board-menu />
           <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
         </div>
-        <v-divider class="mt-1"></v-divider>
-        <h3>{{ news.newsTitle }}</h3>
-        <div class="subtitle-1 text--secondary">{{ news.newsDate }}</div>
+        <v-divider class="mt-2"></v-divider>
+        <h3 class="mt-10 mb-0">{{ news.newsTitle }}</h3>
+        <div class="text-caption text--secondary">{{ news.newsDate }}</div>
       </v-container>
 
-      <v-container class="text-center mt-16">
-        <p :v-html="news.newsDescription" :class="{ desc: !onEdit }">
+      <v-container>
+        <div v-html="news.newsDescription" :class="{ desc: !onEdit }">
           {{ news.newsDescription }}
-        </p>
+        </div>
         <div :class="{ desc: !onEdit }">
           <v-btn
             color="grey"
@@ -104,6 +104,31 @@ export default class BoardArticleDetail extends Vue {
       name: "NewScrapInBoard",
       params: { postDirId: postDirId.toString() }
     });
+  }
+
+  // @Watch("$route")
+  setStyle() {
+    const article = document.querySelector(".article-desc");
+    const images = article?.querySelectorAll("img");
+    const videos = article?.querySelectorAll("video");
+    const iframe = article?.querySelectorAll("iframe");
+    const pTag = article?.querySelectorAll("p");
+    if (images?.length) {
+      images.forEach(el => el.setAttribute("style", "width: 100%"));
+    }
+    if (videos?.length) {
+      videos.forEach(el => el.setAttribute("style", "width: 100px"));
+    }
+    if (iframe?.length) {
+      iframe.forEach(el => el.setAttribute("style", "width: 100%"));
+    }
+    if (pTag?.length) {
+      pTag.forEach(el => el.setAttribute("style", "margin: 24px 0px"));
+    }
+  }
+
+  updated() {
+    this.setStyle();
   }
 }
 </script>

@@ -39,6 +39,9 @@ const store: StoreOptions<RootState> = {
     SET_TOKEN(state, token: string) {
       state.JWT = token;
       STORAGE.setItem("jwt-token", token);
+      Axios.instance.defaults.headers.common[
+        "Authorization"
+      ] = window.sessionStorage.getItem("jwt-token");
     },
 
     SET_NAME(state, userName: string) {

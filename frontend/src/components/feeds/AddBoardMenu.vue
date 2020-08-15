@@ -7,11 +7,16 @@
     nudge-bottom="5"
   >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn icon large>
-        <v-icon v-bind="attrs" v-on="on">
-          mdi-star-outline
-        </v-icon>
-      </v-btn>
+      <span v-on="on" v-bind="attrs" class="mx-3">
+        <v-tooltip top open-delay="300" color="#EEEEEE">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon v-bind="attrs" v-on="on">
+              mdi-star-outline
+            </v-icon>
+          </template>
+          <span class="grey--text text--darken-1">Save to Board</span>
+        </v-tooltip>
+      </span>
     </template>
 
     <!-- 피드에서 접근 -->
@@ -155,4 +160,8 @@ export default class AddBoardMenu extends Vue {
 }
 </script>
 
-<style></style>
+<style scoped>
+span:hover {
+  background-color: #eeeeee;
+}
+</style>

@@ -5,21 +5,20 @@
         <div class="text-left">
           <add-board-menu />
           <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
-          <v-divider class="mt-1"></v-divider>
         </div>
-        <h3>{{ article.title }}</h3>
-        <div class="subtitle-1 text--secondary">{{ article.pubDate }}</div>
-        <div class="text-right"></div>
+        <v-divider class="mt-2"></v-divider>
+        <h3 class="mt-10 mb-0">{{ article.title }}</h3>
+        <div class="text-caption text--secondary">{{ article.pubDate }}</div>
       </v-container>
 
-      <v-container class="text-center mt-16">
-        <p
-          :v-html="article.description"
+      <v-container>
+        <div
+          class="article-desc"
+          v-html="article.description"
           :class="{ desc: !onEdit }"
-          @mouseup="drag"
         >
           {{ article.description }}
-        </p>
+        </div>
         <div :class="{ desc: !onEdit }">
           <v-btn
             color="grey"
@@ -83,13 +82,13 @@ export default class ArticleDetailFeed extends Vue {
     this.checkArticle();
   }
 
-  drag() {
-    const select = document.getSelection();
-    if (select && select.toString()) {
-      this.selectText = select.toString();
-      console.log(select.toString());
-    }
-  }
+  // drag() {
+  //   const select = document.getSelection();
+  //   if (select && select.toString()) {
+  //     this.selectText = select.toString();
+  //     console.log(select.toString());
+  //   }
+  // }
 
   saveEdit() {
     this.$router.replace({
@@ -126,6 +125,31 @@ export default class ArticleDetailFeed extends Vue {
       name: "NewScrapInFeed",
       params: { postDirId: postDirId.toString() }
     });
+  }
+
+  // @Watch("$route")
+  setStyle() {
+    const article = document.querySelector(".article-desc");
+    const images = article?.querySelectorAll("img");
+    const videos = article?.querySelectorAll("video");
+    const iframe = article?.querySelectorAll("iframe");
+    const pTag = article?.querySelectorAll("p");
+    if (images?.length) {
+      images.forEach(el => el.setAttribute("style", "width: 100%"));
+    }
+    if (videos?.length) {
+      videos.forEach(el => el.setAttribute("style", "width: 100px"));
+    }
+    if (iframe?.length) {
+      iframe.forEach(el => el.setAttribute("style", "width: 100%"));
+    }
+    if (pTag?.length) {
+      pTag.forEach(el => el.setAttribute("style", "margin: 24px 0px"));
+    }
+  }
+
+  updated() {
+    this.setStyle();
   }
 }
 </script>

@@ -95,7 +95,7 @@ const routes: Array<RouteConfig> = [
   },
 
   {
-    path: "/fromothersite/select",
+    path: "/fromothersite/select/:scrapKey",
     name: "SelectFromOutside",
     component: SelectFromOutSide
   },

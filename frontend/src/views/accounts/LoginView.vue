@@ -125,11 +125,6 @@ export default class LoginView extends Vue {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
-      if (window.location.href.length > 50) {
-        const scrapKey = window.location.href.slice(41, 57);
-        localStorage.setItem("scrapKey", scrapKey);
-        router.push({ name: "SelectFromOutside" });
-      }
       console.log("데이터 검증 성공");
     }
   }

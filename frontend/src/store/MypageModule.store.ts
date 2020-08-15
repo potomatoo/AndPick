@@ -272,7 +272,6 @@ const module: Module<MypageModule, RootState> = {
       Axios.instance
         .get("/api/scrap/load", scrapData)
         .then(({ data }) => {
-          console.log(data);
           localStorage.setItem("scrapData", data.data.scrap);
         })
         .catch(err => console.error(err));

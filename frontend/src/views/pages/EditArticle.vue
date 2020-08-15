@@ -344,9 +344,39 @@ export default class EditArticle extends Vue {
     this.SELECT_POST({
       postId: Number(this.$route.params.postId)
     });
-    if (this.$route.name === "NewScrap") {
+
+    if (
+      ["NewScrapInFeed", "NewScrapInSubs", "NewScrapInBoard"].includes(
+        this.$route.name
+      ) &&
+      document.querySelector(".content")
+    ) {
       const content = document.querySelector(".content");
       content.querySelector("p").innerText = "";
+    }
+  }
+
+  mounted() {
+    if ("NewScrapFromGoole" === this.$route.name) {
+      this.editor.setContent(
+        {
+          type: "doc",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: localStorage.getItem("scrapData")
+                }
+              ]
+            }
+          ]
+        },
+        true
+      );
+
+      this.editor.focus();
     }
   }
 

@@ -88,10 +88,13 @@ const routes: Array<RouteConfig> = [
   {
     path: "/mypage/:postDirId/newpost",
     name: "NewPost",
-    component: EditArticle,
-    meta: {
-      authRequired: true
-    }
+    component: EditArticle
+  },
+
+  {
+    path: "/scrap/:postDirId/newpost",
+    name: "NewScrapFromGoole",
+    component: EditArticle
   },
 
   {

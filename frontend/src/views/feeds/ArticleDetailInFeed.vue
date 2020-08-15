@@ -138,7 +138,7 @@ export default class ArticleDetailFeed extends Vue {
       images.forEach(el => el.setAttribute("style", "width: 100%"));
     }
     if (videos?.length) {
-      videos.forEach(el => el.setAttribute("style", "width: 100px"));
+      videos.forEach(el => el.setAttribute("style", "width: 100%"));
     }
     if (iframe?.length) {
       iframe.forEach(el => el.setAttribute("style", "width: 100%"));

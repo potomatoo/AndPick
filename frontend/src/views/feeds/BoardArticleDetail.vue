@@ -12,7 +12,11 @@
       </v-container>
 
       <v-container>
-        <div v-html="news.newsDescription" :class="{ desc: !onEdit }">
+        <div
+          class="article-desc"
+          v-html="news.newsDescription"
+          :class="{ desc: !onEdit }"
+        >
           {{ news.newsDescription }}
         </div>
         <div :class="{ desc: !onEdit }">
@@ -114,10 +118,12 @@ export default class BoardArticleDetail extends Vue {
     const iframe = article?.querySelectorAll("iframe");
     const pTag = article?.querySelectorAll("p");
     if (images?.length) {
-      images.forEach(el => el.setAttribute("style", "width: 100%"));
+      images.forEach(el => {
+        el.setAttribute("style", "width: 100%");
+      });
     }
     if (videos?.length) {
-      videos.forEach(el => el.setAttribute("style", "width: 100px"));
+      videos.forEach(el => el.setAttribute("style", "width: 100%"));
     }
     if (iframe?.length) {
       iframe.forEach(el => el.setAttribute("style", "width: 100%"));

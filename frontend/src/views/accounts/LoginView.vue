@@ -59,7 +59,7 @@
           large
           color="success"
           @click.prevent="submitForm"
-          >Login</v-btn
+          >로그인</v-btn
         >
       </div>
     </form>
@@ -70,7 +70,7 @@
     <p>
       계정이 없으신가요?
       <router-link :to="{ name: 'Signup' }">
-        <b style="color: #5cb85c">Signup</b>
+        <b style="color: #5cb85c">회원가입</b>
       </router-link>
     </p>
   </div>
@@ -98,7 +98,7 @@ interface LoginData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);

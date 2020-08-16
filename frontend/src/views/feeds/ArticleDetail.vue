@@ -79,6 +79,7 @@ export default class ArticleDetail extends Vue {
   mounted() {
     // 새로고침시 article state가 초기화되면 상위 페이지로 이동
     this.checkArticle();
+    this.setStyle();
   }
 
   saveEdit() {
@@ -119,7 +120,6 @@ export default class ArticleDetail extends Vue {
     });
   }
 
-  // @Watch("$route")
   setStyle() {
     const article = document.querySelector(".article-desc");
     const images = article?.querySelectorAll("img");
@@ -138,10 +138,6 @@ export default class ArticleDetail extends Vue {
     if (pTag?.length) {
       pTag.forEach(el => el.setAttribute("style", "margin: 24px 0px"));
     }
-  }
-
-  updated() {
-    this.setStyle();
   }
 }
 </script>

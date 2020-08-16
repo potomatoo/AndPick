@@ -69,6 +69,10 @@ const module: Module<MypageModule, RootState> = {
       state.tagDir = tagDir;
     },
 
+    SET_ALLTAGDIR(state, allTagDir: AllTag[]) {
+      state.allTagDir = allTagDir;
+    },
+
     SET_POST(state, post: Post) {
       state.post = post;
     },

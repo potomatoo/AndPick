@@ -1,11 +1,10 @@
 <template>
   <div>
-    <div class="back row py-5" style="height:500px">
+    <div class="back row py-5">
       <ServiceDescription />
       <RssImage />
     </div>
     <ServiceStep />
-    <hr />
     <UserInformation />
   </div>
 </template>
@@ -30,7 +29,11 @@ export default class Cover extends Vue {}
 
 <style>
 .back {
-  background-image: url("https://images.unsplash.com/photo-1556888335-95371827d5fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80");
+  /* background-image: url("https://images.unsplash.com/photo-1556888335-95371827d5fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80"); */
   background-size: 100% 100%;
+  background-color: #17212c;
+  height: 500px;
+  margin: 1px;
+  border: 15px solid #00d59b !important;
 }
 </style>

@@ -234,7 +234,7 @@ export default class SubsContextMenu extends Vue {
       this.selectMoveToFeed.forEach(fid => {
         const payload = {
           feedId: fid,
-          rssId: this.subsItem.rss.rssId,
+          rss: this.subsItem.rss,
           subscribeName: this.subsItem.subscribeName
         };
         this.FOLLOW_SUBSCRIPTION(payload);

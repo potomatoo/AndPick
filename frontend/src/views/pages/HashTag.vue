@@ -29,12 +29,12 @@
               >
                 <div class="container d-flex justify-content-around">
                   <div
-                    class="post-box"
+                    class="post-box p-1"
                     style="border:5px solid #00d59b"
                     @mouseenter="zoomIn"
                     @mouseleave="zoomOut"
                   >
-                    <div class="post-text pl-2 pr-2 mb-0 mt-3">
+                    <div class="post-text pl-2 pr-2 mb-0 mt-3" align="center">
                       {{ post.postTitle }}
                       <hr style="border-color: #00d59b" />
 
@@ -57,7 +57,7 @@
                               rounded
                               depressed
                               small
-                              style="max-width: 200px"
+                              style="max-width: 150px"
                               id="HashTagbtn"
                               >#{{ tag.tagName }}</v-btn
                             >
@@ -76,15 +76,15 @@
         md="3"
         lg="3"
         xl="3"
-        style="height: 500px; border-left: 1px solid rgb(226, 226, 226); position: sticky; top: 130px; height: 520px; overflow-y: auto; margin-left: 70px;"
+        style="height: 500px; border-left: 2px solid rgb(226, 226, 226); position: sticky; top: 130px; height: 520px; overflow-y: auto; margin-left: 70px;"
       >
-        <div style="margin-left: 20px; margin-top:50px">
-          <h6 style="font-weight: bold;">
+        <div style="margin-left: 10px; margin-top:40px">
+          <div style="font-weight: bold;">
             추천키워드
-          </h6>
+          </div>
 
           <div class="container row">
-            <div class="ma-1" v-for="tag in allTagDir" :key="tag.tagName">
+            <div v-for="tag in allTagDir" :key="tag.tagName">
               <router-link
                 class="router-link"
                 :to="{
@@ -94,14 +94,15 @@
                   }
                 }"
               >
-                <v-btn
-                  rounded
-                  depressed
-                  small
-                  style="max-width: 200px"
-                  id="HashTagbtn"
-                  >#{{ tag.tagName }}</v-btn
+                <v-chip
+                  class="ma-1"
+                  style="cursor: pointer; font-weight: medium"
                 >
+                  {{ tag.tagName }}
+                  <v-avatar right class="white">
+                    {{ tag.count }}
+                  </v-avatar>
+                </v-chip>
               </router-link>
             </div>
           </div>
@@ -193,13 +194,6 @@ export default class HashTag extends Vue {
   /* transition: font-size 2s; */
   font-family: "Black Han Sans", sans-serif;
   /* font-family: "Jua", sans-serif; */
-  white-space: nowrap;
-  overflow: hidden;
-  word-break: keep-all;
-  text-overflow: ellipsis;
-}
-
-.v-btn__content {
   white-space: nowrap;
   overflow: hidden;
   word-break: keep-all;

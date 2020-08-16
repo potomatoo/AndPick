@@ -10,19 +10,10 @@
           v-for="postDir in postDirList"
           :key="postDir.postDirId"
           @contextmenu.prevent="showPostDirCtx($event, postDir)"
+          @click="toPostDir(postDir.postDirId)"
         >
           <v-list-item-content>
-            <router-link
-              :to="{
-                name: 'PostDir',
-                params: { postDirId: postDir.postDirId }
-              }"
-              class="router-link"
-            >
-              <v-list-item-title
-                v-text="postDir.postDirName"
-              ></v-list-item-title>
-            </router-link>
+            <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -32,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
 import PostDirContextMenu from "@/components/pages/PostDirContextMenu.vue";
@@ -63,12 +54,19 @@ export default class SidebarMypage extends Vue {
     };
     this.SET_POSTDIR_CONTEXT_MENU(ctx);
   }
+
+  toPostDir(postDirId: number) {
+    if (
+      this.$route.name === "PostDir" &&
+      Number(this.$route.params.postDirId) === postDirId
+    )
+      return;
+    this.$router.push({
+      name: "PostDir",
+      params: { postDirId: postDirId.toString() }
+    });
+  }
 }
 </script>
 
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
+<style scoped></style>

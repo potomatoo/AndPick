@@ -22,15 +22,13 @@
         </v-list-item>
     </router-link>-->
     <v-list class="mt-5">
-      <v-list-item class="px-2">
+      <v-list-item class="px-6" @click="toAddPage">
         <v-list-item-icon>
           <v-icon>mdi-plus-box-outline</v-icon>
         </v-list-item-icon>
-        <router-link class="router-link" :to="{ name: 'AddRss' }">
-          <v-list-item-content>
-            <v-list-item-title>Follow New Sources</v-list-item-title>
-          </v-list-item-content>
-        </router-link>
+        <v-list-item-content>
+          <v-list-item-title>Follow New Sources</v-list-item-title>
+        </v-list-item-content>
       </v-list-item>
     </v-list>
   </div>
@@ -40,11 +38,12 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class SidebarTop extends Vue {}
-</script>
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
+export default class SidebarTop extends Vue {
+  toAddPage() {
+    if (this.$route.name !== "AddRss") {
+      this.$router.push({ name: "AddRss" });
+    }
+  }
 }
-</style>
+</script>
+<style scoped></style>

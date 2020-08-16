@@ -7,6 +7,7 @@
           v-for="board in boardList"
           :key="board.title"
           @contextmenu.prevent="showBoardCtx($event, board)"
+          @click="toBoardArticleList(board.boardId)"
         >
           <v-list-item-icon>
             <v-icon>
@@ -14,15 +15,7 @@
             </v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <router-link
-              :to="{
-                name: 'BoardArticleList',
-                params: { boardId: board.boardId }
-              }"
-              class="router-link"
-            >
-              <v-list-item-title v-text="board.boardName"></v-list-item-title>
-            </router-link>
+            <v-list-item-title v-text="board.boardName"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -86,12 +79,19 @@ export default class SidebarBoard extends Vue {
     };
     this.SET_BOARD_CONTEXT_MENU(ctx);
   }
+
+  toBoardArticleList(boardId: number) {
+    if (
+      this.$route.name === "BoardArticleList" &&
+      Number(this.$route.params.boardId) === boardId
+    )
+      return;
+    this.$router.push({
+      name: "BoardArticleList",
+      params: { boardId: boardId.toString() }
+    });
+  }
 }
 </script>
 
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
+<style scoped></style>

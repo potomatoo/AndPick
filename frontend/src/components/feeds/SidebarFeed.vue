@@ -6,18 +6,11 @@
       :key="feed.feedId"
       no-action
       sub-group
+      @click="toFeedPage(feed.feedId)"
     >
       <template v-slot:activator>
         <v-list-item-content @contextmenu.prevent="showFeedCtx($event, feed)">
-          <router-link
-            :to="{
-              name: 'Feed',
-              params: { feedId: feed.feedId }
-            }"
-            class="router-link"
-          >
-            <v-list-item-title v-text="feed.feedName"></v-list-item-title>
-          </router-link>
+          <v-list-item-title v-text="feed.feedName"></v-list-item-title>
         </v-list-item-content>
       </template>
 
@@ -25,22 +18,10 @@
         v-for="subItem in feed.subscribeList"
         :key="subItem.subscribeId"
         @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
+        @click="toArticleList(feed.feedId, subItem.subscribeId)"
       >
         <v-list-item-content>
-          <router-link
-            :to="{
-              name: 'ArticleListInRss',
-              params: {
-                feedId: feed.feedId,
-                subscribeId: subItem.subscribeId
-              }
-            }"
-            class="router-link"
-          >
-            <v-list-item-title
-              v-text="subItem.subscribeName"
-            ></v-list-item-title>
-          </router-link>
+          <v-list-item-title v-text="subItem.subscribeName"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list-group>
@@ -123,12 +104,29 @@ export default class SidebarFeed extends Vue {
     };
     this.SET_FEED_CONTEXT_MENU(ctx);
   }
+
+  toFeedPage(feedId: number) {
+    if (
+      this.$route.name === "Feed" &&
+      Number(this.$route.params.feedId) === feedId
+    )
+      return;
+    console.log(feedId);
+    this.$router.push({ name: "Feed", params: { feedId: feedId.toString() } });
+  }
+
+  toArticleList(feedId: number, subscribeId: number) {
+    if (
+      this.$route.name === "ArticleListInRss" &&
+      Number(this.$route.params.subscribeId) === subscribeId
+    )
+      return;
+    this.$router.push({
+      name: "ArticleListInRss",
+      params: { feedId: feedId.toString(), subscribeId: subscribeId.toString() }
+    });
+  }
 }
 </script>
 
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
+<style scoped></style>

@@ -22,6 +22,11 @@ export interface Tag {
   tagName: string;
 }
 
+export interface AllTag {
+  count: number;
+  tagName: string;
+}
+
 export interface Context {
   showCtx: boolean;
   x: number;
@@ -34,6 +39,7 @@ export interface MypageModule {
   postDirList: PostDir[];
   postDir: Post[];
   tagDir: Post[];
+  allTagDir: AllTag[];
   post: Post | null;
   postDirId: number | null;
   postId: number | null;

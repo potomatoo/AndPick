@@ -1,6 +1,12 @@
 import { Module } from "vuex";
 import { RootState } from "./index";
-import { MypageModule, PostDir, Post, Tag } from "@/store/MypageInterface.ts";
+import {
+  MypageModule,
+  PostDir,
+  Post,
+  Tag,
+  AllTag
+} from "@/store/MypageInterface.ts";
 import { Axios, LocalAxios } from "@/service/axios.service";
 import router from "@/router";
 import QueryString from "qs";
@@ -13,6 +19,7 @@ const module: Module<MypageModule, RootState> = {
     isCreateFolderModalActive: false,
     postDirList: [],
     postDir: [],
+    allTagDir: [],
     tagDir: [],
     post: null,
     postDirId: null,
@@ -117,6 +124,15 @@ const module: Module<MypageModule, RootState> = {
           commit("SET_TAGDIR", data.data);
         })
         .catch(err => console.error(err));
+    },
+
+    FETCH_ALLTAGDIR({ commit }) {
+      Axios.instance
+        .get("/api/tag/count")
+        .then(({ data }) => {
+          commit("SET_ALLTAGDIR", data.data);
+        })
+        .catch(err => console.log(err));
     },
 
     FETCH_POST({ commit }, postId: number) {

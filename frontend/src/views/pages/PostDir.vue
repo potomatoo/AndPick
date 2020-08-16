@@ -100,16 +100,15 @@
                   >
                     <v-card
                       id="cursor_test"
-                      :elevation="hover ? 12 : 2"
                       :class="{ 'on-hover': hover }"
-                      height="350"
+                      height="435px"
                       max-width="350"
                     >
                       <v-card-text
-                        class="font-weight-medium mt-12 text-center subtitle-1"
+                        class="font-weight-bold mt-5 text-center subtitle-1"
+                        id="postTitle"
                         >{{ post.postTitle }}</v-card-text
                       >
-                      <hr class="mt-0" />
 
                       <div class="container row">
                         <div
@@ -117,18 +116,20 @@
                           v-for="tag in post.tagList"
                           :key="tag.tagId"
                         >
-                          <router-link
-                            :to="{
-                              name: 'HashTag',
-                              params: {
-                                tagName: tag.tagName
-                              }
-                            }"
-                            class="router-link"
-                          >
-                            <v-btn rounded depressed>#{{ tag.tagName }}</v-btn>
-                          </router-link>
+                          <v-btn rounded depressed>#{{ tag.tagName }}</v-btn>
                         </div>
+                        <v-expand-transition>
+                          <div
+                            v-if="hover"
+                            class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-3 white--text"
+                            id="hover-content"
+                          >
+                            <v-icon large left class="mt-0" style="color: white"
+                              >mdi-gesture-tap</v-icon
+                            >
+                            편집하기
+                          </div>
+                        </v-expand-transition>
                       </div>
                     </v-card>
                   </router-link>
@@ -216,7 +217,11 @@ export default class FolderMain extends Vue {
 
 <style scoped>
 #cursor_test {
+  white-space: nowrap;
+  overflow: hidden;
   cursor: pointer;
+  word-break: keep-all;
+  text-overflow: ellipsis;
 }
 
 .router-link {
@@ -232,5 +237,23 @@ export default class FolderMain extends Vue {
 
 #optionBtn {
   outline: none;
+}
+
+#postTitle {
+  text-overflow: ellipsis;
+}
+
+#hover-content {
+  height: 350px;
+  font-size: 20px !important;
+}
+
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.6;
+  position: absolute;
+  width: 100%;
 }
 </style>

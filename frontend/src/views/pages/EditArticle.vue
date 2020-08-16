@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <v-text-field
-      label="Title"
+      label="제목"
       single-line
       v-model="title"
       class="font-weight-bold font-size: 3rem"
@@ -9,8 +9,8 @@
 
     <v-combobox
       v-model="nowTagList"
-      hint="Maximum of 5 tags"
-      label="Add some tags"
+      hint="최대 5개까지 설정 가능합니다."
+      label="#을 제외한 태그 이름을 작성해주세요."
       multiple
       small-chips
     >
@@ -444,7 +444,7 @@ symbol {
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   border: 1px solid #dbdbdb;
   display: block;
-  min-height: 250px;
+  min-height: 350px;
   max-width: 100%;
   min-width: 100%;
   padding: 0.625em;

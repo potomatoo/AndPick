@@ -32,100 +32,103 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: Home
   },
   {
     path: "/cover",
     name: "Cover",
-    component: Cover,
+    component: Cover
   },
   {
     path: "/accounts/signup",
     name: "Signup",
-    component: SignupView,
+    component: SignupView
   },
   {
     path: "/accounts/login/",
     name: "Login",
-    component: LoginView,
+    component: LoginView
   },
   {
     path: "/accounts/social",
     name: "SocialLogin",
-    component: SocialLoginView,
+    component: SocialLoginView
   },
   {
     path: "/accounts/logout",
     name: "Logout",
-    component: LogoutView,
+    component: LogoutView
   },
   {
     path: "/accounts/delete",
     name: "DeleteUser",
-    component: DeleteUserView,
+    component: DeleteUserView
   },
   {
     path: "/accounts/update",
     name: "UpdateUser",
-    component: UpdateUserView,
+    component: UpdateUserView
   },
   {
     path: "/today",
     name: "Today",
-    component: Today,
+    component: Today
   },
   {
     path: "/later",
     name: "Later",
-    component: Later,
+    component: Later
   },
   {
     path: "/mypage/:postDirId",
     name: "PostDir",
-    component: PostDir,
+    component: PostDir
   },
 
   {
     path: "/mypage/:postDirId/newpost",
     name: "NewPost",
-    component: EditArticle,
-    meta: {
-      authRequired: true,
-    },
+    component: EditArticle
   },
 
   {
-    path: "/fromothersite/select",
+    path: "/scrap/:postDirId/newpost",
+    name: "NewScrapFromGoole",
+    component: EditArticle
+  },
+
+  {
+    path: "/fromothersite/select/:scrapKey",
     name: "SelectFromOutside",
-    component: SelectFromOutSide,
+    component: SelectFromOutSide
   },
 
   {
     path: "/mypage/:postDirId/:postId/post",
     name: "EditPost",
-    component: EditArticle,
+    component: EditArticle
   },
 
   {
     path: "/mypage/:tagName/hashtag",
     name: "HashTag",
-    component: HashTag,
+    component: HashTag
   },
 
   {
     path: "/add",
     name: "AddRss",
-    component: AddRss,
+    component: AddRss
   },
   {
     path: "/feed/:feedId",
     name: "Feed",
-    component: FeedPage,
+    component: FeedPage
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
-    component: ArticleListInRss,
+    component: ArticleListInRss
   },
   {
     path: "/feed/:feedId/subscription/:subscribeId/:articleId",
@@ -135,14 +138,14 @@ const routes: Array<RouteConfig> = [
       {
         path: "scrap",
         name: "NewScrapInSubs",
-        component: EditArticle,
+        component: EditArticle
       },
       {
         path: "scrap/:postId",
         name: "EditScrapInSubs",
-        component: EditArticle,
-      },
-    ],
+        component: EditArticle
+      }
+    ]
   },
   {
     path: "/feed/:feedId/article/:articleId",
@@ -152,19 +155,19 @@ const routes: Array<RouteConfig> = [
       {
         path: "scrap",
         name: "NewScrapInFeed",
-        component: EditArticle,
+        component: EditArticle
       },
       {
         path: "scrap/:postId",
         name: "EditScrapInFeed",
-        component: EditArticle,
-      },
-    ],
+        component: EditArticle
+      }
+    ]
   },
   {
     path: "/board/:boardId",
     name: "BoardArticleList",
-    component: BoardArticleList,
+    component: BoardArticleList
   },
   {
     path: "/board/:boardId/news/:newsId",
@@ -174,15 +177,15 @@ const routes: Array<RouteConfig> = [
       {
         path: "scrap",
         name: "NewScrapInBoard",
-        component: EditArticle,
+        component: EditArticle
       },
       {
         path: "scrap/:postId",
         name: "EditScrapInBoard",
-        component: EditArticle,
-      },
-    ],
-  },
+        component: EditArticle
+      }
+    ]
+  }
 ];
 
 const router = new VueRouter({
@@ -191,7 +194,7 @@ const router = new VueRouter({
   routes,
   scrollBehavior(to, from, savedPositin) {
     return { x: 0, y: 0 };
-  },
+  }
 });
 
 router.beforeEach((to, from, next) => {

@@ -1,7 +1,18 @@
 <template>
   <div>
     <v-list>
-      <v-subheader>Board</v-subheader>
+      <div class="d-flex">
+        <v-subheader>Board</v-subheader>
+        <router-link
+          :to="{
+            name: 'BoardExplain'
+          }"
+          class="router-link explain"
+        >
+          도움말
+          <i class="mdi mdi-book-open"></i>
+        </router-link>
+      </div>
       <v-list-item-group>
         <v-list-item
           v-for="board in boardList"
@@ -90,6 +101,12 @@ export default class SidebarBoard extends Vue {
 </script>
 
 <style scoped>
+.explain {
+  opacity: 0.6;
+  font-size: 15px;
+  margin-top: 10px;
+  margin-left: 120px;
+}
 .router-link {
   text-decoration: none;
   color: inherit;

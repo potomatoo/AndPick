@@ -1,10 +1,21 @@
 <template>
   <div>
     <v-list>
-      <v-subheader>
-        Mypage
-        <create-folder />
-      </v-subheader>
+      <div class="d-flex">
+        <v-subheader>
+          Mypage
+          <create-folder />
+        </v-subheader>
+        <router-link
+          :to="{
+            name: 'MypageExplain'
+          }"
+          class="router-link explain"
+        >
+          도움말
+          <i class="mdi mdi-book-open"></i>
+        </router-link>
+      </div>
       <v-list-item-group>
         <v-list-item
           v-for="postDir in postDirList"
@@ -67,8 +78,18 @@ export default class SidebarMypage extends Vue {
 </script>
 
 <style scoped>
+.modal-button {
+  font-size: 15px;
+  opacity: 0.5;
+}
 .router-link {
   text-decoration: none;
   color: inherit;
+}
+.explain {
+  opacity: 0.6;
+  font-size: 15px;
+  margin-top: 8px;
+  margin-left: 75px;
 }
 </style>

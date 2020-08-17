@@ -470,8 +470,6 @@ export default class EditArticle extends Vue {
         },
         true
       );
-
-      this.editor.focus();
     }
 
     if ("NewScrapFromGoole" === this.$route.name) {

@@ -88,14 +88,17 @@ const routes: Array<RouteConfig> = [
   {
     path: "/mypage/:postDirId/newpost",
     name: "NewPost",
-    component: EditArticle,
-    meta: {
-      authRequired: true
-    }
+    component: EditArticle
   },
 
   {
-    path: "/fromothersite/select",
+    path: "/scrap/:postDirId/newpost",
+    name: "NewScrapFromGoole",
+    component: EditArticle
+  },
+
+  {
+    path: "/fromothersite/select/:scrapKey",
     name: "SelectFromOutside",
     component: SelectFromOutSide
   },
@@ -201,7 +204,11 @@ router.beforeEach((to, from, next) => {
   const unAuthRequiredPages = ["Signup", "Login", "SocialLogin"];
   const unAuthRequired = unAuthRequiredPages.includes(to.name!);
 
-  authRequired && !isLogedIn ? next({ name: "Login" }) : next();
+  authRequired && !isLogedIn
+    ? to.name === "Home" && !isLogedIn
+      ? next({ name: "Cover" })
+      : next({ name: "Login" })
+    : next();
   unAuthRequired && isLogedIn ? next({ name: "Cover" }) : next();
 });
 

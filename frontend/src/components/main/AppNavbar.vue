@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left height="70px">
+  <v-app-bar app clipped-left height="65px">
     <v-app-bar-nav-icon v-if="isLoggedIn" @click="TOGGLE_SIDEBAR()" />
     <v-toolbar-title
       class="a mr-5 justify-content-between"
@@ -7,13 +7,12 @@
       style="width: 100%"
     >
       <router-link :to="{ name: 'Home' }">
-        <a
-          ><img
-            class="mdi ml-5"
-            src="@/assets/title1.jpg"
-            width="140px"
-            height="auto"
-        /></a>
+        <img
+          class="mdi ml-5"
+          src="@/assets/title1.jpg"
+          width="110px"
+          height="auto"
+        />
       </router-link>
       <router-link
         v-if="!isLoggedIn"
@@ -60,7 +59,7 @@ import { Axios } from "@/service/axios.service";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
-  computed: { ...mapGetters(["isLoggedIn"]) },
+  computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class AppNavbar extends Vue {
   userName: string | null = null;

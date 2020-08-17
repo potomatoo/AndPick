@@ -3,10 +3,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { namespace } from "vuex-class";
+
+const feedModule = namespace("feedModule");
 
 @Component
-export default class A extends Vue {}
+export default class A extends Vue {
+  @feedModule.State feedList!: [];
+  isLoggedIn = this.$store.getters.isLoggedIn;
+
+  @Watch("isLoggedIn", { immediate: true })
+  fetchData() {
+    this.$store.dispatch("feedModule/FETCH_FEED_LIST");
+    this.$store.dispatch("feedModule/FETCH_BOARD_LIST");
+    this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
+  }
+}
 </script>
 
 <style scoped></style>

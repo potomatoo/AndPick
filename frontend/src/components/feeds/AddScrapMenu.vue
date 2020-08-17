@@ -8,11 +8,16 @@
     nudge-bottom="5"
   >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn icon large>
-        <v-icon v-bind="attrs" v-on="on">
-          mdi-note-plus-outline
-        </v-icon>
-      </v-btn>
+      <span v-on="on" v-bind="attrs">
+        <v-tooltip top open-delay="300" color="#EEEEEE">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon v-bind="attrs" v-on="on">
+              mdi-note-plus-outline
+            </v-icon>
+          </template>
+          <span class="grey--text text--darken-1">Open Post</span>
+        </v-tooltip>
+      </span>
     </template>
     <v-list class="py-0">
       <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
@@ -68,7 +73,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import CreateFolderModal from "@/components/pages/CreateFolderModal.vue";
-import { Post } from "@/store/MypageInterface";
+import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
@@ -110,5 +115,9 @@ export default class AddScrapMenu extends Vue {
 .router-link {
   text-decoration: none;
   color: inherit;
+}
+
+span:hover {
+  background-color: #eeeeee;
 }
 </style>

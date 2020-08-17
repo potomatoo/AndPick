@@ -1,11 +1,13 @@
 {
-    "name": "NewsClipper",
+    "name": "&PickClipper",
     "version": "1.0",
     "description": "Now you can clip news & edit post in &PICK",
     "manifest_version": 2,
 
     "icons": {
-      "16" : "icon.png"
+      "16" : "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
     },
 
     "browser_action": {

@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <v-text-field
-      label="Title"
+      label="제목"
       single-line
       v-model="title"
       class="font-weight-bold font-size: 3rem"
@@ -9,8 +9,8 @@
 
     <v-combobox
       v-model="nowTagList"
-      hint="Maximum of 5 tags"
-      label="Add some tags"
+      hint="최대 5개까지 설정 가능합니다."
+      label="#을 제외한 태그 이름을 작성해주세요."
       multiple
       small-chips
     >
@@ -173,6 +173,12 @@
         </div>
       </editor-menu-bubble>
 
+      <div class="actions">
+        <button class="button" style="font-size: 12px" @click="clearContent">
+          초기화
+        </button>
+      </div>
+
       <editor-content class="content" :editor="editor" />
       <!-- <v-textarea name id cols="30" rows="10" :editor="editor"></v-textarea> -->
 
@@ -241,6 +247,11 @@ export default class EditArticle extends Vue {
   nowTagList = [];
 
   search = null;
+
+  clearContent() {
+    this.editor.clearContent(true);
+    this.editor.focus();
+  }
 
   setContent() {
     this.editor.setContent(
@@ -344,9 +355,143 @@ export default class EditArticle extends Vue {
     this.SELECT_POST({
       postId: Number(this.$route.params.postId)
     });
-    if (this.$route.name === "NewScrap") {
+
+    if (
+      ["NewScrapInFeed", "NewScrapInSubs", "NewScrapInBoard"].includes(
+        this.$route.name
+      ) &&
+      document.querySelector(".content")
+    ) {
       const content = document.querySelector(".content");
       content.querySelector("p").innerText = "";
+    }
+  }
+
+  mounted() {
+    if ("NewPost" === this.$route.name) {
+      this.editor.setContent(
+        {
+          type: "doc",
+          content: [
+            {
+              type: "heading",
+              attrs: {
+                level: 3
+              },
+              content: [
+                {
+                  type: "text",
+                  marks: [
+                    {
+                      type: "bold"
+                    }
+                  ],
+                  text: "<편집하기>"
+                }
+              ]
+            },
+            {
+              type: "bullet_list",
+              content: [
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text: "자유롭게 이 공간에서 편집을 할 수 있습니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "위의 편집기능 버튼을 활용하여 글의 시각성을 높일 수 있습니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "글을 쓰는 도중에도 드래그를 하여 편집이 가능합니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "왼쪽 상위의 초기화 버튼을 누르거나 본문에서 바로 시작하세요."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        true
+      );
+    }
+
+    if ("NewScrapFromGoole" === this.$route.name) {
+      this.editor.setContent(
+        {
+          type: "doc",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: localStorage.getItem("scrapData")
+                }
+              ]
+            }
+          ]
+        },
+        true
+      );
+
+      this.editor.focus();
     }
   }
 
@@ -414,7 +559,7 @@ symbol {
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   border: 1px solid #dbdbdb;
   display: block;
-  min-height: 250px;
+  min-height: 350px;
   max-width: 100%;
   min-width: 100%;
   padding: 0.625em;

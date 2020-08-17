@@ -265,9 +265,9 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    FOLLOW_SUBSCRIPTION({ dispatch }, { feedId, rssId, subscribeName }) {
+    FOLLOW_SUBSCRIPTION({ dispatch }, { feedId, rss, subscribeName }) {
       Axios.instance
-        .post("/api/subscribe/save", { feedId, rssId, subscribeName })
+        .post("/api/subscribe/save", { feedId, rss, subscribeName })
         .then(() => dispatch("FETCH_FEED_LIST"))
         .catch(err => console.error(err));
     },

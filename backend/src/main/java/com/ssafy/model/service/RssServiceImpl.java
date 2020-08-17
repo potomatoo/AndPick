@@ -182,4 +182,23 @@ public class RssServiceImpl implements RssService {
 		return result;
 	}
 
+	@Override
+	public BasicResponse findByCategoryNameLike(String categoryName) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+		String likeQuery = "%" + categoryName + "%";
+		System.out.println(likeQuery);
+		result.data = rssRepository.findByCategoryNameLike(likeQuery);
+		System.out.println(result.data);
+		if (result.data == null) {
+			result.status = false;
+			result.message = "RSS 조회에 실패하였습니다.";
+			return result;
+		} else {
+			result.status = true;
+			result.message = "RSS 조회에 성공하였습니다.";
+			return result;
+		}
+	}
+
 }

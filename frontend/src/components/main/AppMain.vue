@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-main class="v-main">
     <v-layout>
       <v-flex v-if="isLoggedIn" offset-xs1 xs10>
         <router-view></router-view>
@@ -51,6 +51,10 @@ export default class AppMain extends Vue {
 }
 </script>
 <style>
+.v-main {
+  padding-bottom: 0px !important;
+}
+
 .button-bottom {
   position: fixed;
   right: 7vw;

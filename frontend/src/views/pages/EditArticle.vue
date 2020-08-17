@@ -173,6 +173,12 @@
         </div>
       </editor-menu-bubble>
 
+      <div class="actions">
+        <button class="button" style="font-size: 12px" @click="clearContent">
+          초기화
+        </button>
+      </div>
+
       <editor-content class="content" :editor="editor" />
       <!-- <v-textarea name id cols="30" rows="10" :editor="editor"></v-textarea> -->
 
@@ -241,6 +247,11 @@ export default class EditArticle extends Vue {
   nowTagList = [];
 
   search = null;
+
+  clearContent() {
+    this.editor.clearContent(true);
+    this.editor.focus();
+  }
 
   setContent() {
     this.editor.setContent(
@@ -357,6 +368,112 @@ export default class EditArticle extends Vue {
   }
 
   mounted() {
+    if ("NewPost" === this.$route.name) {
+      this.editor.setContent(
+        {
+          type: "doc",
+          content: [
+            {
+              type: "heading",
+              attrs: {
+                level: 3
+              },
+              content: [
+                {
+                  type: "text",
+                  marks: [
+                    {
+                      type: "bold"
+                    }
+                  ],
+                  text: "<편집하기>"
+                }
+              ]
+            },
+            {
+              type: "bullet_list",
+              content: [
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text: "자유롭게 이 공간에서 편집을 할 수 있습니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "위의 편집기능 버튼을 활용하여 글의 시각성을 높일 수 있습니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "글을 쓰는 도중에도 드래그를 하여 편집이 가능합니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "왼쪽 상위의 초기화 버튼을 누르거나 본문에서 바로 시작하세요."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        true
+      );
+
+      this.editor.focus();
+    }
+
     if ("NewScrapFromGoole" === this.$route.name) {
       this.editor.setContent(
         {

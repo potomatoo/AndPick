@@ -6,6 +6,8 @@
       :key="feed.feedId"
       no-action
       sub-group
+      color="rgb(223, 50, 119)"
+      class="sidebar-feed"
       @click="toFeedPage(feed.feedId)"
     >
       <template v-slot:activator>
@@ -13,17 +15,23 @@
           <v-list-item-title v-text="feed.feedName"></v-list-item-title>
         </v-list-item-content>
       </template>
-
-      <v-list-item
-        v-for="subItem in feed.subscribeList"
-        :key="subItem.subscribeId"
-        @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
-        @click="toArticleList(feed.feedId, subItem.subscribeId)"
-      >
-        <v-list-item-content>
-          <v-list-item-title v-text="subItem.subscribeName"></v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list>
+        <v-list-item
+          v-for="subItem in feed.subscribeList"
+          :key="subItem.subscribeId"
+          @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
+          class="sidebar-subscription"
+          @click="toArticleList(feed.feedId, subItem.subscribeId, $event)"
+          color="rgb(233, 50, 119"
+        >
+          <v-list-item-content>
+            <v-list-item-title
+              class="ml-6"
+              v-text="subItem.subscribeName"
+            ></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-list-group>
 
     <v-list-item @click="modalActive = !modalActive">
@@ -105,7 +113,35 @@ export default class SidebarFeed extends Vue {
     this.SET_FEED_CONTEXT_MENU(ctx);
   }
 
+  initSidebarClass() {
+    const boards = document.querySelectorAll(".sidebar-board");
+    const mypages = document.querySelectorAll(".sidebar-mypage");
+    const subscriptions = document.querySelectorAll(".sidebar-subscription");
+    const addrss = document.querySelectorAll(".sidebar-addrss");
+    if (boards?.length) {
+      boards.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (mypages?.length) {
+      mypages.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (subscriptions?.length) {
+      subscriptions.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (addrss?.length) {
+      addrss.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+  }
+
   toFeedPage(feedId: number) {
+    this.initSidebarClass();
     if (
       this.$route.name === "Feed" &&
       Number(this.$route.params.feedId) === feedId
@@ -114,7 +150,9 @@ export default class SidebarFeed extends Vue {
     this.$router.push({ name: "Feed", params: { feedId: feedId.toString() } });
   }
 
-  toArticleList(feedId: number, subscribeId: number) {
+  toArticleList(feedId: number, subscribeId: number, $event: MouseEvent) {
+    this.initSidebarClass();
+    ($event.currentTarget as HTMLElement).classList.add("v-list-item--active");
     if (
       this.$route.name === "ArticleListInRss" &&
       Number(this.$route.params.subscribeId) === subscribeId

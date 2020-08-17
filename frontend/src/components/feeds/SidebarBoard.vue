@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-list>
-      <v-subheader>Board</v-subheader>
+      <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+        >보드</v-subheader
+      >
       <v-list-item-group>
         <v-list-item
           v-for="board in boardList"
@@ -29,7 +31,7 @@
 
       <v-list-item @click="modalActive = !modalActive">
         <v-list-item-content class="text-center">
-          <v-list-item-title>Create New Board</v-list-item-title>
+          <v-list-item-title>새 보드 생성</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 

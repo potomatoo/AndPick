@@ -102,7 +102,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import CreateBoardModal from "@/components/feeds/CreateBoardModal.vue";
-import { Board, Article, News } from "@/store/Feed.interface";
+import { Board, Article, News } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 

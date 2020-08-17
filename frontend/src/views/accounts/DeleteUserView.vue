@@ -1,5 +1,5 @@
 <template>
-  <div>회원탈퇴</div>
+  <div style="font-family: 'Do Hyeon', sans-serif;">회원탈퇴</div>
 </template>
 
 <script>

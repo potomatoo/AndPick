@@ -7,21 +7,25 @@
       offset-y
       absolute
     >
-      <v-list dense width="150px">
+      <v-list dense width="165px">
         <v-list-item @click="activeRenameModal">
           <!-- <v-list-item-icon> -->
           <v-icon class="mr-3">mdi-cursor-text</v-icon>
           <!-- </v-list-item-icon> -->
-          <v-list-item-title>Rename</v-list-item-title>
+          <v-list-item-title style="font-size: 13px"
+            >이름 변경</v-list-item-title
+          >
         </v-list-item>
         <v-list-item @click="activeMoveModal">
           <v-icon class="mr-3">mdi-exit-to-app</v-icon>
-          <v-list-item-title>Move to...</v-list-item-title>
+          <v-list-item-title style="font-size: 13px"
+            >다른 피드로 이동</v-list-item-title
+          >
         </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item @click="unfollowModal = true">
+
+        <v-list-item @click="unfollowModal = true" style="font-size: 13px">
           <v-icon class="mr-3" color="error">mdi-trash-can-outline</v-icon>
-          <v-list-item-title class="red--text">Unfollow</v-list-item-title>
+          <v-list-item-title class="red--text">구독 취소</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -38,13 +42,25 @@
               :rules="rules"
               @keypress.enter="saveName"
             ></v-text-field>
-            <small class="grey--text">* Change Subscribe Name</small>
+            <small class="grey--text">* 변경할 채널 이름을 작성하세요.</small>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="success" @click="saveName">SAVE</v-btn>
-            <v-btn outlined color="grey" @click="closeFeedModal">CANCLE</v-btn>
+            <v-btn
+              text
+              color="primary"
+              style="font-weight: bold"
+              @click="saveName"
+              >저장</v-btn
+            >
+            <v-btn
+              text
+              color="error"
+              style="font-weight: bold"
+              @click="closeFeedModal"
+              >취소</v-btn
+            >
           </v-card-actions>
         </v-form>
       </v-card>
@@ -53,7 +69,9 @@
     <!-- 피드 이동 모달 -->
     <v-dialog v-model="moveToModal" max-width="450px">
       <v-card>
-        <v-card-title>You've selected 1 source</v-card-title>
+        <v-card-title style="font-family: 'Do Hyeon', sans-serif;"
+          >이동 혹은 추가할 피드를 선택해주세요.</v-card-title
+        >
         <v-chip class="mx-6 mt-5" outlined label>
           <v-avatar left>
             <v-icon>mdi-checkbox-marked-circle</v-icon>
@@ -62,7 +80,7 @@
         </v-chip>
 
         <v-card-text class="mt-10">
-          ADDED IN
+          현재 "{{ subsItem.subscribeName }}"가(이) 저장되있는 피드입니다.
         </v-card-text>
         <v-card-text>
           <v-checkbox
@@ -76,7 +94,7 @@
         </v-card-text>
 
         <v-card-text>
-          PERSONAL FEEDS
+          전체 피드입니다.
         </v-card-text>
         <v-card-text>
           <v-checkbox
@@ -91,9 +109,19 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" @click="moveToFeed">SAVE</v-btn>
-          <v-btn outlined color="grey" @click="moveToModal = false"
-            >CANCLE</v-btn
+          <v-btn
+            text
+            color="primary"
+            style="font-weight: bold"
+            @click="moveToFeed"
+            >저장</v-btn
+          >
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="moveToModal = false"
+            >취소</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -102,18 +130,28 @@
     <!-- 구독취소 모달 -->
     <v-dialog v-model="unfollowModal" max-width="450px">
       <v-card>
-        <v-card-title
+        <v-card-title style="font-family: 'Do Hyeon', sans-serif;"
           >{{ subsItem.subscribeName }} 구독을 취소 하시겠습니까?</v-card-title
         >
         <v-card-text>
-          It well be removed from {{ feedItem.feedName }}
+          * "{{ feedItem.feedName }}" 피드에서 삭제됩니다.
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" @click="unfollowSubs">YES</v-btn>
-          <v-btn outlined color="grey" @click="unfollowModal = false"
-            >CANCLE</v-btn
+          <v-btn
+            text
+            color="primary"
+            style="font-weight: bold"
+            @click="unfollowSubs"
+            >삭제</v-btn
+          >
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="unfollowModal = false"
+            >취소</v-btn
           >
         </v-card-actions>
       </v-card>

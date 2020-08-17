@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-subheader>Feed</v-subheader>
+    <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+      >피드</v-subheader
+    >
     <v-list-group
       v-for="feed in feedList"
       :key="feed.feedId"
@@ -47,7 +49,7 @@
 
     <v-list-item @click="modalActive = !modalActive">
       <v-list-item-content class="text-center">
-        <v-list-item-title>Create New Feed</v-list-item-title>
+        <v-list-item-title>새 피드 생성</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 

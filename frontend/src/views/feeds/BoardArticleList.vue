@@ -3,8 +3,10 @@
     <v-container>
       <v-layout>
         <v-flex v-if="board">
-          <div class="caption mb-3">BOARD</div>
-          <h1>{{ board.boardName }}</h1>
+          <div class="caption mb-3">보드</div>
+          <h1 style="font-family: 'Do Hyeon', sans-serif;">
+            {{ board.boardName }}
+          </h1>
         </v-flex>
         <!-- <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
@@ -18,15 +20,15 @@
 
     <!-- 기사 없을때 -->
     <v-container v-if="board && !board.newsList.length" class="text-center">
-      <v-layout justify-center>
-        <h4>Save articles to this board</h4>
-      </v-layout>
-      <v-layout justify-center>
-        <p>
-          When you find an article in your Feed you want<br />to keep, use the
-          icon to save it to this<br />board.
-        </p>
-      </v-layout>
+      <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
+      <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
+        "{{ board.boardName }}"의 첫 번째 기사를 저장해주세요!
+      </h4>
+
+      <p class="text-center">
+        뉴스를 저장할 보드가 생성되었습니다. 구독한 채널에서 소장하고 싶은
+        기사를 자유롭게 저장하세요!
+      </p>
     </v-container>
 
     <!-- 기사 있을때 -->

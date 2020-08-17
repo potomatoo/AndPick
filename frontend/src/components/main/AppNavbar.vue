@@ -55,7 +55,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { mapMutations, mapGetters, mapState } from "vuex";
-import { Axios } from "@/service/axios.service";
+import { Axios } from "../../service/axios.service";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),

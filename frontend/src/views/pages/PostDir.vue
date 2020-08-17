@@ -1,32 +1,13 @@
 <template>
-  <div class="container" v-if="postDir">
+  <div class="container mt-10" v-if="postDir">
     <div class="row">
-      <h6 class="pl-3 text-secondary font-weight-light mb-3 col-10">Mypage</h6>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn id="optionBtn" small color="white" class="mt-3">
-            <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>
-          </v-btn>
-        </template>
-        <v-list dense>
-          <v-list-item @click="click">
-            <v-list-item-title>Latest</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="click">
-            <v-list-item-title>Oldest</v-list-item-title>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item @click="deletePostDir()">
-            <v-list-item-title>
-              <v-icon small left>mdi-delete</v-icon>Delete
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <div class="caption mb-3">마이페이지</div>
     </div>
 
     <div class="row">
-      <h1 class="pl-3 font-weight-bold">{{ postDir.postDirName }}</h1>
+      <h1 style="font-family: 'Do Hyeon', sans-serif;">
+        {{ postDir.postDirName }}
+      </h1>
     </div>
     <v-divider></v-divider>
 
@@ -40,7 +21,7 @@
         color="secondary"
         v-if="postDir.postList && postDir.postList.length"
       >
-        <v-icon left>mdi-plus</v-icon>New
+        <v-icon left>mdi-plus</v-icon>새 글
       </v-btn>
     </router-link>
 
@@ -49,13 +30,12 @@
       class="text-center"
     >
       <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
-      <h4 class="mt-10">
-        Save post to here
+      <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
+        "{{ postDir.postDirName }}"의 첫 번째 글을 작성해주세요!
       </h4>
 
       <p class="text-center">
-        When you find an news in your Subscribe you want to keep and editing
-        with your think, click
+        자신의 생각을 정리할 폴더가 생성되었습니다.
         <router-link
           :to="{
             name: 'NewPost',
@@ -67,6 +47,7 @@
             <v-icon left>mdi-plus</v-icon>New
           </v-btn>
         </router-link>
+        을 클릭하여 시작하세요.
       </p>
     </div>
 
@@ -244,7 +225,7 @@ export default class FolderMain extends Vue {
   margin-top: 50px;
   margin-bottom: 45px;
   /* transition: font-size 2s; */
-  font-family: "Black Han Sans", sans-serif;
+  /* font-family: "Black Han Sans", sans-serif; */
   /* font-family: "Jua", sans-serif; */
   white-space: nowrap;
   overflow: hidden;

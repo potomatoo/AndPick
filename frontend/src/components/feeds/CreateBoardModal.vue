@@ -5,20 +5,32 @@
         <v-card-text>
           <v-text-field
             v-model="newBoardName"
-            label="Board Name"
+            label="보드"
             autofocus
             clearable
             :rules="rules"
             @keyup.enter="addBoard"
           ></v-text-field>
 
-          <small class="grey--text">* Create New Board</small>
+          <small class="grey--text">* 생성할 보드를 작성해주세요.</small>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" @click="addBoard">Create</v-btn>
-          <v-btn outlined color="grey" @click="closeModal">Cancle</v-btn>
+          <v-btn
+            text
+            color="primary"
+            style="font-weight: bold"
+            @click="addBoard"
+            >생성</v-btn
+          >
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="closeModal"
+            >취소</v-btn
+          >
         </v-card-actions>
       </v-form>
     </v-card>
@@ -28,7 +40,7 @@
 <script lang="ts">
 import { Component, Vue, Watch, PropSync } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { Board } from "@/store/Feed.interface";
+import { Board } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 

@@ -44,7 +44,7 @@
           class="router-link"
         >
           <v-btn small outlined color="secondary" class>
-            <v-icon left>mdi-plus</v-icon>New
+            <v-icon left>mdi-plus</v-icon>새 글
           </v-btn>
         </router-link>
         을 클릭하여 시작하세요.

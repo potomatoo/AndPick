@@ -41,6 +41,14 @@
         </v-list-item-group>
       </v-list>
     </v-container>
+
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="80"
+        width="10"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -55,7 +63,9 @@ const feedModule = namespace("feedModule");
 export default class ArticleListInRss extends Vue {
   @feedModule.State rssList!: Rss[];
   @feedModule.State articleList!: Article[];
+  @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_ARTICLE_LIST: any;
 
   rssTitle: string | null = null;
@@ -68,12 +78,14 @@ export default class ArticleListInRss extends Vue {
   }
 
   selectArticle(article: Article, idx: number) {
+    this.SET_LOADING();
     this.SELECT_ARTICLE(article);
     this.toArticleDetail(idx);
   }
 
   @Watch("$route", { immediate: true })
   fetchData() {
+    this.SET_LOADING();
     this.FETCH_ARTICLE_LIST(this.$route.params.subscribeId);
   }
 }

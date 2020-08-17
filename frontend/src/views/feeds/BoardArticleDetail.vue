@@ -36,6 +36,14 @@
     <div :class="{ right: onEdit }">
       <router-view @save="saveEdit" />
     </div>
+
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="80"
+        width="10"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -57,6 +65,8 @@ const feedModule = namespace("feedModule");
 })
 export default class BoardArticleDetail extends Vue {
   @feedModule.State news!: News;
+  @feedModule.State isLoading!: boolean;
+  @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_ARTICLE_IN_BOARD: any;
 
   onEdit = false;
@@ -66,6 +76,7 @@ export default class BoardArticleDetail extends Vue {
   }
 
   fetchData() {
+    this.SET_LOADING();
     this.FETCH_ARTICLE_IN_BOARD(this.$route.params.newsId);
   }
 

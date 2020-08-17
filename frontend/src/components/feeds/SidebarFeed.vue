@@ -111,7 +111,6 @@ export default class SidebarFeed extends Vue {
       Number(this.$route.params.feedId) === feedId
     )
       return;
-    console.log(feedId);
     this.$router.push({ name: "Feed", params: { feedId: feedId.toString() } });
   }
 

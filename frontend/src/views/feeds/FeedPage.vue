@@ -56,6 +56,14 @@
         </v-list-item-group>
       </v-list>
     </v-container>
+
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="80"
+        width="10"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -70,12 +78,15 @@ const feedModule = namespace("feedModule");
 export default class FeedPage extends Vue {
   @feedModule.State articleList!: Article[];
   @feedModule.State feed!: FeedList;
+  @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SELECT_ARTICLE: any;
-  @feedModule.Action FETCH_ARTICLE_LIST_IN_FEED!: any;
+  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Action FETCH_FEED!: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    this.FETCH_ARTICLE_LIST_IN_FEED(this.$route.params.feedId);
+    this.SET_LOADING();
+    this.FETCH_FEED(this.$route.params.feedId);
   }
 
   toArticleDetail(idx: number) {
@@ -86,6 +97,7 @@ export default class FeedPage extends Vue {
   }
 
   selectArticle(article: Article, idx: number) {
+    this.SET_LOADING();
     this.SELECT_ARTICLE(article);
     this.toArticleDetail(idx);
   }

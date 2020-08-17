@@ -38,7 +38,8 @@ const module: Module<FeedModule, RootState> = {
       showCtx: false,
       x: 0,
       y: 0
-    }
+    },
+    isLoading: false
   },
 
   getters: {},
@@ -78,6 +79,7 @@ const module: Module<FeedModule, RootState> = {
 
     SELECT_ARTICLE(state, article: Article) {
       state.article = article;
+      state.isLoading = !state.isLoading;
     },
 
     SET_SUB_CONTEXT_MENU(state, ctx) {
@@ -99,6 +101,10 @@ const module: Module<FeedModule, RootState> = {
       state.subsContextMenu.showCtx = false;
       state.boardContextMenu.showCtx = false;
       state.boardContextMenu = ctx;
+    },
+
+    SET_LOADING(state) {
+      state.isLoading = !state.isLoading;
     }
   },
   actions: {
@@ -116,10 +122,13 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    FETCH_FEED({ commit }, feedId: number) {
+    FETCH_FEED({ commit, dispatch }, feedId: number) {
       Axios.instance
         .get("/api/feed/feedid", { params: { feedId } })
-        .then(({ data }) => commit("SET_FEED", data.data))
+        .then(({ data }) => {
+          commit("SET_FEED", data.data);
+          dispatch("FETCH_ARTICLE_LIST_IN_FEED", feedId);
+        })
         .catch(err => console.error(err));
     },
 
@@ -222,16 +231,17 @@ const module: Module<FeedModule, RootState> = {
         .then(({ data }) => {
           commit("SET_SELECTED_SUBSCRIPTION", subscribeId);
           state.articleList = data.data;
+          commit("SET_LOADING");
         })
         .catch(err => console.error(err));
     },
 
-    FETCH_ARTICLE_LIST_IN_FEED({ state, dispatch }, feedId) {
+    FETCH_ARTICLE_LIST_IN_FEED({ state, commit }, feedId) {
       Axios.instance
         .get("/api/rss/item/feed", { params: { feedId } })
         .then(({ data }) => {
-          dispatch("FETCH_FEED", feedId);
           state.articleList = data.data;
+          commit("SET_LOADING");
         })
         .catch(err => console.error(err));
     },
@@ -282,7 +292,10 @@ const module: Module<FeedModule, RootState> = {
     FETCH_ARTICLE_LIST_IN_BOARD({ commit }, boardId) {
       Axios.instance
         .get("/api/board/find/id", { params: { boardId } })
-        .then(({ data }) => commit("SET_BOARD", data.data))
+        .then(({ data }) => {
+          commit("SET_BOARD", data.data);
+          commit("SET_LOADING");
+        })
         .catch(err => console.error(err));
     },
 
@@ -345,7 +358,10 @@ const module: Module<FeedModule, RootState> = {
     FETCH_ARTICLE_IN_BOARD({ commit }, newsId) {
       Axios.instance
         .get("/api/news/find/id", { params: { newsId } })
-        .then(({ data }) => commit("SET_NEWS", data.data))
+        .then(({ data }) => {
+          commit("SET_NEWS", data.data);
+          commit("SET_LOADING");
+        })
         .catch(err => console.error(err));
     }
   }

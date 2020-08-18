@@ -73,7 +73,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import CreateFolderModal from "@/components/pages/CreateFolderModal.vue";
-import { Post } from "@/store/MypageInterface";
+import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 

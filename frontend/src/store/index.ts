@@ -62,7 +62,17 @@ const store: StoreOptions<RootState> = {
         .then(res => {
           commit("SET_TOKEN", res.data.data["userPassword"]);
           commit("SET_NAME", res.data.data.userName);
-          router.push("/");
+          if (router.app.$route.query.scrap !== undefined) {
+            const scrapKey = router.app.$route.query.scrap;
+            // (40, 57)
+            localStorage.setItem("scrapKey", `${scrapKey}`);
+            router.push({
+              name: "SelectFromOutside",
+              params: { scrapKey: `${scrapKey}` }
+            });
+          } else {
+            router.push("/");
+          }
         })
         .catch(err => {
           console.log("err", err);

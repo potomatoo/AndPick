@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page mt-15 mb-15">
+  <div class="main-page mt-10 mb-15">
     <v-container>
       <v-row>
         <v-col xs="12" sm="12" md="7" lg="7" xl="7">
@@ -15,7 +15,10 @@
             양질의 뉴스기사 및 기술블로그의 글을 실시간으로 제공합니다.<br />
             <br />
             나아가 다양한 웹 사이트에서 자료를 가져와 생각을 더하고 싶다면<br />
-            구글 확장프로그램 "&PICKclipper"와 함께 사용해보세요!
+            구글 확장프로그램 "&PICKClipper"와 함께 사용해보세요!
+            <div class="ml-0 mt-4">
+              <v-btn text small outlined @click="goExtension">바로가기</v-btn>
+            </div>
           </div>
         </v-col>
         <v-col offset md="3" lg="3" xl="3">
@@ -40,7 +43,7 @@
           <v-progress-circular
             :rotate="360"
             :size="150"
-            :width="15"
+            :width="10"
             :value="value"
             color="teal"
           >
@@ -56,7 +59,7 @@
           <v-progress-circular
             :rotate="-90"
             :size="150"
-            :width="15"
+            :width="10"
             :value="value"
             color="primary"
           >
@@ -71,7 +74,7 @@
           <v-progress-circular
             :rotate="180"
             :size="150"
-            :width="15"
+            :width="10"
             :value="value"
             color="pink"
           >
@@ -102,6 +105,11 @@ export default class A extends Vue {
   saveNews = 0;
   users = 0;
 
+  goExtension() {
+    window.location.href =
+      "https://chrome.google.com/webstore/detail/pickclipper/bggenjcdpkngebimckblkeeiciegaenk?hl=ko&";
+  }
+
   @Watch("isLoggedIn", { immediate: true })
   fetchData() {
     this.$store.dispatch("feedModule/FETCH_FEED_LIST");
@@ -112,7 +120,7 @@ export default class A extends Vue {
   created() {
     this.interval = setInterval(() => {
       if (this.value < 100) {
-        this.value += 20;
+        this.value += 10;
         return;
       }
       if (this.value >= 100) {

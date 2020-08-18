@@ -1,7 +1,7 @@
 <template>
   <div class="container my-5" style="width: 400px">
     <div class="d-flex">
-      <h2><b>웰컴 투 &PICK</b></h2>
+      <h2 style="font-family: 'Do Hyeon', sans-serif;">&PICK</h2>
       <img src="@/assets/logo.png" width="90px" height="45px" />
     </div>
     <form>
@@ -98,7 +98,7 @@ interface LoginData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);

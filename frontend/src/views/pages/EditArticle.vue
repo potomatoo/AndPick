@@ -5,6 +5,7 @@
       single-line
       v-model="title"
       class="font-weight-bold font-size: 3rem"
+      style="font-family: 'Do Hyeon', sans-serif;"
     ></v-text-field>
 
     <v-combobox

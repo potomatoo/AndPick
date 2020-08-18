@@ -2,7 +2,9 @@
   <div>
     <v-list>
       <div class="d-flex">
-        <v-subheader>Board</v-subheader>
+        <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+          >보드</v-subheader
+        >
         <router-link
           :to="{
             name: 'BoardExplain'
@@ -39,7 +41,7 @@
 
       <v-list-item @click="modalActive = !modalActive">
         <v-list-item-content class="text-center">
-          <v-list-item-title>Create New Board</v-list-item-title>
+          <v-list-item-title>새 보드 생성</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 

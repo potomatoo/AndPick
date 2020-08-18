@@ -4,7 +4,9 @@
       <v-layout>
         <v-flex>
           <div class="caption mb-3">Scrap</div>
-          <h5>스크랩을 저장할 폴더를 지정해주세요.</h5>
+          <h5 style="font-family: 'Do Hyeon', sans-serif;">
+            스크랩을 저장할 폴더를 지정해주세요.
+          </h5>
         </v-flex>
       </v-layout>
     </v-container>

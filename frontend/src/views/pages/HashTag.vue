@@ -2,7 +2,8 @@
   <v-container class="mt-15">
     <v-row>
       <v-col xs="12" sm="12" md="8" lg="8" xl="8">
-        <span style="font-size: 45px; font-weight: bold"
+        <span
+          style="font-size: 45px; font-weight: bold font-family: 'Do Hyeon', sans-serif;"
           >"{{ $route.params.tagName }}"</span
         >의 검색결과 입니다.
 

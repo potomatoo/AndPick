@@ -22,16 +22,17 @@
         </v-list-item>
     </router-link>-->
     <v-list class="mt-5">
-      <v-list-item class="px-2">
-        <v-list-item-icon>
-          <v-icon>mdi-plus-box-outline</v-icon>
-        </v-list-item-icon>
-        <router-link class="router-link" :to="{ name: 'AddRss' }">
-          <v-list-item-content>
-            <v-list-item-title>Follow New Sources</v-list-item-title>
-          </v-list-item-content>
-        </router-link>
-      </v-list-item>
+      <router-link class="router-link" :to="{ name: 'AddRss' }">
+        <v-list-item class="px-2">
+          <v-list-item-icon
+            class="ml-15"
+            style="font-family: 'Do Hyeon', sans-serif;"
+          >
+            <v-icon left>mdi-plus-box-outline</v-icon>채널 구독
+          </v-list-item-icon>
+          <v-list-item-content> </v-list-item-content>
+        </v-list-item>
+      </router-link>
     </v-list>
   </div>
 </template>

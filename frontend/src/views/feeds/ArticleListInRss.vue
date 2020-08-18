@@ -3,7 +3,12 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <h1 v-if="articleList[0]">{{ articleList[0].subscribeName }}</h1>
+          <h1
+            v-if="articleList[0]"
+            style="font-family: 'Do Hyeon', sans-serif;"
+          >
+            {{ articleList[0].subscribeName }}
+          </h1>
         </v-flex>
         <v-flex class="text-right">
           <!-- <v-icon @click="console.log('hi')">mdi-check</v-icon> -->

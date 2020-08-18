@@ -7,7 +7,9 @@
           <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
         </div>
         <v-divider class="mt-2"></v-divider>
-        <h3 class="mt-10 mb-0">{{ article.title }}</h3>
+        <h3 class="mt-10 mb-0" style="font-family: 'Do Hyeon', sans-serif;">
+          {{ article.title }}
+        </h3>
         <div class="text-caption text--secondary">{{ article.pubDate }}</div>
       </v-container>
 

@@ -1,16 +1,9 @@
 <template>
   <v-footer app clipped-left>
     <div class="container">
-      <router-link :to="{ name: 'Home' }">
-        <a class="logo-font">Junho</a>
-      </router-link>
-      <span class="attribution">
-        An interactive learning project from
-        <a href="https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp" target="_blank"
-          >SSAFY</a
-        >
-        .
-      </span>
+      <a href="https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp" target="_blank"
+        >SSAFY</a
+      ><span class="attribution">의 공통 프로젝트에 의해 개발되었습니다. </span>
     </div>
   </v-footer>
 </template>
@@ -28,5 +21,6 @@ footer {
 }
 a {
   color: #5cb85c !important;
+  height: 20px !important;
 }
 </style>

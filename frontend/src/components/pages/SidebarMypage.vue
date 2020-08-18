@@ -2,8 +2,8 @@
   <div>
     <v-list>
       <div class="d-flex">
-        <v-subheader>
-          Mypage
+        <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black">
+          마이페이지
           <create-folder />
         </v-subheader>
         <router-link

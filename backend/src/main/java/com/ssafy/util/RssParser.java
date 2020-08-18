@@ -1,6 +1,8 @@
 package com.ssafy.util;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -47,7 +49,9 @@ public class RssParser implements Runnable {
 			for (Element item : items) {
 				RssItem rssItem = new RssItem();
 				rssItem.setTitle(item.select("title").text());
-				rssItem.setDescription(Jsoup.parse(item.select("description").text()).text());
+				Elements description = item.select("description");
+				rssItem.setDescription(Jsoup.parse(description.text()).text());
+
 				rssItem.setLink(item.select("link").text());
 				rssItem.setPubDate(item.select("pubDate").text());
 				rssItem.setRssTitle(this.rssChannel.getTitle());
@@ -55,6 +59,14 @@ public class RssParser implements Runnable {
 			}
 
 			redisTemplate.opsForValue().set(this.link, this.rssChannel);
+			List<RssItem> sub = new ArrayList();
+			try {
+				sub = new ArrayList(this.rssChannel.getItems().subList(0, 3));
+			} catch (Exception e) {
+				sub = new ArrayList(this.rssChannel.getItems().subList(0, this.rssChannel.getItems().size()));
+			}
+			this.rssChannel.setItems(sub);
+			redisTemplate.opsForValue().set("limit " + this.link, this.rssChannel);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("[ERROR] 파싱에러");
@@ -68,7 +80,7 @@ public class RssParser implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 		try {
 			while (true) {
 				this.parse();
@@ -79,7 +91,7 @@ public class RssParser implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
 
 }

@@ -134,7 +134,7 @@ public class CategoryController {
 			return response;
 		}
 
-		result.data = categoryService.findCategoryCount();
+		result = categoryService.findCategoryCount();
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

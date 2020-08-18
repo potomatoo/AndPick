@@ -109,4 +109,19 @@ public class CategoryServiceImpl implements CategoryService {
 		return result;
 	}
 
+	@Override
+	public BasicResponse findCategoryCount() {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		result.data = categoryRepository.findCategoryCount();
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "카테고리 카운트 조회에 성공하였습니다.";
+		} else {
+			result.message = "카테고리 카운트 조회에 실패하였습니다.";
+		}
+		return result;
+	}
+
 }

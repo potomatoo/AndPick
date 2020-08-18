@@ -1,9 +1,19 @@
 <template>
   <div>
     <v-list>
-      <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
-        >보드</v-subheader
-      >
+      <div class="d-flex">
+        <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+          >보드</v-subheader
+        >
+        <router-link
+          :to="{
+            name: 'BoardExplain'
+          }"
+          class="router-link explain"
+        >
+          <i class="mdi mdi-help-circle"></i>
+        </router-link>
+      </div>
       <v-list-item-group>
         <v-list-item
           v-for="board in boardList"
@@ -92,6 +102,13 @@ export default class SidebarBoard extends Vue {
 </script>
 
 <style scoped>
+.explain {
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-left: 170px;
+  float: left;
+}
 .router-link {
   text-decoration: none;
   color: inherit;

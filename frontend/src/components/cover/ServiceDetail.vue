@@ -16,8 +16,8 @@
           </p>
         </transition>
       </div>
-      <div class="col-md-1"></div>
-      <div class="col-md-6">
+      <div class="col-1"></div>
+      <div class="col-6">
         <img
           class="detail-image"
           src="https://cdn.pixabay.com/photo/2020/01/26/19/32/architecture-4795667_1280.jpg"
@@ -110,7 +110,6 @@ export default {
   },
 
   mounted() {
-    // window.addEventListener("scroll", this.scrollWatcher);
     this.scrollWatcher();
   }
 };
@@ -122,7 +121,7 @@ export default {
   height: 400px;
   /* word-break: keep-all; */
   padding: 25px 30px 25px 25px;
-  /* overflow: auto; */
+  overflow: auto;
 }
 .inline {
   padding: 40px 0px 40px 0px;
@@ -144,10 +143,10 @@ export default {
   /* text-overflow: clip; */
 }
 .slide-feed-enter-active {
-  transition: all 3s ease;
+  transition: all 2s ease;
 }
 .slide-feed-enter {
-  transform: translateY(20px);
+  transform: translateY(150px);
   opacity: 0;
 }
 </style>

@@ -28,7 +28,7 @@ public class RssThread implements ApplicationListener<ApplicationStartedEvent> {
 		List<Rss> rssList = rssRepository.findAll();
 
 		for (Rss item : rssList) {
-			RssParser parser = new RssParser(item.getRssUrl());
+			RssParser parser = new RssParser(item);
 			parser.setRedisTemplate(redisTemplate);
 
 			new Thread(parser).start();

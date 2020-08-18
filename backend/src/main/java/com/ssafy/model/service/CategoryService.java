@@ -13,4 +13,6 @@ public interface CategoryService {
 	public BasicResponse findByName(String categoryName);
 
 	public BasicResponse save(String categoryName);
+
+	public BasicResponse findCategoryCount();
 }

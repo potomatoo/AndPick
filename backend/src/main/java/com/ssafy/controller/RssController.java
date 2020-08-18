@@ -1,8 +1,10 @@
 package com.ssafy.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -300,6 +302,49 @@ public class RssController {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.message = "rss채널 조회에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+		return response;
+	}
+
+	@GetMapping("/api/rss/main")
+	public Object findLikeCategoryRssChannel(@RequestHeader("Authorization") String jwtToken) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		result = rssService.findMain();
+		Map<String, List<String>> rsslist = (Map<String, List<String>>) result.data;
+		Map<String, List<RssItem>> mainData = new HashMap<String, List<RssItem>>();
+		for (String key : rsslist.keySet()) {
+			List<RssItem> list = new ArrayList<RssItem>();
+
+			for (String rssurl : rsslist.get(key)) {
+				RssChannel rssChnnel = (RssChannel) redisTemplate.opsForValue().get(rssurl);
+				list.addAll(rssChnnel.getItems());
+			}
+			if (list.size() > 3) {
+				mainData.put(key, list.subList(0, 3));
+			} else {
+				mainData.put(key, list.subList(0, list.size()));
+			}
+
+		}
+
+		result.data = mainData;
+
+		if (result.status) {
+			result.message = "main data 죄회가 완료되었습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "main data 죄회에 실패 하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 		return response;

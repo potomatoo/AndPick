@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-list>
-      <div class="d-flex">
+      <div class="d-flex justify-content-between mr-2">
         <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
           >보드</v-subheader
         >
@@ -100,22 +100,22 @@ export default class SidebarBoard extends Vue {
     const subscriptions = document.querySelectorAll(".sidebar-subscription");
     const addrss = document.querySelectorAll(".sidebar-addrss");
     if (boards?.length) {
-      boards.forEach(el =>
+      boards.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (mypages?.length) {
-      mypages.forEach(el =>
+      mypages.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (subscriptions?.length) {
-      subscriptions.forEach(el =>
+      subscriptions.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (addrss?.length) {
-      addrss.forEach(el =>
+      addrss.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
@@ -137,8 +137,7 @@ export default class SidebarBoard extends Vue {
 .explain {
   opacity: 0.4;
   font-size: 20px;
-  margin-top: 5px;
-  margin-left: 170px;
+  margin-top: 3px;
   float: left;
 }
 .router-link {

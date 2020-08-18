@@ -26,11 +26,11 @@ import AppFooter from "@/components/main/AppFooter.vue";
 })
 export default class Home extends Vue {
   isLoggedId = this.$store.getters.isLoggedIn;
-
+  new = false;
   @Watch("$store.state.JWT")
   stateUpdate() {
     if (this.$store.state.JWT) {
-      console.log("login");
+      this.new = true;
     }
   }
 

@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class RssChannel implements Serializable {
-	private static final long serialVersionUID = 1L;
 	// 필수요소
 	private String title;
 	private String link;
@@ -51,6 +50,10 @@ public class RssChannel implements Serializable {
 
 	public List<RssItem> getItems() {
 		return items;
+	}
+
+	public void setItems(List<RssItem> items) {
+		this.items = items;
 	}
 
 	public void itemInit() {

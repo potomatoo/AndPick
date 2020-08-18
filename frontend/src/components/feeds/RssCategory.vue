@@ -35,11 +35,12 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
+import { Category } from "@/store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
-export default class Category extends Vue {
+export default class RssCategory extends Vue {
   @feedModule.State categoryList!: Category[];
   @feedModule.State rssAllCount!: number;
   @feedModule.Action FETCH_SEARCH_CATEGORY: any;

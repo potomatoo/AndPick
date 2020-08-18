@@ -7,10 +7,11 @@ import {
   Rss,
   Feed,
   Board,
-  News
+  News,
+  Category,
+  RssOnAdd
 } from "./Feed.interface";
 import { Axios } from "@/service/axios.service";
-import router from "@/router";
 
 const module: Module<FeedModule, RootState> = {
   namespaced: true,
@@ -39,7 +40,9 @@ const module: Module<FeedModule, RootState> = {
       x: 0,
       y: 0
     },
-    isLoading: false
+    isLoading: false,
+    categoryList: [],
+    rssAllCount: 0
   },
 
   getters: {},
@@ -69,7 +72,7 @@ const module: Module<FeedModule, RootState> = {
       state.news = news;
     },
 
-    SET_RSS_LIST(state, rssList: Rss[]) {
+    SET_RSS_LIST(state, rssList: RssOnAdd[]) {
       state.rssList = rssList;
     },
 
@@ -105,6 +108,14 @@ const module: Module<FeedModule, RootState> = {
 
     SET_LOADING(state) {
       state.isLoading = !state.isLoading;
+    },
+
+    SET_CATEGORY_LIST(state, categoryList: Category[]) {
+      state.categoryList = categoryList;
+    },
+
+    SET_RSS_COUNT(state, count: number) {
+      state.rssAllCount = count;
     }
   },
   actions: {
@@ -117,8 +128,11 @@ const module: Module<FeedModule, RootState> = {
 
     FETCH_RSS({ commit }) {
       Axios.instance
-        .get("/api/rss/list/all")
-        .then(({ data }) => commit("SET_RSS_LIST", data.data))
+        .get("/api/rss/find/channel/all")
+        .then(({ data }) => {
+          commit("SET_RSS_LIST", data.data);
+          commit("SET_RSS_COUNT", data.data.length);
+        })
         .catch(err => console.error(err));
     },
 
@@ -365,6 +379,20 @@ const module: Module<FeedModule, RootState> = {
           commit("SET_NEWS", data.data);
           commit("SET_LOADING");
         })
+        .catch(err => console.error(err));
+    },
+
+    FETCH_CATEGORY_LIST({ commit }) {
+      Axios.instance
+        .get("/api/category/find/count")
+        .then(({ data }) => commit("SET_CATEGORY_LIST", data.data))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_SEARCH_CATEGORY({ commit }, categoryName) {
+      Axios.instance
+        .get("/api/rss/find/channel/categorylike", { params: { categoryName } })
+        .then(({ data }) => commit("SET_RSS_LIST", data.data))
         .catch(err => console.error(err));
     }
   }

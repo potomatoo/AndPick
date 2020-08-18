@@ -1,7 +1,9 @@
 package com.ssafy.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -187,7 +189,6 @@ public class RssServiceImpl implements RssService {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 		String likeQuery = "%" + categoryName + "%";
-		System.out.println(likeQuery);
 		result.data = rssRepository.findByCategoryNameLike(likeQuery);
 		System.out.println(result.data);
 		if (result.data == null) {
@@ -199,6 +200,30 @@ public class RssServiceImpl implements RssService {
 			result.message = "RSS 조회에 성공하였습니다.";
 			return result;
 		}
+	}
+
+	@Override
+	public BasicResponse findMain() {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		List<String> categoryList = categoryRepository.findRandomCategoryId();
+		Map<String, List<String>> rssForCateogry = new HashMap<String, List<String>>();
+		
+		for (String category : categoryList) {
+			rssForCateogry.put(category, rssRepository.findByCategoryName(category));
+		}
+
+		result.data = rssForCateogry;
+		if (result.data == null) {
+			result.status = false;
+			result.message = "RSS 조회에 실패하였습니다.";
+		} else {
+			result.status = true;
+			result.message = "RSS 조회에 성공하였습니다.";
+		}
+
+		return result;
 	}
 
 }

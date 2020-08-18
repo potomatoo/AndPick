@@ -58,7 +58,9 @@
 
       <hr class="ma-0" />
       <v-list-item @click="folderModalActive = !folderModalActive">
-        <v-list-item-title class="success--text">새 글 생성</v-list-item-title>
+        <v-list-item-title class="success--text"
+          >새 폴더 생성</v-list-item-title
+        >
       </v-list-item>
     </v-list>
 

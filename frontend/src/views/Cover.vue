@@ -34,7 +34,6 @@ export default class Cover extends Vue {}
   background-color: #17212c;
   height: 500px;
   margin: 1px;
-  border: 30px solid #00d59b !important;
   overflow: auto;
 }
 </style>

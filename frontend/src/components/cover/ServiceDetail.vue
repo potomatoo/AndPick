@@ -1,13 +1,13 @@
 <template>
   <div class="detail">
-    <div class="outline feed row" style="background-color:#df3277">
+    <div class="outline feed row">
       <div class="col-1"></div>
       <div class="inline col-4">
         <transition name="slide-feed">
-          <h2 v-if="showFeed">피드</h2>
+          <h2 v-show="showFeed">피드</h2>
         </transition>
         <transition name="slide-feed">
-          <p v-if="showFeed">
+          <p v-show="showFeed">
             유용한 뉴스나 기술 블로그의 정보를 구독하고 싶은가요? 그렇다면 지금
             당장 피드에 원하는 채널을 추가해보세요. <br />
             실시간으로 업데이트되는 정보를 받아볼 수 있을거에요!
@@ -18,27 +18,21 @@
       </div>
       <div class="col-1"></div>
       <div class="col-6">
-        <img
-          class="detail-image"
-          src="https://cdn.pixabay.com/photo/2020/01/26/19/32/architecture-4795667_1280.jpg"
-        />
+        <img class="detail-image" src="@/assets/test1.png" />
       </div>
     </div>
 
-    <div class="outline board row" style="background-color:#00d59b">
+    <div class="outline board row">
       <div class="col-6">
-        <img
-          class="detail-image"
-          src="https://cdn.pixabay.com/photo/2020/01/26/19/32/architecture-4795667_1280.jpg"
-        />
+        <img class="detail-image" src="@/assets/test2.png" />
       </div>
       <div class="col-1"></div>
       <div class="inline col-4">
         <transition name="slide-feed">
-          <h2 v-if="showBoard">보드</h2>
+          <h2 v-show="showBoard">보드</h2>
         </transition>
         <transition name="slide-feed">
-          <p v-if="showBoard">
+          <p v-show="showBoard">
             구독하고 있는 채널의 기사를 저장하고 싶으신가요?<br />그렇다면 지금
             당장 보드에 해당 기사를 추가해보세요.<br />
             저장된 기사는 시간이 지나도 다시 볼 수 있을거에요!
@@ -50,14 +44,14 @@
       <div class="col-1"></div>
     </div>
 
-    <div class="outline mypage row" style="background-color:#ad249f">
+    <div class="outline mypage row">
       <div class="col-1"></div>
       <div class="inline col-4">
         <transition name="slide-feed">
-          <h2 v-if="showMy">마이페이지</h2>
+          <h2 v-show="showMy">마이페이지</h2>
         </transition>
         <transition name="slide-feed">
-          <p v-if="showMy">
+          <p v-show="showMy">
             지금 보고 있는 기사에 자신의 생각을 더하고 싶으신가요?<br />
             그렇다면 지금 당장 마이페이지를 활용해보세요.<br />
             다양한 편집기능과 함께 자신의 글로 만들 수 있을거에요!
@@ -68,10 +62,7 @@
       </div>
       <div class="col-1"></div>
       <div class="col-6">
-        <img
-          class="detail-image"
-          src="https://cdn.pixabay.com/photo/2020/01/26/19/32/architecture-4795667_1280.jpg"
-        />
+        <img class="detail-image" src="@/assets/test3.png" />
       </div>
     </div>
   </div>
@@ -117,11 +108,7 @@ export default {
 
 <style>
 .outline {
-  color: white;
-  height: 400px;
-  /* word-break: keep-all; */
-  padding: 25px 30px 25px 25px;
-  overflow: auto;
+  padding: 0px 30px 0px 25px;
 }
 .inline {
   padding: 40px 0px 40px 0px;
@@ -131,8 +118,6 @@ export default {
 }
 .outline > div > p {
   font-size: 20px;
-  color: white;
-  /* font-family: "Black Han Sans", sans-serif; */
 }
 .detail-image {
   position: absolute;

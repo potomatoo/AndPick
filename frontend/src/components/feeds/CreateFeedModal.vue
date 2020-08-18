@@ -49,7 +49,7 @@ export default class CreateFeedModal extends Vue {
   newFeedName = null;
 
   rules = [
-    (value: any) => !!value || "This field is required.",
+    (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
       !this.checkDuplication(value) || "동일한 피드가 존재합니다."
   ];

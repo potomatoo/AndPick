@@ -6,6 +6,7 @@
       v-model="title"
       class="font-weight-bold font-size: 3rem"
       style="font-family: 'Do Hyeon', sans-serif;"
+      :rules="rules"
     ></v-text-field>
 
     <v-combobox
@@ -264,6 +265,8 @@ export default class EditArticle extends Vue {
     );
     this.editor.focus();
   }
+
+  rules = [value => !!value || "제목을 작성해야 합니다."];
 
   @Watch("post")
   setTitle() {

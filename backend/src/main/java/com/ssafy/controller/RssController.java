@@ -264,7 +264,7 @@ public class RssController {
 		if (result.status) {
 			List<Object> list = new ArrayList<>();
 			for (Rss rss : (List<Rss>) result.data) {
-				list.add(redisTemplate.opsForValue().get(rss.getRssUrl()));
+				list.add(redisTemplate.opsForValue().get("limit " + rss.getRssUrl()));
 			}
 			result.data = list;
 			result.message = "rss 저장이 완료되었습니다.";
@@ -295,7 +295,7 @@ public class RssController {
 		if (result.status) {
 			List<Object> list = new ArrayList<>();
 			for (Rss rss : (List<Rss>) result.data) {
-				list.add(redisTemplate.opsForValue().get(rss.getRssUrl()));
+				list.add(redisTemplate.opsForValue().get("limit " + rss.getRssUrl()));
 			}
 			result.data = list;
 			result.message = "rss 저장이 완료되었습니다.";
@@ -341,10 +341,10 @@ public class RssController {
 		result.data = mainData;
 
 		if (result.status) {
-			result.message = "main data 죄회가 완료되었습니다.";
+			result.message = "main data 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "main data 죄회에 실패 하였습니다.";
+			result.message = "main data 조회에 실패 하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 		return response;

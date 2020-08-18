@@ -25,13 +25,12 @@ export default {
           this.$router.push("/");
         })
         .catch((err) => {
-          console.log("소셜에러", err);
-          this.$router.push("/");
+          this.$router.push("/cover");
         });
-    },
+    }
   },
   created() {
     this.handleClickGetAuth();
-  },
+  }
 };
 </script>

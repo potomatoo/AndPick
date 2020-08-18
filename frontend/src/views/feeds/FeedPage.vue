@@ -25,7 +25,11 @@
     <!-- 기사 리스트 -->
     <v-container v-if="!articleList.length" class="text-center">
       <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
-      <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
+      <h4
+        v-if="feed"
+        class="mt-10"
+        style="font-family: 'Do Hyeon', sans-serif;"
+      >
         "{{ feed.feedName }}"의 첫 번째 채널을 구독해주세요!
       </h4>
 

@@ -10,9 +10,10 @@ public class RssChannel implements Serializable {
 	// 필수요소
 	private String title;
 	private String link;
+	private Rss rss;
 	// 선택 요소
+	private String img;
 	private String category;
-
 	private List<RssItem> items;
 
 	public RssChannel() {
@@ -56,15 +57,26 @@ public class RssChannel implements Serializable {
 		this.items = new LinkedList<RssItem>();
 	}
 
+	public Rss getRss() {
+		return rss;
+	}
+
+	public void setRss(Rss rss) {
+		this.rss = rss;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	@Override
 	public String toString() {
-		String result = "RssChannel [title=" + title + ", link=" + link + ", category=" + category + "]";
-
-		for (RssItem item : this.items) {
-			result += "\n\t" + item.toString();
-		}
-
-		return result;
+		return "RssChannel [title=" + title + ", link=" + link + ", rss=" + rss + ", img=" + img + ", category="
+				+ category + ", items=" + items + "]";
 	}
 
 }

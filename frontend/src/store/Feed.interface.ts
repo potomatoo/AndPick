@@ -71,6 +71,7 @@ export interface FeedModule {
   subsContextMenu: Context;
   feedContextMenu: Context;
   boardContextMenu: Context;
+  isLoading: boolean;
 }
 
 // dummy

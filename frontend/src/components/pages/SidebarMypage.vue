@@ -15,34 +15,27 @@
           <i class="mdi mdi-help-circle"></i>
         </router-link>
       </div>
-      <v-list-item-group>
-        <v-list-item
-          v-for="postDir in postDirList"
-          :key="postDir.postDirId"
-          @contextmenu.prevent="showPostDirCtx($event, postDir)"
-        >
-          <v-list-item-content>
-            <router-link
-              :to="{
-                name: 'PostDir',
-                params: { postDirId: postDir.postDirId }
-              }"
-              class="router-link"
-            >
-              <v-list-item-title
-                v-text="postDir.postDirName"
-              ></v-list-item-title>
-            </router-link>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
+      <!-- <v-list-item-group> -->
+      <v-list-item
+        v-for="postDir in postDirList"
+        :key="postDir.postDirId"
+        @contextmenu.prevent="showPostDirCtx($event, postDir)"
+        @click="toPostDir(postDir.postDirId, $event)"
+        class="sidebar-mypage"
+        color="rgb(223, 50, 119)"
+      >
+        <v-list-item-content>
+          <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <!-- </v-list-item-group> -->
     </v-list>
     <post-dir-context-menu :postDirItem="postDirItem" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
 import PostDirContextMenu from "@/components/pages/PostDirContextMenu.vue";
@@ -72,6 +65,43 @@ export default class SidebarMypage extends Vue {
       y: e.clientY
     };
     this.SET_POSTDIR_CONTEXT_MENU(ctx);
+  }
+
+  toPostDir(postDirId: number, $event: MouseEvent) {
+    const boards = document.querySelectorAll(".sidebar-board");
+    const mypages = document.querySelectorAll(".sidebar-mypage");
+    const subscriptions = document.querySelectorAll(".sidebar-subscription");
+    const addrss = document.querySelectorAll(".sidebar-addrss");
+    if (boards?.length) {
+      boards.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (mypages?.length) {
+      mypages.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (subscriptions?.length) {
+      subscriptions.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (addrss?.length) {
+      addrss.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    ($event.currentTarget as HTMLElement).classList.add("v-list-item--active");
+    if (
+      this.$route.name === "PostDir" &&
+      Number(this.$route.params.postDirId) === postDirId
+    )
+      return;
+    this.$router.push({
+      name: "PostDir",
+      params: { postDirId: postDirId.toString() }
+    });
   }
 }
 </script>

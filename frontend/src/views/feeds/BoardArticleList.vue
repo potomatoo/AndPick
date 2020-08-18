@@ -67,6 +67,14 @@
         </v-list-item-group>
       </v-list>
     </v-container>
+
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="80"
+        width="10"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -80,10 +88,13 @@ const feedModule = namespace("feedModule");
 @Component
 export default class BoardArticleList extends Vue {
   @feedModule.State board!: Board;
+  @feedModule.State isLoading!: boolean;
+  @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_ARTICLE_LIST_IN_BOARD: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
+    this.SET_LOADING();
     this.FETCH_ARTICLE_LIST_IN_BOARD(this.$route.params.boardId);
   }
 }

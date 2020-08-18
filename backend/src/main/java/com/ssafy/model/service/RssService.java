@@ -25,4 +25,7 @@ public interface RssService {
 	public BasicResponse findItemBySubscribe(User user, Subscribe subscribe);
 
 	public BasicResponse findByCategoryNameLike(String categoryName);
+
+	public BasicResponse findMain();
+
 }

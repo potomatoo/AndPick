@@ -6,18 +6,28 @@
         <create-folder />
       </v-subheader>
       <v-list-item-group>
-        <v-list-item v-for="postDir in postDirList" :key="postDir.postDirId">
+        <v-list-item
+          v-for="postDir in postDirList"
+          :key="postDir.postDirId"
+          @contextmenu.prevent="showPostDirCtx($event, postDir)"
+        >
           <v-list-item-content>
             <router-link
-              :to="{ name: 'PostDir', params: { postDirId: postDir.postDirId } }"
+              :to="{
+                name: 'PostDir',
+                params: { postDirId: postDir.postDirId }
+              }"
               class="router-link"
             >
-              <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
+              <v-list-item-title
+                v-text="postDir.postDirName"
+              ></v-list-item-title>
             </router-link>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <post-dir-context-menu :postDirItem="postDirItem" />
   </div>
 </template>
 
@@ -25,21 +35,33 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
+import PostDirContextMenu from "@/components/pages/PostDirContextMenu.vue";
+import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
 @Component({
   components: {
-    CreateFolder
+    CreateFolder,
+    PostDirContextMenu
   }
 })
 export default class SidebarMypage extends Vue {
   @mypageModule.State postDirList!: [];
-  @mypageModule.Action FETCH_POSTDIR_LIST: any;
+  @mypageModule.Mutation SET_POSTDIR_CONTEXT_MENU: any;
 
-  @Watch("postDirList", { immediate: true })
-  fetchPostDirList() {
-    this.FETCH_POSTDIR_LIST();
+  postDirListItem = {};
+  postDirItem = {};
+
+  showPostDirCtx(e: MouseEvent, postDir: Post[]) {
+    this.postDirItem = postDir;
+
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_POSTDIR_CONTEXT_MENU(ctx);
   }
 }
 </script>

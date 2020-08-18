@@ -5,7 +5,7 @@ module.exports = {
   },
   plugins: [
     "@typescript-eslint"
-  ],
+  ], 
   extends: [
     "plugin:vue/essential",
     "eslint:recommended",
@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     quotes: ["error", "double"],
     "camelcase": "off",
+    "@typescript-eslint/camelcase": "off",
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",    
   }

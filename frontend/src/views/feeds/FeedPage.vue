@@ -2,14 +2,18 @@
   <div class="mt-10">
     <v-container>
       <v-layout>
-        <v-flex>
-          <h1>{{ $route.params.feedName }}</h1>
+        <v-flex v-if="feed">
+          <h1>{{ feed.feedName }}</h1>
         </v-flex>
-        <v-flex class="text-right">
-          <v-icon @click="console.log('hi')">mdi-check</v-icon>
-          <v-icon class="ml-3" @click="console.log('hi')"
-            >mdi-replay mdi-flip-h</v-icon
-          >
+        <v-flex class="text-right" align-self-end>
+          <v-tooltip @click="fetchData" bottom open-delay="300" color="#EEEEEE">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on">
+                mdi-replay mdi-flip-h
+              </v-icon>
+            </template>
+            <span class="grey--text text--darken-1">Refresh</span>
+          </v-tooltip>
         </v-flex>
       </v-layout>
     </v-container>
@@ -66,19 +70,21 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { Article } from "../../store/Feed.interface";
+import { Article, FeedList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
 @Component
 export default class FeedPage extends Vue {
   @feedModule.State articleList!: Article[];
+  @feedModule.State feedTitle!: string;
+  @feedModule.State feed!: FeedList;
   @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Action FETCH_FEED: any;
   @feedModule.Action FETCH_ARTICLE_LIST_IN_FEED!: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    console.log(this.$route.params.feedId);
     this.FETCH_ARTICLE_LIST_IN_FEED(this.$route.params.feedId);
   }
 

@@ -39,4 +39,7 @@ export default class AppSidebar extends Vue {}
 </script>
 
 <style scoped>
+.v-list {
+  background-color: #f6f7f8 !important;
+}
 </style>

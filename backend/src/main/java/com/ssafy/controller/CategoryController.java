@@ -119,5 +119,30 @@ public class CategoryController {
 		return response;
 
 	}
+	
+	@GetMapping(value = "/api/category/find/count")
+	public Object saveCategory(@RequestHeader(value = "Authorization") String jwtToken) {
+
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		result.data = categoryService.findCategoryCount();
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+
+	}
 
 }

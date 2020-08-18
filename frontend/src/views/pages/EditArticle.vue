@@ -1,11 +1,21 @@
 <template>
   <div class="container mt-5">
     <v-text-field
-      label="Title"
+      label="제목"
       single-line
       v-model="title"
       class="font-weight-bold font-size: 3rem"
     ></v-text-field>
+
+    <v-combobox
+      v-model="nowTagList"
+      hint="최대 5개까지 설정 가능합니다."
+      label="#을 제외한 태그 이름을 작성해주세요."
+      multiple
+      small-chips
+    >
+    </v-combobox>
+
     <div class="editor">
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
@@ -61,19 +71,25 @@
             class="menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 1 }) }"
             @click="commands.heading({ level: 1 })"
-          >H1</button>
+          >
+            H1
+          </button>
 
           <button
             class="menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 2 }) }"
             @click="commands.heading({ level: 2 })"
-          >H2</button>
+          >
+            H2
+          </button>
 
           <button
             class="menubar__button"
             :class="{ 'is-active': isActive.heading({ level: 3 }) }"
             @click="commands.heading({ level: 3 })"
-          >H3</button>
+          >
+            H3
+          </button>
 
           <button
             class="menubar__button"
@@ -157,22 +173,38 @@
         </div>
       </editor-menu-bubble>
 
+      <div class="actions">
+        <button class="button" style="font-size: 12px" @click="clearContent">
+          초기화
+        </button>
+      </div>
+
       <editor-content class="content" :editor="editor" />
       <!-- <v-textarea name id cols="30" rows="10" :editor="editor"></v-textarea> -->
 
       <v-flex offset-lg10 lg2>
-        <v-btn small outlined color="secondary" class="mt-10" @click="addArticleItem">
+        <v-btn small outlined color="secondary" class="mt-10" @click="addPost">
           <v-icon left>mdi-plus</v-icon>SAVE
         </v-btn>
+        <v-snackbar v-model="snackbar" timeout="2000">
+          게시글이 저장되었습니다.
+
+          <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-flex>
     </div>
   </div>
 </template>
 
 <script>
-import { Component, Vue } from "vue-property-decorator";
-import { mapMutations } from "vuex";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { namespace } from "vuex-class";
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
+
 import {
   Blockquote,
   CodeBlock,
@@ -193,31 +225,66 @@ import {
   History
 } from "tiptap-extensions";
 
+const mypageModule = namespace("mypageModule");
+
 @Component({
   components: {
     EditorContent,
     EditorMenuBar,
     EditorMenuBubble
-  },
-  methods: mapMutations("mypageModule", ["addArticle"])
+  }
 })
 export default class EditArticle extends Vue {
-  click() {
-    console.log(this.title, this.html);
+  @mypageModule.State postId;
+  @mypageModule.State post;
+  @mypageModule.Mutation SELECT_POST;
+  @mypageModule.Action FETCH_POST;
+  @mypageModule.Action ADD_POST;
+  @mypageModule.Action UPDATE_POST;
+
+  title = "";
+  snackbar = false;
+  nowTagList = [];
+
+  search = null;
+
+  clearContent() {
+    this.editor.clearContent(true);
+    this.editor.focus();
   }
 
-  addArticleItem() {
-    const articleItem = {
-      title: this.title,
-      content: this.html
-    };
-    this.addArticle(articleItem);
+  setContent() {
+    this.editor.setContent(
+      {
+        type: "doc",
+        content: []
+      },
+      true
+    );
+    this.editor.focus();
+  }
+
+  @Watch("post")
+  setTitle() {
+    this.title = this.post.postTitle;
+    this.html = this.post.postContent;
+    this.nowTagList = [];
+    this.post.tagList.forEach(element => {
+      this.nowTagList.push(element.tagName);
+    });
+    this.editor.setContent(this.post.postContent);
+  }
+
+  @Watch("nowTagList")
+  maxTag() {
+    if (this.nowTagList.length > 5) {
+      this.$nextTick(() => this.nowTagList.pop());
+    }
   }
 
   data() {
     return {
       keepInBounds: true,
-      title: "",
       editor: new Editor({
         extensions: [
           new Blockquote(),
@@ -239,7 +306,6 @@ export default class EditArticle extends Vue {
           new History()
         ],
         content: `
-          
         `,
         onUpdate: ({ getJSON, getHTML }) => {
           this.json = getJSON();
@@ -249,6 +315,191 @@ export default class EditArticle extends Vue {
       json: "",
       html: ""
     };
+  }
+
+  addPost() {
+    if (isNaN(this.postId)) {
+      const submitTagList = [];
+      this.nowTagList.forEach(element => {
+        const oneTagList = {
+          tagName: element
+        };
+        submitTagList.push(oneTagList);
+      });
+      console.log(submitTagList);
+      this.ADD_POST({
+        postContent: this.html,
+        postDirId: this.$route.params.postDirId,
+        postTitle: this.title,
+        tagList: submitTagList
+      });
+      this.snackbar = true;
+    } else {
+      this.UPDATE_POST({
+        postContent: this.html,
+        postDirId: this.$route.params.postDirId || this.post.postDirId,
+        postId: Number(this.$route.params.postId),
+        postTitle: this.title,
+        tagList: this.nowTagList
+      });
+      this.snackbar = true;
+    }
+    this.$emit("save");
+  }
+
+  @Watch("$route", { immediate: true })
+  selectPost() {
+    this.title = "";
+    this.html = "";
+    this.nowTagList = [];
+    this.SELECT_POST({
+      postId: Number(this.$route.params.postId)
+    });
+
+    if (
+      ["NewScrapInFeed", "NewScrapInSubs", "NewScrapInBoard"].includes(
+        this.$route.name
+      ) &&
+      document.querySelector(".content")
+    ) {
+      const content = document.querySelector(".content");
+      content.querySelector("p").innerText = "";
+    }
+  }
+
+  mounted() {
+    if ("NewPost" === this.$route.name) {
+      this.editor.setContent(
+        {
+          type: "doc",
+          content: [
+            {
+              type: "heading",
+              attrs: {
+                level: 3
+              },
+              content: [
+                {
+                  type: "text",
+                  marks: [
+                    {
+                      type: "bold"
+                    }
+                  ],
+                  text: "<편집하기>"
+                }
+              ]
+            },
+            {
+              type: "bullet_list",
+              content: [
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text: "자유롭게 이 공간에서 편집을 할 수 있습니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "위의 편집기능 버튼을 활용하여 글의 시각성을 높일 수 있습니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "글을 쓰는 도중에도 드래그를 하여 편집이 가능합니다."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                },
+                {
+                  type: "list_item",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [
+                        {
+                          type: "text",
+                          text:
+                            "왼쪽 상위의 초기화 버튼을 누르거나 본문에서 바로 시작하세요."
+                        }
+                      ]
+                    },
+                    {
+                      type: "paragraph"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        true
+      );
+    }
+
+    if ("NewScrapFromGoole" === this.$route.name) {
+      this.editor.setContent(
+        {
+          type: "doc",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: localStorage.getItem("scrapData")
+                }
+              ]
+            }
+          ]
+        },
+        true
+      );
+
+      this.editor.focus();
+    }
+  }
+
+  @Watch("postId", { immediate: true })
+  fetchPost() {
+    if (!isNaN(this.postId)) {
+      this.FETCH_POST(this.postId);
+    }
   }
 }
 </script>
@@ -308,7 +559,7 @@ symbol {
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   border: 1px solid #dbdbdb;
   display: block;
-  min-height: 250px;
+  min-height: 350px;
   max-width: 100%;
   min-width: 100%;
   padding: 0.625em;
@@ -317,6 +568,3 @@ symbol {
   border-radius: 4px;
 }
 </style>
-
-
-

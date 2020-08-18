@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 mt-5">
+  <div class="col-5 offset-1 mt-5">
     <h1 class="title1 mt-5"><b>나만의</b></h1>
     <h1 class="title2">
       <b><font color="#5cb85c">스크랩</font>서비스</b>
@@ -18,13 +18,16 @@ export default {};
 <style scoped>
 .title1 {
   font-size: 60px;
+  color: white;
 }
 .title2 {
   font-size: 45px;
+  color: white;
 }
 .description {
   opacity: 0.6;
   font-weight: 600;
   font-size: 20px;
+  color: white;
 }
 </style>

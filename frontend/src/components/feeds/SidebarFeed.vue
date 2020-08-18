@@ -1,13 +1,18 @@
 <template>
   <div>
     <v-subheader>Feed</v-subheader>
-    <v-list-group v-for="feed in feedList" :key="feed.feedName" no-action sub-group>
+    <v-list-group
+      v-for="feed in feedList"
+      :key="feed.feedId"
+      no-action
+      sub-group
+    >
       <template v-slot:activator>
-        <v-list-item-content>
+        <v-list-item-content @contextmenu.prevent="showFeedCtx($event, feed)">
           <router-link
             :to="{
               name: 'Feed',
-              params: { feedName: feed.feedName, feedId: feed.feedId }
+              params: { feedId: feed.feedId }
             }"
             class="router-link"
           >
@@ -16,19 +21,25 @@
         </v-list-item-content>
       </template>
 
-      <v-list-item v-for="subItem in feed.subscribeList" :key="subItem.title">
+      <v-list-item
+        v-for="subItem in feed.subscribeList"
+        :key="subItem.subscribeId"
+        @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
+      >
         <v-list-item-content>
           <router-link
             :to="{
               name: 'ArticleListInRss',
               params: {
-                feedName: feed.feedName,
+                feedId: feed.feedId,
                 subscribeId: subItem.subscribeId
               }
             }"
             class="router-link"
           >
-            <v-list-item-title v-text="subItem.subscribeName"></v-list-item-title>
+            <v-list-item-title
+              v-text="subItem.subscribeName"
+            ></v-list-item-title>
           </router-link>
         </v-list-item-content>
       </v-list-item>
@@ -40,81 +51,77 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-dialog v-model="modalActive" max-width="500px">
-      <v-card>
-        <v-form ref="form" onsubmit="return false;">
-          <v-card-text>
-            <v-text-field
-              v-model="newFeedName"
-              label="Feed Name"
-              autofocus
-              clearable
-              :rules="rules"
-              @keypress.enter="addFeeds"
-            ></v-text-field>
+    <create-feed-modal
+      :modalActive.sync="modalActive"
+      @addFeed="addFeeds"
+      @closeModal="closeModal"
+    />
 
-            <small class="grey--text">* Create New Feed</small>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="addFeeds">Create</v-btn>
-            <v-btn text color="error" @click="closeModal">Cancle</v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
+    <feed-context-menu :feedItem="feedItem" />
+    <subs-context-menu :subsItem="subsItem" :feedItem="feedItem" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-// import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
-import { FeedList } from "../../store/Feed.interface";
+import { FeedList, SubscribeList } from "../../store/Feed.interface";
+import SubsContextMenu from "@/components/feeds/SubsContextMenu.vue";
+import FeedContextMenu from "@/components/feeds/FeedContextMenu.vue";
+import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
 
 const feedModule = namespace("feedModule");
 
-@Component
+@Component({
+  components: {
+    SubsContextMenu,
+    FeedContextMenu,
+    CreateFeedModal
+  }
+})
 export default class SidebarFeed extends Vue {
   @feedModule.State feedList!: [];
+  @feedModule.Mutation SET_SUB_CONTEXT_MENU: any;
+  @feedModule.Mutation SET_FEED_CONTEXT_MENU: any;
   @feedModule.Action ADD_FEED: any;
-
-  newFeedName = null;
 
   modalActive = false;
 
-  rules = [
-    (value: any) => !!value || "This field is required.",
-    (value: string) =>
-      !this.checkDuplication(value) || "동일한 피드가 존재합니다."
-  ];
+  isActiveSubsCtx = false;
 
-  @Watch("modalActive")
-  onModalClose(isActive: boolean) {
-    if (isActive && this.$refs.form) {
-      (this.$refs.form as HTMLFormElement).reset();
-    }
-  }
+  subsItem = {};
 
-  checkDuplication(name: string | null) {
-    if (this.feedList.length) {
-      return this.feedList.some((feed: FeedList) => feed.feedName === name);
-    }
-    return false;
-  }
+  feedItem = {};
 
   closeModal() {
-    this.newFeedName = null;
     this.modalActive = false;
   }
 
-  addFeeds() {
-    if (this.newFeedName && !this.checkDuplication(this.newFeedName)) {
-      this.ADD_FEED(this.newFeedName);
-      this.closeModal();
-    }
+  addFeeds(feedName: string) {
+    this.ADD_FEED(feedName);
+    this.closeModal();
+  }
+
+  showSubsCtx(e: MouseEvent, subsItem: SubscribeList, feedItem: FeedList) {
+    this.subsItem = subsItem;
+    this.feedItem = feedItem;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_SUB_CONTEXT_MENU(ctx);
+  }
+
+  showFeedCtx(e: MouseEvent, item: FeedList) {
+    this.feedItem = item;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_FEED_CONTEXT_MENU(ctx);
   }
 }
 </script>

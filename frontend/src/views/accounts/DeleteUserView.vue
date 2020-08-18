@@ -8,12 +8,17 @@ import { mapActions } from "vuex";
 
 @Component({
   methods: {
-    ...mapActions(["deleteUser"]),
-  },
+    ...mapActions(["deleteUser"])
+  }
 })
 export default class DeleteUserView extends Vue {
   mounted() {
-    this.deleteUser();
+    const check = confirm("정말 탈퇴하시겠습니까?");
+    if (check == true) {
+      this.deleteUser();
+    } else {
+      this.$router.push("/accounts/update");
+    }
   }
 }
 </script>

@@ -34,9 +34,53 @@
 
     <div>
       <v-divider></v-divider>
-      <div>
-        <div class="chart-wrapper"></div>
-        <button onclick="replay()">Replay</button>
+
+      <div class="d-flex justify-content-between">
+        <div>
+          <v-progress-circular
+            :rotate="360"
+            :size="150"
+            :width="15"
+            :value="value"
+            color="teal"
+          >
+            {{ channel }}
+          </v-progress-circular>
+
+          <div class="d-flex justify-content-center">
+            <b>전체 채널 수</b>
+          </div>
+        </div>
+
+        <div>
+          <v-progress-circular
+            :rotate="-90"
+            :size="150"
+            :width="15"
+            :value="value"
+            color="primary"
+          >
+            {{ saveNews }}
+          </v-progress-circular>
+          <div class="d-flex justify-content-center">
+            <b>저장 기사</b>
+          </div>
+        </div>
+
+        <div>
+          <v-progress-circular
+            :rotate="180"
+            :size="150"
+            :width="15"
+            :value="value"
+            color="pink"
+          >
+            {{ users }}
+          </v-progress-circular>
+          <div class="d-flex justify-content-center">
+            <b>사용자 수</b>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -52,11 +96,32 @@ const feedModule = namespace("feedModule");
 export default class A extends Vue {
   isLoggedIn = this.$store.getters.isLoggedIn;
 
+  interval = {};
+  value = 0;
+  channel = 0;
+  saveNews = 0;
+  users = 0;
+
   @Watch("isLoggedIn", { immediate: true })
   fetchData() {
     this.$store.dispatch("feedModule/FETCH_FEED_LIST");
     this.$store.dispatch("feedModule/FETCH_BOARD_LIST");
     this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
+  }
+
+  created() {
+    this.interval = setInterval(() => {
+      if (this.value < 100) {
+        this.value += 20;
+        return;
+      }
+      if (this.value >= 100) {
+        this.channel = 12314;
+        this.saveNews = 12455;
+        this.users = 8197;
+      }
+    }, 100);
+    return;
   }
 }
 </script>
@@ -64,5 +129,8 @@ export default class A extends Vue {
 <style scoped>
 .main-description {
   color: rgba(0, 0, 0, 0.54) !important;
+}
+.v-progress-circular {
+  margin: 1rem;
 }
 </style>

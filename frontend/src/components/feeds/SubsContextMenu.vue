@@ -235,7 +235,8 @@ export default class SubsContextMenu extends Vue {
   }
 
   saveName() {
-    if (this.checkDuplication(this.inputSubsname)) return;
+    if (!this.inputSubsname || this.checkDuplication(this.inputSubsname))
+      return;
     if (this.inputSubsname === this.subsItem.subscribeName) {
       this.closeFeedModal();
       return;

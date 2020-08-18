@@ -43,35 +43,35 @@
     <v-container v-else class="offset-lg3 lg6">
       <v-list three-line>
         <v-list-item-group>
-          <v-list-item v-for="(article, idx) in articleList" :key="idx">
-            <v-list-item-content @click="selectArticle(article)">
-              <router-link
-                class="router-link"
-                :to="{
-                  name: 'ArticleDetailInFeed',
-                  params: { articleId: idx }
-                }"
-              >
-                <v-list-item-content class="mt-3">
-                  <div class="h4">
-                    {{ article.title }}
-                  </div>
-                  <div class="sumtitle-1 text--secondary">
-                    {{ article.pubDate }}
-                  </div>
-                  <div class="sumtitle-1 text--secondary">
-                    {{ article.rssTitle }}
-                  </div>
-                  <v-list-item-subtitle>
-                    {{ article.description }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </router-link>
+          <v-list-item
+            v-for="(article, idx) in articleList"
+            :key="idx"
+            @click="selectArticle(article, idx)"
+          >
+            <v-list-item-content class="mt-3">
+              <div class="h4">{{ article.title }}</div>
+              <div class="sumtitle-1 text--secondary">
+                {{ article.pubDate }}
+              </div>
+              <div class="sumtitle-1 text--secondary">
+                {{ article.rssTitle }}
+              </div>
+              <v-list-item-subtitle>
+                {{ article.description }}
+              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-container>
+
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="80"
+        width="10"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -85,19 +85,29 @@ const feedModule = namespace("feedModule");
 @Component
 export default class FeedPage extends Vue {
   @feedModule.State articleList!: Article[];
-  @feedModule.State feedTitle!: string;
   @feedModule.State feed!: FeedList;
+  @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SELECT_ARTICLE: any;
-  @feedModule.Action FETCH_FEED: any;
-  @feedModule.Action FETCH_ARTICLE_LIST_IN_FEED!: any;
+  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Action FETCH_FEED!: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    this.FETCH_ARTICLE_LIST_IN_FEED(this.$route.params.feedId);
+    this.SET_LOADING();
+    this.FETCH_FEED(this.$route.params.feedId);
   }
 
-  selectArticle(article: Article) {
+  toArticleDetail(idx: number) {
+    this.$router.push({
+      name: "ArticleDetailInFeed",
+      params: { articleId: idx.toString() }
+    });
+  }
+
+  selectArticle(article: Article, idx: number) {
+    this.SET_LOADING();
     this.SELECT_ARTICLE(article);
+    this.toArticleDetail(idx);
   }
 
   addRss() {
@@ -106,9 +116,4 @@ export default class FeedPage extends Vue {
 }
 </script>
 
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
+<style scoped></style>

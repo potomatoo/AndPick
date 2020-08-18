@@ -10,13 +10,15 @@
             {{ articleList[0].subscribeName }}
           </h1>
         </v-flex>
-        <v-flex class="text-right">
-          <!-- <v-icon @click="console.log('hi')">mdi-check</v-icon> -->
-          <v-btn icon large @click="fetchData">
-            <v-icon>
-              mdi-replay mdi-flip-h
-            </v-icon>
-          </v-btn>
+        <v-flex class="text-right" align-self-end>
+          <v-tooltip @click="fetchData" bottom open-delay="300" color="#EEEEEE">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on">
+                mdi-replay mdi-flip-h
+              </v-icon>
+            </template>
+            <span class="grey--text text-darken-1">Refresh</span>
+          </v-tooltip>
         </v-flex>
       </v-layout>
     </v-container>
@@ -26,30 +28,32 @@
     <v-container class="offset-lg3 lg6">
       <v-list three-line>
         <v-list-item-group>
-          <v-list-item v-for="(article, idx) in articleList" :key="idx">
-            <v-list-item-content @click="selectArticle(article)">
-              <router-link
-                class="router-link"
-                :to="{
-                  name: 'ArticleDetail',
-                  params: { articleId: idx }
-                }"
-              >
-                <v-list-item-content class="mt-3">
-                  <div class="h4">{{ article.title }}</div>
-                  <div class="sumtitle-1 text--secondary">
-                    {{ article.pubDate }}
-                  </div>
-                  <v-list-item-subtitle>{{
-                    article.description
-                  }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </router-link>
+          <v-list-item
+            v-for="(article, idx) in articleList"
+            :key="idx"
+            @click="selectArticle(article, idx)"
+          >
+            <v-list-item-content class="mt-3">
+              <div class="h4">{{ article.title }}</div>
+              <div class="sumtitle-1 text--secondary">
+                {{ article.pubDate }}
+              </div>
+              <v-list-item-subtitle>{{
+                article.description
+              }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-container>
+
+    <v-overlay :value="isLoading">
+      <v-progress-circular
+        indeterminate
+        size="80"
+        width="10"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -64,25 +68,32 @@ const feedModule = namespace("feedModule");
 export default class ArticleListInRss extends Vue {
   @feedModule.State rssList!: Rss[];
   @feedModule.State articleList!: Article[];
+  @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_ARTICLE_LIST: any;
 
   rssTitle: string | null = null;
 
-  selectArticle(article: Article) {
+  toArticleDetail(idx: number) {
+    this.$router.push({
+      name: "ArticleDetail",
+      params: { articleId: idx.toString() }
+    });
+  }
+
+  selectArticle(article: Article, idx: number) {
+    this.SET_LOADING();
     this.SELECT_ARTICLE(article);
+    this.toArticleDetail(idx);
   }
 
   @Watch("$route", { immediate: true })
   fetchData() {
+    this.SET_LOADING();
     this.FETCH_ARTICLE_LIST(this.$route.params.subscribeId);
   }
 }
 </script>
 
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
-}
-</style>
+<style scoped></style>

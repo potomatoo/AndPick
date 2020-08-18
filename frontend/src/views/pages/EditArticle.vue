@@ -359,7 +359,6 @@ export default class EditArticle extends Vue {
     this.SELECT_POST({
       postId: Number(this.$route.params.postId)
     });
-
     if (
       ["NewScrapInFeed", "NewScrapInSubs", "NewScrapInBoard"].includes(
         this.$route.name

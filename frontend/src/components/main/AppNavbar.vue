@@ -8,7 +8,7 @@
     >
       <router-link class="router-link" :to="{ name: 'Home' }">
         <span
-          style="font-family: 'Spectral SC', serif; font-size: 40px; color: #5cb85c !important"
+          style="font-family: 'Spectral SC', serif; font-size: 40px; color: #1e847f !important"
           >&</span
         >
         <span
@@ -21,7 +21,7 @@
         :to="{ name: 'Login' }"
         class="router-link ml-5"
       >
-        <v-btn outlined color="success">로그인</v-btn>
+        <v-btn outlined color="#1e847f">로그인</v-btn>
       </router-link>
       <div v-if="isLoggedIn" class="mt-1 d-flex">
         <div class="cheer mt-2">

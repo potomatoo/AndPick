@@ -22,7 +22,7 @@
         @contextmenu.prevent="showPostDirCtx($event, postDir)"
         @click="toPostDir(postDir.postDirId, $event)"
         class="sidebar-mypage"
-        color="rgb(223, 50, 119)"
+        color="#f57e7e"
       >
         <v-list-item-content>
           <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
@@ -73,22 +73,22 @@ export default class SidebarMypage extends Vue {
     const subscriptions = document.querySelectorAll(".sidebar-subscription");
     const addrss = document.querySelectorAll(".sidebar-addrss");
     if (boards?.length) {
-      boards.forEach((el) =>
+      boards.forEach(el =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (mypages?.length) {
-      mypages.forEach((el) =>
+      mypages.forEach(el =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (subscriptions?.length) {
-      subscriptions.forEach((el) =>
+      subscriptions.forEach(el =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (addrss?.length) {
-      addrss.forEach((el) =>
+      addrss.forEach(el =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }

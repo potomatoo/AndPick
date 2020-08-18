@@ -20,7 +20,7 @@ footer {
   text-align: end;
 }
 a {
-  color: #5cb85c !important;
+  color: #1e847f !important;
   height: 20px !important;
 }
 </style>

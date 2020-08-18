@@ -24,7 +24,7 @@
         <v-col offset md="3" lg="3" xl="3">
           <div style="margin-left: 20px; margin-top: 30px">
             <span
-              style="font-family: 'Spectral SC', serif; font-size: 140px; color: #5cb85c !important"
+              style="font-family: 'Spectral SC', serif; font-size: 140px; color: #1e847f !important"
               >&</span
             >
             <span style="font-family: 'Faster One', cursive; font-size: 100px"
@@ -38,20 +38,20 @@
     <div>
       <v-divider></v-divider>
 
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-around">
         <div>
           <v-progress-circular
             :rotate="360"
             :size="150"
             :width="10"
             :value="value"
-            color="teal"
+            color="#ecc19c"
           >
             {{ channel }}
           </v-progress-circular>
 
           <div class="d-flex justify-content-center">
-            <b>전체 채널 수</b>
+            <b>전체 채널</b>
           </div>
         </div>
 
@@ -61,7 +61,7 @@
             :size="150"
             :width="10"
             :value="value"
-            color="primary"
+            color="#1e847f"
           >
             {{ saveNews }}
           </v-progress-circular>
@@ -76,12 +76,12 @@
             :size="150"
             :width="10"
             :value="value"
-            color="pink"
+            color="#000000"
           >
             {{ users }}
           </v-progress-circular>
           <div class="d-flex justify-content-center">
-            <b>사용자 수</b>
+            <b>사용자</b>
           </div>
         </div>
       </div>

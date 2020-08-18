@@ -18,13 +18,13 @@
       </div>
       <div class="col-1"></div>
       <div class="col-6">
-        <img class="detail-image" src="@/assets/test1.png" />
+        <img class="detail-image" src="@/assets/coverFeed.jpg" />
       </div>
     </div>
 
     <div class="outline board row">
       <div class="col-6">
-        <img class="detail-image" src="@/assets/test2.png" />
+        <img class="detail-image" src="@/assets/coverBoard.jpg" />
       </div>
       <div class="col-1"></div>
       <div class="inline col-4">
@@ -62,7 +62,7 @@
       </div>
       <div class="col-1"></div>
       <div class="col-6">
-        <img class="detail-image" src="@/assets/test3.png" />
+        <img class="detail-image" src="@/assets/coverMypage.jpg" />
       </div>
     </div>
   </div>
@@ -123,7 +123,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 60%;
   height: 100%;
   /* text-overflow: clip; */
 }

@@ -12,8 +12,7 @@
           }"
           class="router-link explain"
         >
-          도움말
-          <i class="mdi mdi-book-open"></i>
+          <i class="mdi mdi-help-circle"></i>
         </router-link>
       </div>
       <v-list-item-group>
@@ -87,9 +86,9 @@ export default class SidebarMypage extends Vue {
   color: inherit;
 }
 .explain {
-  opacity: 0.6;
-  font-size: 15px;
-  margin-top: 8px;
-  margin-left: 75px;
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-left: 120px;
 }
 </style>

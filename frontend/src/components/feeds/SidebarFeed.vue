@@ -8,8 +8,7 @@
         }"
         class="router-link explain"
       >
-        도움말
-        <i class="mdi mdi-book-open"></i>
+        <i class="mdi mdi-help-circle"></i>
       </router-link>
     </div>
     <v-list-group
@@ -139,10 +138,10 @@ export default class SidebarFeed extends Vue {
 
 <style scoped>
 .explain {
-  opacity: 0.6;
-  font-size: 15px;
-  margin-top: 10px;
-  margin-left: 130px;
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 7px;
+  margin-left: 180px;
 }
 .router-link {
   text-decoration: none;

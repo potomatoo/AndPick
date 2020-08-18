@@ -9,8 +9,7 @@
           }"
           class="router-link explain"
         >
-          도움말
-          <i class="mdi mdi-book-open"></i>
+          <i class="mdi mdi-help-circle"></i>
         </router-link>
       </div>
       <v-list-item-group>
@@ -102,10 +101,11 @@ export default class SidebarBoard extends Vue {
 
 <style scoped>
 .explain {
-  opacity: 0.6;
-  font-size: 15px;
-  margin-top: 10px;
-  margin-left: 120px;
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-left: 170px;
+  float: left;
 }
 .router-link {
   text-decoration: none;

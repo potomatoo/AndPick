@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import { mapMutations, mapGetters, mapState } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import { Axios } from "../../service/axios.service";
 
 @Component({
@@ -65,14 +65,29 @@ import { Axios } from "../../service/axios.service";
   computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class AppNavbar extends Vue {
-  userName: string | null = null;
+  userName: string | null = "";
 
+  // setName() {
+  //   this.userName = this.$store.state.userName;
+  // }
+  @Watch("$store.state.JWT")
   setName() {
-    this.userName = this.$store.state.userName;
+    if (this.$store.state.JWT) {
+      Axios.instance
+        .get("/api/user/detail")
+        .then((res) => {
+          this.userName = res.data.data.userName;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
-  mounted() {
-    this.setName();
+  created() {
+    if (this.$store.state.JWT) {
+      this.setName();
+    }
   }
 
   @Watch("$store.state.userName")

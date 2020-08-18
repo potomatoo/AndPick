@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.model.dto.Category;
+import com.ssafy.model.dto.CategoryCount;
 import com.ssafy.model.dto.Rss;
 
 @Repository
@@ -20,4 +21,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	@Query(value = "select SSAFYDB.category.category_name from SSAFYDB.category order by rand() limit 3", nativeQuery = true)
 	public List<String> findRandomCategoryId();
 
+	@Modifying
+	@Query(value = "select SSAFYDB.category.category_name as categoryName, SSAFYDB.category.category_id as categoryId, count(*) as count from SSAFYDB.rss join SSAFYDB.category on SSAFYDB.rss.category_id = SSAFYDB.category.category_id group by rss.category_id", nativeQuery = true)
+	public List<CategoryCount> findCategoryCount();
 }

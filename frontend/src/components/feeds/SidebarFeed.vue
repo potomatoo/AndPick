@@ -1,6 +1,16 @@
 <template>
   <div>
-    <v-subheader>Feed</v-subheader>
+    <div class="d-flex">
+      <v-subheader>Feed</v-subheader>
+      <router-link
+        :to="{
+          name: 'FeedExplain'
+        }"
+        class="router-link explain"
+      >
+        <i class="mdi mdi-help-circle"></i>
+      </router-link>
+    </div>
     <v-list-group
       v-for="feed in feedList"
       :key="feed.feedId"
@@ -127,6 +137,12 @@ export default class SidebarFeed extends Vue {
 </script>
 
 <style scoped>
+.explain {
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 7px;
+  margin-left: 180px;
+}
 .router-link {
   text-decoration: none;
   color: inherit;

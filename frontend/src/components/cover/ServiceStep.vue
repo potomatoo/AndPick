@@ -1,7 +1,7 @@
 <template>
   <div class="service-step">
     <div class="p-5">
-      <h3 class="d-flex justify-content-center white--text">
+      <h3 class="d-flex justify-content-center">
         <b>서비스 이용 방법</b>
       </h3>
       <div class="container d-flex justify-content-around">
@@ -16,7 +16,8 @@
           <div class="step-text">
             피드
           </div>
-          <i class="mdi mdi-hexagon" style="color:#df3277"></i>
+          <div class="go-detail">보러가기</div>
+          <i class="mdi-step mdi mdi-hexagon"></i>
         </div>
 
         <div
@@ -28,7 +29,8 @@
           @mouseleave="zoomOut"
         >
           <div class="step-text">보드</div>
-          <i class="mdi mdi-checkbox-blank-circle" style="color:#00d59b"></i>
+          <div class="go-detail">보러가기</div>
+          <i class="mdi-step mdi mdi-checkbox-blank-circle"></i>
         </div>
 
         <div
@@ -39,8 +41,9 @@
           @mouseenter="zoomIn"
           @mouseleave="zoomOut"
         >
-          <div class="step-text">마이페이지</div>
-          <i class="mdi mdi-star" style="color:#ad249f"></i>
+          <div class="step-text">내페이지</div>
+          <div class="go-detail">보러가기</div>
+          <i class="mdi-step mdi mdi-star"></i>
         </div>
       </div>
     </div>
@@ -93,8 +96,8 @@ export default {
 </script>
 
 <style>
-.service-step {
-  background-color: #17212c;
+.go-detail {
+  opacity: 0.5;
 }
 .step-box {
   cursor: pointer;
@@ -109,7 +112,7 @@ export default {
   font-size: 25px;
   /* font-weight: 900; */
   margin-top: 50px;
-  margin-bottom: 45px;
+  margin-bottom: 20px;
   /* transition: font-size 2s; */
   font-family: "Black Han Sans", sans-serif;
   /* font-family: "Jua", sans-serif; */
@@ -119,7 +122,7 @@ export default {
   font-size: 50px;
 } */
 
-.mdi {
+.mdi-step {
   font-size: 33px;
 }
 </style>

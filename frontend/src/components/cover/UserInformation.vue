@@ -1,45 +1,99 @@
 <template>
-  <div class="row mt-5 mx-5 px-5">
-    <div class="col-lg-4" align="center">
-      <img src="@/assets/jobseeker1.png" height="auto" width="250px" />
-      <div style="width:250px">
-        <h5 class="description d-flex justify-content-center">
-          JOBSEEKER
-        </h5>
-        <p class="description">
-          취업준비생들의 면접준비를 위해 도움을 제공합니다.
-        </p>
-      </div>
-    </div>
-    <div class="col-lg-4" align="center">
-      <img src="@/assets/business1.png" height="auto" width="250px" />
-      <div style="width:250px">
-        <h5 class="description d-flex justify-content-center">
-          BUSINESSES
-        </h5>
-        <p class="description">BUSINESSES</p>
-      </div>
-    </div>
-    <div class="col-lg-4" align="center">
-      <img src="@/assets/industry1.png" height="auto" width="250px" />
-      <div style="width:250px">
-        <h5 class="description d-flex justify-content-center">
-          INDUSTRY
-        </h5>
-        <p class="description">
-          최신 산업 트렌드에 관한 기사를 읽어보세요!
-        </p>
-      </div>
+  <div class="user-info">
+    <div class="show-userbox p-5">
+      <transition name="slide-user">
+        <h3 v-if="showUser" class="d-flex justify-content-center">
+          <b>우리의 사용자들</b>
+        </h3>
+      </transition>
+      <transition name="slide-user">
+        <div v-if="showUser" class="container d-flex justify-content-around">
+          <div
+            align="center"
+            class="user-box"
+            style="border:15px solid #ad249f"
+          >
+            <div class="user-text">
+              취준생
+            </div>
+            <i class="mdi-user mdi mdi-tie"></i>
+          </div>
+
+          <div
+            align="center"
+            class="user-box"
+            style="border:15px solid #df3277"
+          >
+            <div class="user-text">개발자</div>
+            <i class="mdi-user mdi mdi-laptop-chromebook"></i>
+          </div>
+
+          <div
+            align="center"
+            class="user-box"
+            style="border:15px solid #00d59b;"
+          >
+            <div class="user-text">기타 등등</div>
+            <i class="mdi-user mdi mdi-account-multiple-plus"></i>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/scrollmonitor/1.2.0/scrollMonitor.js"></script>
 <script>
-export default {};
+export default {
+  name: "UserInformation",
+  data() {
+    return {
+      showUser: false
+    };
+  },
+  methods: {
+    scrollWatcher() {
+      const scrollMonitor = require("scrollmonitor");
+      const userElement = document.querySelector(".show-userbox");
+      const userWatcher = scrollMonitor.create(userElement);
+      userWatcher.enterViewport(() => {
+        this.showUser = true;
+      });
+    }
+  },
+  mounted() {
+    this.scrollWatcher();
+  }
+};
 </script>
 
 <style>
-.description {
-  opacity: 0.6;
+.user-info {
+  /* background-color: #17212c; */
+}
+.user-box {
+  width: 230px;
+  height: 230px;
+  background-color: #17212c;
+  color: white;
+  margin: auto;
+}
+
+.user-text {
+  font-size: 25px;
+  margin-top: 50px;
+  margin-bottom: 45px;
+  font-family: "Black Han Sans", sans-serif;
+}
+
+.slide-user-enter-active {
+  transition: all 2s ease;
+}
+.slide-user-enter {
+  transform: translateY(150px);
+  opacity: 0;
+}
+.mdi-user {
+  font-size: 40px;
 }
 </style>

@@ -54,7 +54,6 @@ export default class AppMain extends Vue {
 .v-main {
   padding-bottom: 0px !important;
 }
-
 .button-bottom {
   position: fixed;
   right: 7vw;

@@ -1,7 +1,7 @@
 <template>
   <div class="container my-5" style="width: 400px">
     <div class="d-flex">
-      <h2><b>Welcome to JG!!</b></h2>
+      <h2><b>웰컴 투 &PICK</b></h2>
       <img src="@/assets/logo.png" width="90px" height="45px" />
     </div>
     <form>
@@ -59,8 +59,8 @@
           large
           color="success"
           @click.prevent="submitForm"
-          >로그인</v-btn
-        >
+          >로그인<i class="login-key mdi mdi-key"></i
+        ></v-btn>
       </div>
     </form>
     <hr />
@@ -131,4 +131,8 @@ export default class LoginView extends Vue {
 }
 </script>
 
-<style></style>
+<style>
+.login-key {
+  font-size: 20px;
+}
+</style>

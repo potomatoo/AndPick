@@ -1,8 +1,11 @@
 <template>
   <div class="container my-5" style="width: 400px">
     <div class="d-flex">
-      <h2 style="font-family: 'Do Hyeon', sans-serif;">&PICK</h2>
-      <img src="@/assets/logo.png" width="90px" height="45px" />
+      <h2
+        style="font-family: 'Do Hyeon', sans-serif; margin-left: 100px; margin-bottom: 40px; color: #4caf50"
+      >
+        &PICK 로그인
+      </h2>
     </div>
     <form>
       <div class="form-group">

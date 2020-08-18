@@ -31,13 +31,13 @@
                 <div class="container d-flex justify-content-around">
                   <div
                     class="post-box p-1"
-                    style="border:5px solid #00d59b"
+                    style="border:3px solid rgba(0, 0, 0, 0.54)"
                     @mouseenter="zoomIn"
                     @mouseleave="zoomOut"
                   >
                     <div class="post-text pl-2 pr-2 mb-0 mt-3" align="center">
                       {{ post.postTitle }}
-                      <hr style="border-color: #00d59b" />
+                      <hr style="border-color: rgba(0, 0, 0, 0.54)" />
 
                       <div class="container row">
                         <div

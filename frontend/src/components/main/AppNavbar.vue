@@ -6,13 +6,15 @@
       align="center"
       style="width: 100%"
     >
-      <router-link :to="{ name: 'Home' }">
-        <img
-          class="mdi ml-5"
-          src="@/assets/title1.jpg"
-          width="110px"
-          height="auto"
-        />
+      <router-link class="router-link" :to="{ name: 'Home' }">
+        <span
+          style="font-family: 'Spectral SC', serif; font-size: 40px; color: #5cb85c !important"
+          >&</span
+        >
+        <span
+          style="font-family: 'Faster One', cursive; font-size: 20px; color: rgba(0, 0, 0, 0.77) !important"
+          >PICK</span
+        >
       </router-link>
       <router-link
         v-if="!isLoggedIn"
@@ -75,10 +77,10 @@ export default class AppNavbar extends Vue {
     if (this.$store.state.JWT) {
       Axios.instance
         .get("/api/user/detail")
-        .then((res) => {
+        .then(res => {
           this.userName = res.data.data.userName;
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     }
@@ -104,6 +106,8 @@ export default class AppNavbar extends Vue {
 .router-link {
   text-decoration: none;
   color: inherit;
+  border: 0;
+  outline: none;
 }
 .mdi-nav:hover {
   cursor: pointer;

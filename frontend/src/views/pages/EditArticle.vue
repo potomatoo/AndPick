@@ -1,13 +1,15 @@
 <template>
   <div class="container mt-5">
-    <v-text-field
-      label="제목"
-      single-line
-      v-model="title"
-      class="font-weight-bold font-size: 3rem"
-      style="font-family: 'Do Hyeon', sans-serif;"
-      :rules="rules"
-    ></v-text-field>
+    <v-form ref="form" v-model="valid" lazy-validation>
+      <v-text-field
+        label="제목"
+        single-line
+        v-model="title"
+        class="font-weight-bold font-size: 3rem"
+        style="font-family: 'Do Hyeon', sans-serif;"
+        :rules="rules"
+      ></v-text-field>
+    </v-form>
 
     <v-combobox
       v-model="nowTagList"
@@ -186,13 +188,22 @@
 
       <v-flex offset-lg10 lg2>
         <v-btn small outlined color="secondary" class="mt-10" @click="addPost">
-          <v-icon left>mdi-plus</v-icon>SAVE
+          저장
         </v-btn>
         <v-snackbar v-model="snackbar" timeout="2000">
           게시글이 저장되었습니다.
 
           <template v-slot:action="{ attrs }">
             <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+
+        <v-snackbar v-model="snackbar2" timeout="2000">
+          제목을 작성해주세요.
+          <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbar2 = false">
               Close
             </v-btn>
           </template>
@@ -206,6 +217,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
+import { router } from "@/router";
 
 import {
   Blockquote,
@@ -246,7 +258,9 @@ export default class EditArticle extends Vue {
 
   title = "";
   snackbar = false;
+  snackbar2 = false;
   nowTagList = [];
+  valid = false;
 
   search = null;
 
@@ -267,6 +281,10 @@ export default class EditArticle extends Vue {
   }
 
   rules = [value => !!value || "제목을 작성해야 합니다."];
+
+  validate() {
+    this.$refs.form.validate();
+  }
 
   @Watch("post")
   setTitle() {
@@ -322,33 +340,57 @@ export default class EditArticle extends Vue {
   }
 
   addPost() {
-    if (isNaN(this.postId)) {
-      const submitTagList = [];
-      this.nowTagList.forEach(element => {
-        const oneTagList = {
-          tagName: element
-        };
-        submitTagList.push(oneTagList);
-      });
-      console.log(submitTagList);
-      this.ADD_POST({
-        postContent: this.html,
-        postDirId: this.$route.params.postDirId,
-        postTitle: this.title,
-        tagList: submitTagList
-      });
-      this.snackbar = true;
+    if (this.$refs.form.validate()) {
+      if (isNaN(this.postId)) {
+        const submitTagList = [];
+        this.nowTagList.forEach(element => {
+          const oneTagList = {
+            tagName: element
+          };
+          submitTagList.push(oneTagList);
+        });
+        this.ADD_POST({
+          postContent: this.html,
+          postDirId: this.$route.params.postDirId,
+          postTitle: this.title,
+          tagList: submitTagList
+        });
+        this.snackbar = true;
+
+        if (
+          this.$route.name === "NewPost" ||
+          this.$route.name === "EditPost" ||
+          this.$route.name === "SelectFromOutside"
+        ) {
+          this.$router.push({
+            name: "PostDir",
+            params: { postDirId: this.$route.params.postDirId }
+          });
+        }
+      } else {
+        this.UPDATE_POST({
+          postContent: this.html,
+          postDirId: this.$route.params.postDirId || this.post.postDirId,
+          postId: Number(this.$route.params.postId),
+          postTitle: this.title,
+          tagList: this.nowTagList
+        });
+        this.snackbar = true;
+        if (
+          this.$route.name === "NewPost" ||
+          this.$route.name === "EditPost" ||
+          this.$route.name === "SelectFromOutside"
+        ) {
+          this.$router.push({
+            name: "PostDir",
+            params: { postDirId: this.$route.params.postDirId }
+          });
+        }
+      }
+      this.$emit("save");
     } else {
-      this.UPDATE_POST({
-        postContent: this.html,
-        postDirId: this.$route.params.postDirId || this.post.postDirId,
-        postId: Number(this.$route.params.postId),
-        postTitle: this.title,
-        tagList: this.nowTagList
-      });
-      this.snackbar = true;
+      this.snackbar2 = true;
     }
-    this.$emit("save");
   }
 
   @Watch("$route", { immediate: true })
@@ -356,6 +398,7 @@ export default class EditArticle extends Vue {
     this.title = "";
     this.html = "";
     this.nowTagList = [];
+
     this.SELECT_POST({
       postId: Number(this.$route.params.postId)
     });

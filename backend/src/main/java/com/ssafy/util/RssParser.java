@@ -28,19 +28,19 @@ public class RssParser implements Runnable {
 
 			this.rssChannel.setTitle(document.selectFirst("title").text());
 			this.rssChannel.setLink(document.selectFirst("link").text());
-			
+
 			Elements items = document.select("item");
 			this.rssChannel.itemInit();
 			for (Element item : items) {
 				RssItem rssItem = new RssItem();
 				rssItem.setTitle(item.select("title").text());
-				rssItem.setDescription(item.select("description").text());
+				rssItem.setDescription(Jsoup.parse(item.select("description").text()).text());
 				rssItem.setLink(item.select("link").text());
 				rssItem.setPubDate(item.select("pubDate").text());
 				rssItem.setRssTitle(this.rssChannel.getTitle());
 				this.rssChannel.addItem(rssItem);
 			}
-			
+
 			redisTemplate.opsForValue().set(this.link, this.rssChannel);
 		} catch (Exception e) {
 			// TODO: handle exception

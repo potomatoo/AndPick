@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d-flex">
+    <div class="d-flex justify-content-between mr-2">
       <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
         >피드</v-subheader
       >
@@ -131,22 +131,22 @@ export default class SidebarFeed extends Vue {
     const subscriptions = document.querySelectorAll(".sidebar-subscription");
     const addrss = document.querySelectorAll(".sidebar-addrss");
     if (boards?.length) {
-      boards.forEach(el =>
+      boards.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (mypages?.length) {
-      mypages.forEach(el =>
+      mypages.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (subscriptions?.length) {
-      subscriptions.forEach(el =>
+      subscriptions.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (addrss?.length) {
-      addrss.forEach(el =>
+      addrss.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
@@ -182,8 +182,7 @@ export default class SidebarFeed extends Vue {
 .explain {
   opacity: 0.4;
   font-size: 20px;
-  margin-top: 7px;
-  margin-left: 180px;
+  margin-top: 4px;
 }
 .router-link {
   text-decoration: none;

@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-list>
-        <div class="d-flex">
-            <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
-              >보드</v-subheader
-            >
+      <div class="d-flex">
+        <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+          >보드</v-subheader
+        >
         <router-link
           :to="{
             name: 'BoardExplain'

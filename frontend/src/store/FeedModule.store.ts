@@ -152,7 +152,7 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    UPDATE_FEED({ dispatch, state }, { feedId, feedName }) {
+    UPDATE_FEED({ dispatch, state, commit }, { feedId, feedName }) {
       const updateData = {
         params: {
           feedId,
@@ -166,6 +166,7 @@ const module: Module<FeedModule, RootState> = {
         })
         .then(() => {
           if (state.feed && state.feed.feedId === feedId) {
+            commit("SET_LOADING");
             dispatch("FETCH_ARTICLE_LIST_IN_FEED", feedId);
           }
         })
@@ -247,7 +248,7 @@ const module: Module<FeedModule, RootState> = {
     },
 
     UPDATE_SUBSCRIBE(
-      { dispatch, state },
+      { dispatch, state, commit },
       { feedId, subscribeId, subscribeName }
     ) {
       const updateData = {
@@ -262,6 +263,7 @@ const module: Module<FeedModule, RootState> = {
         .then(() => dispatch("FETCH_FEED_LIST"))
         .then(() => {
           if (state.subscribeId === subscribeId) {
+            commit("SET_LOADING");
             dispatch("FETCH_ARTICLE_LIST", subscribeId);
           }
         })
@@ -299,12 +301,13 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    UPDATE_BOARD({ dispatch, state }, { boardId, boardName }) {
+    UPDATE_BOARD({ dispatch, state, commit }, { boardId, boardName }) {
       Axios.instance
         .put("/api/board/update", null, { params: { boardId, boardName } })
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .then(() => {
           if (state.board && state.board.boardId === boardId) {
+            commit("SET_LOADING");
             dispatch("FETCH_ARTICLE_LIST_IN_BOARD", boardId);
           }
         })

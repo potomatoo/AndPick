@@ -136,7 +136,8 @@ export default class FeedContextMenu extends Vue {
   }
 
   saveName() {
-    if (this.checkDuplication(this.inputFeedName)) return;
+    if (!this.inputFeedName || this.checkDuplication(this.inputFeedName))
+      return;
     if (this.feedItem.feedName !== this.inputFeedName) {
       this.UPDATE_FEED({
         feedId: this.feedItem.feedId,

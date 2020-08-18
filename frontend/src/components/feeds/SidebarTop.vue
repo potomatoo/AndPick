@@ -21,7 +21,7 @@
           </v-list-item-content>
         </v-list-item>
     </router-link>-->
-    
+
     <v-list class="mt-5">
       <v-list-item
         @click="toAddPage($event)"
@@ -36,6 +36,7 @@
             <v-icon left>mdi-plus-box-outline</v-icon>채널 구독
           </v-list-item-icon>
         </v-list-item>
+      </v-list-item>
     </v-list>
   </div>
 </template>

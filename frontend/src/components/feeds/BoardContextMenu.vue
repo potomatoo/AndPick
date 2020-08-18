@@ -135,7 +135,8 @@ export default class BoardContextMenu extends Vue {
   }
 
   saveName() {
-    if (this.checkDuplication(this.inputBoardName)) return;
+    if (!this.inputBoardName || this.checkDuplication(this.inputBoardName))
+      return;
     if (this.boardItem.boardName !== this.inputBoardName) {
       this.UPDATE_BOARD({
         boardId: this.boardItem.boardId,

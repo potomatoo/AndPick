@@ -30,7 +30,7 @@
       >
         <v-list-item class="px-2">
           <v-list-item-icon
-            class="ml-15"
+            class="ml-10"
             style="font-family: 'Do Hyeon', sans-serif;"
           >
             <v-icon left>mdi-plus-box-outline</v-icon>채널 구독

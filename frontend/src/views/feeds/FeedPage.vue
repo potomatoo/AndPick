@@ -3,7 +3,10 @@
     <v-container>
       <v-layout>
         <v-flex v-if="feed">
-          <h1>{{ feed.feedName }}</h1>
+          <div class="caption mb-3">피드</div>
+          <h1 style="font-family: 'Do Hyeon', sans-serif;">
+            {{ feed.feedName }}
+          </h1>
         </v-flex>
         <v-flex class="text-right" align-self-end>
           <v-tooltip @click="fetchData" bottom open-delay="300" color="#EEEEEE">
@@ -12,7 +15,7 @@
                 mdi-replay mdi-flip-h
               </v-icon>
             </template>
-            <span class="grey--text text--darken-1">Refresh</span>
+            <span class="grey--text text--darken-1">새로고침</span>
           </v-tooltip>
         </v-flex>
       </v-layout>
@@ -21,15 +24,20 @@
 
     <!-- 기사 리스트 -->
     <v-container v-if="!articleList.length" class="text-center">
-      <v-layout justify-center>
-        <h4>Which sources would you like to follow?</h4>
-      </v-layout>
-      <v-layout justify-center>
-        <p>
-          You can follow publications, blogs feeds.
-        </p>
-      </v-layout>
-      <v-btn color="success" dark @click="addRss">ADD CONTENT</v-btn>
+      <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
+      <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
+        "{{ feed.feedName }}"의 첫 번째 채널을 구독해주세요!
+      </h4>
+
+      <p class="text-center">
+        채널을 구독하여 실시간으로 기사를 볼 수 있는 피드가 생성되었습니다.
+
+        <v-btn small outlined color="secondary" @click="addRss">
+          <v-icon left>mdi-plus</v-icon>채널
+        </v-btn>
+
+        을 클릭하여 시작하세요.
+      </p>
     </v-container>
 
     <v-container v-else class="offset-lg3 lg6">

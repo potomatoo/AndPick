@@ -1,34 +1,16 @@
 <template>
-  <div class="container" v-if="postDir">
+  <div class="container mt-10" v-if="postDir">
     <div class="row">
-      <h6 class="pl-3 text-secondary font-weight-light mb-3 col-10">Mypage</h6>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn id="optionBtn" small color="white" class="mt-3">
-            <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>
-          </v-btn>
-        </template>
-        <v-list dense>
-          <v-list-item @click="click">
-            <v-list-item-title>Latest</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="click">
-            <v-list-item-title>Oldest</v-list-item-title>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item @click="deletePostDir()">
-            <v-list-item-title>
-              <v-icon small left>mdi-delete</v-icon>Delete
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <div class="caption mb-3">마이페이지</div>
     </div>
 
     <div class="row">
-      <h1 class="pl-3 font-weight-bold">{{ postDir.postDirName }}</h1>
+      <h1 style="font-family: 'Do Hyeon', sans-serif;">
+        {{ postDir.postDirName }}
+      </h1>
     </div>
     <v-divider></v-divider>
+
     <router-link
       :to="{ name: 'NewPost', params: { postDirId: $route.params.postDirId } }"
       class="router-link"
@@ -39,7 +21,7 @@
         color="secondary"
         v-if="postDir.postList && postDir.postList.length"
       >
-        <v-icon left>mdi-plus</v-icon>New
+        <v-icon left>mdi-plus</v-icon>새 글
       </v-btn>
     </router-link>
 
@@ -48,13 +30,12 @@
       class="text-center"
     >
       <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
-      <h4 class="mt-10">
-        Save post to here
+      <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
+        "{{ postDir.postDirName }}"의 첫 번째 글을 작성해주세요!
       </h4>
 
       <p class="text-center">
-        When you find an news in your Subscribe you want to keep and editing
-        with your think, click
+        자신의 생각을 정리할 폴더가 생성되었습니다.
         <router-link
           :to="{
             name: 'NewPost',
@@ -63,80 +44,79 @@
           class="router-link"
         >
           <v-btn small outlined color="secondary" class>
-            <v-icon left>mdi-plus</v-icon>New
+            <v-icon left>mdi-plus</v-icon>새 글
           </v-btn>
         </router-link>
+        을 클릭하여 시작하세요.
       </p>
     </div>
+
     <div class="container">
       <div class="row">
-        <draggable :list="dragList" class="row wrap sortable-list">
-          <v-flex v-for="item in dragList" :key="item.length" class="sortable">
-            <draggable
-              :list="postDir.postList"
-              class="row justify-content-start row-sm-12"
-              @change="changeDrag"
-            >
-              <v-flex
-                v-for="post in postDir.postList"
-                :key="post.postId"
-                xs12
-                sm6
-                md4
-                pa-3
-                class="row-v"
-                @contextmenu.prevent="showPostCtx($event, post)"
+        <v-flex
+          v-for="post in postDir.postList"
+          :key="post.postId"
+          xs12
+          sm6
+          md4
+          pa-3
+          class="row-v"
+          @contextmenu.prevent="showPostCtx($event, post)"
+        >
+          <router-link
+            :to="{
+              name: 'EditPost',
+              params: {
+                postDirId: $route.params.postDirId,
+                postId: post.postId
+              }
+            }"
+            class="router-link"
+          >
+            <div class="container d-flex justify-content-around">
+              <div
+                align="center"
+                class="post-box"
+                style="border:5px solid #ad249f"
+                @mouseenter="zoomIn"
+                @mouseleave="zoomOut"
               >
-                <v-hover v-slot:default="{ hover }">
-                  <router-link
-                    :to="{
-                      name: 'EditPost',
-                      params: {
-                        postDirId: $route.params.postDirId,
-                        postId: post.postId
-                      }
-                    }"
-                    class="router-link"
-                  >
-                    <v-card
-                      id="cursor_test"
-                      :elevation="hover ? 12 : 2"
-                      :class="{ 'on-hover': hover }"
-                      height="350"
-                      max-width="350"
-                    >
-                      <v-card-text
-                        class="font-weight-medium mt-12 text-center subtitle-1"
-                        >{{ post.postTitle }}</v-card-text
-                      >
-                      <hr class="mt-0" />
+                <div class="post-text pl-2 pr-2 mb-0 mt-3">
+                  {{ post.postTitle }}
+                  <hr style="border-color: #ad249f" />
 
-                      <div class="container row">
-                        <div
-                          class="ma-3"
-                          v-for="tag in post.tagList"
-                          :key="tag.tagId"
+                  <div class="container row">
+                    <div
+                      class="ma-1"
+                      v-for="tag in post.tagList"
+                      :key="tag.tagId"
+                    >
+                      <router-link
+                        class="router-link"
+                        :to="{
+                          name: 'HashTag',
+                          params: {
+                            tagName: tag.tagName
+                          }
+                        }"
+                      >
+                        <v-btn
+                          rounded
+                          depressed
+                          small
+                          style="max-width: 200px"
+                          id="HashTagbtn"
+                          >#{{ tag.tagName }}</v-btn
                         >
-                          <router-link
-                            :to="{
-                              name: 'HashTag',
-                              params: {
-                                tagName: tag.tagName
-                              }
-                            }"
-                            class="router-link"
-                          >
-                            <v-btn rounded depressed>#{{ tag.tagName }}</v-btn>
-                          </router-link>
-                        </div>
-                      </div>
-                    </v-card>
-                  </router-link>
-                </v-hover>
-              </v-flex>
-            </draggable>
-          </v-flex>
-        </draggable>
+                      </router-link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </v-flex>
+
         <post-context-menu :postItem="postItem" />
       </div>
     </div>
@@ -155,7 +135,6 @@ const mypageModule = namespace("mypageModule");
 
 @Component({
   components: {
-    draggable,
     PostContextMenu
   }
 })
@@ -173,13 +152,19 @@ export default class FolderMain extends Vue {
     console.log("click");
   }
 
-  dragList = [
-    {
-      length: 1
-    }
-  ];
-
   postItem = {};
+
+  zoomIn(event: any) {
+    event.target.style.transform = "scale(1.1)";
+    event.target.style.zIndex = 1;
+    event.target.style.transition = "all 0.5s";
+  }
+
+  zoomOut(event: any) {
+    event.target.style.transform = "scale(1)";
+    event.target.style.zIndex = 0;
+    event.target.style.transition = "all 0.5s";
+  }
 
   showPostCtx(e: MouseEvent, post: Post) {
     this.postItem = post;
@@ -192,12 +177,12 @@ export default class FolderMain extends Vue {
     this.SET_POST_CONTEXT_MENU(ctx);
   }
 
-  deletePostDir() {
-    this.DELETE_POSTDIR(this.$route.params.postDirId);
+  routeHashTag(tagName: string) {
+    this.$router.push({ name: "HashTag", params: { tagName: tagName } });
   }
 
-  changeDrag() {
-    this.FETCH_POSTDIR(this.postDir);
+  deletePostDir() {
+    this.DELETE_POSTDIR(this.$route.params.postDirId);
   }
 
   @Watch("$route", { immediate: true })
@@ -215,10 +200,6 @@ export default class FolderMain extends Vue {
 </script>
 
 <style scoped>
-#cursor_test {
-  cursor: pointer;
-}
-
 .router-link {
   text-decoration: none;
   color: inherit;
@@ -226,11 +207,52 @@ export default class FolderMain extends Vue {
   outline: none;
 }
 
+.post-box {
+  cursor: pointer;
+  width: 280px;
+  height: 350px;
+  margin: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+  border-radius: 25px;
+}
+
+.post-text {
+  font-size: 25px;
+  /* font-weight: 900; */
+  margin-top: 50px;
+  margin-bottom: 45px;
+  /* transition: font-size 2s; */
+  /* font-family: "Black Han Sans", sans-serif; */
+  /* font-family: "Jua", sans-serif; */
+  white-space: nowrap;
+  overflow: hidden;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+}
+
+/* .step-text:hover {
+  font-size: 50px;
+} */
+
 #editbtn {
   outline: none;
 }
 
 #optionBtn {
   outline: none;
+}
+
+.v-btn__content {
+  white-space: nowrap;
+  overflow: hidden;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+}
+
+.postTitle {
+  text-overflow: ellipsis;
 }
 </style>

@@ -1,6 +1,18 @@
 <template>
   <div>
-    <v-subheader>Feed</v-subheader>
+    <div class="d-flex">
+      <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+        >피드</v-subheader
+      >
+      <router-link
+        :to="{
+          name: 'FeedExplain'
+        }"
+        class="router-link explain"
+      >
+        <i class="mdi mdi-help-circle"></i>
+      </router-link>
+    </div>
     <v-list-group
       v-for="feed in feedList"
       :key="feed.feedId"
@@ -36,7 +48,7 @@
 
     <v-list-item @click="modalActive = !modalActive">
       <v-list-item-content class="text-center">
-        <v-list-item-title>Create New Feed</v-list-item-title>
+        <v-list-item-title>새 피드 생성</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -166,4 +178,15 @@ export default class SidebarFeed extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.explain {
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 7px;
+  margin-left: 180px;
+}
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

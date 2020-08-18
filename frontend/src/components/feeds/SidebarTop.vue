@@ -21,19 +21,21 @@
           </v-list-item-content>
         </v-list-item>
     </router-link>-->
+    
     <v-list class="mt-5">
       <v-list-item
         @click="toAddPage($event)"
         class="px-6 sidebar-addrss"
         color="rgb(223, 50, 119)"
       >
-        <v-list-item-icon>
-          <v-icon>mdi-plus-box-outline</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Follow New Sources</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+        <v-list-item class="px-2">
+          <v-list-item-icon
+            class="ml-15"
+            style="font-family: 'Do Hyeon', sans-serif;"
+          >
+            <v-icon left>mdi-plus-box-outline</v-icon>채널 구독
+          </v-list-item-icon>
+        </v-list-item>
     </v-list>
   </div>
 </template>

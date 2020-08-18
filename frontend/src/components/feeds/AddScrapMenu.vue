@@ -15,7 +15,7 @@
               mdi-note-plus-outline
             </v-icon>
           </template>
-          <span class="grey--text text--darken-1">Open Post</span>
+          <span class="grey--text text--darken-1">글 작성하기</span>
         </v-tooltip>
       </span>
     </template>
@@ -48,9 +48,8 @@
             <hr class="ma-0" />
 
             <v-list-item @click="setEdit(null, postDir.postDirId)">
-              <v-icon color="success" class="mr-2">mdi-plus</v-icon>
               <v-list-item-title class="success--text"
-                >NEW Post</v-list-item-title
+                >새 글 생성</v-list-item-title
               >
             </v-list-item>
           </v-list>
@@ -59,8 +58,7 @@
 
       <hr class="ma-0" />
       <v-list-item @click="folderModalActive = !folderModalActive">
-        <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-        <v-list-item-title class="success--text">NEW PAGE</v-list-item-title>
+        <v-list-item-title class="success--text">새 글 생성</v-list-item-title>
       </v-list-item>
     </v-list>
 
@@ -73,7 +71,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import CreateFolderModal from "@/components/pages/CreateFolderModal.vue";
-import { Post } from "@/store/MypageInterface";
+import { Post } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 

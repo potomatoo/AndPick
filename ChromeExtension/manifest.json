@@ -1,11 +1,13 @@
 {
-    "name": "NewsClipper",
+    "name": "&PickClipper",
     "version": "1.0",
-    "description": "Now you can clip news & edit post in &PICK",
+    "description": "구글 크롬을 이용하여 뉴스 스크랩! 그리고 &PICK에서 편집하기",
     "manifest_version": 2,
 
     "icons": {
-      "16" : "icon.png"
+      "16" : "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
     },
 
     "browser_action": {

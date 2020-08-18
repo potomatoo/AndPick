@@ -26,6 +26,10 @@ import HashTag from "@/views/pages/HashTag.vue";
 import SelectFromOutSide from "@/views/pages/SelectFromOutside.vue";
 import { nextTick } from "vue/types/umd";
 
+import MypageExplain from "@/views/explain/MypageExplain.vue";
+import BoardExplain from "@/views/explain/BoardExplain.vue";
+import FeedExplain from "@/views/explain/FeedExplain.vue";
+
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -88,14 +92,17 @@ const routes: Array<RouteConfig> = [
   {
     path: "/mypage/:postDirId/newpost",
     name: "NewPost",
-    component: EditArticle,
-    meta: {
-      authRequired: true
-    }
+    component: EditArticle
   },
 
   {
-    path: "/fromothersite/select",
+    path: "/scrap/:postDirId/newpost",
+    name: "NewScrapFromGoole",
+    component: EditArticle
+  },
+
+  {
+    path: "/fromothersite/select/:scrapKey",
     name: "SelectFromOutside",
     component: SelectFromOutSide
   },
@@ -182,6 +189,21 @@ const routes: Array<RouteConfig> = [
         component: EditArticle
       }
     ]
+  },
+  {
+    path: "/explain/mypage",
+    name: "MypageExplain",
+    component: MypageExplain
+  },
+  {
+    path: "/explain/board",
+    name: "BoardExplain",
+    component: BoardExplain
+  },
+  {
+    path: "/explain/feed",
+    name: "FeedExplain",
+    component: FeedExplain
   }
 ];
 

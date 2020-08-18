@@ -3,7 +3,9 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <h1>Follow New Sources</h1>
+          <h1 style="font-family: 'Do Hyeon', sans-serif;">
+            새 채널을 구독해주세요.
+          </h1>
         </v-flex>
         <!-- <v-flex class="text-right">
           <v-icon @click="console.log('hi')">mdi-check</v-icon>
@@ -17,19 +19,17 @@
     <v-divider></v-divider>
 
     <v-container>
-      <v-layout>
-        <h4>Discover the best sources for any topic</h4>
-      </v-layout>
+      <v-layout> </v-layout>
       <v-text-field
         outlined
-        label="Search by topic, website, or RSS link"
+        label="RSS 채널을 검색하세요"
         type="text"
         clearable
         prepend-inner-icon="mdi-magnify"
       ></v-text-field>
       <v-layout justify-center>
         <p>
-          The articles you want to read later will be here
+          추천하는 채널 목록
         </p>
       </v-layout>
     </v-container>

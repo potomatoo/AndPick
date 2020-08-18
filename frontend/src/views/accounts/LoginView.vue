@@ -1,7 +1,7 @@
 <template>
   <div class="container my-5" style="width: 400px">
     <div class="d-flex">
-      <h2><b>Welcome to JG!!</b></h2>
+      <h2 style="font-family: 'Do Hyeon', sans-serif;">&PICK</h2>
       <img src="@/assets/logo.png" width="90px" height="45px" />
     </div>
     <form>
@@ -59,8 +59,8 @@
           large
           color="success"
           @click.prevent="submitForm"
-          >Login</v-btn
-        >
+          >로그인<i class="login-key mdi mdi-key"></i
+        ></v-btn>
       </div>
     </form>
     <hr />
@@ -70,7 +70,7 @@
     <p>
       계정이 없으신가요?
       <router-link :to="{ name: 'Signup' }">
-        <b style="color: #5cb85c">Signup</b>
+        <b style="color: #5cb85c">회원가입</b>
       </router-link>
     </p>
   </div>
@@ -125,15 +125,14 @@ export default class LoginView extends Vue {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
-      if (window.location.href.length > 50) {
-        const scrapKey = window.location.href.slice(41, 57);
-        localStorage.setItem("scrapKey", scrapKey);
-        router.push({ name: "SelectFromOutside" });
-      }
       console.log("데이터 검증 성공");
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+.login-key {
+  font-size: 20px;
+}
+</style>

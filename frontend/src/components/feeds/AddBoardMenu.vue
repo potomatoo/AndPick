@@ -14,7 +14,7 @@
               mdi-star-outline
             </v-icon>
           </template>
-          <span class="grey--text text--darken-1">Save to Board</span>
+          <span class="grey--text text--darken-1">보드에 저장</span>
         </v-tooltip>
       </span>
     </template>
@@ -35,7 +35,7 @@
           small
           @click="saveArticle(board.boardId, article)"
         >
-          <v-icon left>mdi-plus</v-icon> ADD
+          <v-icon left>mdi-plus</v-icon> 추가
         </v-btn>
         <v-btn
           v-else
@@ -45,14 +45,15 @@
           small
           @click="deleteArticle(board.newsList, article.link)"
         >
-          <v-icon left>mdi-window-close</v-icon> REMOVE
+          <v-icon left>mdi-window-close</v-icon> 취소
         </v-btn>
       </v-list-item>
 
       <hr class="ma-0" />
       <v-list-item @click="boardModalActive = !boardModalActive">
-        <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-        <v-list-item-title class="success--text">NEW BOARD</v-list-item-title>
+        <v-list-item-title class="success--text"
+          >새 보드 생성</v-list-item-title
+        >
       </v-list-item>
     </v-list>
 
@@ -69,7 +70,7 @@
           small
           @click="saveArticle(board.boardId, news)"
         >
-          <v-icon left>mdi-plus</v-icon> ADD
+          <v-icon left>mdi-plus</v-icon> 추가
         </v-btn>
         <v-btn
           v-else
@@ -79,14 +80,15 @@
           small
           @click="deleteArticle(board.newsList, news.newsLink)"
         >
-          <v-icon left>mdi-window-close</v-icon> REMOVE
+          <v-icon left>mdi-window-close</v-icon> 취소
         </v-btn>
       </v-list-item>
 
       <hr class="ma-0" />
       <v-list-item @click="boardModalActive = !boardModalActive">
-        <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-        <v-list-item-title class="success--text">NEW BOARD</v-list-item-title>
+        <v-list-item-title class="success--text"
+          >새 보드 생성</v-list-item-title
+        >
       </v-list-item>
     </v-list>
     <create-board-modal
@@ -102,7 +104,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import CreateBoardModal from "@/components/feeds/CreateBoardModal.vue";
-import { Board, Article, News } from "@/store/Feed.interface";
+import { Board, Article, News } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 

@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left height="70px">
+  <v-app-bar app clipped-left height="65px">
     <v-app-bar-nav-icon v-if="isLoggedIn" @click="TOGGLE_SIDEBAR()" />
     <v-toolbar-title
       class="a mr-5 justify-content-between"
@@ -7,13 +7,12 @@
       style="width: 100%"
     >
       <router-link :to="{ name: 'Home' }">
-        <a
-          ><img
-            class="mdi ml-5"
-            src="@/assets/title1.jpg"
-            width="140px"
-            height="auto"
-        /></a>
+        <img
+          class="mdi ml-5"
+          src="@/assets/title1.jpg"
+          width="110px"
+          height="auto"
+        />
       </router-link>
       <router-link
         v-if="!isLoggedIn"
@@ -23,13 +22,16 @@
         <v-btn outlined color="success">로그인</v-btn>
       </router-link>
       <div v-if="isLoggedIn" class="mt-1 d-flex">
-        <div class="cheer p-1">
+        <div class="cheer mt-2">
           <b>{{ userName }}</b> 님의 취업성공을 응원합니다!
         </div>
         <div class="ml-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
-              <span class="mdi mdi-account-edit mr-3 p-2" v-on="on"></span>
+              <span
+                class="mdi-nav mdi mdi-account-edit mr-3 p-2"
+                v-on="on"
+              ></span>
             </template>
             <v-list class="p-3">
               <router-link
@@ -56,11 +58,11 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { mapMutations, mapGetters, mapState } from "vuex";
-import { Axios } from "@/service/axios.service";
+import { Axios } from "../../service/axios.service";
 
 @Component({
   methods: mapMutations("mypageModule", ["TOGGLE_SIDEBAR"]),
-  computed: { ...mapGetters(["isLoggedIn"]) },
+  computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class AppNavbar extends Vue {
   userName: string | null = null;
@@ -88,7 +90,7 @@ export default class AppNavbar extends Vue {
   text-decoration: none;
   color: inherit;
 }
-.mdi:hover {
+.mdi-nav:hover {
   cursor: pointer;
 }
 .a {
@@ -98,5 +100,8 @@ export default class AppNavbar extends Vue {
 }
 .cheer {
   font-size: 16px;
+}
+.mdi-nav {
+  font-size: 27px;
 }
 </style>

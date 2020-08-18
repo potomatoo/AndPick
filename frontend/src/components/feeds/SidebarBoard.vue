@@ -1,7 +1,19 @@
 <template>
   <div>
     <v-list>
-      <v-subheader>Board</v-subheader>
+        <div class="d-flex">
+            <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+              >보드</v-subheader
+            >
+        <router-link
+          :to="{
+            name: 'BoardExplain'
+          }"
+          class="router-link explain"
+        >
+          <i class="mdi mdi-help-circle"></i>
+        </router-link>
+      </div>
       <!-- <v-list-item-group> -->
       <v-list-item
         v-for="board in boardList"
@@ -24,7 +36,7 @@
 
       <v-list-item @click="modalActive = !modalActive">
         <v-list-item-content class="text-center">
-          <v-list-item-title>Create New Board</v-list-item-title>
+          <v-list-item-title>새 보드 생성</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -121,4 +133,16 @@ export default class SidebarBoard extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.explain {
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-left: 170px;
+  float: left;
+}
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

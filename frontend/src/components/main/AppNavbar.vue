@@ -22,13 +22,16 @@
         <v-btn outlined color="success">로그인</v-btn>
       </router-link>
       <div v-if="isLoggedIn" class="mt-1 d-flex">
-        <div class="cheer p-1">
+        <div class="cheer mt-2">
           <b>{{ userName }}</b> 님의 취업성공을 응원합니다!
         </div>
         <div class="ml-5">
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
-              <span class="mdi mdi-account-edit mr-3 p-2" v-on="on"></span>
+              <span
+                class="mdi-nav mdi mdi-account-edit mr-3 p-2"
+                v-on="on"
+              ></span>
             </template>
             <v-list class="p-3">
               <router-link
@@ -87,7 +90,7 @@ export default class AppNavbar extends Vue {
   text-decoration: none;
   color: inherit;
 }
-.mdi:hover {
+.mdi-nav:hover {
   cursor: pointer;
 }
 .a {
@@ -97,5 +100,8 @@ export default class AppNavbar extends Vue {
 }
 .cheer {
   font-size: 16px;
+}
+.mdi-nav {
+  font-size: 27px;
 }
 </style>

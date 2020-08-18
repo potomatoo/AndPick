@@ -12,7 +12,7 @@
           >&</span
         >
         <span
-          style="font-family: 'Faster One', cursive; font-size: 20px; color: black !important"
+          style="font-family: 'Faster One', cursive; font-size: 20px; color: rgba(0, 0, 0, 0.77) !important"
           >PICK</span
         >
       </router-link>
@@ -77,10 +77,10 @@ export default class AppNavbar extends Vue {
     if (this.$store.state.JWT) {
       Axios.instance
         .get("/api/user/detail")
-        .then((res) => {
+        .then(res => {
           this.userName = res.data.data.userName;
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     }

@@ -1,13 +1,15 @@
 package com.ssafy.util;
 
+import java.net.URL;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.ssafy.model.dto.Rss;
 import com.ssafy.model.dto.RssChannel;
 import com.ssafy.model.dto.RssItem;
 
@@ -16,9 +18,10 @@ public class RssParser implements Runnable {
 	private RssChannel rssChannel;
 	private RedisTemplate<String, Object> redisTemplate;
 
-	public RssParser(String link) {
-		this.link = link;
+	public RssParser(Rss rss) {
+		this.link = rss.getRssUrl();
 		this.rssChannel = new RssChannel();
+		this.rssChannel.setRss(rss);
 	}
 
 	public void parse() {
@@ -28,7 +31,17 @@ public class RssParser implements Runnable {
 
 			this.rssChannel.setTitle(document.selectFirst("title").text());
 			this.rssChannel.setLink(document.selectFirst("link").text());
-
+			try {
+				Element img = document.selectFirst("image");
+				try {
+					this.rssChannel.setImg(img.selectFirst("url").text());
+				} catch (Exception e) {
+					this.rssChannel.setImg("");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				this.rssChannel.setImg("");
+			}
 			Elements items = document.select("item");
 			this.rssChannel.itemInit();
 			for (Element item : items) {
@@ -60,7 +73,7 @@ public class RssParser implements Runnable {
 			while (true) {
 				this.parse();
 				this.redisTemplate.opsForValue().set(this.link, this.rssChannel);
-				Thread.sleep(1000);
+				Thread.sleep(60000);
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

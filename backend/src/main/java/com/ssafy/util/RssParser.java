@@ -1,5 +1,6 @@
 package com.ssafy.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class RssParser implements Runnable {
 			Connection con = Jsoup.connect(this.link);
 			Document document = con.get();
 
-			this.rssChannel.setTitle(document.selectFirst("title").text());
+			this.rssChannel.setTitle(this.rssChannel.getRss().getRssName());
 			this.rssChannel.setLink(document.selectFirst("link").text());
 			try {
 				Element img = document.selectFirst("image");
@@ -56,7 +57,8 @@ public class RssParser implements Runnable {
 				Elements description = item.select("description");
 				rssItem.setDescription(Jsoup.parse(description.text()).text());
 				newsDetail.put(rssItem.getLink(), description.text());
-				rssItem.setPubDate(new Date(item.select("pubDate").text().replace("KST", "+0900")));
+
+				rssItem.setPubDate(new Date());
 				rssItem.setRssTitle(this.rssChannel.getTitle());
 				this.rssChannel.addItem(rssItem);
 			}

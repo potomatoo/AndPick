@@ -10,7 +10,7 @@
         placeholder="새로운 닉네임"
         :class="{
           'is-invalid': $v.userName.$error,
-          'is-valid': !$v.userName.$invalid,
+          'is-valid': !$v.userName.$invalid
         }"
       />
       <div class="invalid-feedback">
@@ -24,7 +24,13 @@
         >
       </div>
       <div class="d-flex justify-content-end mt-3">
-        <v-btn color="success" @click.prevent="submitNameForm">수정</v-btn>
+        <v-btn
+          text
+          style="font-weight: bold"
+          color="#1e847f"
+          @click.prevent="submitNameForm"
+          >수정</v-btn
+        >
       </div>
     </div>
   </div>
@@ -40,9 +46,9 @@ import { required, minLength, maxLength } from "vuelidate/lib/validators";
     userName: {
       required,
       minLength: minLength(2),
-      maxLength: maxLength(20),
-    },
-  },
+      maxLength: maxLength(20)
+    }
+  }
 })
 export default class NameUpdate extends Vue {
   userName: string | null = null;

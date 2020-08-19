@@ -64,6 +64,10 @@ const module: Module<FeedModule, RootState> = {
       state.boardList = boardList;
     },
 
+    SET_ARTICLE_LIST(state, articleList: Article[]) {
+      state.articleList = articleList;
+    },
+
     SET_BOARD(state, board: Board) {
       state.board = board;
     },
@@ -77,7 +81,7 @@ const module: Module<FeedModule, RootState> = {
     },
 
     SET_SELECTED_SUBSCRIPTION(state, subscribeId: number) {
-      state.subscribeId = subscribeId;
+      state.subscribeId = Number(subscribeId);
     },
 
     SELECT_ARTICLE(state, article: Article) {
@@ -181,7 +185,7 @@ const module: Module<FeedModule, RootState> = {
         .then(() => {
           if (state.feed && state.feed.feedId === feedId) {
             commit("SET_LOADING");
-            dispatch("FETCH_ARTICLE_LIST_IN_FEED", feedId);
+            dispatch("FETCH_FEED", feedId);
           }
         })
         .catch(err => console.error(err));
@@ -245,7 +249,7 @@ const module: Module<FeedModule, RootState> = {
         .get("/api/rss/item/subscribe", { params: { subscribeId } })
         .then(({ data }) => {
           commit("SET_SELECTED_SUBSCRIPTION", subscribeId);
-          state.articleList = data.data;
+          commit("SET_ARTICLE_LIST", data.data);
           commit("SET_LOADING");
         })
         .catch(err => console.error(err));
@@ -255,7 +259,7 @@ const module: Module<FeedModule, RootState> = {
       Axios.instance
         .get("/api/rss/item/feed", { params: { feedId } })
         .then(({ data }) => {
-          state.articleList = data.data;
+          commit("SET_ARTICLE_LIST", data.data);
           commit("SET_LOADING");
         })
         .catch(err => console.error(err));

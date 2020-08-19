@@ -66,12 +66,12 @@ const feedModule = namespace("feedModule");
 
 @Component
 export default class ArticleListInRss extends Vue {
-  @feedModule.State rssList!: Rss[];
   @feedModule.State articleList!: Article[];
   @feedModule.State isLoading!: boolean;
-  @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Mutation SET_ARTICLE_DETAIL: any;
   @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_ARTICLE_LIST: any;
+  @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
   rssTitle: string | null = null;
 
@@ -82,9 +82,10 @@ export default class ArticleListInRss extends Vue {
     });
   }
 
-  selectArticle(article: Article, idx: number) {
+  async selectArticle(article: Article, idx: number) {
     this.SET_LOADING();
-    this.SELECT_ARTICLE(article);
+    this.SET_ARTICLE_DETAIL();
+    await this.FETCH_ARTICLE_DETAIL(article);
     this.toArticleDetail(idx);
   }
 

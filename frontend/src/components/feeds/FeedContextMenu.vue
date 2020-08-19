@@ -77,14 +77,14 @@
           <v-spacer></v-spacer>
           <v-btn
             text
-            color="primary"
+            color="error"
             style="font-weight: bold"
             @click="deleteFeed"
             >삭제</v-btn
           >
           <v-btn
             text
-            color="error"
+            color="primary"
             style="font-weight: bold"
             @click="deleteModal = false"
             >취소</v-btn

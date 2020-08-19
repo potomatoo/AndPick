@@ -28,14 +28,14 @@
         class="px-6 sidebar-addrss"
         color="rgb(223, 50, 119)"
       >
-        <v-list-item class="px-2">
-          <v-list-item-icon
-            class="ml-10"
-            style="font-family: 'Do Hyeon', sans-serif;"
-          >
-            <v-icon left>mdi-plus-box-outline</v-icon>채널 구독
-          </v-list-item-icon>
-        </v-list-item>
+        <v-list-item-icon>
+          <v-icon left>mdi-plus-box-outline</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title
+            style="font-size: 18px; font-family: 'Do Hyeon', sans-serif;"
+            >채널 구독</v-list-item-title
+        </v-list-item-content>
       </v-list-item>
     </v-list>
   </div>

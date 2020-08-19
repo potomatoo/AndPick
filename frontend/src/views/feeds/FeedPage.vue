@@ -25,7 +25,11 @@
     <!-- 기사 리스트 -->
     <v-container v-if="!articleList.length" class="text-center">
       <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
-      <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
+      <h4
+        v-if="feed"
+        class="mt-10"
+        style="font-family: 'Do Hyeon', sans-serif;"
+      >
         "{{ feed.feedName }}"의 첫 번째 채널을 구독해주세요!
       </h4>
 
@@ -87,9 +91,10 @@ export default class FeedPage extends Vue {
   @feedModule.State articleList!: Article[];
   @feedModule.State feed!: FeedList;
   @feedModule.State isLoading!: boolean;
-  @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Mutation SET_ARTICLE_DETAIL: any;
   @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_FEED!: any;
+  @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
@@ -104,9 +109,10 @@ export default class FeedPage extends Vue {
     });
   }
 
-  selectArticle(article: Article, idx: number) {
+  async selectArticle(article: Article, idx: number) {
     this.SET_LOADING();
-    this.SELECT_ARTICLE(article);
+    this.SET_ARTICLE_DETAIL(article);
+    await this.FETCH_ARTICLE_DETAIL(article);
     this.toArticleDetail(idx);
   }
 

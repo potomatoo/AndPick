@@ -12,7 +12,19 @@
     </v-container>
     <v-divider class="mt-0"></v-divider>
 
-    <div class="ml-2">
+    <div class="ml-2" v-if="!postDirList.length">
+      <div style="font-size: 50px">
+        <p>Mypage에서 폴더를 생성하고 이용해주시기 바랍니다.</p>
+      </div>
+
+      <div>
+        <p>
+          폴더를 생성한 후에 확장프로그램 아이콘을 눌러 바로 사용가능합니다!
+        </p>
+      </div>
+    </div>
+
+    <div class="ml-2" v-if="postDirList.length">
       <v-list>
         <v-list-item-group>
           <v-list-item
@@ -46,6 +58,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Post } from "../../store/MypageInterface";
 import router from "../../router";
+import CreateFolder from "../../components/pages/CreateFolder.vue";
 
 const mypageModule = namespace("mypageModule");
 

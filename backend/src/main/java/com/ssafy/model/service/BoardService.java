@@ -3,6 +3,7 @@ package com.ssafy.model.service;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Board;
+import com.ssafy.model.dto.News;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 
@@ -17,5 +18,7 @@ public interface BoardService {
 	public BasicResponse updateBoard(User user, Board board);
 
 	public BasicResponse deleteBoard(User user, Board board);
+
+	public BasicResponse copyNews(News news);
 
 }

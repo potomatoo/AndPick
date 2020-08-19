@@ -10,10 +10,13 @@
           <v-chip
             class="ma-2 category-chip"
             @click="selectAll($event)"
-            color="green lighten-3"
+            color="rgb(30, 132, 127)"
+            text-color="white"
           >
             #All
-            <v-avatar right class="white">{{ rssAllCount }}</v-avatar>
+            <v-avatar right class="white black--text">{{
+              rssAllCount
+            }}</v-avatar>
           </v-chip>
         </div>
         <div v-for="category in categoryList" :key="category.categoryId">
@@ -22,7 +25,7 @@
             @click="selectCategory(category.categoryName, $event)"
           >
             #{{ category.categoryName }}
-            <v-avatar right class="white">
+            <v-avatar right class="white black--text">
               {{ category.count }}
             </v-avatar>
           </v-chip>
@@ -49,18 +52,32 @@ export default class RssCategory extends Vue {
   selectCategory(categoryName: string, $event: MouseEvent) {
     const chips = document.querySelectorAll(".category-chip");
     if (chips.length) {
-      chips.forEach(el => el.classList.remove("green", "lighten-3"));
+      chips.forEach(el => {
+        el.removeAttribute("style");
+        el.classList.remove("white--text");
+      });
     }
-    ($event.currentTarget as HTMLElement).classList.add("green", "lighten-3");
+    ($event.currentTarget as HTMLElement).setAttribute(
+      "style",
+      "background-color: rgb(30, 132, 127); border-color: rgb(30, 132, 127);"
+    );
+    ($event.currentTarget as HTMLElement).classList.add("white--text");
     this.FETCH_SEARCH_CATEGORY(categoryName);
   }
 
   selectAll($event: MouseEvent) {
     const chips = document.querySelectorAll(".category-chip");
     if (chips.length) {
-      chips.forEach(el => el.classList.remove("green", "lighten-3"));
+      chips.forEach(el => {
+        el.removeAttribute("style");
+        el.classList.remove("white--text");
+      });
     }
-    ($event.currentTarget as HTMLElement).classList.add("green", "lighten-3");
+    ($event.currentTarget as HTMLElement).setAttribute(
+      "style",
+      "background-color: rgb(30, 132, 127); border-color: rgb(30, 132, 127);"
+    );
+    ($event.currentTarget as HTMLElement).classList.add("white--text");
     this.FETCH_RSS();
   }
 }

@@ -26,6 +26,8 @@ public interface RssService {
 
 	public BasicResponse findByCategoryNameLike(String categoryName);
 
+	public BasicResponse findByRssNameLike(String rssName);
+
 	public BasicResponse findMain();
 
 	public BasicResponse findCount();

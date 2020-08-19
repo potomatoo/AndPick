@@ -338,32 +338,35 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    SAVE_IN_BOARD({ dispatch }, { boardId, article, from }) {
-      let data = {};
-      console.log(article, boardId);
-      if (from) {
-        data = {
-          pubDate: new Date(article.newsDate),
-          description: article.newsDescription,
-          link: article.newsLink,
-          title: article.newsTitle,
-          rssTitle: article.rssTitle,
-          subscribeName: article.subscribeName
-        };
-      } else {
-        data = {
-          pubDate: new Date(article.pubDate) || new Date(),
-          description: article.description.substr(0, 190),
-          link: article.link,
-          title: article.title,
-          rssTitle: article.rssTitle,
-          subscribeName: article.subscribeName
-        };
-      }
-      console.log(data);
+    SAVE_IN_BOARD({ dispatch }, { boardId, article }) {
+      const data = {
+        pubDate: new Date(article.pubDate) || new Date(),
+        description: article.description,
+        link: article.link,
+        title: article.title,
+        rssTitle: article.rssTitle,
+        subscribeName: article.subscribeName
+      };
 
       Axios.instance
-        .post("/api/news/save", data, { params: { boardId } })
+        .post("/api/news/save", article, { params: { boardId } })
+        .then(({ data }) => {
+          dispatch("FETCH_BOARD_LIST");
+        })
+        .catch(err => console.error(err));
+    },
+
+    COPY_IN_BOARD({ dispatch }, { boardId, article }) {
+      const data = {
+        newsDate: new Date(article.newsDate) || new Date(),
+        newsDescription: article.newsDescription,
+        newsLink: article.newsLink,
+        newsTitle: article.newsTitle,
+        newsId: article.newsId,
+        userNo: article.userNo
+      };
+      Axios.instance
+        .post("/api/board/copy", data, { params: { boardId } })
         .then(({ data }) => {
           dispatch("FETCH_BOARD_LIST");
         })

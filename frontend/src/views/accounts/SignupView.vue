@@ -1,6 +1,10 @@
 <template>
   <div class="container my-5" style="width: 400px">
-    <h1>Signup</h1>
+    <h1
+      style="font-family: 'Do Hyeon', sans-serif; margin-left: 130px; color: #1e847f"
+    >
+      Signup
+    </h1>
     <div class="form-group">
       <input
         v-model.trim="$v.signupData.userId.$model"
@@ -11,7 +15,7 @@
         @blur.prevent="emailForm(signupData.userId)"
         :class="{
           'is-invalid': $v.signupData.userId.$error,
-          'is-valid': !$v.signupData.userId.$invalid,
+          'is-valid': !$v.signupData.userId.$invalid
         }"
       />
 
@@ -34,7 +38,7 @@
         placeholder="닉네임"
         :class="{
           'is-invalid': $v.signupData.userName.$error,
-          'is-valid': !$v.signupData.userName.$invalid,
+          'is-valid': !$v.signupData.userName.$invalid
         }"
       />
       <div class="invalid-feedback">
@@ -61,7 +65,7 @@
         placeholder="비밀번호"
         :class="{
           'is-invalid': $v.signupData.userPassword.$error,
-          'is-valid': !$v.signupData.userPassword.$invalid,
+          'is-valid': !$v.signupData.userPassword.$invalid
         }"
       />
       <div class="invalid-feedback">
@@ -88,7 +92,7 @@
           'is-valid':
             signupData.userPassword != null
               ? !$v.signupData.userPasswordCheck.$invalid
-              : null,
+              : null
         }"
       />
       <div class="invalid-feedback">
@@ -103,13 +107,14 @@
     </div>
     <div>
       <v-btn
+        class="white--text"
         style="width: 100%"
         large
-        color="success"
+        color="#1e847f"
         @click.prevent="submitForm"
         @keyup.enter="submitForm"
-        >회원가입</v-btn
-      >
+        ><b>회원가입</b>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -122,7 +127,7 @@ import {
   minLength,
   maxLength,
   email,
-  sameAs,
+  sameAs
 } from "vuelidate/lib/validators";
 
 interface SignupData {
@@ -135,7 +140,7 @@ interface SignupData {
 
 @Component({
   methods: {
-    ...mapActions(["signup", "checkId"]),
+    ...mapActions(["signup", "checkId"])
   },
   validations: {
     signupData: {
@@ -146,7 +151,7 @@ interface SignupData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,5}$/i;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
@@ -159,23 +164,23 @@ interface SignupData {
           } else {
             return true;
           }
-        },
+        }
       },
       userName: {
         required,
         minLength: minLength(2),
-        maxLength: maxLength(20),
+        maxLength: maxLength(20)
       },
       userPassword: {
         required,
-        minLength: minLength(4),
+        minLength: minLength(4)
       },
       userPasswordCheck: {
         minLength: minLength(4),
-        sameAsPassword: sameAs("userPassword"),
-      },
-    },
-  },
+        sameAsPassword: sameAs("userPassword")
+      }
+    }
+  }
 })
 export default class SignupView extends Vue {
   signupData: SignupData = {
@@ -183,7 +188,7 @@ export default class SignupView extends Vue {
     userName: null,
     userPassword: null,
     userPasswordCheck: null,
-    userType: 0,
+    userType: 0
   };
 
   @Watch("signupData.userId")

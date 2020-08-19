@@ -28,9 +28,8 @@ export default class Cover extends Vue {}
 
 <style>
 .back {
-  background-image: url("https://images.unsplash.com/photo-1556888335-95371827d5fb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1789&q=80");
   background-size: 100% 100%;
-  background-color: #17212c;
+  background-color: #1e847f;
   height: 500px;
   margin: 1px;
   overflow: auto;

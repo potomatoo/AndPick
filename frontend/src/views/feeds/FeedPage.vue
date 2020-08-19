@@ -91,9 +91,10 @@ export default class FeedPage extends Vue {
   @feedModule.State articleList!: Article[];
   @feedModule.State feed!: FeedList;
   @feedModule.State isLoading!: boolean;
-  @feedModule.Mutation SELECT_ARTICLE: any;
+  @feedModule.Mutation SET_ARTICLE_DETAIL: any;
   @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_FEED!: any;
+  @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
@@ -108,9 +109,10 @@ export default class FeedPage extends Vue {
     });
   }
 
-  selectArticle(article: Article, idx: number) {
+  async selectArticle(article: Article, idx: number) {
     this.SET_LOADING();
-    this.SELECT_ARTICLE(article);
+    this.SET_ARTICLE_DETAIL(article);
+    await this.FETCH_ARTICLE_DETAIL(article);
     this.toArticleDetail(idx);
   }
 

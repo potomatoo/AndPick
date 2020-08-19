@@ -66,7 +66,6 @@ const feedModule = namespace("feedModule");
 
 @Component
 export default class ArticleListInRss extends Vue {
-  @feedModule.State rssList!: Rss[];
   @feedModule.State articleList!: Article[];
   @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SET_ARTICLE_DETAIL: any;

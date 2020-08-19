@@ -1,8 +1,7 @@
 <template>
   <div class="detail">
     <div class="outline feed row">
-      <div class="col-1"></div>
-      <div class="inline col-4">
+      <div class="inline col-4 offset-2">
         <transition name="slide-feed">
           <h2 v-show="showFeed">피드</h2>
         </transition>
@@ -16,18 +15,16 @@
           </p>
         </transition>
       </div>
-      <div class="col-1"></div>
-      <div class="col-6">
-        <img class="detail-image" src="@/assets/coverFeed.jpg" />
+      <div class="col-5">
+        <img class="detail-image" src="@/assets/coverFeed.png" />
       </div>
     </div>
 
     <div class="outline board row">
-      <div class="col-6">
-        <img class="detail-image" src="@/assets/coverBoard.jpg" />
+      <div class="col-5 offset-1">
+        <img class="detail-image board-image" src="@/assets/coverBoard.png" />
       </div>
-      <div class="col-1"></div>
-      <div class="inline col-4">
+      <div class="inline col-5">
         <transition name="slide-feed">
           <h2 v-show="showBoard">보드</h2>
         </transition>
@@ -41,12 +38,10 @@
           </p>
         </transition>
       </div>
-      <div class="col-1"></div>
     </div>
 
     <div class="outline mypage row">
-      <div class="col-1"></div>
-      <div class="inline col-4">
+      <div class="inline col-4 offset-2">
         <transition name="slide-feed">
           <h2 v-show="showMy">마이페이지</h2>
         </transition>
@@ -60,9 +55,8 @@
           </p>
         </transition>
       </div>
-      <div class="col-1"></div>
-      <div class="col-6">
-        <img class="detail-image" src="@/assets/coverMypage.jpg" />
+      <div class="col-5">
+        <img class="detail-image" src="@/assets/coverMypage.png" />
       </div>
     </div>
   </div>
@@ -123,9 +117,12 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 60%;
+  width: 80%;
   height: 100%;
   /* text-overflow: clip; */
+}
+.board-image {
+  left: 10%;
 }
 .slide-feed-enter-active {
   transition: all 2s ease;

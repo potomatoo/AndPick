@@ -200,14 +200,15 @@ export default {
   position: absolute;
 }
 .one-feed {
+  background-color: black;
   background-image: url("../../assets/feed4.png");
   background-size: cover;
   transform: scale(0.4);
   left: -55%;
   z-index: 1;
-  border: black;
 }
 .two-feed {
+  background-color: black;
   background-image: url("../../assets/feed5.png");
   background-size: cover;
   transform: scale(0.7);
@@ -215,6 +216,7 @@ export default {
   z-index: 2;
 }
 .thr-feed {
+  background-color: black;
   background-image: url("../../assets/feed1.png");
   background-size: cover;
   transform: scale(1.15);
@@ -229,6 +231,7 @@ export default {
   z-index: 2;
 }
 .fiv-feed {
+  background-color: black;
   background-image: url("../../assets/feed3.png");
   background-size: cover;
   transform: scale(0.4);

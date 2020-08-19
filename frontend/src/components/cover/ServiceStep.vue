@@ -118,11 +118,6 @@ export default {
   font-family: "Black Han Sans", sans-serif;
   /* font-family: "Jua", sans-serif; */
 }
-
-/* .step-text:hover {
-  font-size: 50px;
-} */
-
 .mdi-step {
   font-size: 33px;
 }

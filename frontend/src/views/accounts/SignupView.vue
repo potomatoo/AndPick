@@ -11,7 +11,7 @@
         @blur.prevent="emailForm(signupData.userId)"
         :class="{
           'is-invalid': $v.signupData.userId.$error,
-          'is-valid': !$v.signupData.userId.$invalid,
+          'is-valid': !$v.signupData.userId.$invalid
         }"
       />
 
@@ -34,7 +34,7 @@
         placeholder="닉네임"
         :class="{
           'is-invalid': $v.signupData.userName.$error,
-          'is-valid': !$v.signupData.userName.$invalid,
+          'is-valid': !$v.signupData.userName.$invalid
         }"
       />
       <div class="invalid-feedback">
@@ -61,7 +61,7 @@
         placeholder="비밀번호"
         :class="{
           'is-invalid': $v.signupData.userPassword.$error,
-          'is-valid': !$v.signupData.userPassword.$invalid,
+          'is-valid': !$v.signupData.userPassword.$invalid
         }"
       />
       <div class="invalid-feedback">
@@ -88,7 +88,7 @@
           'is-valid':
             signupData.userPassword != null
               ? !$v.signupData.userPasswordCheck.$invalid
-              : null,
+              : null
         }"
       />
       <div class="invalid-feedback">
@@ -122,7 +122,7 @@ import {
   minLength,
   maxLength,
   email,
-  sameAs,
+  sameAs
 } from "vuelidate/lib/validators";
 
 interface SignupData {
@@ -135,7 +135,7 @@ interface SignupData {
 
 @Component({
   methods: {
-    ...mapActions(["signup", "checkId"]),
+    ...mapActions(["signup", "checkId"])
   },
   validations: {
     signupData: {
@@ -159,23 +159,23 @@ interface SignupData {
           } else {
             return true;
           }
-        },
+        }
       },
       userName: {
         required,
         minLength: minLength(2),
-        maxLength: maxLength(20),
+        maxLength: maxLength(20)
       },
       userPassword: {
         required,
-        minLength: minLength(4),
+        minLength: minLength(8)
       },
       userPasswordCheck: {
-        minLength: minLength(4),
-        sameAsPassword: sameAs("userPassword"),
-      },
-    },
-  },
+        minLength: minLength(8),
+        sameAsPassword: sameAs("userPassword")
+      }
+    }
+  }
 })
 export default class SignupView extends Vue {
   signupData: SignupData = {
@@ -183,7 +183,7 @@ export default class SignupView extends Vue {
     userName: null,
     userPassword: null,
     userPasswordCheck: null,
-    userType: 0,
+    userType: 0
   };
 
   @Watch("signupData.userId")

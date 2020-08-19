@@ -21,7 +21,7 @@ public interface PostService {
 
 	public BasicResponse findByPostId(User user, Post post);
 
-	public BasicResponse updatePost(User user, Post post, String[] tags);
+	public BasicResponse updatePost(User user, Post post, List<PostTag> tags);
 
 	public BasicResponse deletePost(User user, Post post);
 

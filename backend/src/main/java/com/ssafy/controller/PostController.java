@@ -143,10 +143,7 @@ public class PostController {
 	}
 
 	@PutMapping(value = "/api/post/update")
-	public Object updatePost(@RequestHeader("Authorization") String jwtToken, @RequestParam("postDirId") long postDirId,
-			@RequestParam("postId") long postId, @RequestParam("postTitle") String postTitle,
-			@RequestParam("postContent") String postContent,
-			@RequestParam(name = "tagList", required = false) String[] tags) {
+	public Object updatePost(@RequestHeader("Authorization") String jwtToken, @RequestBody Post post) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -158,23 +155,23 @@ public class PostController {
 			return response;
 		}
 
-		if (postTitle == null || postContent == null) {
+		if (post.getPostTitle() == null || post.getPostContent() == null) {
 			result.status = false;
 			result.message = "필수값을 입력하세요.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 			return response;
 		}
 
-		Post post = new Post();
+		Post postDto = new Post();
 
-		post.setPostId(postId);
-		post.setPostDirId(postDirId);
-		post.setPostTitle(postTitle);
-		post.setPostContent(postContent);
-		post.setUserNo(user.getUserNo());
-		post.setPostDate(new Date());
+		postDto.setPostId(post.getPostId());
+		postDto.setPostDirId(post.getPostDirId());
+		postDto.setPostTitle(post.getPostTitle());
+		postDto.setPostContent(post.getPostContent());
+		postDto.setUserNo(user.getUserNo());
+		postDto.setPostDate(new Date());
 
-		result = postService.updatePost(user, post, tags);
+		result = postService.updatePost(user, postDto, post.getTagList());
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

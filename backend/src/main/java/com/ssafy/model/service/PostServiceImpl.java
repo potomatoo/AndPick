@@ -166,7 +166,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public BasicResponse updatePost(User user, Post post, String[] tags) {
+	public BasicResponse updatePost(User user, Post post, List<PostTag> tags) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
@@ -178,9 +178,7 @@ public class PostServiceImpl implements PostService {
 			return result;
 		}
 
-		for (PostTag postTag : checkPost.getTagList()) {
-			postTagRepository.deleteById(postTag.getPostTagId());
-		}
+		postTagRepository.deletePostTagByPostId(post.getPostId());
 
 		PostDetail postDetail = new PostDetail();
 		postDetail.setId(checkPost.getPostContent());
@@ -197,10 +195,10 @@ public class PostServiceImpl implements PostService {
 		post = postRepository.save(post);
 
 		List<PostTag> list = new ArrayList<PostTag>();
-		if (tags != null && tags.length != 0) {
-			for (String tagName : tags) {
+		if (tags != null && tags.size() != 0) {
+			for (PostTag tagName : tags) {
 				Tag tag = new Tag();
-				tag.setTagName(tagName);
+				tag.setTagName(tagName.getTagName());
 
 				tag = tagRepository.save(tag);
 
@@ -234,7 +232,7 @@ public class PostServiceImpl implements PostService {
 			result.message = "사용자 정보가 다릅니다.";
 			return result;
 		}
-
+		postTagRepository.deletePostTagByPostId(post.getPostId());
 		postRepository.delete(post);
 		postDetailRepository.deleteById(post.getPostContent());
 

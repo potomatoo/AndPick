@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.model.dto.Board;
+import com.ssafy.model.dto.News;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.BoardService;
@@ -166,6 +167,33 @@ public class BoardController {
 		board.setBoardId(boardId);
 
 		result = boardService.deleteBoard(user, board);
+
+		if (result.status) {
+			response = new ResponseEntity(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
+	@PostMapping(value = "/api/board/copy")
+	public Object copyBoard(@RequestHeader("Authorization") String jwtToken, @RequestParam("boardId") long boardId,
+			@RequestBody News news) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		news.setBoardId(boardId);
+		news.setNewsId(0);
+		result = boardService.copyNews(news);
 
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);

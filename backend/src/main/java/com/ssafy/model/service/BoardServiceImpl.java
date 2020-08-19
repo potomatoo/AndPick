@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Board;
+import com.ssafy.model.dto.News;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.BoardRepository;
 import com.ssafy.model.repository.NewsRepository;
@@ -130,6 +131,24 @@ public class BoardServiceImpl implements BoardService {
 			result.message = "보드 삭제에 성공하였습니다.";
 		} else {
 			result.message = "보드 삭제에 실패하였습니다.";
+		}
+
+		return result;
+	}
+
+	@Override
+	public BasicResponse copyNews(News news) {
+		// TODO Auto-generated method stub
+
+		BasicResponse result = new BasicResponse();
+
+		result.data = newsRepository.save(news);
+
+		result.status = true;
+		if (result.status) {
+			result.message = "뉴스 이동에 성공하였습니다.";
+		} else {
+			result.message = "뉴스 이동에 실패하였습니다.";
 		}
 
 		return result;

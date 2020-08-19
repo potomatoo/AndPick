@@ -102,7 +102,7 @@ interface LoginData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
@@ -111,7 +111,7 @@ interface LoginData {
       },
       userPassword: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(8)
       }
     }
   }

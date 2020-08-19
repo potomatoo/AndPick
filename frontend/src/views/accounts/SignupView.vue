@@ -173,10 +173,10 @@ interface SignupData {
       },
       userPassword: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(8)
       },
       userPasswordCheck: {
-        minLength: minLength(4),
+        minLength: minLength(8),
         sameAsPassword: sameAs("userPassword")
       }
     }

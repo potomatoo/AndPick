@@ -56,8 +56,7 @@ public class RssParser implements Runnable {
 				Elements description = item.select("description");
 				rssItem.setDescription(Jsoup.parse(description.text()).text());
 				newsDetail.put(rssItem.getLink(), description.text());
-				rssItem.setPubDate(item.select("pubDate").text());
-				//rssItem.setPubDate(new Date(item.select("pubDate").text()));
+				rssItem.setPubDate(new Date(item.select("pubDate").text().replace("KST", "+0900")));
 				rssItem.setRssTitle(this.rssChannel.getTitle());
 				this.rssChannel.addItem(rssItem);
 			}

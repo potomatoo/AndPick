@@ -41,10 +41,7 @@
               </v-col>
               <v-col class="pa-0">
                 <v-list-item-content class="py-0 ml-5">
-                  <p
-                    class="h5 text--primary font-weight-bold rss-title"
-                    @click="selectRss(rss)"
-                  >
+                  <p class="h5 text--primary font-weight-bold">
                     {{ rss.title }}
                   </p>
                   <p class="mt-2 mb-4 rss-link" @click="openWeb(rss.link)">
@@ -58,7 +55,7 @@
                     class="text--primary article-title"
                     v-for="article in rss.items"
                     :key="article.link"
-                    @click="toArticleDetail(article.link)"
+                    @click="toArticleDetail(article)"
                   >
                     - {{ article.title }}
                   </div>
@@ -70,18 +67,20 @@
       </v-col>
       <!-- </v-row> -->
     </v-container>
-    <rss-modal :rssModalActive.sync="rssModalActive" :rss="selectedRss" />
+    <!-- <rss-modal :rssModalActive.sync="rssModalActive" :rss="selectedRss" /> -->
+    <article-detail-modal :modalActive.sync="modalActive" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { RssOnAdd } from "../../store/Feed.interface";
+import { RssOnAdd, Article } from "../../store/Feed.interface";
 
 import RssCategory from "@/components/feeds/RssCategory.vue";
 import RssModal from "@/components/feeds/RssModal.vue";
 import FollowButton from "@/components/feeds/FollowButton.vue";
+import ArticleDetailModal from "@/components/feeds/ArticleDetailModal.vue";
 
 const feedModule = namespace("feedModule");
 
@@ -89,18 +88,22 @@ const feedModule = namespace("feedModule");
   components: {
     RssCategory,
     RssModal,
-    FollowButton
+    FollowButton,
+    ArticleDetailModal
   }
 })
 export default class AddRss extends Vue {
   @feedModule.State rssList!: [];
+  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_ARTICLE_DETAIL: any;
   @feedModule.Action FETCH_RSS: any;
   @feedModule.Action FETCH_CATEGORY_LIST: any;
   @feedModule.Action FETCH_SEARCH_CATEGORY: any;
+  @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
   inputText = "";
 
-  rssModalActive = false;
+  modalActive = false;
 
   selectedRss: RssOnAdd | object = {};
 
@@ -113,8 +116,11 @@ export default class AddRss extends Vue {
     window.open(link);
   }
 
-  toArticleDetail(link: string) {
-    console.log(link);
+  async toArticleDetail(article: Article) {
+    this.SET_LOADING();
+    this.SET_ARTICLE_DETAIL(article);
+    await this.FETCH_ARTICLE_DETAIL(article);
+    this.modalActive = !this.modalActive;
   }
 
   searchRss($event: KeyboardEvent) {
@@ -129,10 +135,10 @@ export default class AddRss extends Vue {
     ($event.target as HTMLElement).blur();
   }
 
-  selectRss(rss: RssOnAdd) {
-    this.selectedRss = rss;
-    this.rssModalActive = !this.rssModalActive;
-  }
+  // selectRss(rss: RssOnAdd) {
+  //   this.selectedRss = rss;
+  //   this.rssModalActive = !this.rssModalActive;
+  // }
 }
 </script>
 
@@ -161,9 +167,5 @@ export default class AddRss extends Vue {
 
 .article-title:hover {
   background-color: #eeeeee;
-}
-
-.rss-title {
-  cursor: pointer;
 }
 </style>

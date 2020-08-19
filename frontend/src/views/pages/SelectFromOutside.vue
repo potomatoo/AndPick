@@ -56,6 +56,7 @@ export default class SelectFromOutside extends Vue {
 
   isLoggedId = this.$store.getters.isLoggedIn;
   scrapData = localStorage.getItem("scrapData");
+  lamda = false;
 
   @Watch("$route", { immediate: true })
   saveLocal() {
@@ -65,7 +66,7 @@ export default class SelectFromOutside extends Vue {
   @Watch("$store.state.JWT")
   stateUpdate() {
     if (this.$store.state.JWT) {
-      console.log("login");
+      this.lamda = true;
     }
   }
 

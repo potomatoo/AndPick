@@ -181,6 +181,13 @@
         <button class="button" style="font-size: 12px" @click="clearContent">
           초기화
         </button>
+        <span style="font-size: 11px; margin-left: 10px"
+          >* 초기화를 실수로 눌렀더라도<img
+            class="icon"
+            src="@/assets/tiptap/icons/undo.svg"
+            style="height: 11px"
+          />아이콘으로 복구 가능합니다.</span
+        >
       </div>
 
       <editor-content class="content" :editor="editor" />
@@ -369,12 +376,19 @@ export default class EditArticle extends Vue {
           });
         }
       } else {
+        const submitTagList = [];
+        this.nowTagList.forEach(element => {
+          const oneTagList = {
+            tagName: element
+          };
+          submitTagList.push(oneTagList);
+        });
         this.UPDATE_POST({
           postContent: this.html,
           postDirId: this.$route.params.postDirId || this.post.postDirId,
           postId: Number(this.$route.params.postId),
           postTitle: this.title,
-          tagList: this.nowTagList
+          tagList: submitTagList
         });
         this.snackbar = true;
         if (

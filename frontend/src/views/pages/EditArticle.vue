@@ -253,6 +253,7 @@ export default class EditArticle extends Vue {
   @mypageModule.State post;
   @mypageModule.Mutation SELECT_POST;
   @mypageModule.Action FETCH_POST;
+  @mypageModule.Action FETCH_POSTDIR;
   @mypageModule.Action ADD_POST;
   @mypageModule.Action UPDATE_POST;
 
@@ -388,6 +389,7 @@ export default class EditArticle extends Vue {
         }
       }
       this.$emit("save");
+      this.FETCH_POSTDIR(this.$route.params.postDirId);
     } else {
       this.snackbar2 = true;
     }

@@ -176,10 +176,12 @@ const module: Module<MypageModule, RootState> = {
         .put("/api/postdir/update", null, postDirData)
         .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
+          console.log("FETCH_POSTDIR_LIST");
         })
         .then(() => {
-          if (state.postDirId === postDirId) {
+          if (Number(state.postDirId) === postDirId) {
             dispatch("FETCH_POSTDIR", postDirId);
+            console.log("FETCH_POSTDIR");
           }
         })
         .catch(err => console.error(err));

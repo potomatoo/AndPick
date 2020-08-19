@@ -44,6 +44,7 @@
         indeterminate
         size="80"
         width="10"
+        color="rgb(236, 193, 156)"
       ></v-progress-circular>
     </v-overlay>
   </div>

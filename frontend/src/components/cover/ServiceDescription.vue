@@ -24,8 +24,7 @@ export default {};
 
 <style scoped>
 .service-des {
-  display: flex;
-  align-items: center;
+  margin-top: 70px;
 }
 .title1 {
   font-size: 70px;

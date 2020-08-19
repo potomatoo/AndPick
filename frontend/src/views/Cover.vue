@@ -30,7 +30,7 @@ export default class Cover extends Vue {}
 .back {
   background-size: 100% 100%;
   background-color: #1e847f;
-  height: 500px;
+  height: 600px;
   margin: 1px;
   overflow: auto;
 }

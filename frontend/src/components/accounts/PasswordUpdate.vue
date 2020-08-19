@@ -89,15 +89,15 @@ interface UpdateData {
     updateData: {
       userPassword: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(8)
       },
       changePassword: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(8)
       },
       changePasswordCheck: {
         required,
-        minLength: minLength(4),
+        minLength: minLength(8),
         sameAsPassword: sameAs("changePassword")
       }
     }

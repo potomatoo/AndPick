@@ -25,7 +25,7 @@
       </router-link>
       <div v-if="isLoggedIn" class="mt-1 d-flex">
         <div class="cheer mt-2">
-          <b>{{ userName }}</b> 님의 취업성공을 응원합니다!
+          <b>{{ userName }}</b> 님의 밝은 미래를 응원합니다!
         </div>
         <div class="ml-5">
           <v-menu offset-y>
@@ -77,10 +77,10 @@ export default class AppNavbar extends Vue {
     if (this.$store.state.JWT) {
       Axios.instance
         .get("/api/user/detail")
-        .then(res => {
+        .then((res) => {
           this.userName = res.data.data.userName;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }

@@ -2,6 +2,7 @@ package com.ssafy.util;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jsoup.Connection;
@@ -45,25 +46,29 @@ public class RssParser implements Runnable {
 				this.rssChannel.setImg("");
 			}
 			Elements items = document.select("item");
+			HashMap<String, String> newsDetail = new HashMap<String, String>();
+
 			this.rssChannel.itemInit();
 			for (Element item : items) {
 				RssItem rssItem = new RssItem();
 				rssItem.setTitle(item.select("title").text());
+				rssItem.setLink(item.select("link").text());
 				Elements description = item.select("description");
 				rssItem.setDescription(Jsoup.parse(description.text()).text());
-
-				rssItem.setLink(item.select("link").text());
+				newsDetail.put(rssItem.getLink(), description.text());
 				rssItem.setPubDate(item.select("pubDate").text());
 				rssItem.setRssTitle(this.rssChannel.getTitle());
 				this.rssChannel.addItem(rssItem);
 			}
 
 			redisTemplate.opsForValue().set(this.link, this.rssChannel);
-			List<RssItem> sub = new ArrayList();
+			redisTemplate.opsForValue().set(this.rssChannel.getTitle(), newsDetail);
+
+			List<RssItem> sub = new ArrayList<RssItem>();
 			try {
-				sub = new ArrayList(this.rssChannel.getItems().subList(0, 3));
+				sub = new ArrayList<RssItem>(this.rssChannel.getItems().subList(0, 3));
 			} catch (Exception e) {
-				sub = new ArrayList(this.rssChannel.getItems().subList(0, this.rssChannel.getItems().size()));
+				sub = new ArrayList<RssItem>(this.rssChannel.getItems().subList(0, this.rssChannel.getItems().size()));
 			}
 			this.rssChannel.setItems(sub);
 			redisTemplate.opsForValue().set("limit " + this.link, this.rssChannel);
@@ -80,7 +85,7 @@ public class RssParser implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 		try {
 			while (true) {
 				this.parse();
@@ -91,7 +96,7 @@ public class RssParser implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

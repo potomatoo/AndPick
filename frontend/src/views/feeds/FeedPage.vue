@@ -54,13 +54,11 @@
           >
             <v-list-item-content class="mt-3">
               <div class="h4">{{ article.title }}</div>
-              <div class="sumtitle-1 text--secondary">
-                {{ article.pubDate }}
+              <div class="text-caption text--secondary">
+                {{ article.rssTitle }} /
+                {{ setDate(article.pubDate) }}
               </div>
-              <div class="sumtitle-1 text--secondary">
-                {{ article.rssTitle }}
-              </div>
-              <v-list-item-subtitle>
+              <v-list-item-subtitle class="mt-2">
                 {{ article.description }}
               </v-list-item-subtitle>
             </v-list-item-content>
@@ -119,6 +117,10 @@ export default class FeedPage extends Vue {
 
   addRss() {
     this.$router.push({ name: "AddRss" });
+  }
+
+  setDate(date: string) {
+    return date.slice(0, 10) + " " + date.slice(11, 16);
   }
 }
 </script>

@@ -10,7 +10,9 @@
         <h3 class="mt-10 mb-0" style="font-family: 'Do Hyeon', sans-serif;">
           {{ news.newsTitle }}
         </h3>
-        <div class="text-caption text--secondary">{{ news.newsDate }}</div>
+        <div class="text-caption text--secondary">
+          {{ setDate(news.newsDate) }}
+        </div>
       </v-container>
 
       <v-container>
@@ -122,6 +124,10 @@ export default class BoardArticleDetail extends Vue {
       name: "NewScrapInBoard",
       params: { postDirId: postDirId.toString() }
     });
+  }
+
+  setDate(date: string) {
+    return date.slice(0, 10) + " " + date.slice(11, 16);
   }
 
   // @Watch("$route")

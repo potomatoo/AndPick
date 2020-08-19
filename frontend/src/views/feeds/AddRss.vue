@@ -88,7 +88,7 @@ import { namespace } from "vuex-class";
 import { RssOnAdd, Article } from "../../store/Feed.interface";
 
 import RssCategory from "@/components/feeds/RssCategory.vue";
-import RssModal from "@/components/feeds/RssModal.vue";
+// import RssModal from "@/components/feeds/RssModal.vue";
 import FollowButton from "@/components/feeds/FollowButton.vue";
 import ArticleDetailModal from "@/components/feeds/ArticleDetailModal.vue";
 
@@ -97,7 +97,6 @@ const feedModule = namespace("feedModule");
 @Component({
   components: {
     RssCategory,
-    RssModal,
     FollowButton,
     ArticleDetailModal
   }

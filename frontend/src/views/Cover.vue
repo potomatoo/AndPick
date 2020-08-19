@@ -2,7 +2,6 @@
   <div>
     <div class="back row py-5">
       <ServiceDescription />
-      <RssImage />
     </div>
     <ServiceStep />
     <UserInformation />

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-6 mt-5 d-flex justify-content-center"></div>
+  <div class="col-md-6 mt-5 d-flex justify-content-center"></div>
 </template>
 
 <script>

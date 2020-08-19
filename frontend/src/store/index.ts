@@ -86,7 +86,7 @@ const store: StoreOptions<RootState> = {
         })
         .then((res) => {
           alert("회원가입이 완료되었습니다.");
-          router.push("/");
+          router.push("/cover");
         })
         .catch((err) => {
           console.log("err", err);
@@ -144,7 +144,10 @@ const store: StoreOptions<RootState> = {
           alert("비밀번호가 변경되었습니다.");
           router.push("/");
         })
-        .catch((err) => console.log("err", err));
+        .catch((err) => {
+          alert("회원정보가 옳지 않습니다.");
+          console.log("err", err);
+        });
     },
 
     deleteUser({ getters, commit }) {

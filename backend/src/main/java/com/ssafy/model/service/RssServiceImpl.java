@@ -206,6 +206,24 @@ public class RssServiceImpl implements RssService {
 	}
 
 	@Override
+	public BasicResponse findByRssNameLike(String rssName) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+		String likeQuery = "%" + rssName + "%";
+		result.data = rssRepository.findByRssNameLike(likeQuery);
+		System.out.println(result.data);
+		if (result.data == null) {
+			result.status = false;
+			result.message = "RSS 조회에 실패하였습니다.";
+			return result;
+		} else {
+			result.status = true;
+			result.message = "RSS 조회에 성공하였습니다.";
+			return result;
+		}
+	}
+
+	@Override
 	public BasicResponse findMain() {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();

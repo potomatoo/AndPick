@@ -307,6 +307,37 @@ public class RssController {
 		return response;
 	}
 
+	@GetMapping("/api/rss/find/channel/rsslike")
+	public Object findLikeNameRssChannel(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("rssName") String rssName) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		result = rssService.findByRssNameLike(rssName);
+
+		if (result.status) {
+			List<Object> list = new ArrayList<>();
+			for (Rss rss : (List<Rss>) result.data) {
+				list.add(redisTemplate.opsForValue().get("limit " + rss.getRssUrl()));
+			}
+			result.data = list;
+			result.message = "rss 저장이 완료되었습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "rss채널 조회에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+		return response;
+	}
+
 	@GetMapping("/api/rss/main")
 	public Object findLikeCategoryRssChannel(@RequestHeader("Authorization") String jwtToken) {
 		ResponseEntity response = null;

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page mt-10 mb-15">
+  <div class="main-page mt-5 mb-15">
     <v-container>
       <v-row>
         <v-col xs="12" sm="12" md="7" lg="7" xl="7">
@@ -11,7 +11,7 @@
             class="main-description"
             style="font-weight: bold; margin-top: 50px"
           >
-            &PICK은 IT업계를 준비하는 사람들을 위한 웹 서비스입니다.<br />
+            &PICK은 나만의 스크랩을 위한 웹 서비스입니다.<br />
             양질의 뉴스기사 및 기술블로그의 글을 실시간으로 제공합니다.<br />
             <br />
             나아가 다양한 웹 사이트에서 자료를 가져와 생각을 더하고 싶다면<br />

@@ -11,24 +11,7 @@
     </div>
     <v-divider></v-divider>
 
-    <router-link
-      :to="{ name: 'NewPost', params: { postDirId: $route.params.postDirId } }"
-      class="router-link"
-    >
-      <v-btn
-        small
-        outlined
-        color="secondary"
-        v-if="postDir.postList && postDir.postList.length"
-      >
-        <v-icon left>mdi-plus</v-icon>새 글
-      </v-btn>
-    </router-link>
-
-    <div
-      v-if="postDir.postList && !postDir.postList.length"
-      class="text-center"
-    >
+    <v-container v-if="!postDir.postList.length" class="text-center">
       <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
       <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
         "{{ postDir.postDirName }}"의 첫 번째 글을 작성해주세요!
@@ -49,9 +32,20 @@
         </router-link>
         을 클릭하여 시작하세요.
       </p>
-    </div>
+    </v-container>
 
-    <div class="container">
+    <div class="container" v-else-if="postDir.postList.length">
+      <router-link
+        :to="{
+          name: 'NewPost',
+          params: { postDirId: $route.params.postDirId }
+        }"
+        class="router-link"
+      >
+        <v-btn small outlined color="secondary">
+          <v-icon left>mdi-plus</v-icon>새 글
+        </v-btn>
+      </router-link>
       <div class="row">
         <v-flex
           v-for="post in postDir.postList"
@@ -142,7 +136,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class FolderMain extends Vue {
-  @mypageModule.State postDir!: [];
+  @mypageModule.State postDir!: Post[] | null;
   @mypageModule.State postDirId!: number | null;
   @mypageModule.State postDirName!: string | null;
   @mypageModule.Mutation SELECT_POSTDIR: any;

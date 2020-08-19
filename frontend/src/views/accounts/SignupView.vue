@@ -1,6 +1,10 @@
 <template>
   <div class="container my-5" style="width: 400px">
-    <h1>Signup</h1>
+    <h1
+      style="font-family: 'Do Hyeon', sans-serif; margin-left: 130px; color: #1e847f"
+    >
+      Signup
+    </h1>
     <div class="form-group">
       <input
         v-model.trim="$v.signupData.userId.$model"
@@ -103,13 +107,14 @@
     </div>
     <div>
       <v-btn
+        class="white--text"
         style="width: 100%"
         large
-        color="success"
+        color="#1e847f"
         @click.prevent="submitForm"
         @keyup.enter="submitForm"
-        >회원가입</v-btn
-      >
+        ><b>회원가입</b>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -146,7 +151,7 @@ interface SignupData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,5}$/i;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);

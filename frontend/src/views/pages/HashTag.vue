@@ -21,7 +21,7 @@
                 :to="{
                   name: 'EditPost',
                   params: {
-                    postDirId: $route.params.postDirId,
+                    postDirId: post.postDirId,
                     postId: post.postId
                   }
                 }"

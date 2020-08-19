@@ -35,7 +35,10 @@ const module: Module<MypageModule, RootState> = {
       showCtx: false,
       x: 0,
       y: 0
-    }
+    },
+    rssChannel: 0,
+    saveNews: 0,
+    users: 0
   },
 
   getters: {},
@@ -89,6 +92,17 @@ const module: Module<MypageModule, RootState> = {
     SET_POST_CONTEXT_MENU(state, ctx) {
       state.postContextMenu.showCtx = false;
       state.postContextMenu = ctx;
+    },
+
+    SET_MAINPAGE_COUNT(state) {
+      Axios.instance
+        .get("api/public/count")
+        .then(({ data }) => {
+          state.rssChannel = data.data.rssCount;
+          state.saveNews = data.data.subscribeCount;
+          state.users = data.data.userCount;
+        })
+        .catch(err => console.error(err));
     }
   },
 

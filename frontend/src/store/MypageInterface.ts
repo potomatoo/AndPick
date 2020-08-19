@@ -47,4 +47,7 @@ export interface MypageModule {
   postDirName: string | null;
   postDirContextMenu: Context;
   postContextMenu: Context;
+  rssChannel: number;
+  saveNews: number;
+  users: number;
 }

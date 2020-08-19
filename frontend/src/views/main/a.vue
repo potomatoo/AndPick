@@ -63,7 +63,7 @@
             :value="value"
             color="#1e847f"
           >
-            {{ saveNews }}
+            {{ saveNew }}
           </v-progress-circular>
           <div class="d-flex justify-content-center">
             <b>저장 기사</b>
@@ -78,7 +78,7 @@
             :value="value"
             color="#000000"
           >
-            {{ users }}
+            {{ user }}
           </v-progress-circular>
           <div class="d-flex justify-content-center">
             <b>사용자</b>
@@ -94,20 +94,29 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 const feedModule = namespace("feedModule");
+const mypageModule = namespace("mypageModule");
 
 @Component
 export default class A extends Vue {
+  @mypageModule.State rssChannel!: number;
+  @mypageModule.State saveNews!: number;
+  @mypageModule.State users!: number;
+  @mypageModule.Mutation SET_MAINPAGE_COUNT: any;
+
   isLoggedIn = this.$store.getters.isLoggedIn;
 
   interval = {};
   value = 0;
+
   channel = 0;
-  saveNews = 0;
-  users = 0;
+  saveNew = 0;
+  user = 0;
 
   goExtension() {
-    window.location.href =
-      "https://chrome.google.com/webstore/detail/pickclipper/bggenjcdpkngebimckblkeeiciegaenk?hl=ko&";
+    window.open(
+      "https://chrome.google.com/webstore/detail/pickclipper/bggenjcdpkngebimckblkeeiciegaenk?hl=ko&",
+      "_blank"
+    );
   }
 
   @Watch("isLoggedIn", { immediate: true })
@@ -117,16 +126,21 @@ export default class A extends Vue {
     this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
   }
 
-  created() {
+  @Watch("$route", { immediate: true })
+  setCount() {
+    this.SET_MAINPAGE_COUNT();
+  }
+
+  mounted() {
     this.interval = setInterval(() => {
       if (this.value < 100) {
         this.value += 10;
         return;
       }
       if (this.value >= 100) {
-        this.channel = 12314;
-        this.saveNews = 12455;
-        this.users = 8197;
+        this.channel = this.rssChannel;
+        this.saveNew = this.saveNews;
+        this.user = this.users;
       }
     }, 100);
     return;

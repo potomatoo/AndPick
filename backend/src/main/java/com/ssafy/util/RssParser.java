@@ -1,7 +1,7 @@
 package com.ssafy.util;
 
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,12 +57,13 @@ public class RssParser implements Runnable {
 				rssItem.setDescription(Jsoup.parse(description.text()).text());
 				newsDetail.put(rssItem.getLink(), description.text());
 				rssItem.setPubDate(item.select("pubDate").text());
+				//rssItem.setPubDate(new Date(item.select("pubDate").text()));
 				rssItem.setRssTitle(this.rssChannel.getTitle());
 				this.rssChannel.addItem(rssItem);
 			}
 
 			redisTemplate.opsForValue().set(this.link, this.rssChannel);
-			redisTemplate.opsForValue().set(this.rssChannel.getTitle(), newsDetail);
+			redisTemplate.opsForValue().set(this.rssChannel.getRss().getRssName(), newsDetail);
 
 			List<RssItem> sub = new ArrayList<RssItem>();
 			try {
@@ -89,7 +90,6 @@ public class RssParser implements Runnable {
 		try {
 			while (true) {
 				this.parse();
-				this.redisTemplate.opsForValue().set(this.link, this.rssChannel);
 				Thread.sleep(60000);
 			}
 		} catch (InterruptedException e) {

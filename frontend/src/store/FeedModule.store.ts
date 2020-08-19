@@ -84,9 +84,8 @@ const module: Module<FeedModule, RootState> = {
       state.subscribeId = Number(subscribeId);
     },
 
-    SELECT_ARTICLE(state, article: Article) {
+    SET_ARTICLE_DETAIL(state, article: Article) {
       state.article = article;
-      state.isLoading = !state.isLoading;
     },
 
     SET_SUB_CONTEXT_MENU(state, ctx) {
@@ -397,6 +396,16 @@ const module: Module<FeedModule, RootState> = {
       Axios.instance
         .get("/api/rss/find/channel/categorylike", { params: { categoryName } })
         .then(({ data }) => commit("SET_RSS_LIST", data.data))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_ARTICLE_DETAIL({ commit }, rssItem: Article) {
+      return Axios.instance
+        .post("/api/find/news/detail", rssItem)
+        .then(({ data }) => {
+          commit("SET_ARTICLE_DETAIL", data.data);
+          commit("SET_LOADING");
+        })
         .catch(err => console.error(err));
     }
   }

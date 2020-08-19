@@ -69,6 +69,8 @@ public class PostDirServiceImpl implements PostDirService {
 		if (user == null)
 			return false;
 
+		postDirRepository.deleteTagbyPostDirId(postDirId);
+		postDirRepository.deletePostbyPostDirId(postDirId);
 		postDirRepository.deleteById(postDirId);
 		return true;
 	}

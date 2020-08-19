@@ -404,6 +404,13 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
+    FETCH_SEARCH_RSS({ commit }, rssName) {
+      Axios.instance
+        .get("/api/rss/find/channel/rsslike", { params: { rssName } })
+        .then(({ data }) => commit("SET_RSS_LIST", data.data))
+        .catch(err => console.error(err));
+    },
+
     FETCH_ARTICLE_DETAIL({ commit }, rssItem: Article) {
       return Axios.instance
         .post("/api/find/news/detail", rssItem)

@@ -30,41 +30,51 @@
 
     <v-container fluid>
       <!-- <v-row> -->
-      <v-col v-for="rss in rssList" :key="rss.rss.rssId">
-        <v-card max-height="250px">
-          <v-card-text>
-            <follow-button :rss="rss.rss" />
-            <v-row>
-              <v-col sm="2" class="pa-0 text-center">
-                <img v-if="rss.img" :src="rss.img" class="rss-img " />
-                <img v-else src="@/assets/noimage.jpg" class="rss-img" />
-              </v-col>
-              <v-col class="pa-0">
-                <v-list-item-content class="py-0 ml-5">
-                  <p class="h5 text--primary font-weight-bold">
-                    {{ rss.title }}
-                  </p>
-                  <p class="mt-2 mb-4 rss-link" @click="openWeb(rss.link)">
-                    {{
-                      rss.link[4] === "s"
-                        ? rss.link.slice(8)
-                        : rss.link.slice(7)
-                    }}
-                  </p>
-                  <div
-                    class="text--primary article-title"
-                    v-for="article in rss.items"
-                    :key="article.link"
-                    @click="toArticleDetail(article)"
-                  >
-                    - {{ article.title }}
-                  </div>
-                </v-list-item-content>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
+      <div v-if="rssList.length">
+        <v-col v-for="rss in rssList" :key="rss.rss.rssId">
+          <v-card max-height="250px">
+            <v-card-text>
+              <follow-button :rss="rss.rss" />
+              <v-row>
+                <v-col sm="2" class="pa-0 text-center">
+                  <img v-if="rss.img" :src="rss.img" class="rss-img " />
+                  <img v-else src="@/assets/noimage.jpg" class="rss-img" />
+                </v-col>
+                <v-col class="pa-0">
+                  <v-list-item-content class="py-0 ml-5">
+                    <p class="h5 text--primary font-weight-bold">
+                      {{ rss.title }}
+                    </p>
+                    <p class="mt-2 mb-4 rss-link" @click="openWeb(rss.link)">
+                      {{
+                        rss.link[4] === "s"
+                          ? rss.link.slice(8)
+                          : rss.link.slice(7)
+                      }}
+                    </p>
+                    <div
+                      class="text--primary article-title"
+                      v-for="article in rss.items"
+                      :key="article.link"
+                      @click="toArticleDetail(article)"
+                    >
+                      - {{ article.title }}
+                    </div>
+                  </v-list-item-content>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </div>
+      <div v-else>
+        <p
+          class="mt-5 text-center green--text text--lighten-3"
+          style="margin-left: 10px; margin-top: 4-px; font-weight: bold"
+        >
+          "{{ searchText }}"에 대한 검색 결과가 없습니다.
+        </p>
+      </div>
       <!-- </v-row> -->
     </v-container>
     <!-- <rss-modal :rssModalActive.sync="rssModalActive" :rss="selectedRss" /> -->
@@ -99,9 +109,12 @@ export default class AddRss extends Vue {
   @feedModule.Action FETCH_RSS: any;
   @feedModule.Action FETCH_CATEGORY_LIST: any;
   @feedModule.Action FETCH_SEARCH_CATEGORY: any;
+  @feedModule.Action FETCH_SEARCH_RSS: any;
   @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
   inputText = "";
+
+  searchText = "";
 
   modalActive = false;
 
@@ -124,13 +137,16 @@ export default class AddRss extends Vue {
   }
 
   searchRss($event: KeyboardEvent) {
-    if (this.inputText && this.inputText[0] === "#") {
-      const chips = document.querySelectorAll(".category-chip");
-      if (chips.length) {
-        chips.forEach(el => el.classList.remove("green", "lighten-3"));
-      }
-      this.FETCH_SEARCH_CATEGORY(this.inputText.slice(1));
+    const chips = document.querySelectorAll(".category-chip");
+    if (chips.length) {
+      chips.forEach(el => el.classList.remove("green", "lighten-3"));
     }
+    if (this.inputText && this.inputText[0] === "#") {
+      this.FETCH_SEARCH_CATEGORY(this.inputText.slice(1));
+    } else {
+      this.FETCH_SEARCH_RSS(this.inputText);
+    }
+    this.searchText = this.inputText;
     this.inputText = "";
     ($event.target as HTMLElement).blur();
   }

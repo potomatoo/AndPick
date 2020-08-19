@@ -1,6 +1,6 @@
 package com.ssafy.controller;
 
-import java.util.Date;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.News;
+import com.ssafy.model.dto.RssItem;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.NewsService;
@@ -175,5 +176,35 @@ public class NewsController {
 
 		return response;
 
+	}
+
+	@PostMapping("/api/find/news/detail")
+	public Object findNewsHtml(@RequestHeader("Authorization") String jwtToken, @RequestBody RssItem rssItem) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		HashMap<String, String> detail = (HashMap<String, String>) redisTemplate.opsForValue()
+				.get(rssItem.getRssTitle());
+		String tag = detail.get(rssItem.getLink());
+
+		rssItem.setDescription(tag);
+
+		result.data = rssItem;
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			response = new ResponseEntity(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
 	}
 }

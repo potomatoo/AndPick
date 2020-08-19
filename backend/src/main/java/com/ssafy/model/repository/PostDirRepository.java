@@ -22,7 +22,7 @@ public interface PostDirRepository extends JpaRepository<PostDir, Long> {
 	public void deleteTagbyPostDirId(@Param("post_dir_id") long post_dir_id);
 
 	@Modifying
-	@Query(value = "selete form SSAFYDB.post where post_dir_id = :post_dir_id", nativeQuery = true)
+	@Query(value = "delete from SSAFYDB.post where post_dir_id = :post_dir_id", nativeQuery = true)
 	public void deletePostbyPostDirId(@Param("post_dir_id") long post_dir_id);
 
 }

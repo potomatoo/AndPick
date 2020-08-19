@@ -8,7 +8,7 @@
         <div
           align="center"
           class="step-box"
-          style="border:15px solid #df3277"
+          style="border:5px solid #979dac"
           @click="smoothScroll(1)"
           @mouseenter="zoomIn"
           @mouseleave="zoomOut"
@@ -16,33 +16,33 @@
           <div class="step-text">
             피드
           </div>
-          <div class="go-detail">보러가기</div>
+          <div class="go-detail">자세히</div>
           <i class="mdi-step mdi mdi-hexagon"></i>
         </div>
 
         <div
           align="center"
           class="step-box"
-          style="border:15px solid #00d59b;"
+          style="border:5px solid #7d8597;"
           @click="smoothScroll(2)"
           @mouseenter="zoomIn"
           @mouseleave="zoomOut"
         >
           <div class="step-text">보드</div>
-          <div class="go-detail">보러가기</div>
+          <div class="go-detail">자세히</div>
           <i class="mdi-step mdi mdi-checkbox-blank-circle"></i>
         </div>
 
         <div
           align="center"
           class="step-box"
-          style="border:15px solid #ad249f;"
+          style="border:5px solid #5c677d;"
           @click="smoothScroll(3)"
           @mouseenter="zoomIn"
           @mouseleave="zoomOut"
         >
-          <div class="step-text">내페이지</div>
-          <div class="go-detail">보러가기</div>
+          <div class="step-text">마이페이지</div>
+          <div class="go-detail">자세히</div>
           <i class="mdi-step mdi mdi-star"></i>
         </div>
       </div>
@@ -103,9 +103,10 @@ export default {
   cursor: pointer;
   width: 230px;
   height: 230px;
-  background-color: #17212c;
-  color: white;
+  /* background-color: #17212c; */
+  /* color: white; */
   margin: auto;
+  border-radius: 25px;
 }
 
 .step-text {
@@ -117,11 +118,6 @@ export default {
   font-family: "Black Han Sans", sans-serif;
   /* font-family: "Jua", sans-serif; */
 }
-
-/* .step-text:hover {
-  font-size: 50px;
-} */
-
 .mdi-step {
   font-size: 33px;
 }

@@ -1,17 +1,17 @@
 <template>
-  <div class="mypage-explain">
-    <div>여기는 마이페이지설명</div>
+  <div class="explain-mypage">
+    <div class="helper-text">마이페이지<i class="mdi mdi-book-open"></i></div>
     <div class="container-mypage">
-      <div class="one"></div>
-      <div class="two"></div>
-      <div class="thr"></div>
-      <div class="fou"></div>
-      <div class="fiv"></div>
+      <div class="one-mypage"></div>
+      <div class="two-mypage"></div>
+      <div class="thr-mypage"></div>
+      <div class="fou-mypage"></div>
+      <div class="fiv-mypage"></div>
     </div>
-    <button class="prevbtn" @click="ne">
+    <button class="prevbtn-mypage" @click="ne">
       <i class="mdi-arrow mdi mdi-arrow-left-bold-circle-outline"></i>
     </button>
-    <button class="nextbtn" @click="pl">
+    <button class="nextbtn-mypage" @click="pl">
       <i class="mdi-arrow mdi mdi-arrow-right-bold-circle-outline"></i>
     </button>
   </div>
@@ -22,7 +22,13 @@ export default {
   name: "MypageExplain",
   data() {
     return {
-      imgList: ["black", "red", "yellow", "blue", "green"],
+      imgList: [
+        require("@/assets/mypage4.png"),
+        require("@/assets/mypage5.png"),
+        require("@/assets/mypage1.png"),
+        require("@/assets/mypage2.png"),
+        require("@/assets/mypage3.png")
+      ],
       a: 0,
       b: 1,
       c: 2,
@@ -86,46 +92,46 @@ export default {
       }
     },
     move() {
-      const boxone = document.querySelector(".one");
-      const boxtwo = document.querySelector(".two");
-      const boxthr = document.querySelector(".thr");
-      const boxfou = document.querySelector(".fou");
-      const boxfiv = document.querySelector(".fiv");
-      const nextbtn = document.querySelector(".nextbtn");
-      const prevbtn = document.querySelector(".prevbtn");
+      const boxone = document.querySelector(".one-mypage");
+      const boxtwo = document.querySelector(".two-mypage");
+      const boxthr = document.querySelector(".thr-mypage");
+      const boxfou = document.querySelector(".fou-mypage");
+      const boxfiv = document.querySelector(".fiv-mypage");
+      const nextbtn = document.querySelector(".nextbtn-mypage");
+      const prevbtn = document.querySelector(".prevbtn-mypage");
       nextbtn.disabled = "disabled";
       prevbtn.disabled = "disabled";
-      boxone.style.animation = "one 1s forwards";
-      boxtwo.style.animation = "two 1s forwards";
-      boxthr.style.animation = "thr 1s forwards";
-      boxfou.style.animation = "fou 1s forwards";
-      boxfiv.style.animation = "fiv 1s forwards";
+      boxone.style.animation = "one-mypage 1s forwards";
+      boxtwo.style.animation = "two-mypage 1s forwards";
+      boxthr.style.animation = "thr-mypage 1s forwards";
+      boxfou.style.animation = "fou-mypage 1s forwards";
+      boxfiv.style.animation = "fiv-mypage 1s forwards";
     },
     movepr() {
-      const boxone = document.querySelector(".one");
-      const boxtwo = document.querySelector(".two");
-      const boxthr = document.querySelector(".thr");
-      const boxfou = document.querySelector(".fou");
-      const boxfiv = document.querySelector(".fiv");
-      const nextbtn = document.querySelector(".nextbtn");
-      const prevbtn = document.querySelector(".prevbtn");
+      const boxone = document.querySelector(".one-mypage");
+      const boxtwo = document.querySelector(".two-mypage");
+      const boxthr = document.querySelector(".thr-mypage");
+      const boxfou = document.querySelector(".fou-mypage");
+      const boxfiv = document.querySelector(".fiv-mypage");
+      const nextbtn = document.querySelector(".nextbtn-mypage");
+      const prevbtn = document.querySelector(".prevbtn-mypage");
 
       nextbtn.disabled = "disabled";
       prevbtn.disabled = "disabled";
-      boxone.style.animation = "backone 1s forwards";
-      boxtwo.style.animation = "backtwo 1s forwards";
-      boxthr.style.animation = "backthr 1s forwards";
-      boxfou.style.animation = "backfou 1s forwards";
-      boxfiv.style.animation = "backfiv 1s forwards";
+      boxone.style.animation = "backone-mypage 1s forwards";
+      boxtwo.style.animation = "backtwo-mypage 1s forwards";
+      boxthr.style.animation = "backthr-mypage 1s forwards";
+      boxfou.style.animation = "backfou-mypage 1s forwards";
+      boxfiv.style.animation = "backfiv-mypage 1s forwards";
     },
     stop() {
-      const boxone = document.querySelector(".one");
-      const boxtwo = document.querySelector(".two");
-      const boxthr = document.querySelector(".thr");
-      const boxfou = document.querySelector(".fou");
-      const boxfiv = document.querySelector(".fiv");
-      const nextbtn = document.querySelector(".nextbtn");
-      const prevbtn = document.querySelector(".prevbtn");
+      const boxone = document.querySelector(".one-mypage");
+      const boxtwo = document.querySelector(".two-mypage");
+      const boxthr = document.querySelector(".thr-mypage");
+      const boxfou = document.querySelector(".fou-mypage");
+      const boxfiv = document.querySelector(".fiv-mypage");
+      const nextbtn = document.querySelector(".nextbtn-mypage");
+      const prevbtn = document.querySelector(".prevbtn-mypage");
 
       boxone.style.animation = "";
       boxtwo.style.animation = "";
@@ -135,29 +141,28 @@ export default {
 
       boxone.style.left = -55 + "%";
       boxone.style.zIndex = 1;
-      boxone.style.transform = "scale(0.5)";
-      boxone.style.backgroundColor = `${this.imgList[this.a]}`;
+      boxone.style.transform = "scale(0.4)";
+      boxone.style.backgroundImage = `url('${this.imgList[this.a]}')`;
 
       boxtwo.style.left = 15 + "%";
       boxtwo.style.zIndex = 2;
-      boxtwo.style.transform = "scale(0.8)";
-      boxtwo.style.backgroundColor = `${this.imgList[this.b]}`;
-      // boxtwo.style.background = `url('${imgList[b]}')`
+      boxtwo.style.transform = "scale(0.7)";
+      boxtwo.style.backgroundImage = `url('${this.imgList[this.b]}')`;
 
       boxthr.style.left = 85 + "%";
       boxthr.style.zIndex = 3;
-      boxthr.style.transform = "scale(1)";
-      boxthr.style.backgroundColor = `${this.imgList[this.c]}`;
+      boxthr.style.transform = "scale(1.15)";
+      boxthr.style.backgroundImage = `url('${this.imgList[this.c]}')`;
 
       boxfou.style.left = 155 + "%";
       boxfou.style.zIndex = 2;
-      boxfou.style.transform = "scale(0.8)";
-      boxfou.style.backgroundColor = `${this.imgList[this.d]}`;
+      boxfou.style.transform = "scale(0.7)";
+      boxfou.style.backgroundImage = `url('${this.imgList[this.d]}')`;
 
       boxfiv.style.left = 225 + "%";
       boxfiv.style.zIndex = 1;
-      boxfiv.style.transform = "scale(0.5)";
-      boxfiv.style.backgroundColor = `${this.imgList[this.e]}`;
+      boxfiv.style.transform = "scale(0.4)";
+      boxfiv.style.backgroundImage = `url('${this.imgList[this.e]}')`;
 
       nextbtn.removeAttribute("disabled");
       prevbtn.removeAttribute("disabled");
@@ -177,11 +182,15 @@ export default {
 </script>
 
 <style>
+.helper-text {
+  font-family: "Do Hyeon", sans-serif;
+}
 .mdi-arrow {
   font-size: 41px;
 }
-.mypage-explain {
-  margin-top: 70px;
+
+.explain-mypage {
+  margin-top: 40px;
 }
 .container-mypage {
   position: relative;
@@ -193,102 +202,112 @@ export default {
   height: 450px;
   position: absolute;
 }
-.one {
+.one-mypage {
   background-color: black;
-  transform: scale(0.5);
+  background-image: url("../../assets/mypage4.png");
+  background-size: cover;
+  transform: scale(0.4);
   left: -55%;
   z-index: 1;
 }
-.two {
-  background-color: red;
-  transform: scale(0.8);
+.two-mypage {
+  background-color: black;
+  background-image: url("../../assets/mypage5.png");
+  background-size: cover;
+  transform: scale(0.7);
   left: 15%;
   z-index: 2;
 }
-.thr {
-  background-color: yellow;
-  transform: scale(1);
+.thr-mypage {
+  background-color: black;
+  background-image: url("../../assets/mypage1.png");
+  background-size: cover;
+  transform: scale(1.15);
   left: 85%;
   z-index: 3;
 }
-.fou {
-  background-color: blue;
-  transform: scale(0.8);
+.fou-mypage {
+  background-color: black;
+  background-image: url("../../assets/mypage2.png");
+  background-size: cover;
+  transform: scale(0.7);
   left: 155%;
   z-index: 2;
 }
-.fiv {
-  background-color: green;
-  transform: scale(0.5);
+.fiv-mypage {
+  background-color: black;
+  background-image: url("../../assets/mypage3.png");
+  background-size: cover;
+  transform: scale(0.4);
   left: 225%;
   z-index: 1;
 }
-@keyframes one {
+@keyframes one-mypage {
   100% {
-    transform: scale(0.5);
+    transform: scale(0.4);
     left: 225%;
     z-index: 1;
   }
 }
-@keyframes two {
+@keyframes two-mypage {
   100% {
-    transform: scale(0.5);
+    transform: scale(0.4);
     left: -55%;
     z-index: 1;
   }
 }
-@keyframes thr {
+@keyframes thr-mypage {
   100% {
-    transform: scale(0.8);
+    transform: scale(0.7);
     left: 15%;
     z-index: 2;
   }
 }
-@keyframes fou {
+@keyframes fou-mypage {
   100% {
-    transform: scale(1);
+    transform: scale(1.15);
     left: 85%;
     z-index: 3;
   }
 }
-@keyframes fiv {
+@keyframes fiv-mypage {
   100% {
-    transform: scale(0.8);
+    transform: scale(0.7);
     left: 155%;
     z-index: 2;
   }
 }
-@keyframes backone {
+@keyframes backone-mypage {
   100% {
-    transform: scale(0.8);
+    transform: scale(0.7);
     left: 15%;
     z-index: 2;
   }
 }
-@keyframes backtwo {
+@keyframes backtwo-mypage {
   100% {
-    transform: scale(1);
+    transform: scale(1.15);
     left: 85%;
     z-index: 3;
   }
 }
-@keyframes backthr {
+@keyframes backthr-mypage {
   100% {
-    transform: scale(0.8);
+    transform: scale(0.7);
     left: 155%;
     z-index: 2;
   }
 }
-@keyframes backfou {
+@keyframes backfou-mypage {
   100% {
-    transform: scale(0.5);
+    transform: scale(0.4);
     left: 225%;
     z-index: 1;
   }
 }
-@keyframes backfiv {
+@keyframes backfiv-mypage {
   100% {
-    transform: scale(0.5);
+    transform: scale(0.4);
     left: -55%;
     z-index: 1;
   }

@@ -114,17 +114,15 @@ export default class PostDirContextMenu extends Vue {
   deleteModal = false;
 
   rules = [
-    (value: any) => !!value || "This field is required.",
+    (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
       !this.checkDuplication(value) || "동일한 폴더가 존재합니다."
   ];
 
   checkDuplication(name: string | null) {
-    if (this.postDirList.length) {
-      return this.postDirList.some(
-        (PostDir: PostDir) => PostDir.postDirName === name
-      );
-    }
+    if (this.postDirItem.postDirName === name) return false;
+    return this.postDirList.filter(postDir => postDir.postDirName === name)
+      .length;
   }
 
   setPostDirName() {
@@ -132,20 +130,20 @@ export default class PostDirContextMenu extends Vue {
   }
 
   activeRenameModal() {
+    this.inputPostDirName = "";
     this.setPostDirName();
     this.renameModal = true;
   }
 
   savePostDirName() {
-    if (this.inputPostDirName === this.postDirItem.postDirName) {
-      this.renameModal = false;
+    if (!this.inputPostDirName || this.checkDuplication(this.inputPostDirName))
       return;
+    if (this.postDirItem.postDirName !== this.inputPostDirName) {
+      this.UPDATE_POSTDIR({
+        postDirId: Number(this.postDirItem.postDirId),
+        postDirName: this.inputPostDirName
+      });
     }
-
-    this.UPDATE_POSTDIR({
-      postDirId: Number(this.postDirItem.postDirId),
-      postDirName: this.inputPostDirName
-    });
     this.renameModal = false;
   }
 

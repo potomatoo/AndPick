@@ -35,7 +35,6 @@
           <v-list-item-title
             style="font-size: 18px; font-family: 'Do Hyeon', sans-serif;"
             >채널 구독</v-list-item-title
-          >
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -53,17 +52,17 @@ export default class SidebarTop extends Vue {
     const subscriptions = document.querySelectorAll(".sidebar-subscription");
 
     if (boards?.length) {
-      boards.forEach(el =>
+      boards.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (mypages?.length) {
-      mypages.forEach(el =>
+      mypages.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }
     if (subscriptions?.length) {
-      subscriptions.forEach(el =>
+      subscriptions.forEach((el) =>
         el.classList.remove("v-item--active", "v-list-item--active")
       );
     }

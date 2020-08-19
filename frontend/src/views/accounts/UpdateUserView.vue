@@ -16,7 +16,9 @@
       <router-link
         :to="{ name: 'DeleteUser' }"
         class="router-link d-flex justify-content-end"
-        ><v-btn color="error">회원탈퇴</v-btn></router-link
+        ><v-btn text style="font-weight: bold" color="#1e847f"
+          >회원탈퇴</v-btn
+        ></router-link
       >
       <hr />
     </div>

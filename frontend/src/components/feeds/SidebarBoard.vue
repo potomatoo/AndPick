@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-list>
-      <div class="d-flex">
+      <div class="d-flex justify-content-between mr-2">
         <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
           >보드</v-subheader
         >
@@ -21,7 +21,7 @@
         @contextmenu.prevent="showBoardCtx($event, board)"
         @click="toBoardArticleList(board.boardId, $event)"
         class="sidebar-board"
-        color="rgb(223, 50, 119)"
+        color="#f57e7e"
       >
         <v-list-item-icon>
           <v-icon>
@@ -137,8 +137,7 @@ export default class SidebarBoard extends Vue {
 .explain {
   opacity: 0.4;
   font-size: 20px;
-  margin-top: 5px;
-  margin-left: 170px;
+  margin-top: 3px;
   float: left;
 }
 .router-link {

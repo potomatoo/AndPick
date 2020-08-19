@@ -6,24 +6,26 @@
       align="center"
       style="width: 100%"
     >
-      <router-link :to="{ name: 'Home' }">
-        <img
-          class="mdi ml-5"
-          src="@/assets/title1.jpg"
-          width="110px"
-          height="auto"
-        />
+      <router-link class="router-link" :to="{ name: 'Home' }">
+        <span
+          style="font-family: 'Spectral SC', serif; font-size: 40px; color: #1e847f !important"
+          >&</span
+        >
+        <span
+          style="font-family: 'Faster One', cursive; font-size: 20px; color: rgba(0, 0, 0, 0.77) !important"
+          >PICK</span
+        >
       </router-link>
       <router-link
         v-if="!isLoggedIn"
         :to="{ name: 'Login' }"
         class="router-link ml-5"
       >
-        <v-btn outlined color="success">로그인</v-btn>
+        <v-btn outlined color="#1e847f">로그인</v-btn>
       </router-link>
       <div v-if="isLoggedIn" class="mt-1 d-flex">
         <div class="cheer mt-2">
-          <b>{{ userName }}</b> 님의 취업성공을 응원합니다!
+          <b>{{ userName }}</b> 님의 밝은 미래를 응원합니다!
         </div>
         <div class="ml-5">
           <v-menu offset-y>
@@ -57,7 +59,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import { mapMutations, mapGetters, mapState } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import { Axios } from "../../service/axios.service";
 
 @Component({
@@ -65,14 +67,29 @@ import { Axios } from "../../service/axios.service";
   computed: { ...mapGetters(["isLoggedIn"]) }
 })
 export default class AppNavbar extends Vue {
-  userName: string | null = null;
+  userName: string | null = "";
 
+  // setName() {
+  //   this.userName = this.$store.state.userName;
+  // }
+  @Watch("$store.state.JWT")
   setName() {
-    this.userName = this.$store.state.userName;
+    if (this.$store.state.JWT) {
+      Axios.instance
+        .get("/api/user/detail")
+        .then((res) => {
+          this.userName = res.data.data.userName;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
-  mounted() {
-    this.setName();
+  created() {
+    if (this.$store.state.JWT) {
+      this.setName();
+    }
   }
 
   @Watch("$store.state.userName")
@@ -89,6 +106,8 @@ export default class AppNavbar extends Vue {
 .router-link {
   text-decoration: none;
   color: inherit;
+  border: 0;
+  outline: none;
 }
 .mdi-nav:hover {
   cursor: pointer;

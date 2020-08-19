@@ -1,43 +1,72 @@
 <template>
-  <div class="user-info">
-    <div class="show-userbox p-5">
-      <transition name="slide-user">
-        <h3 v-if="showUser" class="d-flex justify-content-center">
+  <div class="user-out">
+    <transition name="slide-user">
+      <div v-if="showUser">
+        <h3 class="d-flex justify-content-center">
           <b>우리의 사용자들</b>
         </h3>
-      </transition>
-      <transition name="slide-user">
-        <div v-if="showUser" class="container d-flex justify-content-around">
-          <div
-            align="center"
-            class="user-box"
-            style="border:15px solid #ad249f"
-          >
-            <div class="user-text">
-              취준생
+      </div>
+    </transition>
+    <div class="row mx-5 px-5">
+      <div class="col-lg-4" align="center">
+        <transition name="slide-user">
+          <div v-if="showUser">
+            <img
+              src="@/assets/user_jobseeker.png"
+              height="auto"
+              width="250px"
+            />
+          </div>
+        </transition>
+        <transition name="slide-user">
+          <div v-if="showUser">
+            <div style="width:250px">
+              <h5 class="description d-flex justify-content-center">
+                취준생
+              </h5>
+              <p>
+                취업준비생들의 면접준비에 유용한 정보를 제공합니다
+              </p>
             </div>
-            <i class="mdi-user mdi mdi-tie"></i>
           </div>
-
-          <div
-            align="center"
-            class="user-box"
-            style="border:15px solid #df3277"
-          >
-            <div class="user-text">개발자</div>
-            <i class="mdi-user mdi mdi-laptop-chromebook"></i>
+        </transition>
+      </div>
+      <div class="col-lg-4" align="center">
+        <transition name="slide-user">
+          <div v-if="showUser">
+            <img src="@/assets/user_industry.png" height="auto" width="250px" />
           </div>
-
-          <div
-            align="center"
-            class="user-box"
-            style="border:15px solid #00d59b;"
-          >
-            <div class="user-text">기타 등등</div>
-            <i class="mdi-user mdi mdi-account-multiple-plus"></i>
+        </transition>
+        <transition name="slide-user">
+          <div v-if="showUser">
+            <div style="width:250px">
+              <h5 class="description d-flex justify-content-center">
+                개발자
+              </h5>
+              <p>다양한 기술블로그를 통해 새로운 기술을 습득해보세요</p>
+            </div>
           </div>
-        </div>
-      </transition>
+        </transition>
+      </div>
+      <div class="col-lg-4" align="center">
+        <transition name="slide-user">
+          <div v-if="showUser">
+            <img src="@/assets/user_business.png" height="auto" width="250px" />
+          </div>
+        </transition>
+        <transition name="slide-user">
+          <div v-if="showUser">
+            <div style="width:250px">
+              <h5 class="description d-flex justify-content-center">
+                기타
+              </h5>
+              <p>
+                최신 산업 트렌드에 관한 기사를 읽어보세요
+              </p>
+            </div>
+          </div>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
@@ -54,7 +83,7 @@ export default {
   methods: {
     scrollWatcher() {
       const scrollMonitor = require("scrollmonitor");
-      const userElement = document.querySelector(".show-userbox");
+      const userElement = document.querySelector(".user-out");
       const userWatcher = scrollMonitor.create(userElement);
       userWatcher.enterViewport(() => {
         this.showUser = true;
@@ -68,32 +97,18 @@ export default {
 </script>
 
 <style>
-.user-info {
-  /* background-color: #17212c; */
+.user-out {
+  margin-top: 100px;
 }
-.user-box {
-  width: 230px;
-  height: 230px;
-  background-color: #17212c;
-  color: white;
-  margin: auto;
-}
-
-.user-text {
-  font-size: 25px;
-  margin-top: 50px;
-  margin-bottom: 45px;
+.description {
+  opacity: 0.6;
   font-family: "Black Han Sans", sans-serif;
 }
-
 .slide-user-enter-active {
   transition: all 2s ease;
 }
 .slide-user-enter {
   transform: translateY(150px);
   opacity: 0;
-}
-.mdi-user {
-  font-size: 40px;
 }
 </style>

@@ -18,7 +18,7 @@ const module: Module<MypageModule, RootState> = {
     isSidebarActive: true,
     isCreateFolderModalActive: false,
     postDirList: [],
-    postDir: [],
+    postDir: null,
     allTagDir: [],
     tagDir: [],
     post: null,
@@ -35,7 +35,10 @@ const module: Module<MypageModule, RootState> = {
       showCtx: false,
       x: 0,
       y: 0
-    }
+    },
+    rssChannel: 0,
+    saveNews: 0,
+    users: 0
   },
 
   getters: {},
@@ -89,6 +92,17 @@ const module: Module<MypageModule, RootState> = {
     SET_POST_CONTEXT_MENU(state, ctx) {
       state.postContextMenu.showCtx = false;
       state.postContextMenu = ctx;
+    },
+
+    SET_MAINPAGE_COUNT(state) {
+      Axios.instance
+        .get("api/public/count")
+        .then(({ data }) => {
+          state.rssChannel = data.data.rssCount;
+          state.saveNews = data.data.subscribeCount;
+          state.users = data.data.userCount;
+        })
+        .catch(err => console.error(err));
     }
   },
 
@@ -178,7 +192,7 @@ const module: Module<MypageModule, RootState> = {
           dispatch("FETCH_POSTDIR_LIST");
         })
         .then(() => {
-          if (state.postDirId === postDirId) {
+          if (Number(state.postDirId) === postDirId) {
             dispatch("FETCH_POSTDIR", postDirId);
           }
         })
@@ -208,7 +222,7 @@ const module: Module<MypageModule, RootState> = {
       Axios.instance
         .post("/api/post/save", postData)
         .then(({ data }) => {
-          dispatch("FETCH_POSTDIR_LIST");
+          dispatch("FETCH_POSTDIR", data.data.postDirId);
         })
         .catch(err => console.error(err));
     },
@@ -229,20 +243,15 @@ const module: Module<MypageModule, RootState> = {
         tagList: [];
       }
     ) {
+      const postData = {
+        postContent: postContent,
+        postDirId: postDirId,
+        postId: postId,
+        postTitle: postTitle,
+        tagList: tagList
+      };
       Axios.instance
-        .put(
-          "/api/post/update",
-          QueryString.stringify(
-            {
-              postContent: postContent,
-              postDirId: postDirId,
-              postId: postId,
-              postTitle: postTitle,
-              tagList: tagList
-            },
-            { indices: false }
-          )
-        )
+        .put("/api/post/update", postData)
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
         })

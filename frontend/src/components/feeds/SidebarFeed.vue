@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d-flex">
+    <div class="d-flex justify-content-between mr-2">
       <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
         >피드</v-subheader
       >
@@ -18,7 +18,7 @@
       :key="feed.feedId"
       no-action
       sub-group
-      color="rgb(223, 50, 119)"
+      color="#f57e7e"
       class="sidebar-feed"
       @click="toFeedPage(feed.feedId)"
     >
@@ -34,7 +34,7 @@
           @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
           class="sidebar-subscription"
           @click="toArticleList(feed.feedId, subItem.subscribeId, $event)"
-          color="rgb(233, 50, 119"
+          color="#f57e7e"
         >
           <v-list-item-content>
             <v-list-item-title
@@ -182,8 +182,7 @@ export default class SidebarFeed extends Vue {
 .explain {
   opacity: 0.4;
   font-size: 20px;
-  margin-top: 7px;
-  margin-left: 180px;
+  margin-top: 4px;
 }
 .router-link {
   text-decoration: none;

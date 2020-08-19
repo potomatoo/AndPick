@@ -205,7 +205,7 @@ export default class SubsContextMenu extends Vue {
   }
 
   rules = [
-    (value: string) => !!value || "this field is required.",
+    (value: string) => !!value || "글자를 입력해주세요.",
     (value: string) =>
       !this.checkDuplication(value) || "동일한 피드가 존재합니다."
   ];

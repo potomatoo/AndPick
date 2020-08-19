@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-list>
-      <div class="d-flex">
+      <div class="d-flex justify-content-between mr-2">
         <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black">
           마이페이지
           <create-folder />
@@ -22,7 +22,7 @@
         @contextmenu.prevent="showPostDirCtx($event, postDir)"
         @click="toPostDir(postDir.postDirId, $event)"
         class="sidebar-mypage"
-        color="rgb(223, 50, 119)"
+        color="#f57e7e"
       >
         <v-list-item-content>
           <v-list-item-title v-text="postDir.postDirName"></v-list-item-title>
@@ -118,7 +118,6 @@ export default class SidebarMypage extends Vue {
 .explain {
   opacity: 0.4;
   font-size: 20px;
-  margin-top: 5px;
-  margin-left: 120px;
+  margin-top: 4px;
 }
 </style>

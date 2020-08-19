@@ -2,8 +2,7 @@
   <v-container class="mt-15">
     <v-row>
       <v-col xs="12" sm="12" md="8" lg="8" xl="8">
-        <span
-          style="font-size: 45px; font-weight: bold font-family: 'Do Hyeon', sans-serif;"
+        <span style="font-size: 45px; font-family: 'Do Hyeon', sans-serif;"
           >"{{ $route.params.tagName }}"</span
         >의 검색결과 입니다.
 
@@ -22,7 +21,7 @@
                 :to="{
                   name: 'EditPost',
                   params: {
-                    postDirId: $route.params.postDirId,
+                    postDirId: post.postDirId,
                     postId: post.postId
                   }
                 }"
@@ -31,13 +30,13 @@
                 <div class="container d-flex justify-content-around">
                   <div
                     class="post-box p-1"
-                    style="border:5px solid #00d59b"
+                    style="border:3px solid rgba(0, 0, 0, 0.54)"
                     @mouseenter="zoomIn"
                     @mouseleave="zoomOut"
                   >
                     <div class="post-text pl-2 pr-2 mb-0 mt-3" align="center">
                       {{ post.postTitle }}
-                      <hr style="border-color: #00d59b" />
+                      <hr style="border-color: rgba(0, 0, 0, 0.54)" />
 
                       <div class="container row">
                         <div
@@ -193,7 +192,7 @@ export default class HashTag extends Vue {
   margin-top: 50px;
   margin-bottom: 45px;
   /* transition: font-size 2s; */
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Do Hyeon", sans-serif;
   /* font-family: "Jua", sans-serif; */
   white-space: nowrap;
   overflow: hidden;

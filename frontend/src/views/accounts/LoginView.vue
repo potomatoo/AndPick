@@ -1,8 +1,11 @@
 <template>
   <div class="container my-5" style="width: 400px">
     <div class="d-flex">
-      <h2 style="font-family: 'Do Hyeon', sans-serif;">&PICK</h2>
-      <img src="@/assets/logo.png" width="90px" height="45px" />
+      <h2
+        style="font-family: 'Do Hyeon', sans-serif; margin-left: 100px; margin-bottom: 40px; color: #1e847f"
+      >
+        &PICK 로그인
+      </h2>
     </div>
     <form>
       <div class="form-group">
@@ -55,11 +58,12 @@
       </div>
       <div class="mb-2">
         <v-btn
+          class="white--text"
           style="width: 100%"
           large
-          color="success"
+          color="#1e847f"
           @click.prevent="submitForm"
-          >로그인<i class="login-key mdi mdi-key"></i
+          ><b>로그인</b><i class="login-key mdi mdi-key"></i
         ></v-btn>
       </div>
     </form>
@@ -70,7 +74,7 @@
     <p>
       계정이 없으신가요?
       <router-link :to="{ name: 'Signup' }">
-        <b style="color: #5cb85c">회원가입</b>
+        <b style="color: #1e847f">회원가입</b>
       </router-link>
     </p>
   </div>
@@ -98,7 +102,7 @@ interface LoginData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
@@ -107,7 +111,7 @@ interface LoginData {
       },
       userPassword: {
         required,
-        minLength: minLength(4)
+        minLength: minLength(8)
       }
     }
   }
@@ -125,7 +129,6 @@ export default class LoginView extends Vue {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
-      console.log("데이터 검증 성공");
     }
   }
 }

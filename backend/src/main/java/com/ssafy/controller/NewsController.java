@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.News;
+import com.ssafy.model.dto.NewsDetail;
 import com.ssafy.model.dto.RssItem;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.response.BasicResponse;
@@ -30,7 +31,8 @@ public class NewsController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/news/save")
-	public Object saveNews(@RequestHeader("Authorization") String jwtToken, @RequestBody News news) {
+	public Object saveNews(@RequestHeader("Authorization") String jwtToken, @RequestParam("boardId") long boardId,
+			@RequestBody RssItem rssitem) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
@@ -42,8 +44,8 @@ public class NewsController {
 			return response;
 		}
 
-		if (news.getNewsTitle() == null || news.getNewsLink() == null || news.getNewsDate() == null
-				|| news.getNewsDescription() == null) {
+		if (rssitem.getTitle() == null || rssitem.getLink() == null || rssitem.getPubDate() == null
+				|| rssitem.getDescription() == null) {
 			result.status = false;
 			result.message = "필수 값을 입력하세요";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
@@ -51,14 +53,29 @@ public class NewsController {
 		}
 
 		News newsDto = new News();
-		newsDto.setNewsTitle(news.getNewsTitle());
-		newsDto.setNewsLink(news.getNewsLink());
-		newsDto.setNewsDescription(news.getNewsDescription());
-		newsDto.setNewsDate(news.getNewsDate());
-		newsDto.setBoardId(news.getBoardId());
+		newsDto.setNewsTitle(rssitem.getTitle());
+		newsDto.setNewsLink(rssitem.getLink());
+		String summary = rssitem.getDescription();
+
+		if (summary.length() > 200) {
+			summary = summary.substring(0, 190);
+		}
+
+		newsDto.setNewsDescription(summary);
+		newsDto.setNewsDate(rssitem.getPubDate());
+		newsDto.setBoardId(boardId);
 		newsDto.setUserNo(user.getUserNo());
 
-		result = newsService.saveNews(user, newsDto);
+		HashMap<String, String> detail = (HashMap<String, String>) redisTemplate.opsForValue()
+				.get(rssitem.getRssTitle());
+		String tag = detail.get(rssitem.getLink());
+
+		NewsDetail newsDetail = new NewsDetail();
+		newsDetail.setId(rssitem.getLink());
+		System.out.println(tag);
+		newsDetail.setContent(tag);
+
+		result = newsService.saveNews(user, newsDto, newsDetail);
 
 		if (result.status) {
 			response = new ResponseEntity(result, HttpStatus.OK);

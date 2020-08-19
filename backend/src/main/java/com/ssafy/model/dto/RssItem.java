@@ -1,6 +1,7 @@
 package com.ssafy.model.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class RssItem implements Serializable {
 	// 필수 요소
@@ -8,10 +9,9 @@ public class RssItem implements Serializable {
 	private String description;
 	private String link;
 	// 선택 요소
-	private String pubDate;
+	private Date pubDate;
 	// 식별용
 	private String rssTitle;
-
 	private String subscribeName;
 
 	public String getTitle() {
@@ -38,11 +38,11 @@ public class RssItem implements Serializable {
 		this.link = link;
 	}
 
-	public String getPubDate() {
+	public Date getPubDate() {
 		return pubDate;
 	}
 
-	public void setPubDate(String pubDate) {
+	public void setPubDate(Date pubDate) {
 		this.pubDate = pubDate;
 	}
 

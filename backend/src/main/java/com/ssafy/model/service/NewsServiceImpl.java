@@ -1,14 +1,19 @@
 package com.ssafy.model.service;
 
+import java.util.HashMap;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.News;
+import com.ssafy.model.dto.NewsDetail;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.BoardRepository;
+import com.ssafy.model.repository.NewsDetailRepository;
 import com.ssafy.model.repository.NewsRepository;
 import com.ssafy.model.response.BasicResponse;
 
@@ -17,11 +22,13 @@ public class NewsServiceImpl implements NewsService {
 	@Autowired
 	private NewsRepository newsRepository;
 	@Autowired
+	private NewsDetailRepository newsDetailRepository;
+	@Autowired
 	private BoardRepository boardRepository;
 
 	@Override
 	@Transactional
-	public BasicResponse saveNews(User user, News news) {
+	public BasicResponse saveNews(User user, News news, NewsDetail newsDetail) {
 		// TODO Auto-generated method stub
 		BasicResponse response = new BasicResponse();
 
@@ -32,8 +39,10 @@ public class NewsServiceImpl implements NewsService {
 			response.message = "보드 정보가 일치하지 않습니다.";
 			return response;
 		}
-
+		System.out.println(news.getNewsDescription().length());
 		response.data = newsRepository.save(news);
+		newsDetailRepository.save(newsDetail);
+
 		response.status = (response.data != null) ? true : false;
 		if (response.status) {
 			response.message = "뉴스 저장에 성공하였습니다.";
@@ -125,7 +134,6 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	@Transactional
 	public BasicResponse findOneById(User user, News news) {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
@@ -137,6 +145,9 @@ public class NewsServiceImpl implements NewsService {
 		}
 
 		news = newsRepository.findOneByNewsId(news.getNewsId());
+		NewsDetail newsdetail = newsDetailRepository.findById(news.getNewsLink()).get();
+
+		news.setNewsDescription(newsdetail.getContent());
 
 		if (user.getUserNo() != news.getUserNo()) {
 			result.message = "잘못된 뉴스 정보입니다.";

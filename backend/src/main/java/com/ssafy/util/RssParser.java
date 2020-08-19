@@ -69,7 +69,7 @@ public class RssParser implements Runnable {
 				sub = new ArrayList<RssItem>(this.rssChannel.getItems().subList(0, 3));
 			} catch (Exception e) {
 				sub = new ArrayList<RssItem>(this.rssChannel.getItems().subList(0, this.rssChannel.getItems().size()));
-			}
+			}			
 			this.rssChannel.setItems(sub);
 			redisTemplate.opsForValue().set("limit " + this.link, this.rssChannel);
 		} catch (Exception e) {
@@ -89,7 +89,6 @@ public class RssParser implements Runnable {
 		try {
 			while (true) {
 				this.parse();
-				this.redisTemplate.opsForValue().set(this.link, this.rssChannel);
 				Thread.sleep(60000);
 			}
 		} catch (InterruptedException e) {

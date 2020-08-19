@@ -33,7 +33,7 @@ public class RssParser implements Runnable {
 			Connection con = Jsoup.connect(this.link);
 			Document document = con.get();
 
-			this.rssChannel.setTitle(document.selectFirst("title").text());
+			this.rssChannel.setTitle(this.rssChannel.getRss().getRssName());
 			this.rssChannel.setLink(document.selectFirst("link").text());
 			try {
 				Element img = document.selectFirst("image");

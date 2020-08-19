@@ -183,11 +183,11 @@ const module: Module<FeedModule, RootState> = {
         })
         .then(() => {
           if (state.feed && state.feed.feedId === feedId) {
-            commit("SET_LOADING");
             dispatch("FETCH_FEED", feedId);
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     DELETE_FEED({ dispatch }, feedId) {
@@ -249,9 +249,9 @@ const module: Module<FeedModule, RootState> = {
         .then(({ data }) => {
           commit("SET_SELECTED_SUBSCRIPTION", subscribeId);
           commit("SET_ARTICLE_LIST", data.data);
-          commit("SET_LOADING");
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     FETCH_ARTICLE_LIST_IN_FEED({ state, commit }, feedId) {
@@ -259,9 +259,9 @@ const module: Module<FeedModule, RootState> = {
         .get("/api/rss/item/feed", { params: { feedId } })
         .then(({ data }) => {
           commit("SET_ARTICLE_LIST", data.data);
-          commit("SET_LOADING");
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     UPDATE_SUBSCRIBE(
@@ -280,11 +280,11 @@ const module: Module<FeedModule, RootState> = {
         .then(() => dispatch("FETCH_FEED_LIST"))
         .then(() => {
           if (state.subscribeId === subscribeId) {
-            commit("SET_LOADING");
             dispatch("FETCH_ARTICLE_LIST", subscribeId);
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADGIN"));
     },
 
     UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
@@ -313,9 +313,9 @@ const module: Module<FeedModule, RootState> = {
         .get("/api/board/find/id", { params: { boardId } })
         .then(({ data }) => {
           commit("SET_BOARD", data.data);
-          commit("SET_LOADING");
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     UPDATE_BOARD({ dispatch, state, commit }, { boardId, boardName }) {
@@ -324,11 +324,11 @@ const module: Module<FeedModule, RootState> = {
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .then(() => {
           if (state.board && state.board.boardId === boardId) {
-            commit("SET_LOADING");
             dispatch("FETCH_ARTICLE_LIST_IN_BOARD", boardId);
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     DELETE_BOARD({ dispatch }, boardId) {
@@ -340,31 +340,33 @@ const module: Module<FeedModule, RootState> = {
 
     SAVE_IN_BOARD({ dispatch }, { boardId, article, from }) {
       let data = {};
+      console.log(article, boardId);
       if (from) {
         data = {
-          boardId,
-          newsDate: new Date(article.newsDate),
-          newsDescription: article.newsDescription,
-          newsLink: article.newsLink,
-          newsTitle: article.newsTitle,
-          userId: null,
-          userNo: null
+          pubDate: new Date(article.newsDate),
+          description: article.newsDescription,
+          link: article.newsLink,
+          title: article.newsTitle,
+          rssTitle: article.rssTitle,
+          subscribeName: article.subscribeName
         };
       } else {
         data = {
-          boardId,
-          newsDate: article.pubDate || new Date(),
-          newsDescription: article.description.substr(0, 190),
-          newsLink: article.link,
-          newsTitle: article.title,
-          userId: null,
-          userNo: null
+          pubDate: new Date(article.pubDate) || new Date(),
+          description: article.description.substr(0, 190),
+          link: article.link,
+          title: article.title,
+          rssTitle: article.rssTitle,
+          subscribeName: article.subscribeName
         };
       }
+      console.log(data);
 
       Axios.instance
-        .post("/api/news/save", data)
-        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .post("/api/news/save", data, { params: { boardId } })
+        .then(({ data }) => {
+          dispatch("FETCH_BOARD_LIST");
+        })
         .catch(err => console.error(err));
     },
 
@@ -380,9 +382,9 @@ const module: Module<FeedModule, RootState> = {
         .get("/api/news/find/id", { params: { newsId } })
         .then(({ data }) => {
           commit("SET_NEWS", data.data);
-          commit("SET_LOADING");
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     FETCH_CATEGORY_LIST({ commit }) {
@@ -404,9 +406,9 @@ const module: Module<FeedModule, RootState> = {
         .post("/api/find/news/detail", rssItem)
         .then(({ data }) => {
           commit("SET_ARTICLE_DETAIL", data.data);
-          commit("SET_LOADING");
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     }
   }
 };

@@ -18,7 +18,7 @@ const module: Module<MypageModule, RootState> = {
     isSidebarActive: true,
     isCreateFolderModalActive: false,
     postDirList: [],
-    postDir: [],
+    postDir: null,
     allTagDir: [],
     tagDir: [],
     post: null,
@@ -176,12 +176,10 @@ const module: Module<MypageModule, RootState> = {
         .put("/api/postdir/update", null, postDirData)
         .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
-          console.log("FETCH_POSTDIR_LIST");
         })
         .then(() => {
           if (Number(state.postDirId) === postDirId) {
             dispatch("FETCH_POSTDIR", postDirId);
-            console.log("FETCH_POSTDIR");
           }
         })
         .catch(err => console.error(err));
@@ -210,7 +208,7 @@ const module: Module<MypageModule, RootState> = {
       Axios.instance
         .post("/api/post/save", postData)
         .then(({ data }) => {
-          dispatch("FETCH_POSTDIR_LIST");
+          dispatch("FETCH_POSTDIR", data.data.postDirId);
         })
         .catch(err => console.error(err));
     },
@@ -231,20 +229,15 @@ const module: Module<MypageModule, RootState> = {
         tagList: [];
       }
     ) {
+      const postData = {
+        postContent: postContent,
+        postDirId: postDirId,
+        postId: postId,
+        postTitle: postTitle,
+        tagList: tagList
+      };
       Axios.instance
-        .put(
-          "/api/post/update",
-          QueryString.stringify(
-            {
-              postContent: postContent,
-              postDirId: postDirId,
-              postId: postId,
-              postTitle: postTitle,
-              tagList: tagList
-            },
-            { indices: false }
-          )
-        )
+        .put("/api/post/update", postData)
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
         })

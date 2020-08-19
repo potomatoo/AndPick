@@ -350,4 +350,21 @@ public class RssController {
 		return response;
 	}
 
+	@GetMapping("/api/public/count")
+	public Object count() {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		result = rssService.findCount();
+
+		if (result.status) {
+			result.message = "숫자 조회가 완료되었습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "숫자 조회에 실패 하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+		return response;
+	}
+
 }

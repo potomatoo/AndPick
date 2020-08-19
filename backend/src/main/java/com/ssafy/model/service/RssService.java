@@ -28,4 +28,6 @@ public interface RssService {
 
 	public BasicResponse findMain();
 
+	public BasicResponse findCount();
+
 }

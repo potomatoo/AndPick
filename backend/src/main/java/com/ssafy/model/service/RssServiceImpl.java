@@ -19,6 +19,7 @@ import com.ssafy.model.repository.CategoryRepository;
 import com.ssafy.model.repository.FeedRepository;
 import com.ssafy.model.repository.RssRepository;
 import com.ssafy.model.repository.SubscribeRepository;
+import com.ssafy.model.repository.UserRepository;
 import com.ssafy.model.response.BasicResponse;
 
 @Service
@@ -32,6 +33,8 @@ public class RssServiceImpl implements RssService {
 	private FeedRepository feedRepository;
 	@Autowired
 	private SubscribeRepository subscribeRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	@Transactional
@@ -209,7 +212,7 @@ public class RssServiceImpl implements RssService {
 
 		List<String> categoryList = categoryRepository.findRandomCategoryId();
 		Map<String, List<String>> rssForCateogry = new HashMap<String, List<String>>();
-		
+
 		for (String category : categoryList) {
 			rssForCateogry.put(category, rssRepository.findByCategoryName(category));
 		}
@@ -222,6 +225,22 @@ public class RssServiceImpl implements RssService {
 			result.status = true;
 			result.message = "RSS 조회에 성공하였습니다.";
 		}
+
+		return result;
+	}
+
+	@Override
+	public BasicResponse findCount() {
+		// TODO Auto-generated method stub
+		HashMap<String, Long> count = new HashMap<>();
+
+		count.put("userCount", userRepository.count());
+		count.put("rssCount", rssRepository.count());
+		count.put("subscribeCount", subscribeRepository.count());
+
+		BasicResponse result = new BasicResponse();
+		result.data = count;
+		result.status = (result.data != null) ? true : false;
 
 		return result;
 	}

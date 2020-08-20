@@ -85,6 +85,7 @@ export interface Article {
   pubDate: string;
   rssTitle: string;
   subscribeName: string | null;
+  imgsrc: string;
 }
 
 export interface RssOnAdd {

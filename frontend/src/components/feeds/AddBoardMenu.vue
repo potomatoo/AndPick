@@ -137,7 +137,6 @@ export default class AddBoardMenu extends Vue {
   }
 
   saveArticle(boardId: number, article: Article) {
-    console.log(article);
     if (this.$route.name === "BoardArticleDetail") {
       this.COPY_IN_BOARD({ boardId, article });
     } else {

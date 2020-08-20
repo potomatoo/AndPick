@@ -51,13 +51,13 @@
                   <div class="h4">
                     {{ news.newsTitle }}
                   </div>
-                  <div class="sumtitle-1 text--secondary">
-                    {{ news.newsDate }}
+                  <div class="text-caption text--secondary">
+                    {{ setDate(news.newsDate) }}
                   </div>
                   <!-- <div class="sumtitle-1 text--secondary">
                     {{ article.rssTitle }}
                   </div> -->
-                  <v-list-item-subtitle>
+                  <v-list-item-subtitle class="mt-2">
                     {{ news.newsDescription }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
@@ -73,6 +73,7 @@
         indeterminate
         size="80"
         width="10"
+        color="rgb(236, 193, 156)"
       ></v-progress-circular>
     </v-overlay>
   </div>
@@ -96,6 +97,10 @@ export default class BoardArticleList extends Vue {
   fetchData() {
     this.SET_LOADING();
     this.FETCH_ARTICLE_LIST_IN_BOARD(this.$route.params.boardId);
+  }
+
+  setDate(date: string) {
+    return date.slice(0, 10) + " " + date.slice(11, 16);
   }
 }
 </script>

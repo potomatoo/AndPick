@@ -20,6 +20,7 @@
         clearable
         prepend-inner-icon="mdi-magnify"
         v-model="inputText"
+        color="rgb(236, 193, 156)"
         @keypress.enter="searchRss($event)"
       ></v-text-field>
     </v-container>
@@ -32,13 +33,13 @@
       <!-- <v-row> -->
       <div v-if="rssList.length">
         <v-col v-for="rss in rssList" :key="rss.rss.rssId">
-          <v-card max-height="250px">
+          <v-card max-height="250px" max-width="700px">
             <v-card-text>
               <follow-button :rss="rss.rss" />
               <v-row>
                 <v-col sm="2" class="pa-0 text-center">
                   <img v-if="rss.img" :src="rss.img" class="rss-img " />
-                  <img v-else src="@/assets/noimage.jpg" class="rss-img" />
+                  <img v-else src="@/assets/logo-img.png" class="rss-img" />
                 </v-col>
                 <v-col class="pa-0">
                   <v-list-item-content class="py-0 ml-5">
@@ -69,8 +70,8 @@
       </div>
       <div v-else>
         <p
-          class="mt-5 text-center green--text text--lighten-3"
-          style="margin-left: 10px; margin-top: 4-px; font-weight: bold"
+          class="mt-5 text-center"
+          style="margin-left: 10px; margin-top: 4-px; font-weight: bold; color: rgb(30, 132, 127)"
         >
           "{{ searchText }}"에 대한 검색 결과가 없습니다.
         </p>
@@ -138,7 +139,10 @@ export default class AddRss extends Vue {
   searchRss($event: KeyboardEvent) {
     const chips = document.querySelectorAll(".category-chip");
     if (chips.length) {
-      chips.forEach(el => el.classList.remove("green", "lighten-3"));
+      chips.forEach(el => {
+        el.removeAttribute("style");
+        el.classList.remove("white--text");
+      });
     }
     if (this.inputText && this.inputText[0] === "#") {
       this.FETCH_SEARCH_CATEGORY(this.inputText.slice(1));

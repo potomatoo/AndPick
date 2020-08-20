@@ -26,7 +26,7 @@
       <v-list-item
         @click="toAddPage($event)"
         class="px-6 sidebar-addrss"
-        color="rgb(223, 50, 119)"
+        color="rgb(245, 126, 126)"
       >
         <v-list-item-icon>
           <v-icon left>mdi-plus-box-outline</v-icon>

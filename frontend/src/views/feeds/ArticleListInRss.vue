@@ -35,10 +35,10 @@
           >
             <v-list-item-content class="mt-3">
               <div class="h4">{{ article.title }}</div>
-              <div class="sumtitle-1 text--secondary">
-                {{ article.pubDate }}
+              <div class="text-caption text--secondary">
+                {{ setDate(article.pubDate) }}
               </div>
-              <v-list-item-subtitle>{{
+              <v-list-item-subtitle class="mt-2">{{
                 article.description
               }}</v-list-item-subtitle>
             </v-list-item-content>
@@ -52,6 +52,7 @@
         indeterminate
         size="80"
         width="10"
+        color="rgb(236, 193, 156)"
       ></v-progress-circular>
     </v-overlay>
   </div>
@@ -60,7 +61,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { Rss, Article } from "../../store/Feed.interface";
+import { Article } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
@@ -93,6 +94,10 @@ export default class ArticleListInRss extends Vue {
   fetchData() {
     this.SET_LOADING();
     this.FETCH_ARTICLE_LIST(this.$route.params.subscribeId);
+  }
+
+  setDate(date: string) {
+    return date.slice(0, 10) + " " + date.slice(11, 16);
   }
 }
 </script>

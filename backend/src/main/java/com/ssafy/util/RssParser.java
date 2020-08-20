@@ -82,7 +82,6 @@ public class RssParser implements Runnable {
 						imgsrc = baseUrlAuthority + imgsrc;
 					}
 
-					System.out.println(imgsrc);
 					rssItem.setImgsrc(imgsrc);
 				} else {
 					rssItem.setImgsrc(rssChannel.getImg());
@@ -121,7 +120,7 @@ public class RssParser implements Runnable {
 		while (true) {
 			try {
 				this.parse();
-				Thread.sleep(60000);
+				Thread.sleep(300000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

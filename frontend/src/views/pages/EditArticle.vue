@@ -208,7 +208,7 @@
         </v-snackbar>
 
         <v-snackbar v-model="snackbar2" timeout="2000">
-          제목을 작성해주세요.
+          제목을 확인해주세요.
           <template v-slot:action="{ attrs }">
             <v-btn color="pink" text v-bind="attrs" @click="snackbar2 = false">
               Close

@@ -405,7 +405,6 @@ export default class EditArticle extends Vue {
       }
       this.$emit("save");
       this.FETCH_POSTDIR_LIST();
-      // this.FETCH_POSTDIR(this.$route.params.postDirId);
     } else {
       this.snackbar2 = true;
     }

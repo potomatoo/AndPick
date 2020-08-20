@@ -39,7 +39,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import CreateFolder from "@/components/pages/CreateFolder.vue";
 import PostDirContextMenu from "@/components/pages/PostDirContextMenu.vue";
-import { Post } from "../../store/MypageInterface";
+import { Post, PostDir } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
@@ -50,7 +50,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class SidebarMypage extends Vue {
-  @mypageModule.State postDirList!: [];
+  @mypageModule.State postDirList!: PostDir[];
   @mypageModule.Mutation SET_POSTDIR_CONTEXT_MENU: any;
 
   postDirListItem = {};

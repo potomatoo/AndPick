@@ -82,6 +82,9 @@ spring.data.mongodb.database= `mongodb_database_name`
 spring.data.mongodb.port=  `mongodb_port`
 
 ```
+
+> Use [sql file](https://lab.ssafy.com/s03-webmobile1-sub3/s03p13b107/blob/develop/backend/database.sql) to create mysql tables
+
 ### Google Login Config( ./backend/src/main/java/com/ssafy/config/GoogleLoginConfig.java )
 ```
 public static final String GOOGLE_CLIENT_ID = `Google_Client_ID`;

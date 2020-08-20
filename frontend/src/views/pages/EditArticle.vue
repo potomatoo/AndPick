@@ -406,7 +406,6 @@ export default class EditArticle extends Vue {
         }
       }
       this.$emit("save");
-      this.FETCH_POSTDIR_LIST();
     } else {
       this.snackbar2 = true;
     }

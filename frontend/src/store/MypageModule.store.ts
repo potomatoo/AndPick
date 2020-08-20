@@ -223,6 +223,7 @@ const module: Module<MypageModule, RootState> = {
         .post("/api/post/save", postData)
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
+          dispatch("FETCH_POSTDIR_LIST");
         })
         .catch(err => console.error(err));
     },
@@ -254,6 +255,7 @@ const module: Module<MypageModule, RootState> = {
         .put("/api/post/update", postData)
         .then(({ data }) => {
           dispatch("FETCH_POSTDIR", data.data.postDirId);
+          dispatch("FETCH_POSTDIR_LIST");
         })
         .catch(err => console.error(err));
     },

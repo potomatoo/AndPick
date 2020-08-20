@@ -1,5 +1,6 @@
 package com.ssafy.util;
 
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,7 +74,16 @@ public class RssParser implements Runnable {
 				Document descDoc = Jsoup.parse(description.text());
 				Element imgelement = descDoc.selectFirst("img");
 				if (imgelement != null) {
-					rssItem.setImgsrc(imgelement.attr("src"));
+					String imgsrc = imgelement.attr("src");
+
+					if (!imgsrc.substring(0, 4).equals("http")) {
+						URL url = new URL(this.link);
+						String baseUrlAuthority = url.getProtocol() + "://" + url.getAuthority();
+						imgsrc = baseUrlAuthority + imgsrc;
+					}
+
+					System.out.println(imgsrc);
+					rssItem.setImgsrc(imgsrc);
 				} else {
 					rssItem.setImgsrc(rssChannel.getImg());
 				}

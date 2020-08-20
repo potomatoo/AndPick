@@ -48,6 +48,12 @@ public class UserServiceImpl implements UserService {
 		defaultFeed.setFeedName("기업 정보");
 		defaultFeed.setUserNo(result.getUserNo());
 		defaultFeed = feedrepository.save(defaultFeed);
+		
+
+		Feed tutorialFeed = new Feed();
+		tutorialFeed.setFeedName("우클릭으로 삭제하세요");
+		tutorialFeed.setUserNo(result.getUserNo());
+		tutorialFeed = feedrepository.save(tutorialFeed);
 		// 구독 추가
 		Subscribe defaultSubscribe = new Subscribe();
 		defaultSubscribe.setSubscribeName("삼성 반도체 이야기");

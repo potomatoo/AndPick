@@ -3,11 +3,9 @@ import Vuex, { StoreOptions } from "vuex";
 import feedModule from "./FeedModule.store";
 import mypageModule from "./MypageModule.store";
 
-import axios from "axios";
 import { Axios } from "@/service/axios.service";
 
 import router from "@/router";
-import SERVER from "@/api/spr";
 
 import qs from "qs";
 
@@ -32,8 +30,8 @@ const store: StoreOptions<RootState> = {
     userName: STORAGE.getItem("name")
   },
   getters: {
-    isLoggedIn: (state) => !!state.JWT,
-    config: (state) => ({ headers: { Authorization: `${state.JWT}` } })
+    isLoggedIn: state => !!state.JWT,
+    config: state => ({ headers: { Authorization: `${state.JWT}` } })
   },
   mutations: {
     SET_TOKEN(state, token: string) {
@@ -55,63 +53,60 @@ const store: StoreOptions<RootState> = {
   },
   actions: {
     postAuthData({ commit }, info) {
-      axios
-        .post(SERVER.URL + info.location, qs.stringify(info.data), {
+      Axios.instance
+        .post("/api/public/login", qs.stringify(info.data), {
           withCredentials: true
         })
-        .then((res) => {
+        .then(res => {
           commit("SET_TOKEN", res.data.data["userPassword"]);
-          if (router.app.$route.query.scrap !== undefined) {
-            const scrapKey = router.app.$route.query.scrap;
-            // (40, 57)
-            localStorage.setItem("scrapKey", `${scrapKey}`);
+          const scrapKey = localStorage.getItem("scrapKey");
+          if (scrapKey) {
             router.push({
               name: "SelectFromOutside",
-              params: { scrapKey: `${scrapKey}` }
+              params: { scrapKey }
             });
           } else {
             router.push("/");
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("err", err);
           alert("아이디 또는 비밀번호가 옳지 않습니다.");
         });
     },
 
     signup(context, signupData) {
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.signup, signupData, {
+      Axios.instance
+        .post("/api/public/signup", signupData, {
           withCredentials: true
         })
-        .then((res) => {
+        .then(res => {
           alert("회원가입이 완료되었습니다.");
           router.push("/login");
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("err", err);
           alert("회원가입 실패입니다.");
         });
     },
 
     checkId({ commit }, signupData) {
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.checkid, qs.stringify(signupData), {
+      Axios.instance
+        .post("/api/public/signup/checkid", qs.stringify(signupData), {
           withCredentials: true
         })
-        .then((res) => {
+        .then(res => {
           commit("CHECK_DUPLICATE");
           alert("사용가능한 이메일 입니다.");
         })
-        .catch((err) => {
+        .catch(err => {
           alert("이미 가입된 이메일 입니다.");
         });
     },
 
     login({ dispatch }, loginData) {
       const info = {
-        data: loginData,
-        location: SERVER.ROUTES.login
+        data: loginData
       };
       dispatch("postAuthData", info);
     },
@@ -125,21 +120,18 @@ const store: StoreOptions<RootState> = {
 
     updateUser({ commit }, userName) {
       Axios.instance
-        .put(SERVER.URL + SERVER.ROUTES.updateUser, qs.stringify({ userName }))
+        .put("/api/user/update", qs.stringify({ userName }))
         .then(() => {
           commit("SET_NAME", userName);
           alert("닉네임이 변경되었습니다.");
           router.push("/");
         })
-        .catch((err) => console.log("err", err));
+        .catch(err => console.log("err", err));
     },
 
     updateUserPassword({ dispatch }, userPassword) {
       Axios.instance
-        .put(
-          SERVER.URL + SERVER.ROUTES.updatePassword,
-          qs.stringify(userPassword)
-        )
+        .put("/api/update/user/password", qs.stringify(userPassword))
         .then(() => {
           alert("비밀번호가 변경되었습니다.");
           dispatch("login", {
@@ -147,7 +139,7 @@ const store: StoreOptions<RootState> = {
             userPassword: userPassword.changePassword
           });
         })
-        .catch((err) => {
+        .catch(err => {
           alert("회원정보가 옳지 않습니다.");
           console.log("err", err);
         });
@@ -155,14 +147,14 @@ const store: StoreOptions<RootState> = {
 
     deleteUser({ getters, commit }) {
       Axios.instance
-        .delete(SERVER.URL + SERVER.ROUTES.deleteUser)
+        .delete("/api/user/delete")
         .then(() => {
           commit("SET_TOKEN", null);
           STORAGE.removeItem("jwt-token");
           alert("회원탈퇴가 완료되었습니다.");
           router.push("/cover");
         })
-        .catch((err) => console.log(err.response));
+        .catch(err => console.log(err.response));
     }
   }
 };

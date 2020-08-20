@@ -71,7 +71,7 @@
     <router-link :to="{ name: 'SocialLogin' }"
       ><img src="@/assets/google.png" style="width: 380px; height: 40px;"
     /></router-link>
-    <p>
+    <p v-if="!urlPath">
       계정이 없으신가요?
       <router-link :to="{ name: 'Signup' }">
         <b style="color: #1e847f">회원가입</b>
@@ -102,7 +102,7 @@ interface LoginData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);
@@ -123,12 +123,22 @@ export default class LoginView extends Vue {
     userType: 0,
     code: null
   };
+
+  urlPath: string | null = null;
+
   submitForm() {
     this.$v.$touch();
     if (this.$v.$invalid) {
       alert("입력이 옳지 않습니다.");
     } else {
       this.$store.dispatch("login", this.loginData);
+    }
+  }
+
+  created() {
+    if (router.app.$route.query.scrap) {
+      this.urlPath = router.app.$route.query.scrap.toString();
+      localStorage.setItem("scrapKey", `${this.urlPath}`);
     }
   }
 }

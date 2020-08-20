@@ -113,6 +113,7 @@ public class JwtProperties {
 - [Eslint](https://eslint.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vuelidate](https://vuelidate.js.org/)
+- [vue-google-oauth2](https://www.npmjs.com/package/vue-google-oauth2)
 
 ## Back end
 - [Spring boot](https://spring.io/projects/spring-boot)

@@ -59,7 +59,8 @@ export default class CreateFolderModal extends Vue {
     (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
       !this.checkDuplication(value) || "동일한 폴더가 존재합니다.",
-    (value: string) => value.length < 16 || "15자 이하로 입력해주세요."
+    (value: string) =>
+      (value && value.length < 16) || "15자 이하로 입력해주세요."
   ];
 
   @Watch("isActive")

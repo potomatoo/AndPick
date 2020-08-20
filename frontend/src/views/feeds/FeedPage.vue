@@ -22,9 +22,11 @@
     </v-container>
     <v-divider></v-divider>
 
-    <!-- 기사 리스트 -->
+    <!-- 구독한 채널이 없을 때 -->
     <v-container v-if="!articleList.length" class="text-center">
-      <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
+      <v-icon style="font-size: 180px" color="rgb(236, 193, 156)"
+        >mdi-comment-plus-outline</v-icon
+      >
       <h4
         v-if="feed"
         class="mt-10"
@@ -36,7 +38,7 @@
       <p class="text-center">
         채널을 구독하여 실시간으로 기사를 볼 수 있는 피드가 생성되었습니다.
 
-        <v-btn small outlined color="secondary" @click="addRss">
+        <v-btn small outlined color="rgb(30, 132, 127)" @click="addRss">
           <v-icon left>mdi-plus</v-icon>채널
         </v-btn>
 
@@ -44,24 +46,45 @@
       </p>
     </v-container>
 
-    <v-container v-else class="offset-lg3 lg6">
-      <v-list three-line>
+    <!-- 구독한 채널이 있을 때 -->
+    <v-container v-else>
+      <v-list three-line max-width="700PX">
         <v-list-item-group>
           <v-list-item
             v-for="(article, idx) in articleList"
             :key="idx"
             @click="selectArticle(article, idx)"
+            class="mb-3"
           >
-            <v-list-item-content class="mt-3">
-              <div class="h4">{{ article.title }}</div>
-              <div class="text-caption text--secondary">
-                {{ article.rssTitle }} /
-                {{ setDate(article.pubDate) }}
-              </div>
-              <v-list-item-subtitle class="mt-2">
-                {{ article.description }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
+            <v-row>
+              <v-col sm="2">
+                <img
+                  v-if="article.imgsrc"
+                  class="article-img"
+                  :src="article.imgsrc"
+                  onerror="this.src='http://i3b107.p.ssafy.io/img/logo-img.91ab7a7f.png'"
+                  :alt="article.title"
+                />
+                <img
+                  v-else
+                  class="article-img"
+                  src="@/assets/logo-img.png"
+                  :alt="article.title"
+                />
+              </v-col>
+              <v-col>
+                <v-list-item-content class="pt-0">
+                  <div class="h4">{{ article.title }}</div>
+                  <div class="text-caption text--secondary">
+                    {{ article.rssTitle }} /
+                    {{ setDate(article.pubDate) }}
+                  </div>
+                  <v-list-item-subtitle class="mt-2">
+                    {{ article.description }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-col>
+            </v-row>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -91,13 +114,13 @@ export default class FeedPage extends Vue {
   @feedModule.State feed!: FeedList;
   @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SET_ARTICLE_DETAIL: any;
-  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action FETCH_FEED!: any;
   @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.FETCH_FEED(this.$route.params.feedId);
   }
 
@@ -109,7 +132,7 @@ export default class FeedPage extends Vue {
   }
 
   async selectArticle(article: Article, idx: number) {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.SET_ARTICLE_DETAIL(article);
     await this.FETCH_ARTICLE_DETAIL(article);
     this.toArticleDetail(idx);
@@ -125,4 +148,12 @@ export default class FeedPage extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.article-img {
+  width: 100%;
+  margin-top: 12px;
+  border: 2px soild;
+  border-radius: 7px;
+  height: 100px;
+}
+</style>

@@ -7,6 +7,7 @@
         class="form-control"
         id="userPassword"
         type="password"
+        autocomplete="new-password"
         placeholder="현재 비밀번호"
         :class="{
           'is-invalid': $v.updateData.userPassword.$error,
@@ -77,8 +78,10 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { required, minLength, sameAs } from "vuelidate/lib/validators";
+import { Axios } from "../../service/axios.service";
 
 interface UpdateData {
+  userId: string | null;
   userPassword: string | null;
   changePassword: string | null;
   changePasswordCheck: string | null;
@@ -105,6 +108,7 @@ interface UpdateData {
 })
 export default class PasswordUpdate extends Vue {
   updateData: UpdateData = {
+    userId: null,
     userPassword: null,
     changePassword: null,
     changePasswordCheck: null
@@ -114,6 +118,16 @@ export default class PasswordUpdate extends Vue {
     if (!this.$v.$invalid) {
       this.$store.dispatch("updateUserPassword", this.updateData);
     }
+  }
+  created() {
+    Axios.instance
+      .get("/api/user/detail")
+      .then((res) => {
+        this.updateData.userId = res.data.data.userId;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 </script>

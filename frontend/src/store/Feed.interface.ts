@@ -48,6 +48,7 @@ export interface News {
   newsLink: string;
   newsDate: string;
   newsDescription: string;
+  newsImg: string;
   boardId: number;
   userNo: 16;
 }
@@ -85,6 +86,7 @@ export interface Article {
   pubDate: string;
   rssTitle: string;
   subscribeName: string | null;
+  imgsrc: string;
 }
 
 export interface RssOnAdd {

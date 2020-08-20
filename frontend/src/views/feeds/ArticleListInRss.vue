@@ -2,11 +2,9 @@
   <div class="mt-10">
     <v-container>
       <v-layout>
-        <v-flex>
-          <h1
-            v-if="articleList[0]"
-            style="font-family: 'Do Hyeon', sans-serif;"
-          >
+        <v-flex v-if="articleList[0]">
+          <div class="caption mb-3">채널</div>
+          <h1 style="font-family: 'Do Hyeon', sans-serif;">
             {{ articleList[0].subscribeName }}
           </h1>
         </v-flex>
@@ -17,7 +15,7 @@
                 mdi-replay mdi-flip-h
               </v-icon>
             </template>
-            <span class="grey--text text-darken-1">Refresh</span>
+            <span class="grey--text text-darken-1">새로고침</span>
           </v-tooltip>
         </v-flex>
       </v-layout>
@@ -25,23 +23,43 @@
     <v-divider></v-divider>
 
     <!-- 기사 리스트 -->
-    <v-container class="offset-lg3 lg6">
-      <v-list three-line>
+    <v-container>
+      <v-list three-line max-width="700px">
         <v-list-item-group>
           <v-list-item
             v-for="(article, idx) in articleList"
             :key="idx"
             @click="selectArticle(article, idx)"
+            class="mb-3"
           >
-            <v-list-item-content class="mt-3">
-              <div class="h4">{{ article.title }}</div>
-              <div class="text-caption text--secondary">
-                {{ setDate(article.pubDate) }}
-              </div>
-              <v-list-item-subtitle class="mt-2">{{
-                article.description
-              }}</v-list-item-subtitle>
-            </v-list-item-content>
+            <v-row>
+              <v-col sm="2">
+                <img
+                  v-if="article.imgsrc"
+                  class="article-img"
+                  :src="article.imgsrc"
+                  onerror="this.src='http://i3b107.p.ssafy.io/img/logo-img.91ab7a7f.png'"
+                  :alt="article.title"
+                />
+                <img
+                  v-else
+                  class="article-img"
+                  src="@/assets/logo-img.png"
+                  :alt="article.title"
+                />
+              </v-col>
+              <v-col>
+                <v-list-item-content class="pt-0">
+                  <div class="h4">{{ article.title }}</div>
+                  <div class="text-caption text--secondary">
+                    {{ setDate(article.pubDate) }}
+                  </div>
+                  <v-list-item-subtitle class="mt-2">
+                    {{ article.description }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-col>
+            </v-row>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -70,7 +88,7 @@ export default class ArticleListInRss extends Vue {
   @feedModule.State articleList!: Article[];
   @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SET_ARTICLE_DETAIL: any;
-  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action FETCH_ARTICLE_LIST: any;
   @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
@@ -84,7 +102,7 @@ export default class ArticleListInRss extends Vue {
   }
 
   async selectArticle(article: Article, idx: number) {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.SET_ARTICLE_DETAIL();
     await this.FETCH_ARTICLE_DETAIL(article);
     this.toArticleDetail(idx);
@@ -92,7 +110,7 @@ export default class ArticleListInRss extends Vue {
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.FETCH_ARTICLE_LIST(this.$route.params.subscribeId);
   }
 
@@ -102,4 +120,12 @@ export default class ArticleListInRss extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.article-img {
+  width: 100%;
+  margin-top: 12px;
+  border: 2px soild;
+  border-radius: 7px;
+  height: 100px;
+}
+</style>

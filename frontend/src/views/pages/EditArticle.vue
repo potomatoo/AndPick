@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" v-model="valid" lazy-validation onsubmit="return false;">
       <v-text-field
         label="제목"
         single-line
@@ -208,7 +208,7 @@
         </v-snackbar>
 
         <v-snackbar v-model="snackbar2" timeout="2000">
-          제목을 확인해주세요.
+          글 제목을 확인해주세요.
           <template v-slot:action="{ attrs }">
             <v-btn color="pink" text v-bind="attrs" @click="snackbar2 = false">
               Close
@@ -224,7 +224,6 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from "tiptap";
-import { router } from "@/router";
 
 import {
   Blockquote,
@@ -289,7 +288,10 @@ export default class EditArticle extends Vue {
     this.editor.focus();
   }
 
-  rules = [value => !!value || "제목을 작성해야 합니다."];
+  rules = [
+    value => !!value || "제목을 작성해야 합니다.",
+    value => value.length < 21 || "20자 이하로 입력해주세요."
+  ];
 
   validate() {
     this.$refs.form.validate();

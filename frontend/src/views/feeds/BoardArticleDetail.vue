@@ -106,7 +106,7 @@ const feedModule = namespace("feedModule");
 export default class BoardArticleDetail extends Vue {
   @feedModule.State news!: News;
   @feedModule.State isLoading!: boolean;
-  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action FETCH_ARTICLE_IN_BOARD: any;
   @feedModule.Action DELETE_IN_BOARD: any;
 
@@ -119,7 +119,7 @@ export default class BoardArticleDetail extends Vue {
   }
 
   fetchData() {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.FETCH_ARTICLE_IN_BOARD(this.$route.params.newsId);
   }
 

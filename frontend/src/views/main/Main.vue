@@ -97,7 +97,7 @@ const feedModule = namespace("feedModule");
 const mypageModule = namespace("mypageModule");
 
 @Component
-export default class A extends Vue {
+export default class Main extends Vue {
   @mypageModule.State rssChannel!: number;
   @mypageModule.State saveNews!: number;
   @mypageModule.State users!: number;

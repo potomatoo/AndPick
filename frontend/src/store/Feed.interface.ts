@@ -48,6 +48,7 @@ export interface News {
   newsLink: string;
   newsDate: string;
   newsDescription: string;
+  newsImg: string;
   boardId: number;
   userNo: 16;
 }

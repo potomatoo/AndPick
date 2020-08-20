@@ -62,7 +62,7 @@
                   v-if="article.imgsrc"
                   class="article-img"
                   :src="article.imgsrc"
-                  onerror="this.src='http://localhost:8080/img/logo-img.91ab7a7f.png'"
+                  onerror="this.src='http://i3b107.p.ssafy.io/img/logo-img.91ab7a7f.png'"
                   :alt="article.title"
                 />
                 <img
@@ -114,13 +114,13 @@ export default class FeedPage extends Vue {
   @feedModule.State feed!: FeedList;
   @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SET_ARTICLE_DETAIL: any;
-  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action FETCH_FEED!: any;
   @feedModule.Action FETCH_ARTICLE_DETAIL: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.FETCH_FEED(this.$route.params.feedId);
   }
 
@@ -132,7 +132,7 @@ export default class FeedPage extends Vue {
   }
 
   async selectArticle(article: Article, idx: number) {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.SET_ARTICLE_DETAIL(article);
     await this.FETCH_ARTICLE_DETAIL(article);
     this.toArticleDetail(idx);

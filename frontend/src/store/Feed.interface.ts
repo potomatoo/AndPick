@@ -2,6 +2,7 @@
 export interface Category {
   categoryId: number;
   categoryName: string;
+  count?: number;
 }
 // api data
 export interface Rss {
@@ -59,7 +60,7 @@ export interface Board {
 }
 
 export interface FeedModule {
-  rssList: Rss[];
+  rssList: RssOnAdd[];
   feedList: FeedList[];
   boardList: Board[];
   article: Article | null;
@@ -71,6 +72,9 @@ export interface FeedModule {
   subsContextMenu: Context;
   feedContextMenu: Context;
   boardContextMenu: Context;
+  isLoading: boolean;
+  categoryList: Category[];
+  rssAllCount: number;
 }
 
 // dummy
@@ -80,5 +84,15 @@ export interface Article {
   link: string;
   pubDate: string;
   rssTitle: string;
-  subscribeName: string;
+  subscribeName: string | null;
+  imgsrc: string;
+}
+
+export interface RssOnAdd {
+  title: string;
+  link: string;
+  category: string | null;
+  items: Article[];
+  rss: Rss;
+  img: string;
 }

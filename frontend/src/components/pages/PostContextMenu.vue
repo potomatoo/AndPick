@@ -18,14 +18,26 @@
     <!-- 구독취소 모달 -->
     <v-dialog v-model="deleteModal" max-width="450px">
       <v-card>
-        <v-card-title
+        <v-card-title style="font-family: 'Do Hyeon', sans-serif;"
           >{{ postItem.postTitle }}를 삭제하시겠습니까?</v-card-title
         >
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="deletePost">OK</v-btn>
-          <v-btn text color="error" @click="deleteModal = false">CANCLE</v-btn>
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="deletePost"
+            >삭제</v-btn
+          >
+          <v-btn
+            text
+            color="primary"
+            style="font-weight: bold"
+            @click="deleteModal = false"
+            >취소</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>

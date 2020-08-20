@@ -7,10 +7,11 @@ import {
   Rss,
   Feed,
   Board,
-  News
+  News,
+  Category,
+  RssOnAdd
 } from "./Feed.interface";
 import { Axios } from "@/service/axios.service";
-import router from "@/router";
 
 const module: Module<FeedModule, RootState> = {
   namespaced: true,
@@ -38,7 +39,10 @@ const module: Module<FeedModule, RootState> = {
       showCtx: false,
       x: 0,
       y: 0
-    }
+    },
+    isLoading: false,
+    categoryList: [],
+    rssAllCount: 0
   },
 
   getters: {},
@@ -60,6 +64,10 @@ const module: Module<FeedModule, RootState> = {
       state.boardList = boardList;
     },
 
+    SET_ARTICLE_LIST(state, articleList: Article[]) {
+      state.articleList = articleList;
+    },
+
     SET_BOARD(state, board: Board) {
       state.board = board;
     },
@@ -68,15 +76,15 @@ const module: Module<FeedModule, RootState> = {
       state.news = news;
     },
 
-    SET_RSS_LIST(state, rssList: Rss[]) {
+    SET_RSS_LIST(state, rssList: RssOnAdd[]) {
       state.rssList = rssList;
     },
 
     SET_SELECTED_SUBSCRIPTION(state, subscribeId: number) {
-      state.subscribeId = subscribeId;
+      state.subscribeId = Number(subscribeId);
     },
 
-    SELECT_ARTICLE(state, article: Article) {
+    SET_ARTICLE_DETAIL(state, article: Article) {
       state.article = article;
     },
 
@@ -99,6 +107,18 @@ const module: Module<FeedModule, RootState> = {
       state.subsContextMenu.showCtx = false;
       state.boardContextMenu.showCtx = false;
       state.boardContextMenu = ctx;
+    },
+
+    SET_LOADING(state) {
+      state.isLoading = !state.isLoading;
+    },
+
+    SET_CATEGORY_LIST(state, categoryList: Category[]) {
+      state.categoryList = categoryList;
+    },
+
+    SET_RSS_COUNT(state, count: number) {
+      state.rssAllCount = count;
     }
   },
   actions: {
@@ -111,15 +131,21 @@ const module: Module<FeedModule, RootState> = {
 
     FETCH_RSS({ commit }) {
       Axios.instance
-        .get("/api/rss/list/all")
-        .then(({ data }) => commit("SET_RSS_LIST", data.data))
+        .get("/api/rss/find/channel/all")
+        .then(({ data }) => {
+          commit("SET_RSS_LIST", data.data);
+          commit("SET_RSS_COUNT", data.data.length);
+        })
         .catch(err => console.error(err));
     },
 
-    FETCH_FEED({ commit }, feedId: number) {
+    FETCH_FEED({ commit, dispatch }, feedId: number) {
       Axios.instance
         .get("/api/feed/feedid", { params: { feedId } })
-        .then(({ data }) => commit("SET_FEED", data.data))
+        .then(({ data }) => {
+          commit("SET_FEED", data.data);
+          dispatch("FETCH_ARTICLE_LIST_IN_FEED", feedId);
+        })
         .catch(err => console.error(err));
     },
 
@@ -143,7 +169,7 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    UPDATE_FEED({ dispatch, state }, { feedId, feedName }) {
+    UPDATE_FEED({ dispatch, state, commit }, { feedId, feedName }) {
       const updateData = {
         params: {
           feedId,
@@ -157,10 +183,11 @@ const module: Module<FeedModule, RootState> = {
         })
         .then(() => {
           if (state.feed && state.feed.feedId === feedId) {
-            dispatch("FETCH_ARTICLE_LIST_IN_FEED", feedId);
+            dispatch("FETCH_FEED", feedId);
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     DELETE_FEED({ dispatch }, feedId) {
@@ -221,23 +248,24 @@ const module: Module<FeedModule, RootState> = {
         .get("/api/rss/item/subscribe", { params: { subscribeId } })
         .then(({ data }) => {
           commit("SET_SELECTED_SUBSCRIPTION", subscribeId);
-          state.articleList = data.data;
+          commit("SET_ARTICLE_LIST", data.data);
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
-    FETCH_ARTICLE_LIST_IN_FEED({ state, dispatch }, feedId) {
+    FETCH_ARTICLE_LIST_IN_FEED({ state, commit }, feedId) {
       Axios.instance
         .get("/api/rss/item/feed", { params: { feedId } })
         .then(({ data }) => {
-          dispatch("FETCH_FEED", feedId);
-          state.articleList = data.data;
+          commit("SET_ARTICLE_LIST", data.data);
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     UPDATE_SUBSCRIBE(
-      { dispatch, state },
+      { dispatch, state, commit },
       { feedId, subscribeId, subscribeName }
     ) {
       const updateData = {
@@ -255,7 +283,8 @@ const module: Module<FeedModule, RootState> = {
             dispatch("FETCH_ARTICLE_LIST", subscribeId);
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADGIN"));
     },
 
     UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
@@ -282,11 +311,14 @@ const module: Module<FeedModule, RootState> = {
     FETCH_ARTICLE_LIST_IN_BOARD({ commit }, boardId) {
       Axios.instance
         .get("/api/board/find/id", { params: { boardId } })
-        .then(({ data }) => commit("SET_BOARD", data.data))
-        .catch(err => console.error(err));
+        .then(({ data }) => {
+          commit("SET_BOARD", data.data);
+        })
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
-    UPDATE_BOARD({ dispatch, state }, { boardId, boardName }) {
+    UPDATE_BOARD({ dispatch, state, commit }, { boardId, boardName }) {
       Axios.instance
         .put("/api/board/update", null, { params: { boardId, boardName } })
         .then(() => dispatch("FETCH_BOARD_LIST"))
@@ -295,7 +327,8 @@ const module: Module<FeedModule, RootState> = {
             dispatch("FETCH_ARTICLE_LIST_IN_BOARD", boardId);
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     },
 
     DELETE_BOARD({ dispatch }, boardId) {
@@ -305,38 +338,43 @@ const module: Module<FeedModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    SAVE_IN_BOARD({ dispatch }, { boardId, article, from }) {
-      let data = {};
-      if (from) {
-        data = {
-          boardId,
-          newsDate: new Date(article.newsDate),
-          newsDescription: article.newsDescription,
-          newsLink: article.newsLink,
-          newsTitle: article.newsTitle,
-          userId: null,
-          userNo: null
-        };
-      } else {
-        data = {
-          boardId,
-          newsDate: article.pubDate || new Date(),
-          newsDescription: article.description.substr(0, 190),
-          newsLink: article.link,
-          newsTitle: article.title,
-          userId: null,
-          userNo: null
-        };
-      }
+    SAVE_IN_BOARD({ dispatch }, { boardId, article }) {
+      const data = {
+        pubDate: article.pubDate || new Date(),
+        description: article.description,
+        link: article.link,
+        title: article.title,
+        rssTitle: article.rssTitle,
+        subscribeName: article.subscribeName
+      };
 
       Axios.instance
-        .post("/api/news/save", data)
-        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .post("/api/news/save", article, { params: { boardId } })
+        .then(({ data }) => {
+          dispatch("FETCH_BOARD_LIST");
+        })
+        .catch(err => console.error(err));
+    },
+
+    COPY_IN_BOARD({ dispatch }, { boardId, article }) {
+      const data = {
+        newsDate: article.newsDate || new Date(),
+        newsDescription: article.newsDescription,
+        newsLink: article.newsLink,
+        newsTitle: article.newsTitle,
+        newsId: article.newsId,
+        userNo: article.userNo
+      };
+      Axios.instance
+        .post("/api/board/copy", data, { params: { boardId } })
+        .then(({ data }) => {
+          dispatch("FETCH_BOARD_LIST");
+        })
         .catch(err => console.error(err));
     },
 
     DELETE_IN_BOARD({ dispatch }, newsId) {
-      Axios.instance
+      return Axios.instance
         .delete("/api/news/delete", { params: { newsId } })
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));
@@ -345,8 +383,42 @@ const module: Module<FeedModule, RootState> = {
     FETCH_ARTICLE_IN_BOARD({ commit }, newsId) {
       Axios.instance
         .get("/api/news/find/id", { params: { newsId } })
-        .then(({ data }) => commit("SET_NEWS", data.data))
+        .then(({ data }) => {
+          commit("SET_NEWS", data.data);
+        })
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
+    },
+
+    FETCH_CATEGORY_LIST({ commit }) {
+      Axios.instance
+        .get("/api/category/find/count")
+        .then(({ data }) => commit("SET_CATEGORY_LIST", data.data))
         .catch(err => console.error(err));
+    },
+
+    FETCH_SEARCH_CATEGORY({ commit }, categoryName) {
+      Axios.instance
+        .get("/api/rss/find/channel/categorylike", { params: { categoryName } })
+        .then(({ data }) => commit("SET_RSS_LIST", data.data))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_SEARCH_RSS({ commit }, rssName) {
+      Axios.instance
+        .get("/api/rss/find/channel/rsslike", { params: { rssName } })
+        .then(({ data }) => commit("SET_RSS_LIST", data.data))
+        .catch(err => console.error(err));
+    },
+
+    FETCH_ARTICLE_DETAIL({ commit }, rssItem: Article) {
+      return Axios.instance
+        .post("/api/find/news/detail", rssItem)
+        .then(({ data }) => {
+          commit("SET_ARTICLE_DETAIL", data.data);
+        })
+        .catch(err => console.error(err))
+        .finally(() => commit("SET_LOADING"));
     }
   }
 };

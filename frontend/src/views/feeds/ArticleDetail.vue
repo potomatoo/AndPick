@@ -7,8 +7,12 @@
           <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
         </div>
         <v-divider class="mt-2"></v-divider>
-        <h3 class="mt-10 mb-0">{{ article.title }}</h3>
-        <div class="text-caption text--secondary">{{ article.pubDate }}</div>
+        <h3 class="mt-10 mb-0" style="font-family: 'Do Hyeon', sans-serif;">
+          {{ article.title }}
+        </h3>
+        <div class="text-caption text--secondary">
+          {{ setDate(article.pubDate) }}
+        </div>
       </v-container>
 
       <v-container>
@@ -27,7 +31,7 @@
             block
             tile
             @click="openPage(article.link)"
-            >VISIT WEBSITE</v-btn
+            >사이트 바로가기</v-btn
           >
         </div>
       </v-container>
@@ -79,6 +83,7 @@ export default class ArticleDetail extends Vue {
   mounted() {
     // 새로고침시 article state가 초기화되면 상위 페이지로 이동
     this.checkArticle();
+    this.setStyle();
   }
 
   saveEdit() {
@@ -119,7 +124,10 @@ export default class ArticleDetail extends Vue {
     });
   }
 
-  // @Watch("$route")
+  setDate(date: string) {
+    return date.slice(0, 10) + " " + date.slice(11, 16);
+  }
+
   setStyle() {
     const article = document.querySelector(".article-desc");
     const images = article?.querySelectorAll("img");
@@ -130,7 +138,7 @@ export default class ArticleDetail extends Vue {
       images.forEach(el => el.setAttribute("style", "width: 100%"));
     }
     if (videos?.length) {
-      videos.forEach(el => el.setAttribute("style", "width: 100px"));
+      videos.forEach(el => el.setAttribute("style", "width: 100%"));
     }
     if (iframe?.length) {
       iframe.forEach(el => el.setAttribute("style", "width: 100%"));
@@ -138,10 +146,6 @@ export default class ArticleDetail extends Vue {
     if (pTag?.length) {
       pTag.forEach(el => el.setAttribute("style", "margin: 24px 0px"));
     }
-  }
-
-  updated() {
-    this.setStyle();
   }
 }
 </script>

@@ -21,16 +21,22 @@
           </v-list-item-content>
         </v-list-item>
     </router-link>-->
+
     <v-list class="mt-5">
-      <v-list-item class="px-2">
+      <v-list-item
+        @click="toAddPage($event)"
+        class="px-6 sidebar-addrss"
+        color="rgb(245, 126, 126)"
+      >
         <v-list-item-icon>
-          <v-icon>mdi-plus-box-outline</v-icon>
+          <v-icon left>mdi-plus-box-outline</v-icon>
         </v-list-item-icon>
-        <router-link class="router-link" :to="{ name: 'AddRss' }">
-          <v-list-item-content>
-            <v-list-item-title>Follow New Sources</v-list-item-title>
-          </v-list-item-content>
-        </router-link>
+        <v-list-item-content>
+          <v-list-item-title
+            style="font-size: 18px; font-family: 'Do Hyeon', sans-serif;"
+            >채널 구독</v-list-item-title
+          >
+        </v-list-item-content>
       </v-list-item>
     </v-list>
   </div>
@@ -40,11 +46,32 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class SidebarTop extends Vue {}
-</script>
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
+export default class SidebarTop extends Vue {
+  toAddPage($event: MouseEvent) {
+    const boards = document.querySelectorAll(".sidebar-board");
+    const mypages = document.querySelectorAll(".sidebar-mypage");
+    const subscriptions = document.querySelectorAll(".sidebar-subscription");
+
+    if (boards?.length) {
+      boards.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (mypages?.length) {
+      mypages.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (subscriptions?.length) {
+      subscriptions.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    ($event.currentTarget as HTMLElement).classList.add("v-list-item--active");
+    if (this.$route.name !== "AddRss") {
+      this.$router.push({ name: "AddRss" });
+    }
+  }
 }
-</style>
+</script>
+<style scoped></style>

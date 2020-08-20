@@ -3,179 +3,188 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <h1>Follow New Sources</h1>
+          <h1 style="font-family: 'Do Hyeon', sans-serif;">
+            새 채널을 구독해주세요.
+          </h1>
         </v-flex>
-        <!-- <v-flex class="text-right">
-          <v-icon @click="console.log('hi')">mdi-check</v-icon>
-          <v-icon class="ml-3" @click="console.log('hi')"
-            >mdi-replay mdi-flip-h</v-icon
-          >
-        </v-flex> -->
       </v-layout>
     </v-container>
 
     <v-divider></v-divider>
-
     <v-container>
-      <v-layout>
-        <h4>Discover the best sources for any topic</h4>
-      </v-layout>
+      <v-layout> </v-layout>
       <v-text-field
         outlined
-        label="Search by topic, website, or RSS link"
+        label="RSS 채널을 검색하세요. 카테고리 검색은 앞에 #을 붙이세요 (ex.#IT)"
         type="text"
         clearable
         prepend-inner-icon="mdi-magnify"
+        v-model="inputText"
+        color="rgb(236, 193, 156)"
+        @keypress.enter="searchRss($event)"
       ></v-text-field>
-      <v-layout justify-center>
-        <p>
-          The articles you want to read later will be here
-        </p>
-      </v-layout>
     </v-container>
+    <rss-category />
+    <p style="margin-left: 10px; margin-top: 4-px; font-weight: bold">
+      추천하는 채널 목록
+    </p>
 
     <v-container fluid>
       <!-- <v-row> -->
-      <v-col v-for="rss in rssList" :key="rss.rssId">
-        <v-card max-height="250px">
-          <v-card-text>
-            <div class="float-left">Word of the Day</div>
-
-            <!-- ADD 버튼 메뉴 -->
-            <v-menu
-              offset-x
-              :close-on-content-click="false"
-              min-width="300px"
-              :close-on-click="closeMenu"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  outlined
-                  color="success"
-                  v-bind="attrs"
-                  v-on="on"
-                  class="float-right"
-                >
-                  FOLLOW
-                </v-btn>
-              </template>
-              <v-list class="py-0">
-                <v-list-item v-for="(feed, i) in feedList" :key="i">
-                  <v-icon color="grey" class="mr-2">mdi-rss</v-icon>
-                  <v-list-item-title>{{ feed.feedName }}</v-list-item-title>
-                  <v-btn
-                    v-if="checkSubscribe(feed.subscribeList, rss)"
-                    class="ml-3"
-                    outlined
-                    color="success"
-                    small
-                    @click="addRss(feed.feedId, rss)"
-                  >
-                    <v-icon left>mdi-plus</v-icon> ADD
-                  </v-btn>
-                  <v-btn
-                    v-else
-                    class="ml-3"
-                    outlined
-                    color="error"
-                    small
-                    @click="addRss(feed.feedId, rss)"
-                  >
-                    <v-icon left>mdi-window-close</v-icon> REMOVE
-                  </v-btn>
-                </v-list-item>
-                <hr class="ma-0" />
-                <v-list-item @click="modalActive = !modalActive">
-                  <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-                  <v-list-item-title class="success--text"
-                    >NEW FEED</v-list-item-title
-                  >
-                </v-list-item>
-              </v-list>
-            </v-menu>
-
-            <p class="display-1 text--primary mt-10">
-              {{
-                rss.rssName ||
-                  ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1]
-              }}
-            </p>
-            <p>adjective</p>
-            <div class="text--primary">
-              well meaning and kindly.<br />
-              "a benevolent smile"
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
+      <div v-if="rssList.length">
+        <v-col v-for="rss in rssList" :key="rss.rss.rssId">
+          <v-card max-height="250px" max-width="700px">
+            <v-card-text>
+              <follow-button :rss="rss.rss" />
+              <v-row>
+                <v-col sm="2" class="pa-0 text-center">
+                  <img v-if="rss.img" :src="rss.img" class="rss-img " />
+                  <img v-else src="@/assets/logo-img.png" class="rss-img" />
+                </v-col>
+                <v-col class="pa-0">
+                  <v-list-item-content class="py-0 ml-5">
+                    <p class="h5 text--primary font-weight-bold">
+                      {{ rss.title }}
+                    </p>
+                    <p class="mt-2 mb-4 rss-link" @click="openWeb(rss.link)">
+                      {{
+                        rss.link[4] === "s"
+                          ? rss.link.slice(8)
+                          : rss.link.slice(7)
+                      }}
+                    </p>
+                    <div
+                      class="text--primary article-title"
+                      v-for="article in rss.items"
+                      :key="article.link"
+                      @click="toArticleDetail(article)"
+                    >
+                      - {{ article.title }}
+                    </div>
+                  </v-list-item-content>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </div>
+      <div v-else>
+        <p
+          class="mt-5 text-center"
+          style="margin-left: 10px; margin-top: 4-px; font-weight: bold; color: rgb(30, 132, 127)"
+        >
+          "{{ searchText }}"에 대한 검색 결과가 없습니다.
+        </p>
+      </div>
       <!-- </v-row> -->
     </v-container>
-    <create-feed-modal
-      :modalActive.sync="modalActive"
-      @addFeed="addFeeds"
-      @closeModal="closeModal"
-    />
+    <!-- <rss-modal :rssModalActive.sync="rssModalActive" :rss="selectedRss" /> -->
+    <article-detail-modal :modalActive.sync="modalActive" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { Rss, SubscribeList } from "../../store/Feed.interface";
+import { RssOnAdd, Article } from "../../store/Feed.interface";
 
-import CreateFeedModal from "@/components/feeds/CreateFeedModal.vue";
+import RssCategory from "@/components/feeds/RssCategory.vue";
+// import RssModal from "@/components/feeds/RssModal.vue";
+import FollowButton from "@/components/feeds/FollowButton.vue";
+import ArticleDetailModal from "@/components/feeds/ArticleDetailModal.vue";
 
 const feedModule = namespace("feedModule");
 
 @Component({
   components: {
-    CreateFeedModal
+    RssCategory,
+    FollowButton,
+    ArticleDetailModal
   }
 })
 export default class AddRss extends Vue {
   @feedModule.State rssList!: [];
-  @feedModule.State feedList!: [];
+  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_ARTICLE_DETAIL: any;
   @feedModule.Action FETCH_RSS: any;
-  @feedModule.Action SUBSCRIBE_RSS: any;
-  @feedModule.Action ADD_FEED: any;
+  @feedModule.Action FETCH_CATEGORY_LIST: any;
+  @feedModule.Action FETCH_SEARCH_CATEGORY: any;
+  @feedModule.Action FETCH_SEARCH_RSS: any;
+  @feedModule.Action FETCH_ARTICLE_DETAIL: any;
+
+  inputText = "";
+
+  searchText = "";
 
   modalActive = false;
 
-  closeMenu = true;
-
-  addRss(feedId: number, rss: Rss) {
-    this.SUBSCRIBE_RSS({ feedId, rss });
-  }
-
-  checkSubscribe(subscribedList: SubscribeList[], rss: Rss) {
-    return !(
-      subscribedList.length &&
-      subscribedList.some(el => el.rss.rssId === rss.rssId)
-    );
-  }
-
-  closeModal() {
-    this.modalActive = false;
-  }
-
-  addFeeds(feedName: string) {
-    this.ADD_FEED(feedName);
-    this.closeModal();
-  }
+  selectedRss: RssOnAdd | object = {};
 
   created() {
     this.FETCH_RSS();
+    this.FETCH_CATEGORY_LIST();
   }
 
-  @Watch("modalActive")
-  prevent() {
-    if (this.modalActive) {
-      this.closeMenu = false;
-    } else {
-      this.closeMenu = true;
-    }
+  openWeb(link: string) {
+    window.open(link);
   }
+
+  async toArticleDetail(article: Article) {
+    this.SET_LOADING();
+    this.SET_ARTICLE_DETAIL(article);
+    await this.FETCH_ARTICLE_DETAIL(article);
+    this.modalActive = !this.modalActive;
+  }
+
+  searchRss($event: KeyboardEvent) {
+    const chips = document.querySelectorAll(".category-chip");
+    if (chips.length) {
+      chips.forEach(el => {
+        el.removeAttribute("style");
+        el.classList.remove("white--text");
+      });
+    }
+    if (this.inputText && this.inputText[0] === "#") {
+      this.FETCH_SEARCH_CATEGORY(this.inputText.slice(1));
+    } else {
+      this.FETCH_SEARCH_RSS(this.inputText);
+    }
+    this.searchText = this.inputText;
+    this.inputText = "";
+    ($event.target as HTMLElement).blur();
+  }
+
+  // selectRss(rss: RssOnAdd) {
+  //   this.selectedRss = rss;
+  //   this.rssModalActive = !this.rssModalActive;
+  // }
 }
 </script>
 
-<style></style>
+<style scoped>
+.rss-img {
+  width: 60%;
+  height: 70px;
+  border: 1px solid #eeeeee;
+}
+
+.rss-link {
+  cursor: pointer;
+}
+
+.rss-link:hover {
+  text-decoration: underline;
+}
+
+.article-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 5px 0px;
+  cursor: pointer;
+}
+
+.article-title:hover {
+  background-color: #eeeeee;
+}
+</style>

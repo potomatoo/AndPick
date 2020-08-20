@@ -1,5 +1,5 @@
 <template>
-  <div>로그아웃</div>
+  <div style="font-family: 'Do Hyeon', sans-serif;">로그아웃</div>
 </template>
 
 <script>

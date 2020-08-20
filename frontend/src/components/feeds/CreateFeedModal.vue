@@ -5,20 +5,28 @@
         <v-card-text>
           <v-text-field
             v-model="newFeedName"
-            label="Feed Name"
+            label="피드"
             autofocus
             clearable
             :rules="rules"
             @keypress.enter="addFeed"
           ></v-text-field>
 
-          <small class="grey--text">* Create New Feed</small>
+          <small class="grey--text">* 생성할 피드를 작성해주세요.</small>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" @click="addFeed">Create</v-btn>
-          <v-btn outlined color="grey" @click="closeModal">Cancle</v-btn>
+          <v-btn text color="primary" style="font-weight: bold" @click="addFeed"
+            >생성</v-btn
+          >
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="closeModal"
+            >취소</v-btn
+          >
         </v-card-actions>
       </v-form>
     </v-card>
@@ -28,7 +36,7 @@
 <script lang="ts">
 import { Component, Vue, Watch, PropSync } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { FeedList } from "@/store/Feed.interface";
+import { FeedList } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
@@ -41,7 +49,7 @@ export default class CreateFeedModal extends Vue {
   newFeedName = null;
 
   rules = [
-    (value: any) => !!value || "This field is required.",
+    (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
       !this.checkDuplication(value) || "동일한 피드가 존재합니다."
   ];

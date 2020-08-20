@@ -37,7 +37,7 @@ export interface MypageModule {
   isSidebarActive: boolean;
   isCreateFolderModalActive: boolean;
   postDirList: PostDir[];
-  postDir: Post[];
+  postDir: Post[] | null;
   tagDir: Post[];
   allTagDir: AllTag[];
   post: Post | null;
@@ -47,4 +47,7 @@ export interface MypageModule {
   postDirName: string | null;
   postDirContextMenu: Context;
   postContextMenu: Context;
+  rssChannel: number;
+  saveNews: number;
+  users: number;
 }

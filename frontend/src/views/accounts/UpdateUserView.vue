@@ -1,6 +1,8 @@
 <template>
   <div class="container my-5" style="width: 600px">
-    <h2 align="center">회원정보수정</h2>
+    <h2 align="center" style="font-family: 'Do Hyeon', sans-serif;">
+      회원정보수정
+    </h2>
     <hr />
     <NameUpdate />
     <div v-if="!user.userType">
@@ -14,7 +16,9 @@
       <router-link
         :to="{ name: 'DeleteUser' }"
         class="router-link d-flex justify-content-end"
-        ><v-btn color="error">회원탈퇴</v-btn></router-link
+        ><v-btn text style="font-weight: bold" color="#1e847f"
+          >회원탈퇴</v-btn
+        ></router-link
       >
       <hr />
     </div>
@@ -32,8 +36,8 @@ import axios from "axios";
 @Component({
   components: {
     NameUpdate,
-    PasswordUpdate,
-  },
+    PasswordUpdate
+  }
 })
 export default class UpdateUserView extends Vue {
   user = "";
@@ -43,8 +47,8 @@ export default class UpdateUserView extends Vue {
         "http://i3b107.p.ssafy.io:8080/api/user/detail",
         this.$store.getters.config
       )
-      .then((res) => (this.user = res.data.data))
-      .catch((err) => console.log(err));
+      .then(res => (this.user = res.data.data))
+      .catch(err => console.log(err));
   }
   created() {
     this.fetchUser();

@@ -32,8 +32,8 @@ const store: StoreOptions<RootState> = {
     userName: STORAGE.getItem("name")
   },
   getters: {
-    isLoggedIn: state => !!state.JWT,
-    config: state => ({ headers: { Authorization: `${state.JWT}` } })
+    isLoggedIn: (state) => !!state.JWT,
+    config: (state) => ({ headers: { Authorization: `${state.JWT}` } })
   },
   mutations: {
     SET_TOKEN(state, token: string) {
@@ -59,9 +59,8 @@ const store: StoreOptions<RootState> = {
         .post(SERVER.URL + info.location, qs.stringify(info.data), {
           withCredentials: true
         })
-        .then(res => {
+        .then((res) => {
           commit("SET_TOKEN", res.data.data["userPassword"]);
-          commit("SET_NAME", res.data.data.userName);
           if (router.app.$route.query.scrap !== undefined) {
             const scrapKey = router.app.$route.query.scrap;
             // (40, 57)
@@ -74,7 +73,7 @@ const store: StoreOptions<RootState> = {
             router.push("/");
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("err", err);
           alert("아이디 또는 비밀번호가 옳지 않습니다.");
         });
@@ -85,11 +84,11 @@ const store: StoreOptions<RootState> = {
         .post(SERVER.URL + SERVER.ROUTES.signup, signupData, {
           withCredentials: true
         })
-        .then(res => {
+        .then((res) => {
           alert("회원가입이 완료되었습니다.");
-          router.push("/");
+          router.push("/cover");
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("err", err);
           alert("회원가입 실패입니다.");
         });
@@ -100,11 +99,11 @@ const store: StoreOptions<RootState> = {
         .post(SERVER.URL + SERVER.ROUTES.checkid, qs.stringify(signupData), {
           withCredentials: true
         })
-        .then(res => {
+        .then((res) => {
           commit("CHECK_DUPLICATE");
           alert("사용가능한 이메일 입니다.");
         })
-        .catch(err => {
+        .catch((err) => {
           alert("이미 가입된 이메일 입니다.");
         });
     },
@@ -119,7 +118,6 @@ const store: StoreOptions<RootState> = {
 
     logout({ getters, commit }) {
       commit("SET_TOKEN", null);
-      commit("SET_NAME", null);
       STORAGE.removeItem("jwt-token");
       STORAGE.removeItem("name");
       router.push("/cover");
@@ -133,7 +131,7 @@ const store: StoreOptions<RootState> = {
           alert("닉네임이 변경되었습니다.");
           router.push("/");
         })
-        .catch(err => console.log("err", err));
+        .catch((err) => console.log("err", err));
     },
 
     updateUserPassword({ commit }, userPassword) {
@@ -146,7 +144,10 @@ const store: StoreOptions<RootState> = {
           alert("비밀번호가 변경되었습니다.");
           router.push("/");
         })
-        .catch(err => console.log("err", err));
+        .catch((err) => {
+          alert("회원정보가 옳지 않습니다.");
+          console.log("err", err);
+        });
     },
 
     deleteUser({ getters, commit }) {
@@ -158,7 +159,7 @@ const store: StoreOptions<RootState> = {
           alert("회원탈퇴가 완료되었습니다.");
           router.push("/");
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
     }
   }
 };

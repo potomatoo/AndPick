@@ -16,7 +16,7 @@
         dark
         fab
         small
-        color="success"
+        color="#ecc19c"
       >
         <v-icon dark>mdi-menu-up</v-icon>
       </v-btn>
@@ -54,11 +54,10 @@ export default class AppMain extends Vue {
 .v-main {
   padding-bottom: 0px !important;
 }
-
 .button-bottom {
   position: fixed;
-  right: 7vw;
-  bottom: 20vh;
+  right: 3vw;
+  bottom: 12vh;
   text-decoration: none;
   color: inherit;
   border: 0;

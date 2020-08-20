@@ -7,19 +7,23 @@
       offset-y
       absolute
     >
-      <v-list dense width="170px">
+      <v-list dense width="130px">
         <v-list-item @click="activeRenameModal">
           <v-icon class="mr-3">mdi-cursor-text</v-icon>
-          <v-list-item-title>Rename</v-list-item-title>
+          <v-list-item-title style="font-size: 13px"
+            >이름 변경</v-list-item-title
+          >
         </v-list-item>
         <!-- <v-list-item>
           <v-icon class="mr-3">mdi-rss</v-icon>
           <v-list-item-title>Manage Sources</v-list-item-title>
         </v-list-item> -->
-        <v-divider></v-divider>
+
         <v-list-item @click="deleteModal = true">
           <v-icon class="mr-3" color="error">mdi-trash-can-outline</v-icon>
-          <v-list-item-title class="red--text">Delete</v-list-item-title>
+          <v-list-item-title class="red--text" style="font-size: 13px"
+            >삭제</v-list-item-title
+          >
         </v-list-item>
       </v-list>
     </v-menu>
@@ -36,13 +40,25 @@
               :rules="rules"
               @keypress.enter="saveName"
             ></v-text-field>
-            <small class="grey--text">* Change Feed Name</small>
+            <small class="grey--text">* 변경할 보드 이름을 작성해주세요.</small>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="success" @click="saveName">SAVE</v-btn>
-            <v-btn outlined color="grey" @click="closeFeedModal">CANCLE</v-btn>
+            <v-btn
+              text
+              color="primary"
+              style="font-weight: bold"
+              @click="saveName"
+              >저장</v-btn
+            >
+            <v-btn
+              text
+              color="error"
+              style="font-weight: bold"
+              @click="closeFeedModal"
+              >취소</v-btn
+            >
           </v-card-actions>
         </v-form>
       </v-card>
@@ -51,17 +67,25 @@
     <!-- 피드 삭제 모달 -->
     <v-dialog v-model="deleteModal" max-width="450px">
       <v-card>
-        <v-card-title>Delete {{ boardItem.boardName }} board</v-card-title>
-        <v-card-text>
-          Are you sure you want to delete board? This operation cannot be
-          undone.
-        </v-card-text>
+        <v-card-title style="font-family: 'Do Hyeon', sans-serif;"
+          >{{ boardItem.boardName }} 보드를 삭제하시겠습니까?</v-card-title
+        >
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" @click="deleteBoard">DELETE</v-btn>
-          <v-btn outlined color="grey" @click="deleteModal = false"
-            >CANCLE</v-btn
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="deleteBoard"
+            >삭제</v-btn
+          >
+          <v-btn
+            text
+            color="primary"
+            style="font-weight: bold"
+            @click="deleteModal = false"
+            >취소</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -90,7 +114,7 @@ export default class BoardContextMenu extends Vue {
   deleteModal = false;
 
   rules = [
-    (value: string) => !!value || "this field is required.",
+    (value: string) => !!value || "글자를 입력해주세요.",
     (value: string) =>
       !this.checkDuplication(value) || "동일한 보드가 존재합니다."
   ];
@@ -111,7 +135,8 @@ export default class BoardContextMenu extends Vue {
   }
 
   saveName() {
-    if (this.checkDuplication(this.inputBoardName)) return;
+    if (!this.inputBoardName || this.checkDuplication(this.inputBoardName))
+      return;
     if (this.boardItem.boardName !== this.inputBoardName) {
       this.UPDATE_BOARD({
         boardId: this.boardItem.boardId,
@@ -131,4 +156,8 @@ export default class BoardContextMenu extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+v-list-item {
+  height: 30px !important;
+}
+</style>

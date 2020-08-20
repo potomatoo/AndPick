@@ -1,67 +1,65 @@
 <template>
   <div class="detail">
-    <div class="outline feed row" style="background-color:#df3277">
-      <div class="col-1"></div>
-      <div class="inline col-4">
+    <div class="outline feed row">
+      <div class="inline col-4 offset-2">
         <transition name="slide-feed">
-          <h2 v-if="showFeed">피드</h2>
+          <h2 v-show="showFeed">피드</h2>
         </transition>
         <transition name="slide-feed">
-          <p v-if="showFeed">
-            유용한 뉴스나 기술 블로그의 정보를 구독하고 싶은가요? 그렇다면 지금
-            당장 피드에 원하는 페이지를 추가해보세요. 실시간으로 업데이트되는
-            정보를 받아볼 수 있을거에요!
+          <p v-show="showFeed">
+            <b style="font-size: 27px">뉴</b>스나 기술 블로그의 정보를 구독하고
+            싶은가요? <br />그렇다면 지금 당장 피드에 원하는 채널을
+            추가해보세요. <br />
+            실시간으로 업데이트되는 정보를 받아볼 수 있을거에요.
+            <br /><br />
+            카테고리 별로 피드를 생성하여 이용해보세요!
           </p>
         </transition>
       </div>
-      <div class="col-md-1"></div>
-      <div class="col-md-6">
-        <img
-          class="detail-image"
-          src="https://cdn.pixabay.com/photo/2020/01/26/19/32/architecture-4795667_1280.jpg"
-        />
+      <div class="col-5">
+        <img class="detail-image" src="@/assets/coverFeed.png" />
       </div>
     </div>
 
-    <div class="outline board row" style="background-color:#00d59b">
-      <div class="col-6">
-        <img
-          class="detail-image"
-          src="https://cdn.pixabay.com/photo/2020/01/26/19/32/architecture-4795667_1280.jpg"
-        />
+    <div class="outline board row">
+      <div class="col-5 offset-1">
+        <img class="detail-image board-image" src="@/assets/coverBoard.png" />
       </div>
-      <div class="col-1"></div>
-      <div class="inline col-4">
+      <div class="inline col-5">
         <transition name="slide-feed">
-          <h2 v-if="showBoard">보드</h2>
+          <h2 v-show="showBoard">보드</h2>
         </transition>
         <transition name="slide-feed">
-          <p v-if="showBoard">
-            보드에 대한 설명 가나다라 마바사 아자차카 타파하 라라라라라
+          <p v-show="showBoard">
+            <b style="font-size: 27px">구</b>독하고 있는 채널의 기사를 저장하고
+            싶은가요?<br />그렇다면 지금 당장 보드에 해당 기사를
+            추가해보세요.<br />
+            저장된 기사는 시간이 지나도 다시 볼 수 있을거에요.
+            <br /><br />
+            폴더를 생성하여 입맛대로 저장해보세요!
           </p>
         </transition>
       </div>
-      <div class="col-1"></div>
     </div>
 
-    <div class="outline mypage row" style="background-color:#ad249f">
-      <div class="col-1"></div>
-      <div class="inline col-4">
+    <div class="outline mypage row">
+      <div class="inline col-4 offset-2">
         <transition name="slide-feed">
-          <h2 v-if="showMy">마이페이지</h2>
+          <h2 v-show="showMy">마이페이지</h2>
         </transition>
         <transition name="slide-feed">
-          <p v-if="showMy">
-            마이페이지에 대한 설명 가나다라 마바사 아자차카 타파하 라라라라라
+          <p v-show="showMy">
+            <b style="font-size: 27px">지</b>금 보고 있는 기사에 자신의 생각을
+            더하고 싶은가요?<br />
+            그렇다면 지금 당장 마이페이지를 활용해보세요.<br />
+            다양한 편집기능과 함께 자신의 글로 만들 수 있을거에요.
+            <br /><br />
+            나만의 공간을 만들고 해시태그와 함께 이용해보세요!
           </p>
         </transition>
       </div>
-      <div class="col-1"></div>
-      <div class="col-6">
-        <img
-          class="detail-image"
-          src="https://cdn.pixabay.com/photo/2020/01/26/19/32/architecture-4795667_1280.jpg"
-        />
+      <div class="col-5">
+        <img class="detail-image" src="@/assets/coverMypage.png" />
       </div>
     </div>
   </div>
@@ -100,7 +98,6 @@ export default {
   },
 
   mounted() {
-    // window.addEventListener("scroll", this.scrollWatcher);
     this.scrollWatcher();
   }
 };
@@ -108,11 +105,7 @@ export default {
 
 <style>
 .outline {
-  color: white;
-  height: 400px;
-  /* word-break: keep-all; */
-  padding: 25px 30px 25px 25px;
-  /* overflow: auto; */
+  padding: 0px 30px 0px 25px;
 }
 .inline {
   padding: 40px 0px 40px 0px;
@@ -122,22 +115,23 @@ export default {
 }
 .outline > div > p {
   font-size: 20px;
-  color: white;
-  /* font-family: "Black Han Sans", sans-serif; */
 }
 .detail-image {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 80%;
   height: 100%;
   /* text-overflow: clip; */
 }
+.board-image {
+  left: 10%;
+}
 .slide-feed-enter-active {
-  transition: all 3s ease;
+  transition: all 2s ease;
 }
 .slide-feed-enter {
-  transform: translateY(20px);
+  transform: translateY(150px);
   opacity: 0;
 }
 </style>

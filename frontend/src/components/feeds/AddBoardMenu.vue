@@ -14,7 +14,7 @@
               mdi-star-outline
             </v-icon>
           </template>
-          <span class="grey--text text--darken-1">Save to Board</span>
+          <span class="grey--text text--darken-1">보드에 저장</span>
         </v-tooltip>
       </span>
     </template>
@@ -35,7 +35,7 @@
           small
           @click="saveArticle(board.boardId, article)"
         >
-          <v-icon left>mdi-plus</v-icon> ADD
+          <v-icon left>mdi-plus</v-icon> 추가
         </v-btn>
         <v-btn
           v-else
@@ -45,20 +45,21 @@
           small
           @click="deleteArticle(board.newsList, article.link)"
         >
-          <v-icon left>mdi-window-close</v-icon> REMOVE
+          <v-icon left>mdi-window-close</v-icon> 취소
         </v-btn>
       </v-list-item>
 
       <hr class="ma-0" />
       <v-list-item @click="boardModalActive = !boardModalActive">
-        <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-        <v-list-item-title class="success--text">NEW BOARD</v-list-item-title>
+        <v-list-item-title class="success--text"
+          >새 보드 생성</v-list-item-title
+        >
       </v-list-item>
     </v-list>
 
     <!-- 보드에서 접근 -->
     <v-list v-else-if="this.$route.name === 'BoardArticleDetail'" class="py-0">
-      <v-list-item v-for="board in boardList" :key="board.boardId">
+      <v-list-item v-for="board in filteredBoardList" :key="board.boardId">
         <v-icon color="grey" class="mr-2">mdi-star-outline</v-icon>
         <v-list-item-title>{{ board.boardName }}</v-list-item-title>
         <v-btn
@@ -69,7 +70,7 @@
           small
           @click="saveArticle(board.boardId, news)"
         >
-          <v-icon left>mdi-plus</v-icon> ADD
+          <v-icon left>mdi-plus</v-icon> 추가
         </v-btn>
         <v-btn
           v-else
@@ -79,14 +80,15 @@
           small
           @click="deleteArticle(board.newsList, news.newsLink)"
         >
-          <v-icon left>mdi-window-close</v-icon> REMOVE
+          <v-icon left>mdi-window-close</v-icon> 취소
         </v-btn>
       </v-list-item>
 
       <hr class="ma-0" />
       <v-list-item @click="boardModalActive = !boardModalActive">
-        <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-        <v-list-item-title class="success--text">NEW BOARD</v-list-item-title>
+        <v-list-item-title class="success--text"
+          >새 보드 생성</v-list-item-title
+        >
       </v-list-item>
     </v-list>
     <create-board-modal
@@ -102,7 +104,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import CreateBoardModal from "@/components/feeds/CreateBoardModal.vue";
-import { Board, Article, News } from "@/store/Feed.interface";
+import { Board, Article, News } from "../../store/Feed.interface";
 
 const feedModule = namespace("feedModule");
 
@@ -115,9 +117,16 @@ export default class AddBoardMenu extends Vue {
   @feedModule.State boardList!: Board[];
   @feedModule.State article!: Article;
   @feedModule.State news!: News;
+  @feedModule.Action COPY_IN_BOARD: any;
   @feedModule.Action SAVE_IN_BOARD: any;
   @feedModule.Action DELETE_IN_BOARD: any;
   @feedModule.Action ADD_BOARD: any;
+
+  get filteredBoardList() {
+    return this.boardList.filter(
+      el => el.boardId !== Number(this.$route.params.boardId)
+    );
+  }
 
   boardModalActive = false;
 
@@ -129,7 +138,7 @@ export default class AddBoardMenu extends Vue {
 
   saveArticle(boardId: number, article: Article) {
     if (this.$route.name === "BoardArticleDetail") {
-      this.SAVE_IN_BOARD({ boardId, article, from: "board" });
+      this.COPY_IN_BOARD({ boardId, article });
     } else {
       this.SAVE_IN_BOARD({ boardId, article });
     }

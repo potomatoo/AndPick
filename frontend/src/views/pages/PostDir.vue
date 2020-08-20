@@ -1,61 +1,27 @@
 <template>
-  <div class="container" v-if="postDir">
-    <div class="row">
-      <h6 class="pl-3 text-secondary font-weight-light mb-3 col-10">Mypage</h6>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn id="optionBtn" small color="white" class="mt-3">
-            <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>
-          </v-btn>
-        </template>
-        <v-list dense>
-          <v-list-item @click="click">
-            <v-list-item-title>Latest</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="click">
-            <v-list-item-title>Oldest</v-list-item-title>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item @click="deletePostDir()">
-            <v-list-item-title>
-              <v-icon small left>mdi-delete</v-icon>Delete
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
-
-    <div class="row">
-      <h1 class="pl-3 font-weight-bold">{{ postDir.postDirName }}</h1>
-    </div>
+  <div class="mt-10" v-if="postDir">
+    <v-container>
+      <v-layout>
+        <v-flex>
+          <div class="caption mb-3">마이페이지</div>
+          <h1 style="font-family: 'Do Hyeon', sans-serif;">
+            {{ postDir.postDirName }}
+          </h1>
+        </v-flex>
+      </v-layout>
+    </v-container>
     <v-divider></v-divider>
 
-    <router-link
-      :to="{ name: 'NewPost', params: { postDirId: $route.params.postDirId } }"
-      class="router-link"
-    >
-      <v-btn
-        small
-        outlined
-        color="secondary"
-        v-if="postDir.postList && postDir.postList.length"
+    <v-container v-if="!postDir.postList.length" class="text-center">
+      <v-icon style="font-size: 180px" color="rgb(236, 193, 156)"
+        >mdi-comment-plus-outline</v-icon
       >
-        <v-icon left>mdi-plus</v-icon>New
-      </v-btn>
-    </router-link>
-
-    <div
-      v-if="postDir.postList && !postDir.postList.length"
-      class="text-center"
-    >
-      <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
-      <h4 class="mt-10">
-        Save post to here
+      <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
+        "{{ postDir.postDirName }}"의 첫 번째 글을 작성해주세요!
       </h4>
 
       <p class="text-center">
-        When you find an news in your Subscribe you want to keep and editing
-        with your think, click
+        자신의 생각을 정리할 폴더가 생성되었습니다.
         <router-link
           :to="{
             name: 'NewPost',
@@ -63,14 +29,26 @@
           }"
           class="router-link"
         >
-          <v-btn small outlined color="secondary" class>
-            <v-icon left>mdi-plus</v-icon>New
+          <v-btn small outlined color="rgb(30, 132, 127)">
+            <v-icon left>mdi-plus</v-icon>새 글
           </v-btn>
         </router-link>
+        을 클릭하여 시작하세요.
       </p>
-    </div>
+    </v-container>
 
-    <div class="container">
+    <div class="container" v-else-if="postDir.postList.length">
+      <router-link
+        :to="{
+          name: 'NewPost',
+          params: { postDirId: $route.params.postDirId }
+        }"
+        class="router-link"
+      >
+        <v-btn small outlined color="secondary">
+          <v-icon left>mdi-plus</v-icon>새 글
+        </v-btn>
+      </router-link>
       <div class="row">
         <v-flex
           v-for="post in postDir.postList"
@@ -96,13 +74,16 @@
               <div
                 align="center"
                 class="post-box"
-                style="border:5px solid #ad249f"
+                style="border:3px solid rgba(0, 0, 0, 0.54)"
                 @mouseenter="zoomIn"
                 @mouseleave="zoomOut"
               >
-                <div class="post-text pl-2 pr-2 mb-0 mt-3">
+                <div
+                  class="post-text pl-2 pr-2 mb-0 mt-3"
+                  style="font-family: 'Do Hyeon', sans-serif;"
+                >
                   {{ post.postTitle }}
-                  <hr style="border-color: #ad249f" />
+                  <hr style="border-color: rgba(0, 0, 0, 0.54)" />
 
                   <div class="container row">
                     <div
@@ -158,7 +139,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class FolderMain extends Vue {
-  @mypageModule.State postDir!: [];
+  @mypageModule.State postDir!: Post[] | null;
   @mypageModule.State postDirId!: number | null;
   @mypageModule.State postDirName!: string | null;
   @mypageModule.Mutation SELECT_POSTDIR: any;
@@ -244,7 +225,7 @@ export default class FolderMain extends Vue {
   margin-top: 50px;
   margin-bottom: 45px;
   /* transition: font-size 2s; */
-  font-family: "Black Han Sans", sans-serif;
+  /* font-family: "Black Han Sans", sans-serif; */
   /* font-family: "Jua", sans-serif; */
   white-space: nowrap;
   overflow: hidden;

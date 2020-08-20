@@ -1,53 +1,54 @@
 <template>
   <div>
-    <v-subheader>Feed</v-subheader>
+    <div class="d-flex justify-content-between mr-2">
+      <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+        >피드</v-subheader
+      >
+      <router-link
+        :to="{
+          name: 'FeedExplain'
+        }"
+        class="router-link explain"
+      >
+        <i class="mdi mdi-help-circle"></i>
+      </router-link>
+    </div>
     <v-list-group
       v-for="feed in feedList"
       :key="feed.feedId"
       no-action
       sub-group
+      color="#f57e7e"
+      class="sidebar-feed"
+      @click="toFeedPage(feed.feedId)"
     >
       <template v-slot:activator>
         <v-list-item-content @contextmenu.prevent="showFeedCtx($event, feed)">
-          <router-link
-            :to="{
-              name: 'Feed',
-              params: { feedId: feed.feedId }
-            }"
-            class="router-link"
-          >
-            <v-list-item-title v-text="feed.feedName"></v-list-item-title>
-          </router-link>
+          <v-list-item-title v-text="feed.feedName"></v-list-item-title>
         </v-list-item-content>
       </template>
-
-      <v-list-item
-        v-for="subItem in feed.subscribeList"
-        :key="subItem.subscribeId"
-        @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
-      >
-        <v-list-item-content>
-          <router-link
-            :to="{
-              name: 'ArticleListInRss',
-              params: {
-                feedId: feed.feedId,
-                subscribeId: subItem.subscribeId
-              }
-            }"
-            class="router-link"
-          >
+      <v-list>
+        <v-list-item
+          v-for="subItem in feed.subscribeList"
+          :key="subItem.subscribeId"
+          @contextmenu.prevent="showSubsCtx($event, subItem, feed)"
+          class="sidebar-subscription"
+          @click="toArticleList(feed.feedId, subItem.subscribeId, $event)"
+          color="#f57e7e"
+        >
+          <v-list-item-content>
             <v-list-item-title
+              class="ml-6"
               v-text="subItem.subscribeName"
             ></v-list-item-title>
-          </router-link>
-        </v-list-item-content>
-      </v-list-item>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-list-group>
 
     <v-list-item @click="modalActive = !modalActive">
       <v-list-item-content class="text-center">
-        <v-list-item-title>Create New Feed</v-list-item-title>
+        <v-list-item-title>새 피드 생성</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -123,10 +124,66 @@ export default class SidebarFeed extends Vue {
     };
     this.SET_FEED_CONTEXT_MENU(ctx);
   }
+
+  initSidebarClass() {
+    const boards = document.querySelectorAll(".sidebar-board");
+    const mypages = document.querySelectorAll(".sidebar-mypage");
+    const subscriptions = document.querySelectorAll(".sidebar-subscription");
+    const addrss = document.querySelectorAll(".sidebar-addrss");
+    if (boards?.length) {
+      boards.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (mypages?.length) {
+      mypages.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (subscriptions?.length) {
+      subscriptions.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (addrss?.length) {
+      addrss.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+  }
+
+  toFeedPage(feedId: number) {
+    this.initSidebarClass();
+    if (
+      this.$route.name === "Feed" &&
+      Number(this.$route.params.feedId) === feedId
+    )
+      return;
+    this.$router.push({ name: "Feed", params: { feedId: feedId.toString() } });
+  }
+
+  toArticleList(feedId: number, subscribeId: number, $event: MouseEvent) {
+    this.initSidebarClass();
+    ($event.currentTarget as HTMLElement).classList.add("v-list-item--active");
+    if (
+      this.$route.name === "ArticleListInRss" &&
+      Number(this.$route.params.subscribeId) === subscribeId
+    )
+      return;
+    this.$router.push({
+      name: "ArticleListInRss",
+      params: { feedId: feedId.toString(), subscribeId: subscribeId.toString() }
+    });
+  }
 }
 </script>
 
 <style scoped>
+.explain {
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 4px;
+}
 .router-link {
   text-decoration: none;
   color: inherit;

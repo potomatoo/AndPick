@@ -1,10 +1,12 @@
 <template>
-  <div class="mt-10">
+  <div class="mt-10" v-if="postDirList">
     <v-container>
       <v-layout>
         <v-flex>
           <div class="caption mb-3">Scrap</div>
-          <h5>스크랩을 저장할 폴더를 지정해주세요.</h5>
+          <h5 style="font-family: 'Do Hyeon', sans-serif;">
+            스크랩을 저장할 폴더를 지정해주세요.
+          </h5>
         </v-flex>
       </v-layout>
     </v-container>
@@ -44,6 +46,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { Post } from "../../store/MypageInterface";
 import router from "../../router";
+import CreateFolder from "../../components/pages/CreateFolder.vue";
 
 const mypageModule = namespace("mypageModule");
 
@@ -54,6 +57,7 @@ export default class SelectFromOutside extends Vue {
 
   isLoggedId = this.$store.getters.isLoggedIn;
   scrapData = localStorage.getItem("scrapData");
+  lamda = false;
 
   @Watch("$route", { immediate: true })
   saveLocal() {
@@ -63,7 +67,7 @@ export default class SelectFromOutside extends Vue {
   @Watch("$store.state.JWT")
   stateUpdate() {
     if (this.$store.state.JWT) {
-      console.log("login");
+      this.lamda = true;
     }
   }
 

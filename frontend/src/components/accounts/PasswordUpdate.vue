@@ -10,7 +10,7 @@
         placeholder="현재 비밀번호"
         :class="{
           'is-invalid': $v.updateData.userPassword.$error,
-          'is-valid': !$v.updateData.userPassword.$invalid,
+          'is-valid': !$v.updateData.userPassword.$invalid
         }"
       />
       <div class="invalid-feedback">
@@ -30,7 +30,7 @@
         placeholder="새로운 비밀번호"
         :class="{
           'is-invalid': $v.updateData.changePassword.$error,
-          'is-valid': !$v.updateData.changePassword.$invalid,
+          'is-valid': !$v.updateData.changePassword.$invalid
         }"
       />
       <div class="invalid-feedback">
@@ -53,7 +53,7 @@
           'is-valid':
             updateData.changePassword != null
               ? !$v.updateData.changePasswordCheck.$invalid
-              : null,
+              : null
         }"
       />
       <div class="invalid-feedback">
@@ -63,7 +63,13 @@
       </div>
     </div>
     <div class="d-flex justify-content-end mt-3">
-      <v-btn color="success" @click.prevent="submitPasswordForm">수정</v-btn>
+      <v-btn
+        text
+        style="font-weight: bold"
+        color="#1e847f"
+        @click.prevent="submitPasswordForm"
+        >수정</v-btn
+      >
     </div>
   </div>
 </template>
@@ -83,25 +89,25 @@ interface UpdateData {
     updateData: {
       userPassword: {
         required,
-        minLength: minLength(4),
+        minLength: minLength(8)
       },
       changePassword: {
         required,
-        minLength: minLength(4),
+        minLength: minLength(8)
       },
       changePasswordCheck: {
         required,
-        minLength: minLength(4),
-        sameAsPassword: sameAs("changePassword"),
-      },
-    },
-  },
+        minLength: minLength(8),
+        sameAsPassword: sameAs("changePassword")
+      }
+    }
+  }
 })
 export default class PasswordUpdate extends Vue {
   updateData: UpdateData = {
     userPassword: null,
     changePassword: null,
-    changePasswordCheck: null,
+    changePasswordCheck: null
   };
   submitPasswordForm() {
     this.$v.$touch();

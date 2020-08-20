@@ -5,20 +5,32 @@
         <v-card-text>
           <v-text-field
             v-model="newPostDirName"
-            label="PostDirName"
+            label="마이페이지"
             autofocus
             clearable
             :rules="rules"
             @keyup.enter="addPostDir"
           ></v-text-field>
 
-          <small class="grey--text">* 생성할 폴더 이름을 작성해주세요</small>
+          <small class="grey--text">* 생성할 폴더를 작성해주세요</small>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="addPostDir">Create</v-btn>
-          <v-btn text color="error" @click="closeModal">Cancle</v-btn>
+          <v-btn
+            text
+            color="primary"
+            style="font-weight: bold"
+            @click="addPostDir"
+            >생성</v-btn
+          >
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="closeModal"
+            >취소</v-btn
+          >
         </v-card-actions>
       </v-form>
     </v-card>
@@ -44,7 +56,7 @@ export default class CreateFolderModal extends Vue {
   newPostDirName = null;
 
   rules = [
-    (value: any) => !!value || "This field is required.",
+    (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
       !this.checkDuplication(value) || "동일한 폴더가 존재합니다."
   ];

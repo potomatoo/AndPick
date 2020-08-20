@@ -39,7 +39,7 @@ export default {};
 .main-description {
   opacity: 0.6;
   font-weight: 600;
-  font-size: 20spx;
+  font-size: 20px;
   word-break: keep-all;
   color: black !important;
 }

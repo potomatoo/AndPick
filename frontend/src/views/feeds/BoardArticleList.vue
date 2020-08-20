@@ -40,10 +40,10 @@
             <v-row>
               <v-col sm="2">
                 <img
-                  v-if="news.imgsrc"
+                  v-if="news.newsImg"
                   class="news-img"
-                  :src="news.imgsrc"
-                  onerror="this.src='http://localhost:8080/img/logo-img.91ab7a7f.png'"
+                  :src="news.newsImg"
+                  onerror="this.src='http://i3b107.p.ssafy.io/img/logo-img.91ab7a7f.png'"
                   :alt="news.title"
                 />
                 <img

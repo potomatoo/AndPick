@@ -62,7 +62,7 @@
                   v-if="article.imgsrc"
                   class="article-img"
                   :src="article.imgsrc"
-                  onerror="this.src='http://localhost:8080/img/logo-img.91ab7a7f.png'"
+                  onerror="this.src='http://i3b107.p.ssafy.io/img/logo-img.91ab7a7f.png'"
                   :alt="article.title"
                 />
                 <img

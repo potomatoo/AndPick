@@ -23,11 +23,11 @@
         class="sidebar-board"
         color="#f57e7e"
       >
-        <v-list-item-icon>
+        <!-- <v-list-item-icon>
           <v-icon>
             mdi-star-outline
           </v-icon>
-        </v-list-item-icon>
+        </v-list-item-icon> -->
         <v-list-item-content>
           <v-list-item-title v-text="board.boardName"></v-list-item-title>
         </v-list-item-content>

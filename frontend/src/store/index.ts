@@ -30,8 +30,8 @@ const store: StoreOptions<RootState> = {
     userName: STORAGE.getItem("name")
   },
   getters: {
-    isLoggedIn: (state) => !!state.JWT,
-    config: (state) => ({ headers: { Authorization: `${state.JWT}` } })
+    isLoggedIn: state => !!state.JWT,
+    config: state => ({ headers: { Authorization: `${state.JWT}` } })
   },
   mutations: {
     SET_TOKEN(state, token: string) {
@@ -57,21 +57,19 @@ const store: StoreOptions<RootState> = {
         .post("/api/public/login", qs.stringify(info.data), {
           withCredentials: true
         })
-        .then((res) => {
+        .then(res => {
           commit("SET_TOKEN", res.data.data["userPassword"]);
-          if (router.app.$route.query.scrap !== undefined) {
-            const scrapKey = router.app.$route.query.scrap;
-            // (40, 57)
-            localStorage.setItem("scrapKey", `${scrapKey}`);
+          const scrapKey = localStorage.getItem("scrapKey");
+          if (scrapKey) {
             router.push({
               name: "SelectFromOutside",
-              params: { scrapKey: `${scrapKey}` }
+              params: { scrapKey }
             });
           } else {
             router.push("/");
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("err", err);
           alert("아이디 또는 비밀번호가 옳지 않습니다.");
         });
@@ -82,11 +80,11 @@ const store: StoreOptions<RootState> = {
         .post("/api/public/signup", signupData, {
           withCredentials: true
         })
-        .then((res) => {
+        .then(res => {
           alert("회원가입이 완료되었습니다.");
           router.push("/login");
         })
-        .catch((err) => {
+        .catch(err => {
           console.log("err", err);
           alert("회원가입 실패입니다.");
         });
@@ -97,11 +95,11 @@ const store: StoreOptions<RootState> = {
         .post("/api/public/signup/checkid", qs.stringify(signupData), {
           withCredentials: true
         })
-        .then((res) => {
+        .then(res => {
           commit("CHECK_DUPLICATE");
           alert("사용가능한 이메일 입니다.");
         })
-        .catch((err) => {
+        .catch(err => {
           alert("이미 가입된 이메일 입니다.");
         });
     },
@@ -128,7 +126,7 @@ const store: StoreOptions<RootState> = {
           alert("닉네임이 변경되었습니다.");
           router.push("/");
         })
-        .catch((err) => console.log("err", err));
+        .catch(err => console.log("err", err));
     },
 
     updateUserPassword({ dispatch }, userPassword) {
@@ -141,7 +139,7 @@ const store: StoreOptions<RootState> = {
             userPassword: userPassword.changePassword
           });
         })
-        .catch((err) => {
+        .catch(err => {
           alert("회원정보가 옳지 않습니다.");
           console.log("err", err);
         });
@@ -156,7 +154,7 @@ const store: StoreOptions<RootState> = {
           alert("회원탈퇴가 완료되었습니다.");
           router.push("/cover");
         })
-        .catch((err) => console.log(err.response));
+        .catch(err => console.log(err.response));
     }
   }
 };

@@ -351,6 +351,8 @@ export default class EditArticle extends Vue {
   }
 
   addPost() {
+    if (localStorage.getItem("scrapKey")) localStorage.removeItem("scrapKey");
+    if (localStorage.getItem("scrapData")) localStorage.removeItem("scrapData");
     if (this.$refs.form.validate()) {
       if (isNaN(this.postId)) {
         const submitTagList = [];
@@ -406,7 +408,6 @@ export default class EditArticle extends Vue {
         }
       }
       this.$emit("save");
-      this.FETCH_POSTDIR_LIST();
     } else {
       this.snackbar2 = true;
     }

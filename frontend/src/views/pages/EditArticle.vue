@@ -351,6 +351,8 @@ export default class EditArticle extends Vue {
   }
 
   addPost() {
+    if (localStorage.getItem("scrapKey")) localStorage.removeItem("scrapKey");
+    if (localStorage.getItem("scrapData")) localStorage.removeItem("scrapData");
     if (this.$refs.form.validate()) {
       if (isNaN(this.postId)) {
         const submitTagList = [];

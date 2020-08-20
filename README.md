@@ -114,11 +114,16 @@ public class JwtProperties {
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vuelidate](https://vuelidate.js.org/)
 - [vue-google-oauth2](https://www.npmjs.com/package/vue-google-oauth2)
+- [axios](https://github.com/axios/axios)
+- [tiptap](https://tiptap.dev/)
 
 ## Back end
 - [Spring boot](https://spring.io/projects/spring-boot)
-- [Spring boot Security](https://spring.io/projects/spring-security-oauth)
+- [Spring Security](https://spring.io/projects/spring-security)
 - [JWT](https://jwt.io/)
+- [Swagger](https://swagger.io/)
+- [Jsoup](https://jsoup.org/)
+- [Gson](https://github.com/google/gson)
 
 ## DB
 - [Mysql](https://www.mysql.com/)

@@ -2,10 +2,18 @@
   <div class="mt-10" v-if="news">
     <div :class="{ left: onEdit }">
       <v-container>
-        <div class="text-left">
-          <add-board-menu />
-          <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
-        </div>
+        <v-layout>
+          <v-flex class="text-left">
+            <add-board-menu />
+            <add-scrap-menu @onPost="onPost" @onNewPost="onNewPost" />
+          </v-flex>
+          <v-flex class="text-right mr-3">
+            <v-icon @click="deleteModal = !deleteModal"
+              >mdi-trash-can-outline</v-icon
+            >
+          </v-flex>
+        </v-layout>
+
         <v-divider class="mt-2"></v-divider>
         <h3 class="mt-10 mb-0" style="font-family: 'Do Hyeon', sans-serif;">
           {{ news.newsTitle }}
@@ -41,6 +49,33 @@
       <router-view @save="saveEdit" />
     </div>
 
+    <!-- 뉴스 삭제 모달 -->
+    <v-dialog v-model="deleteModal" max-width="450px">
+      <v-card>
+        <v-card-title style="font-family: 'Do Hyeon', sans-serif;"
+          >해당 글을 삭제하시겠습니까?</v-card-title
+        >
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            color="error"
+            style="font-weight: bold"
+            @click="deleteNews(news.newsId)"
+            >삭제</v-btn
+          >
+          <v-btn
+            text
+            color="primary"
+            style="font-weight: bold"
+            @click="deleteModal = false"
+            >취소</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-overlay :value="isLoading">
       <v-progress-circular
         indeterminate
@@ -73,8 +108,11 @@ export default class BoardArticleDetail extends Vue {
   @feedModule.State isLoading!: boolean;
   @feedModule.Mutation SET_LOADING: any;
   @feedModule.Action FETCH_ARTICLE_IN_BOARD: any;
+  @feedModule.Action DELETE_IN_BOARD: any;
 
   onEdit = false;
+
+  deleteModal = false;
 
   openPage(link: string) {
     window.open(link);
@@ -128,6 +166,14 @@ export default class BoardArticleDetail extends Vue {
 
   setDate(date: string) {
     return date.slice(0, 10) + " " + date.slice(11, 16);
+  }
+
+  async deleteNews(newsId: number) {
+    await this.DELETE_IN_BOARD(newsId);
+    this.$router.replace({
+      name: "BoardArticleList",
+      params: { boardId: this.$route.params.boardId }
+    });
   }
 
   // @Watch("$route")

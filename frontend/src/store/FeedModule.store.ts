@@ -374,7 +374,7 @@ const module: Module<FeedModule, RootState> = {
     },
 
     DELETE_IN_BOARD({ dispatch }, newsId) {
-      Axios.instance
+      return Axios.instance
         .delete("/api/news/delete", { params: { newsId } })
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));

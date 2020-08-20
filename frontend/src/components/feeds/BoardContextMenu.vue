@@ -104,6 +104,7 @@ const feedModule = namespace("feedModule");
 export default class BoardContextMenu extends Vue {
   @feedModule.State boardList!: Board[];
   @feedModule.State boardContextMenu!: Context;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action UPDATE_BOARD: any;
   @feedModule.Action DELETE_BOARD: any;
 
@@ -138,6 +139,7 @@ export default class BoardContextMenu extends Vue {
     if (!this.inputBoardName || this.checkDuplication(this.inputBoardName))
       return;
     if (this.boardItem.boardName !== this.inputBoardName) {
+      this.SET_LOADING_TRUE();
       this.UPDATE_BOARD({
         boardId: this.boardItem.boardId,
         boardName: this.inputBoardName
@@ -150,7 +152,11 @@ export default class BoardContextMenu extends Vue {
   }
 
   deleteBoard() {
-    this.DELETE_BOARD(this.boardItem.boardId);
+    this.DELETE_BOARD({
+      boardId: this.boardItem.boardId,
+      routeName: this.$route.name,
+      routeBoardId: this.$route.params.boardId
+    });
     this.deleteModal = false;
   }
 }

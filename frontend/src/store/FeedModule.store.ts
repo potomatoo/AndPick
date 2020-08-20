@@ -12,6 +12,7 @@ import {
   RssOnAdd
 } from "./Feed.interface";
 import { Axios } from "@/service/axios.service";
+import router from "@/router";
 
 const module: Module<FeedModule, RootState> = {
   namespaced: true,
@@ -109,8 +110,12 @@ const module: Module<FeedModule, RootState> = {
       state.boardContextMenu = ctx;
     },
 
-    SET_LOADING(state) {
-      state.isLoading = !state.isLoading;
+    SET_LOADING_TRUE(state) {
+      state.isLoading = true;
+    },
+
+    SET_LOADING_FALSE(state) {
+      state.isLoading = false;
     },
 
     SET_CATEGORY_LIST(state, categoryList: Category[]) {
@@ -146,7 +151,10 @@ const module: Module<FeedModule, RootState> = {
           commit("SET_FEED", data.data);
           dispatch("FETCH_ARTICLE_LIST_IN_FEED", feedId);
         })
-        .catch(err => console.error(err));
+        .catch(err => {
+          commit("SET_LOADING_FALSE");
+          console.error(err);
+        });
     },
 
     FETCH_BOARD_LIST({ commit }) {
@@ -163,9 +171,6 @@ const module: Module<FeedModule, RootState> = {
           dispatch("FETCH_FEED_LIST");
           return { feedName: data.data.feedName, feedId: data.data.feedId };
         })
-        // .then(({ feedId }) => {
-        //   router.push({ name: "Feed", params: { feedId } });
-        // })
         .catch(err => console.error(err));
     },
 
@@ -187,13 +192,27 @@ const module: Module<FeedModule, RootState> = {
           }
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADING"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     },
 
-    DELETE_FEED({ dispatch }, feedId) {
+    DELETE_FEED({ dispatch }, { feedId, routeName, routeFeedId }) {
       Axios.instance
         .delete("/api/feed/delete", { params: { feedId } })
-        .then(() => dispatch("FETCH_FEED_LIST"))
+        .then(() => {
+          dispatch("FETCH_FEED_LIST");
+          if (
+            [
+              "Feed",
+              "ArticleListInRss",
+              "ArticleDetail",
+              "NewScrapInFeed",
+              "EditScrapInFeed"
+            ].includes(routeName) &&
+            feedId === Number(routeFeedId)
+          ) {
+            router.push({ name: "Home" });
+          }
+        })
         .catch(err => console.error(err));
     },
 
@@ -205,9 +224,7 @@ const module: Module<FeedModule, RootState> = {
       };
       const subscribeData = {
         rss,
-        subscribeName:
-          rss.rssName ||
-          ["동아경제", "노컷경제", "칸경제", "", "칸IT"][rss.rssId - 1],
+        subscribeName: rss.rssName,
         feedId
       };
 
@@ -251,7 +268,7 @@ const module: Module<FeedModule, RootState> = {
           commit("SET_ARTICLE_LIST", data.data);
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADING"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     },
 
     FETCH_ARTICLE_LIST_IN_FEED({ state, commit }, feedId) {
@@ -261,7 +278,7 @@ const module: Module<FeedModule, RootState> = {
           commit("SET_ARTICLE_LIST", data.data);
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADING"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     },
 
     UPDATE_SUBSCRIBE(
@@ -284,7 +301,7 @@ const module: Module<FeedModule, RootState> = {
           }
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADGIN"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     },
 
     UNFOLLOW_SUBSCRIPTION({ dispatch }, subscribeId: number) {
@@ -315,7 +332,7 @@ const module: Module<FeedModule, RootState> = {
           commit("SET_BOARD", data.data);
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADING"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     },
 
     UPDATE_BOARD({ dispatch, state, commit }, { boardId, boardName }) {
@@ -328,13 +345,26 @@ const module: Module<FeedModule, RootState> = {
           }
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADING"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     },
 
-    DELETE_BOARD({ dispatch }, boardId) {
+    DELETE_BOARD({ dispatch }, { boardId, routeName, routeBoardId }) {
       Axios.instance
         .delete("/api/board/delete", { params: { boardId } })
-        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .then(() => {
+          dispatch("FETCH_BOARD_LIST");
+          if (
+            [
+              "BoardArticleList",
+              "BoardArticleDetail",
+              "NewScrapInBoard",
+              "EditScrapInBoard"
+            ].includes(routeName) &&
+            boardId === Number(routeBoardId)
+          ) {
+            router.push({ name: "Home" });
+          }
+        })
         .catch(err => console.error(err));
     },
 
@@ -387,7 +417,7 @@ const module: Module<FeedModule, RootState> = {
           commit("SET_NEWS", data.data);
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADING"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     },
 
     FETCH_CATEGORY_LIST({ commit }) {
@@ -418,7 +448,7 @@ const module: Module<FeedModule, RootState> = {
           commit("SET_ARTICLE_DETAIL", data.data);
         })
         .catch(err => console.error(err))
-        .finally(() => commit("SET_LOADING"));
+        .finally(() => commit("SET_LOADING_FALSE"));
     }
   }
 };

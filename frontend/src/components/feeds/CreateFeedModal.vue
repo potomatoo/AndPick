@@ -46,12 +46,14 @@ export default class CreateFeedModal extends Vue {
 
   @PropSync("modalActive", { type: Boolean }) readonly isActive!: boolean;
 
-  newFeedName = null;
+  newFeedName = "";
 
   rules = [
     (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
-      !this.checkDuplication(value) || "동일한 피드가 존재합니다."
+      !this.checkDuplication(value) || "동일한 피드가 존재합니다.",
+    (value: string) =>
+      (value && value.length < 16) || "15자 이하로 입력해주세요."
   ];
 
   @Watch("isActive")
@@ -69,13 +71,17 @@ export default class CreateFeedModal extends Vue {
   }
 
   addFeed() {
-    if (this.newFeedName && !this.checkDuplication(this.newFeedName)) {
+    if (
+      this.newFeedName &&
+      !this.checkDuplication(this.newFeedName) &&
+      this.newFeedName?.length < 16
+    ) {
       this.$emit("addFeed", this.newFeedName);
     }
   }
 
   closeModal() {
-    this.newFeedName = null;
+    this.newFeedName = "";
     this.$emit("closeModal");
   }
 }

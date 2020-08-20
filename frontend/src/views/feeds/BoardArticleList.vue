@@ -40,10 +40,10 @@
             <v-row>
               <v-col sm="2">
                 <img
-                  v-if="news.imgsrc"
+                  v-if="news.newsImg"
                   class="news-img"
-                  :src="news.imgsrc"
-                  onerror="this.src='http://localhost:8080/img/logo-img.91ab7a7f.png'"
+                  :src="news.newsImg"
+                  onerror="this.src='http://i3b107.p.ssafy.io/img/logo-img.91ab7a7f.png'"
                   :alt="news.title"
                 />
                 <img
@@ -97,12 +97,12 @@ const feedModule = namespace("feedModule");
 export default class BoardArticleList extends Vue {
   @feedModule.State board!: Board;
   @feedModule.State isLoading!: boolean;
-  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action FETCH_ARTICLE_LIST_IN_BOARD: any;
 
   @Watch("$route", { immediate: true })
   fetchData() {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.FETCH_ARTICLE_LIST_IN_BOARD(this.$route.params.boardId);
   }
 

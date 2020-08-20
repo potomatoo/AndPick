@@ -40,7 +40,7 @@
 <script lang="ts">
 import { Component, Vue, Watch, PropSync } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import { PostDir } from "../../store/MypageInterface";
+import { PostDir } from "@/store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
@@ -53,12 +53,14 @@ export default class CreateFolderModal extends Vue {
 
   @PropSync("folderModalActive", { type: Boolean }) isActive!: boolean;
 
-  newPostDirName = null;
+  newPostDirName = "";
 
   rules = [
     (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
-      !this.checkDuplication(value) || "동일한 폴더가 존재합니다."
+      !this.checkDuplication(value) || "동일한 폴더가 존재합니다.",
+    (value: string) =>
+      (value && value.length < 16) || "15자 이하로 입력해주세요."
   ];
 
   @Watch("isActive")
@@ -77,12 +79,16 @@ export default class CreateFolderModal extends Vue {
   }
 
   closeModal() {
-    this.newPostDirName = null;
+    this.newPostDirName = "";
     this.isActive = false;
   }
 
   addPostDir() {
-    if (this.newPostDirName && !this.checkDuplication(this.newPostDirName)) {
+    if (
+      this.newPostDirName &&
+      !this.checkDuplication(this.newPostDirName) &&
+      this.newPostDirName?.length < 16
+    ) {
       this.ADD_POSTDIR(this.newPostDirName);
       this.closeModal();
     }

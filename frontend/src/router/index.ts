@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "@/views/main/a.vue";
+import Home from "@/views/main/Main.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
 
@@ -24,7 +24,6 @@ import PostDir from "@/views/pages/PostDir.vue";
 import EditArticle from "@/views/pages/EditArticle.vue";
 import HashTag from "@/views/pages/HashTag.vue";
 import SelectFromOutSide from "@/views/pages/SelectFromOutside.vue";
-import { nextTick } from "vue/types/umd";
 
 import MypageExplain from "@/views/explain/MypageExplain.vue";
 import BoardExplain from "@/views/explain/BoardExplain.vue";
@@ -228,7 +227,7 @@ router.beforeEach((to, from, next) => {
       ? next({ name: "Cover" })
       : next({ name: "Login" })
     : next();
-  unAuthRequired && isLogedIn ? next({ name: "Cover" }) : next();
+  unAuthRequired && isLogedIn ? next({ name: "Home" }) : next();
 });
 
 export default router;

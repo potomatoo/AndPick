@@ -1,18 +1,21 @@
 <template>
-  <div class="container mt-10" v-if="postDir">
-    <div class="row">
-      <div class="caption mb-3">마이페이지</div>
-    </div>
-
-    <div class="row">
-      <h1 style="font-family: 'Do Hyeon', sans-serif;">
-        {{ postDir.postDirName }}
-      </h1>
-    </div>
+  <div class="mt-10" v-if="postDir">
+    <v-container>
+      <v-layout>
+        <v-flex>
+          <div class="caption mb-3">마이페이지</div>
+          <h1 style="font-family: 'Do Hyeon', sans-serif;">
+            {{ postDir.postDirName }}
+          </h1>
+        </v-flex>
+      </v-layout>
+    </v-container>
     <v-divider></v-divider>
 
     <v-container v-if="!postDir.postList.length" class="text-center">
-      <v-icon style="font-size: 180px">mdi-comment-plus-outline</v-icon>
+      <v-icon style="font-size: 180px" color="rgb(236, 193, 156)"
+        >mdi-comment-plus-outline</v-icon
+      >
       <h4 class="mt-10" style="font-family: 'Do Hyeon', sans-serif;">
         "{{ postDir.postDirName }}"의 첫 번째 글을 작성해주세요!
       </h4>
@@ -26,7 +29,7 @@
           }"
           class="router-link"
         >
-          <v-btn small outlined color="secondary" class>
+          <v-btn small outlined color="rgb(30, 132, 127)">
             <v-icon left>mdi-plus</v-icon>새 글
           </v-btn>
         </router-link>

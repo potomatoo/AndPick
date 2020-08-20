@@ -50,12 +50,13 @@ export default class CreateBoardModal extends Vue {
 
   @PropSync("modalActive", { type: Boolean }) readonly isActive!: boolean;
 
-  newBoardName = null;
+  newBoardName = "";
 
   rules = [
     (value: any) => !!value || "글자를 입력해주세요.",
     (value: string) =>
-      !this.checkDuplication(value) || "동일한 보드가 존재합니다."
+      !this.checkDuplication(value) || "동일한 보드가 존재합니다.",
+    (value: string) => value.length < 16 || "15자 이하로 입력해주세요."
   ];
 
   @Watch("modalActive")
@@ -73,13 +74,17 @@ export default class CreateBoardModal extends Vue {
   }
 
   addBoard() {
-    if (this.newBoardName && !this.checkDuplication(this.newBoardName)) {
+    if (
+      this.newBoardName &&
+      !this.checkDuplication(this.newBoardName) &&
+      this.newBoardName?.length < 16
+    ) {
       this.$emit("addBoard", this.newBoardName);
     }
   }
 
   closeModal() {
-    this.newBoardName = null;
+    this.newBoardName = "";
     this.$emit("closeModal");
   }
 }

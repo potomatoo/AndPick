@@ -39,7 +39,7 @@ public class NewsServiceImpl implements NewsService {
 			response.message = "보드 정보가 일치하지 않습니다.";
 			return response;
 		}
-		System.out.println(news.getNewsDescription().length());
+		
 		response.data = newsRepository.save(news);
 		newsDetailRepository.save(newsDetail);
 

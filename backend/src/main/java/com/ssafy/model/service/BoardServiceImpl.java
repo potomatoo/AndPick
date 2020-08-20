@@ -1,5 +1,9 @@
 package com.ssafy.model.service;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Board;
 import com.ssafy.model.dto.News;
+import com.ssafy.model.dto.RssItem;
 import com.ssafy.model.dto.User;
 import com.ssafy.model.repository.BoardRepository;
 import com.ssafy.model.repository.NewsRepository;
@@ -48,7 +53,19 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
-		result.data = boardRepository.findAllByUserNo(user.getUserNo());
+		List<Board> boardlist = boardRepository.findAllByUserNo(user.getUserNo());
+
+		for (Board boardData : boardlist) {
+			Collections.sort(boardData.getNewsList(), new Comparator<News>() {
+				@Override
+				public int compare(News o1, News o2) {
+					// TODO Auto-generated method stub
+					return o2.getNewsDate().compareTo(o1.getNewsDate());
+				}
+			});
+		}
+
+		result.data = boardlist;
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "보드 조회에 성공하였습니다.";
@@ -65,7 +82,18 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
 
-		result.data = boardRepository.findOneByBoardId(board.getBoardId());
+		Board boardData = boardRepository.findOneByBoardId(board.getBoardId());
+
+		if (boardData != null)
+			Collections.sort(boardData.getNewsList(), new Comparator<News>() {
+				@Override
+				public int compare(News o1, News o2) {
+					// TODO Auto-generated method stub
+					return o2.getNewsDate().compareTo(o1.getNewsDate());
+				}
+			});
+
+		result.data = boardData;
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
 			result.message = "보드 조회에 성공하였습니다.";
@@ -91,7 +119,6 @@ public class BoardServiceImpl implements BoardService {
 		}
 
 		checkBoard.setBoardName(board.getBoardName());
-
 		result.data = boardRepository.save(checkBoard);
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {

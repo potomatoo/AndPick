@@ -1,6 +1,8 @@
 package com.ssafy.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -198,7 +200,14 @@ public class RssController {
 
 		}
 
-		// sort과정
+		Collections.sort(rssItem, new Comparator<RssItem>() {
+			@Override
+			public int compare(RssItem o1, RssItem o2) {
+				// TODO Auto-generated method stub
+				return o2.getPubDate().compareTo(o1.getPubDate());
+			}
+		});
+		
 		result.status = true;
 		result.message = "피드의 뉴스 목록입니다.";
 		result.data = rssItem;

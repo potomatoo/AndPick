@@ -32,6 +32,16 @@ public class News implements Serializable {
 	private long boardId;
 	@Column(name = "user_no")
 	private long userNo;
+	@Column(name = "news_img")
+	private String newsImg;
+
+	public String getNewsImg() {
+		return newsImg;
+	}
+
+	public void setNewsImg(String newsImg) {
+		this.newsImg = newsImg;
+	}
 
 	public long getNewsId() {
 		return newsId;
@@ -93,6 +103,7 @@ public class News implements Serializable {
 	public String toString() {
 		return "News [newsId=" + newsId + ", newsTitle=" + newsTitle + ", newsLink=" + newsLink + ", newsDate="
 				+ newsDate + ", newsDescription=" + newsDescription + ", boardId=" + boardId + ", userNo=" + userNo
-				+ "]";
+				+ ", newsImg=" + newsImg + "]";
 	}
+
 }

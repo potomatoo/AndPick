@@ -195,6 +195,7 @@ public class BoardController {
 		news.setBoardId(boardId);
 		news.setNewsId(0);
 		news.setNewsDescription(Jsoup.parse(news.getNewsDescription()).text());
+		news.setNewsImg(news.getNewsImg());
 
 		if (news.getNewsDescription().length() > 100) {
 			news.setNewsDescription(news.getNewsDescription().substring(0, 100));

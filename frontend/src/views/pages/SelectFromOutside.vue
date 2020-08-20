@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10">
+  <div class="mt-10" v-if="postDirList">
     <v-container>
       <v-layout>
         <v-flex>
@@ -12,19 +12,7 @@
     </v-container>
     <v-divider class="mt-0"></v-divider>
 
-    <div class="ml-2" v-if="!postDirList.length">
-      <div style="font-size: 50px">
-        <p>Mypage에서 폴더를 생성하고 이용해주시기 바랍니다.</p>
-      </div>
-
-      <div>
-        <p>
-          폴더를 생성한 후에 확장프로그램 아이콘을 눌러 바로 사용가능합니다!
-        </p>
-      </div>
-    </div>
-
-    <div class="ml-2" v-if="postDirList.length">
+    <div class="ml-2">
       <v-list>
         <v-list-item-group>
           <v-list-item

@@ -153,7 +153,11 @@ export default class FeedContextMenu extends Vue {
   }
 
   deleteFeed() {
-    this.DELETE_FEED(this.feedItem.feedId);
+    this.DELETE_FEED({
+      feedId: this.feedItem.feedId,
+      routeName: this.$route.name,
+      routeFeedId: this.$route.params.feedId
+    });
     this.deleteModal = false;
   }
 }

@@ -152,7 +152,11 @@ export default class BoardContextMenu extends Vue {
   }
 
   deleteBoard() {
-    this.DELETE_BOARD(this.boardItem.boardId);
+    this.DELETE_BOARD({
+      boardId: this.boardItem.boardId,
+      routeName: this.$route.name,
+      routeBoardId: this.$route.params.boardId
+    });
     this.deleteModal = false;
   }
 }

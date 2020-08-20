@@ -12,6 +12,7 @@ import {
   RssOnAdd
 } from "./Feed.interface";
 import { Axios } from "@/service/axios.service";
+import router from "@/router";
 
 const module: Module<FeedModule, RootState> = {
   namespaced: true,
@@ -194,10 +195,24 @@ const module: Module<FeedModule, RootState> = {
         .finally(() => commit("SET_LOADING_FALSE"));
     },
 
-    DELETE_FEED({ dispatch }, feedId) {
+    DELETE_FEED({ dispatch }, { feedId, routeName, routeFeedId }) {
       Axios.instance
         .delete("/api/feed/delete", { params: { feedId } })
-        .then(() => dispatch("FETCH_FEED_LIST"))
+        .then(() => {
+          dispatch("FETCH_FEED_LIST");
+          if (
+            [
+              "Feed",
+              "ArticleListInRss",
+              "ArticleDetail",
+              "NewScrapInFeed",
+              "EditScrapInFeed"
+            ].includes(routeName) &&
+            feedId === Number(routeFeedId)
+          ) {
+            router.push({ name: "Home" });
+          }
+        })
         .catch(err => console.error(err));
     },
 
@@ -333,10 +348,23 @@ const module: Module<FeedModule, RootState> = {
         .finally(() => commit("SET_LOADING_FALSE"));
     },
 
-    DELETE_BOARD({ dispatch }, boardId) {
+    DELETE_BOARD({ dispatch }, { boardId, routeName, routeBoardId }) {
       Axios.instance
         .delete("/api/board/delete", { params: { boardId } })
-        .then(() => dispatch("FETCH_BOARD_LIST"))
+        .then(() => {
+          dispatch("FETCH_BOARD_LIST");
+          if (
+            [
+              "BoardArticleList",
+              "BoardArticleDetail",
+              "NewScrapInBoard",
+              "EditScrapInBoard"
+            ].includes(routeName) &&
+            boardId === Number(routeBoardId)
+          ) {
+            router.push({ name: "Home" });
+          }
+        })
         .catch(err => console.error(err));
     },
 

@@ -7,7 +7,7 @@ import {
   Tag,
   AllTag
 } from "@/store/MypageInterface.ts";
-import { Axios, LocalAxios } from "@/service/axios.service";
+import { Axios } from "@/service/axios.service";
 import router from "@/router";
 import QueryString from "qs";
 
@@ -258,7 +258,7 @@ const module: Module<MypageModule, RootState> = {
         .catch(err => console.error(err));
     },
 
-    DELETE_POSTDIR({ dispatch }, postDirId: number) {
+    DELETE_POSTDIR({ dispatch }, { postDirId, routeName, routePostDirId }) {
       const postDirData = {
         params: {
           postDirId
@@ -268,9 +268,14 @@ const module: Module<MypageModule, RootState> = {
         .delete("/api/postdir/delete", postDirData)
         .then(() => {
           dispatch("FETCH_POSTDIR_LIST");
-        })
-        .then(() => {
-          router.push({ name: "Home" });
+          if (
+            ["PostDir", "NewPost", "NewScrapFromGoole", "EditPost"].includes(
+              routeName
+            ) &&
+            postDirId === Number(routePostDirId)
+          ) {
+            router.push({ name: "Home" });
+          }
         })
         .catch(err => console.error(err));
     },

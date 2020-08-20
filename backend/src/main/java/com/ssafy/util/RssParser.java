@@ -1,10 +1,12 @@
 package com.ssafy.util;
 
+import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -48,7 +50,6 @@ public class RssParser implements Runnable {
 			}
 			Elements items = document.select("item");
 			HashMap<String, String> newsDetail = new HashMap<String, String>();
-
 			this.rssChannel.itemInit();
 			for (Element item : items) {
 				RssItem rssItem = new RssItem();
@@ -57,9 +58,18 @@ public class RssParser implements Runnable {
 				Elements description = item.select("description");
 				rssItem.setDescription(Jsoup.parse(description.text()).text());
 				newsDetail.put(rssItem.getLink(), description.text());
-
-				rssItem.setPubDate(new Date());
 				rssItem.setRssTitle(this.rssChannel.getTitle());
+
+				try {
+					SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
+					String sdate = item.selectFirst("pubDate").text();
+					Date date = format.parse(sdate);
+					rssItem.setPubDate(date);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+
 				this.rssChannel.addItem(rssItem);
 			}
 
@@ -74,9 +84,11 @@ public class RssParser implements Runnable {
 			}
 			this.rssChannel.setItems(sub);
 			redisTemplate.opsForValue().set("limit " + this.link, this.rssChannel);
+
+			System.out.println("[PARSE] " + this.rssChannel.getRss().getRssName());
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("[ERROR] 파싱에러");
+			System.out.println("[ERROR] " + this.rssChannel.getRss().getRssName());
 			e.printStackTrace();
 		}
 	}
@@ -88,14 +100,14 @@ public class RssParser implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		try {
-			while (true) {
+		while (true) {
+			try {
 				this.parse();
-				Thread.sleep(60000);
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}

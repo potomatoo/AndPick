@@ -2,6 +2,7 @@ package com.ssafy.controller;
 
 import javax.transaction.Transactional;
 
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -193,6 +194,8 @@ public class BoardController {
 
 		news.setBoardId(boardId);
 		news.setNewsId(0);
+		news.setNewsDescription(Jsoup.parse(news.getNewsDescription()).text());
+
 		if (news.getNewsDescription().length() > 100) {
 			news.setNewsDescription(news.getNewsDescription().substring(0, 100));
 		}

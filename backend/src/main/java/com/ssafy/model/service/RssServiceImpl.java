@@ -193,7 +193,7 @@ public class RssServiceImpl implements RssService {
 		BasicResponse result = new BasicResponse();
 		String likeQuery = "%" + categoryName + "%";
 		result.data = rssRepository.findByCategoryNameLike(likeQuery);
-		System.out.println(result.data);
+
 		if (result.data == null) {
 			result.status = false;
 			result.message = "RSS 조회에 실패하였습니다.";
@@ -211,7 +211,7 @@ public class RssServiceImpl implements RssService {
 		BasicResponse result = new BasicResponse();
 		String likeQuery = "%" + rssName + "%";
 		result.data = rssRepository.findByRssNameLike(likeQuery);
-		System.out.println(result.data);
+
 		if (result.data == null) {
 			result.status = false;
 			result.message = "RSS 조회에 실패하였습니다.";

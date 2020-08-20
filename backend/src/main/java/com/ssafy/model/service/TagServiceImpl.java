@@ -32,7 +32,7 @@ public class TagServiceImpl implements TagService {
 			result.data = checkTag;
 			return result;
 		}
-		System.out.println(tag);
+
 		result.data = tagRepository.save(tag);
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {
@@ -49,7 +49,7 @@ public class TagServiceImpl implements TagService {
 	public BasicResponse findAll() {
 		// TODO Auto-generated method stub
 		BasicResponse result = new BasicResponse();
-		System.out.println("?");
+
 		result.data = tagRepository.findAll();
 		result.status = (result.data != null) ? true : false;
 		if (result.status) {

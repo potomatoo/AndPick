@@ -2,6 +2,7 @@ package com.ssafy.controller;
 
 import java.util.HashMap;
 
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -55,10 +56,10 @@ public class NewsController {
 		News newsDto = new News();
 		newsDto.setNewsTitle(rssitem.getTitle());
 		newsDto.setNewsLink(rssitem.getLink());
-		String summary = rssitem.getDescription();
+		String summary = Jsoup.parse(rssitem.getDescription()).text();
 
-		if (summary.length() > 200) {
-			summary = summary.substring(0, 190);
+		if (summary.length() > 100) {
+			summary = summary.substring(0, 100);
 		}
 
 		newsDto.setNewsDescription(summary);
@@ -72,7 +73,6 @@ public class NewsController {
 
 		NewsDetail newsDetail = new NewsDetail();
 		newsDetail.setId(rssitem.getLink());
-		System.out.println(tag);
 		newsDetail.setContent(tag);
 
 		result = newsService.saveNews(user, newsDto, newsDetail);

@@ -115,7 +115,6 @@ public class GoogleLoginController {
 
 	@PostMapping("/api/public/google/login")
 	public Object googleLogin(@RequestBody String authToken, RedirectAttributes rediAttributes) {
-		System.out.println(authToken);
 		MultiValueMap<String, String> parma = new LinkedMultiValueMap<String, String>();
 		parma.add("code", authToken);
 		parma.add("client_id", GoogleLoginConfig.GOOGLE_CLIENT_ID);

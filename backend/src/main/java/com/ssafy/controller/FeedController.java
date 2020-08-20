@@ -158,7 +158,7 @@ public class FeedController {
 		feed.setFeedId(feedId);
 
 		result = feedService.findOneByFeedId(user, feed);
-		System.out.println(result);
+		
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

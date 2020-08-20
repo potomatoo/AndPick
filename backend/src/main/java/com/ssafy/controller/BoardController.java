@@ -193,6 +193,9 @@ public class BoardController {
 
 		news.setBoardId(boardId);
 		news.setNewsId(0);
+		if (news.getNewsDescription().length() > 100) {
+			news.setNewsDescription(news.getNewsDescription().substring(0, 100));
+		}
 		result = boardService.copyNews(news);
 
 		if (result.status) {

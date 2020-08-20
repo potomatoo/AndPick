@@ -4,15 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class RssItem implements Serializable {
-	// 필수 요소
 	private String title;
 	private String description;
 	private String link;
-	// 선택 요소
+
 	private Date pubDate;
-	// 식별용
 	private String rssTitle;
 	private String subscribeName;
+	private String imgsrc;
 
 	public String getTitle() {
 		return title;
@@ -62,10 +61,18 @@ public class RssItem implements Serializable {
 		this.subscribeName = subscribeName;
 	}
 
+	public String getImgsrc() {
+		return imgsrc;
+	}
+
+	public void setImgsrc(String imgsrc) {
+		this.imgsrc = imgsrc;
+	}
+
 	@Override
 	public String toString() {
 		return "RssItem [title=" + title + ", description=" + description + ", link=" + link + ", pubDate=" + pubDate
-				+ ", rssTitle=" + rssTitle + ", subscribeName=" + subscribeName + "]";
+				+ ", rssTitle=" + rssTitle + ", subscribeName=" + subscribeName + ", imgsrc=" + imgsrc + "]";
 	}
 
 }

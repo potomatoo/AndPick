@@ -1,6 +1,5 @@
 package com.ssafy.util;
 
-import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +47,7 @@ public class RssParser implements Runnable {
 				// TODO: handle exception
 				this.rssChannel.setImg("");
 			}
+
 			Elements items = document.select("item");
 			HashMap<String, String> newsDetail = new HashMap<String, String>();
 			this.rssChannel.itemInit();
@@ -67,7 +67,13 @@ public class RssParser implements Runnable {
 					rssItem.setPubDate(date);
 				} catch (Exception e) {
 					// TODO: handle exception
-					e.printStackTrace();
+					System.out.println("[ERROR] DATE ERROR" + this.rssChannel.getRss().getRssName());
+				}
+
+				Document descDoc = Jsoup.parse(description.text());
+				Element imgelement = descDoc.selectFirst("img");
+				if (imgelement != null) {
+					rssItem.setImgsrc(imgelement.attr("src"));
 				}
 
 				this.rssChannel.addItem(rssItem);
@@ -103,7 +109,7 @@ public class RssParser implements Runnable {
 		while (true) {
 			try {
 				this.parse();
-				Thread.sleep(10000);
+				Thread.sleep(60000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -340,7 +340,7 @@ const module: Module<FeedModule, RootState> = {
 
     SAVE_IN_BOARD({ dispatch }, { boardId, article }) {
       const data = {
-        pubDate: new Date(article.pubDate) || new Date(),
+        pubDate: article.pubDate || new Date(),
         description: article.description,
         link: article.link,
         title: article.title,
@@ -358,7 +358,7 @@ const module: Module<FeedModule, RootState> = {
 
     COPY_IN_BOARD({ dispatch }, { boardId, article }) {
       const data = {
-        newsDate: new Date(article.newsDate) || new Date(),
+        newsDate: article.newsDate || new Date(),
         newsDescription: article.newsDescription,
         newsLink: article.newsLink,
         newsTitle: article.newsTitle,
@@ -374,7 +374,7 @@ const module: Module<FeedModule, RootState> = {
     },
 
     DELETE_IN_BOARD({ dispatch }, newsId) {
-      Axios.instance
+      return Axios.instance
         .delete("/api/news/delete", { params: { newsId } })
         .then(() => dispatch("FETCH_BOARD_LIST"))
         .catch(err => console.error(err));

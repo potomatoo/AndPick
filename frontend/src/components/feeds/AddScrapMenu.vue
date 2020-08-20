@@ -73,7 +73,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
 import CreateFolderModal from "@/components/pages/CreateFolderModal.vue";
-import { Post } from "../../store/MypageInterface";
+import { PostDir } from "../../store/MypageInterface";
 
 const mypageModule = namespace("mypageModule");
 
@@ -83,7 +83,7 @@ const mypageModule = namespace("mypageModule");
   }
 })
 export default class AddScrapMenu extends Vue {
-  @mypageModule.State postDirList!: Post[];
+  @mypageModule.State postDirList!: PostDir[];
 
   folderModalActive = false;
 

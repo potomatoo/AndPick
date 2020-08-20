@@ -5,22 +5,17 @@
       <span @click="test" class="mdi mdi-arrow-down-drop-circle-outline"></span>
     </div>
     <ServiceStep class="service-position" />
-    <UserInformation />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import ServiceDescription from "@/components/cover/ServiceDescription.vue";
-import RssImage from "@/components/cover/RssImage.vue";
-import UserInformation from "@/components/cover/UserInformation.vue";
 import ServiceStep from "@/components/cover/ServiceStep.vue";
 
 @Component({
   components: {
     ServiceDescription,
-    RssImage,
-    UserInformation,
     ServiceStep
   }
 })

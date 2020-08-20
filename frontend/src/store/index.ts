@@ -86,7 +86,7 @@ const store: StoreOptions<RootState> = {
         })
         .then((res) => {
           alert("회원가입이 완료되었습니다.");
-          router.push("/cover");
+          router.push("/login");
         })
         .catch((err) => {
           console.log("err", err);
@@ -134,7 +134,7 @@ const store: StoreOptions<RootState> = {
         .catch((err) => console.log("err", err));
     },
 
-    updateUserPassword({ commit }, userPassword) {
+    updateUserPassword({ dispatch }, userPassword) {
       Axios.instance
         .put(
           SERVER.URL + SERVER.ROUTES.updatePassword,
@@ -142,7 +142,10 @@ const store: StoreOptions<RootState> = {
         )
         .then(() => {
           alert("비밀번호가 변경되었습니다.");
-          router.push("/");
+          dispatch("login", {
+            userId: userPassword.userId,
+            userPassword: userPassword.changePassword
+          });
         })
         .catch((err) => {
           alert("회원정보가 옳지 않습니다.");
@@ -157,7 +160,7 @@ const store: StoreOptions<RootState> = {
           commit("SET_TOKEN", null);
           STORAGE.removeItem("jwt-token");
           alert("회원탈퇴가 완료되었습니다.");
-          router.push("/");
+          router.push("/cover");
         })
         .catch((err) => console.log(err.response));
     }

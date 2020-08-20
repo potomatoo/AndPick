@@ -12,7 +12,7 @@
 &PICK은 당신의 밝은 미래를 응원합니다.
 
 
-# Getting Started
+# :tada: Getting Started
 
 ## Front end
 ```
@@ -29,7 +29,7 @@ java -jar target/Teletubbies-0.0.1-SNAPSHOT.jar
 ## ChormeExtenstion
 ### [크롬 익스텐션 다운로드](https://chrome.google.com/webstore/detail/pickclipper/bggenjcdpkngebimckblkeeiciegaenk?utm_source=chrome-ntp-icon)
 
-# Configuration
+# :wrench: Configuration
 
 ## require
 - [Mavne](https://maven.apache.org/)
@@ -105,7 +105,7 @@ public class JwtProperties {
 }
 ```
 
-# Tech Stack
+# :pencil2: Tech Stack
 ## Front end
 - [Vue](https://vuejs.org/)
 - [Vuex](https://vuex.vuejs.org/kr/)
@@ -129,7 +129,7 @@ public class JwtProperties {
 
 
 
-# Author
+# :busts_in_silhouette: Author
 
 ## Team 텔레토비
 이연재 : 막내 팀장

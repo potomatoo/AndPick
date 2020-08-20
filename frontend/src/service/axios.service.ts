@@ -1,12 +1,5 @@
 import axios, { AxiosInstance } from "axios";
 
-export class LocalAxios {
-  static readonly instance: AxiosInstance = axios.create({
-    baseURL: "http://localhost:8080",
-    timeout: 5000
-  });
-}
-
 export class Axios {
   static readonly instance: AxiosInstance = axios.create({
     baseURL: "http://i3b107.p.ssafy.io:8080",

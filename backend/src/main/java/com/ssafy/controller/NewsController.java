@@ -56,6 +56,8 @@ public class NewsController {
 		News newsDto = new News();
 		newsDto.setNewsTitle(rssitem.getTitle());
 		newsDto.setNewsLink(rssitem.getLink());
+		newsDto.setNewsImg(rssitem.getImgsrc());
+
 		String summary = Jsoup.parse(rssitem.getDescription()).text();
 
 		if (summary.length() > 100) {

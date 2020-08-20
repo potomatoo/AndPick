@@ -74,6 +74,8 @@ public class RssParser implements Runnable {
 				Element imgelement = descDoc.selectFirst("img");
 				if (imgelement != null) {
 					rssItem.setImgsrc(imgelement.attr("src"));
+				} else {
+					rssItem.setImgsrc(rssChannel.getImg());
 				}
 
 				this.rssChannel.addItem(rssItem);

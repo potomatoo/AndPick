@@ -199,15 +199,15 @@ public class RssController {
 			}
 
 		}
+		if (rssItem != null)
+			Collections.sort(rssItem, new Comparator<RssItem>() {
+				@Override
+				public int compare(RssItem o1, RssItem o2) {
+					// TODO Auto-generated method stub
+					return o2.getPubDate().compareTo(o1.getPubDate());
+				}
+			});
 
-		Collections.sort(rssItem, new Comparator<RssItem>() {
-			@Override
-			public int compare(RssItem o1, RssItem o2) {
-				// TODO Auto-generated method stub
-				return o2.getPubDate().compareTo(o1.getPubDate());
-			}
-		});
-		
 		result.status = true;
 		result.message = "피드의 뉴스 목록입니다.";
 		result.data = rssItem;

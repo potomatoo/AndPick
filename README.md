@@ -1,7 +1,6 @@
 # :rocket: &PICK
 ## 지금 당장  &PICK 하라
 
-@[video](https://lab.ssafy.com/s03-webmobile1-sub3/s03p13b107/blob/develop/readme/KakaoTalk_20200820_160816719.mp4)
 &PICK은 다양한 분야의 뉴스기사 및 기술블로그의 정보를 제공합니다.  
 
 구독 : 관심있는 뉴스나 기술 블로그를 피드에 추가하여 최신 정보를 확인

@@ -84,16 +84,16 @@ spring.data.mongodb.port=  `mongodb_port`
 ```
 ### Google Login Config( ./backend/src/main/java/com/ssafy/config/GoogleLoginConfig.java )
 ```
-	public static final String GOOGLE_CLIENT_ID = `Google_Client_ID`;
-	public static final String GOOGLE_SECRIT_ID = `Google_Secrit_ID`;
-    ...
-    	@Bean
-	OAuth2Parameters oAuth2Parameters() {
-		OAuth2Parameters oAuth2Parameters = new OAuth2Parameters();
-		oAuth2Parameters.setRedirectUri( `Redirect_url` );
-		oAuth2Parameters.setScope( `Google_Login_scope` );
-		return oAuth2Parameters;
-	}
+public static final String GOOGLE_CLIENT_ID = `Google_Client_ID`;
+public static final String GOOGLE_SECRIT_ID = `Google_Secrit_ID`;
+...
+	@Bean
+OAuth2Parameters oAuth2Parameters() {
+	OAuth2Parameters oAuth2Parameters = new OAuth2Parameters();
+	oAuth2Parameters.setRedirectUri( `Redirect_url` );
+	oAuth2Parameters.setScope( `Google_Login_scope` );
+	return oAuth2Parameters;
+}
 
 ```
 ### JWT Config ( ./backend/src/main/java/com/ssafy/config/JwtProperties.java )

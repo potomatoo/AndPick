@@ -14,7 +14,7 @@
           v-on="on"
           class="float-right"
         >
-          FOLLOW
+          팔로우
         </v-btn>
       </template>
       <v-list class="py-0">
@@ -29,7 +29,7 @@
             small
             @click="addRss(feed.feedId, rss)"
           >
-            <v-icon left>mdi-plus</v-icon> ADD
+            <v-icon left>mdi-plus</v-icon> 추가
           </v-btn>
           <v-btn
             v-else
@@ -39,13 +39,15 @@
             small
             @click="addRss(feed.feedId, rss)"
           >
-            <v-icon left>mdi-window-close</v-icon> REMOVE
+            <v-icon left>mdi-window-close</v-icon> 삭제
           </v-btn>
         </v-list-item>
         <hr class="ma-0" />
         <v-list-item @click="modalActive = !modalActive">
           <v-icon color="success" class="mr-2">mdi-plus</v-icon>
-          <v-list-item-title class="success--text">NEW FEED</v-list-item-title>
+          <v-list-item-title class="success--text"
+            >새 피드 생성</v-list-item-title
+          >
         </v-list-item>
       </v-list>
     </v-menu>

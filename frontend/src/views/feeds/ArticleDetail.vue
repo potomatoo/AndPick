@@ -31,7 +31,7 @@
             block
             tile
             @click="openPage(article.link)"
-            >VISIT WEBSITE</v-btn
+            >사이트 바로가기</v-btn
           >
         </div>
       </v-container>

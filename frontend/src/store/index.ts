@@ -3,11 +3,9 @@ import Vuex, { StoreOptions } from "vuex";
 import feedModule from "./FeedModule.store";
 import mypageModule from "./MypageModule.store";
 
-import axios from "axios";
 import { Axios } from "@/service/axios.service";
 
 import router from "@/router";
-import SERVER from "@/api/spr";
 
 import qs from "qs";
 
@@ -55,8 +53,8 @@ const store: StoreOptions<RootState> = {
   },
   actions: {
     postAuthData({ commit }, info) {
-      axios
-        .post(SERVER.URL + info.location, qs.stringify(info.data), {
+      Axios.instance
+        .post("/api/public/login", qs.stringify(info.data), {
           withCredentials: true
         })
         .then((res) => {
@@ -80,8 +78,8 @@ const store: StoreOptions<RootState> = {
     },
 
     signup(context, signupData) {
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.signup, signupData, {
+      Axios.instance
+        .post("/api/public/signup", signupData, {
           withCredentials: true
         })
         .then((res) => {
@@ -95,8 +93,8 @@ const store: StoreOptions<RootState> = {
     },
 
     checkId({ commit }, signupData) {
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.checkid, qs.stringify(signupData), {
+      Axios.instance
+        .post("/api/public/signup/checkid", qs.stringify(signupData), {
           withCredentials: true
         })
         .then((res) => {
@@ -110,8 +108,7 @@ const store: StoreOptions<RootState> = {
 
     login({ dispatch }, loginData) {
       const info = {
-        data: loginData,
-        location: SERVER.ROUTES.login
+        data: loginData
       };
       dispatch("postAuthData", info);
     },
@@ -125,7 +122,7 @@ const store: StoreOptions<RootState> = {
 
     updateUser({ commit }, userName) {
       Axios.instance
-        .put(SERVER.URL + SERVER.ROUTES.updateUser, qs.stringify({ userName }))
+        .put("/api/user/update", qs.stringify({ userName }))
         .then(() => {
           commit("SET_NAME", userName);
           alert("닉네임이 변경되었습니다.");
@@ -136,10 +133,7 @@ const store: StoreOptions<RootState> = {
 
     updateUserPassword({ dispatch }, userPassword) {
       Axios.instance
-        .put(
-          SERVER.URL + SERVER.ROUTES.updatePassword,
-          qs.stringify(userPassword)
-        )
+        .put("/api/update/user/password", qs.stringify(userPassword))
         .then(() => {
           alert("비밀번호가 변경되었습니다.");
           dispatch("login", {
@@ -155,7 +149,7 @@ const store: StoreOptions<RootState> = {
 
     deleteUser({ getters, commit }) {
       Axios.instance
-        .delete(SERVER.URL + SERVER.ROUTES.deleteUser)
+        .delete("/api/user/delete")
         .then(() => {
           commit("SET_TOKEN", null);
           STORAGE.removeItem("jwt-token");

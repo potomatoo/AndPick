@@ -104,7 +104,7 @@ const feedModule = namespace("feedModule");
 })
 export default class AddRss extends Vue {
   @feedModule.State rssList!: [];
-  @feedModule.Mutation SET_LOADING: any;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Mutation SET_ARTICLE_DETAIL: any;
   @feedModule.Action FETCH_RSS: any;
   @feedModule.Action FETCH_CATEGORY_LIST: any;
@@ -130,7 +130,7 @@ export default class AddRss extends Vue {
   }
 
   async toArticleDetail(article: Article) {
-    this.SET_LOADING();
+    this.SET_LOADING_TRUE();
     this.SET_ARTICLE_DETAIL(article);
     await this.FETCH_ARTICLE_DETAIL(article);
     this.modalActive = !this.modalActive;

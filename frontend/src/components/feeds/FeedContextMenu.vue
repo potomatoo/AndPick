@@ -106,6 +106,7 @@ const feedModule = namespace("feedModule");
 export default class FeedContextMenu extends Vue {
   @feedModule.State feedList!: FeedList[];
   @feedModule.State feedContextMenu!: Context;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action UPDATE_FEED: any;
   @feedModule.Action DELETE_FEED: any;
 
@@ -139,6 +140,7 @@ export default class FeedContextMenu extends Vue {
     if (!this.inputFeedName || this.checkDuplication(this.inputFeedName))
       return;
     if (this.feedItem.feedName !== this.inputFeedName) {
+      this.SET_LOADING_TRUE();
       this.UPDATE_FEED({
         feedId: this.feedItem.feedId,
         feedName: this.inputFeedName

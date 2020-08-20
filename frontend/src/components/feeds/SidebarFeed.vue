@@ -85,6 +85,7 @@ export default class SidebarFeed extends Vue {
   @feedModule.State feedList!: [];
   @feedModule.Mutation SET_SUB_CONTEXT_MENU: any;
   @feedModule.Mutation SET_FEED_CONTEXT_MENU: any;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action ADD_FEED: any;
 
   modalActive = false;
@@ -164,6 +165,7 @@ export default class SidebarFeed extends Vue {
 
   toArticleList(feedId: number, subscribeId: number, $event: MouseEvent) {
     this.initSidebarClass();
+    this.SET_LOADING_TRUE();
     ($event.currentTarget as HTMLElement).classList.add("v-list-item--active");
     if (
       this.$route.name === "ArticleListInRss" &&

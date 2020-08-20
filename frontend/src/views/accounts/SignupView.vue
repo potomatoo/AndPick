@@ -63,6 +63,7 @@
         id="userPassword"
         type="password"
         placeholder="비밀번호"
+        autocomplete="new-password"
         :class="{
           'is-invalid': $v.signupData.userPassword.$error,
           'is-valid': !$v.signupData.userPassword.$invalid
@@ -151,7 +152,7 @@ interface SignupData {
           if (value === "") return true;
           const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,5}$/i;
 
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve(emailRegex.test(value));
             }, 100);

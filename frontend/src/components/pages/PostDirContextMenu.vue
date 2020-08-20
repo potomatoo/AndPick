@@ -148,7 +148,11 @@ export default class PostDirContextMenu extends Vue {
   }
 
   deletePostDir() {
-    this.DELETE_POSTDIR(this.postDirItem.postDirId);
+    this.DELETE_POSTDIR({
+      postDirId: this.postDirItem.postDirId,
+      routeName: this.$route.name,
+      routePostDirId: this.$route.params.postDirId
+    });
     this.deleteModal = false;
   }
 }

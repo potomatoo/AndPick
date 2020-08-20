@@ -170,6 +170,7 @@ const feedModule = namespace("feedModule");
 export default class SubsContextMenu extends Vue {
   @feedModule.State feedList!: FeedList[];
   @feedModule.State subsContextMenu!: Context;
+  @feedModule.Mutation SET_LOADING_TRUE: any;
   @feedModule.Action UPDATE_SUBSCRIBE: any;
   @feedModule.Action UNFOLLOW_SUBSCRIPTION: any;
   @feedModule.Action FOLLOW_SUBSCRIPTION: any;
@@ -189,7 +190,7 @@ export default class SubsContextMenu extends Vue {
   get selectedFeed() {
     const addedData: { feed: FeedList; subscribeId: number }[] = [];
     this.feedList.forEach(feed => {
-      feed.subscribeList!.forEach(subs => {
+      feed.subscribeList?.forEach(subs => {
         if (this.subsItem.rss && subs.rss.rssId === this.subsItem.rss.rssId) {
           addedData.push({ feed: feed, subscribeId: subs.subscribeId });
         }
@@ -241,6 +242,7 @@ export default class SubsContextMenu extends Vue {
       this.closeFeedModal();
       return;
     }
+    this.SET_LOADING_TRUE();
     const payload = {
       feedId: this.subsItem.feedId,
       subscribeId: this.subsItem.subscribeId,

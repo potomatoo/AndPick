@@ -139,6 +139,10 @@ export default class LoginView extends Vue {
     if (router.app.$route.query.scrap) {
       this.urlPath = router.app.$route.query.scrap.toString();
       localStorage.setItem("scrapKey", `${this.urlPath}`);
+    } else {
+      if (localStorage.getItem("scrapKey")) {
+        localStorage.removeItem("scrapKey");
+      }
     }
   }
 }

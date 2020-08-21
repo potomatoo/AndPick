@@ -16,8 +16,6 @@ import AppSidebar from "@/components/main/AppSidebar.vue";
 import AppMain from "@/components/main/AppMain.vue";
 import AppFooter from "@/components/main/AppFooter.vue";
 
-// import { mapGetters } from "vuex";
-
 @Component({
   components: {
     AppNavbar,
@@ -25,20 +23,24 @@ import AppFooter from "@/components/main/AppFooter.vue";
     AppMain,
     AppFooter
   }
-  // computed: { ...mapGetters(["isLoggedIn"]) },
 })
 export default class Home extends Vue {
+  isLoggedId = this.$store.getters.isLoggedIn;
+  new = false;
   @Watch("$store.state.JWT")
   stateUpdate() {
     if (this.$store.state.JWT) {
-      console.log("로그인감지");
-    } else {
-      console.log("토큰없음");
+      this.new = true;
     }
   }
-  created() {
-    this.$store.dispatch("feedModule/FETCH_FEED");
-    this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
+
+  @Watch("isLoggedId", { immediate: true })
+  fetchData() {
+    if (this.isLoggedId) {
+      this.$store.dispatch("feedModule/FETCH_FEED_LIST");
+      this.$store.dispatch("feedModule/FETCH_BOARD_LIST");
+      this.$store.dispatch("mypageModule/FETCH_POSTDIR_LIST");
+    }
   }
 }
 </script>

@@ -19,9 +19,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.google.gson.Gson;
 import com.ssafy.config.JwtProperties;
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.LoginRequest;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.security.UserPrincipal;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		LoginRequest loginreq = new LoginRequest();
 
-		String id = request.getParameter("userId");
+		String id = request.getParameter("userId");	
 		String password = request.getParameter("userPassword");
 
 		if (id == null)

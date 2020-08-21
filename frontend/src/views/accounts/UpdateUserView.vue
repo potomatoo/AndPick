@@ -1,40 +1,64 @@
 <template>
-  <div class="container my-5">
-    <h1>회원정보수정</h1>
-    <div class="form-group">
-      <label for="userName">닉네임</label>
-      <input
-        v-model="updateData.userName"
-        class="form-control"
-        id="userName"
-        type="text"
-        placeholder="이메일"
-      />
+  <div class="container my-5" style="width: 600px">
+    <h2 align="center" style="font-family: 'Do Hyeon', sans-serif;">
+      회원정보수정
+    </h2>
+    <hr />
+    <NameUpdate />
+    <div v-if="!user.userType">
+      <hr />
+      <PasswordUpdate />
     </div>
-    <div>
-      <button @click="updateUser(updateData)">수정</button>
+    <hr />
+    <div class="form-group py-5">
+      <h4>회원 탈퇴</h4>
+      <p>회원 탈퇴시 모든 데이터가 사라집니다.</p>
+      <router-link
+        :to="{ name: 'DeleteUser' }"
+        class="router-link d-flex justify-content-end"
+        ><v-btn text style="font-weight: bold" color="#1e847f"
+          >회원탈퇴</v-btn
+        ></router-link
+      >
+      <hr />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { mapActions } from "vuex";
 
-interface UpdateData {
-  userName: string | null;
-}
+import NameUpdate from "@/components/accounts/NameUpdate.vue";
+import PasswordUpdate from "@/components/accounts/PasswordUpdate.vue";
+
+import axios from "axios";
 
 @Component({
-  methods: {
-    ...mapActions(["updateUser"]),
-  },
+  components: {
+    NameUpdate,
+    PasswordUpdate
+  }
 })
 export default class UpdateUserView extends Vue {
-  updateData: UpdateData = {
-    userName: null,
-  };
+  user = "";
+  fetchUser() {
+    axios
+      .get(
+        "http://i3b107.p.ssafy.io:8080/api/user/detail",
+        this.$store.getters.config
+      )
+      .then(res => (this.user = res.data.data))
+      .catch(err => console.log(err));
+  }
+  created() {
+    this.fetchUser();
+  }
 }
 </script>
 
-<style></style>
+<style scoped>
+.router-link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

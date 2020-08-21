@@ -1,12 +1,16 @@
 package com.ssafy.model.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,12 +29,15 @@ public class Post {
 	@Column(name = "post_title")
 	private String postTitle;
 	@Column(name = "post_content")
-	private String postContetnt;
+	private String postContent;
 	@Column(name = "post_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date postDate;
 	@Column(name = "post_favorite")
 	private boolean postFavorite;
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "post_id")
+	private List<PostTag> tagList;
 
 	public long getPostId() {
 		return postId;
@@ -64,12 +71,12 @@ public class Post {
 		this.postTitle = postTitle;
 	}
 
-	public String getPostContetnt() {
-		return postContetnt;
+	public String getPostContent() {
+		return postContent;
 	}
 
-	public void setPostContetnt(String postContetnt) {
-		this.postContetnt = postContetnt;
+	public void setPostContent(String postContent) {
+		this.postContent = postContent;
 	}
 
 	public Date getPostDate() {
@@ -88,10 +95,19 @@ public class Post {
 		this.postFavorite = postFavorite;
 	}
 
+	public List<PostTag> getTagList() {
+		return tagList;
+	}
+
+	public void setTagList(List<PostTag> tagList) {
+		this.tagList = tagList;
+	}
+
 	@Override
 	public String toString() {
 		return "Post [postId=" + postId + ", userNo=" + userNo + ", postDirId=" + postDirId + ", postTitle=" + postTitle
-				+ ", postContetnt=" + postContetnt + ", postDate=" + postDate + ", postFavorite=" + postFavorite + "]";
+				+ ", postContent=" + postContent + ", postDate=" + postDate + ", postFavorite=" + postFavorite
+				+ ", tagList=" + tagList + "]";
 	}
 
 }

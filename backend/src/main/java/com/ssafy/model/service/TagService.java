@@ -1,24 +1,20 @@
 package com.ssafy.model.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Tag;
+import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface TagService {
-	public Tag saveTag(String tagName);
+	public BasicResponse saveTag(Tag tag);
 
-	public List<Tag> findAll();
+	public BasicResponse findAll();
 
-	public List<Tag> findAllByName(String tagName);
+	public BasicResponse findAllByName(Tag tag);
 
-	public Tag findOneByName(String tagName);
+	public BasicResponse findOneByName(Tag tag);
 
-	public Tag findOneById(long tagId);
-
-	public Tag updateTag(long tagId, String tagName);
-
-	public boolean deleteTag(long tagId);
+	public BasicResponse findAllTagCount(User user);
 }

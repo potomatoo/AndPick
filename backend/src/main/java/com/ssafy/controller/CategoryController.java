@@ -1,16 +1,19 @@
 package com.ssafy.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.Category;
+import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.CategoryService;
 
 @Controller
@@ -18,75 +21,126 @@ public class CategoryController {
 
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 
 	@GetMapping(value = "/api/category/findall")
 	public Object findAll(@RequestHeader(value = "Authorization") String jwtToken) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.status = true;
-		result.message = "모든 카테고리 목록입니다.";
-		result.data = categoryService.findAll();
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		response = new ResponseEntity<>(result, HttpStatus.OK);
+		result = categoryService.findAll();
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
 
 		return response;
 	}
 
-	@PostMapping(value = "/api/category/findbynamelike")
+	@GetMapping(value = "/api/category/findbynamelike")
 	public Object findByNameLike(@RequestHeader(value = "Authorization") String jwtToken,
 			@RequestParam(value = "categoryName") String categoryName) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.status = true;
-		result.message = "모든 카테고리 목록입니다.";
-		result.data = categoryService.findByCategoryNameLike(categoryName);
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		response = new ResponseEntity<>(result, HttpStatus.OK);
+		result = categoryService.findByCategoryNameLike(categoryName);
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
 
 		return response;
 	}
-	
-	@PostMapping(value = "/api/category/findbyname")
+
+	@GetMapping(value = "/api/category/findbyname")
 	public Object findByName(@RequestHeader(value = "Authorization") String jwtToken,
 			@RequestParam(value = "categoryName") String categoryName) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.status = true;
-		result.message = "모든 카테고리 목록입니다.";
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
 		result.data = categoryService.findByName(categoryName);
-
-		response = new ResponseEntity<>(result, HttpStatus.OK);
-
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
 		return response;
 	}
 
 	@PostMapping(value = "/api/category/save")
 	public Object saveCategory(@RequestHeader(value = "Authorization") String jwtToken,
-			@RequestParam(value = "categoryName") String categoryName) {
+			@RequestBody Category category) {
 
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.data = categoryService.findByName(categoryName);
-		
-		if(result.data==null) {
-			Category category = new Category();
-			category.setCategoryName(categoryName);
-			
-			result.status=true;
-			result.message="카테고리가 저장되었습니다.";
-			result.data = categoryService.save(category);
-			response = new ResponseEntity<>(result,HttpStatus.OK);
-		}else {	
-			result.status=false;
-			result.message="이미 존재하는 카테고리 입니다.";
-			response = new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
-		
-		
+
+		result.data = categoryService.save(category.getCategoryName());
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+
+	}
+	
+	@GetMapping(value = "/api/category/find/count")
+	public Object saveCategory(@RequestHeader(value = "Authorization") String jwtToken) {
+
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		result = categoryService.findCategoryCount();
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
 		return response;
 
 	}

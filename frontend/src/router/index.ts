@@ -1,25 +1,33 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "@/views/main/a.vue";
+import Home from "@/views/main/Main.vue";
 import Cover from "@/views/Cover.vue";
 import Today from "@/views/feeds/TodayFeedList.vue";
-import PostDir from "@/views/pages/PostDir.vue";
 
-import EditArticle from "@/views/pages/EditArticle.vue";
 import Later from "@/views/feeds/ReadLaterList.vue";
 import AddRss from "@/views/feeds/AddRss.vue";
 import FeedPage from "@/views/feeds/FeedPage.vue";
-import BoardList from "@/views/feeds/BoardList.vue";
+import BoardArticleList from "@/views/feeds/BoardArticleList.vue";
+import BoardArticleDetail from "@/views/feeds/BoardArticleDetail.vue";
 import ArticleListInRss from "@/views/feeds/ArticleListInRss.vue";
 import ArticleDetail from "@/views/feeds/ArticleDetail.vue";
 import ArticleDetailInFeed from "@/views/feeds/ArticleDetailInFeed.vue";
-import MypageMain from "@/views/pages/MypageMain.vue";
 
 import SignupView from "@/views/accounts/SignupView.vue";
 import LoginView from "@/views/accounts/LoginView.vue";
+import SocialLoginView from "@/views/accounts/SocialLoginView.vue";
 import LogoutView from "@/views/accounts/LogoutView.vue";
 import UpdateUserView from "@/views/accounts/UpdateUserView.vue";
 import DeleteUserView from "@/views/accounts/DeleteUserView.vue";
+
+import PostDir from "@/views/pages/PostDir.vue";
+import EditArticle from "@/views/pages/EditArticle.vue";
+import HashTag from "@/views/pages/HashTag.vue";
+import SelectFromOutSide from "@/views/pages/SelectFromOutside.vue";
+
+import MypageExplain from "@/views/explain/MypageExplain.vue";
+import BoardExplain from "@/views/explain/BoardExplain.vue";
+import FeedExplain from "@/views/explain/FeedExplain.vue";
 
 Vue.use(VueRouter);
 
@@ -27,112 +35,199 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Home",
-    component: Home,
-    beforeEnter(from, to, next) {
-      if (!window.sessionStorage.getItem("jwt-token")) {
-        next("/cover");
-      } else {
-        next();
-      }
-    },
+    component: Home
   },
   {
     path: "/cover",
     name: "Cover",
-    component: Cover,
+    component: Cover
   },
   {
     path: "/accounts/signup",
     name: "Signup",
-    component: SignupView,
+    component: SignupView
   },
   {
-    path: "/accounts/login",
+    path: "/accounts/login/",
     name: "Login",
-    component: LoginView,
+    component: LoginView
+  },
+  {
+    path: "/accounts/social",
+    name: "SocialLogin",
+    component: SocialLoginView
   },
   {
     path: "/accounts/logout",
     name: "Logout",
-    component: LogoutView,
+    component: LogoutView
   },
   {
     path: "/accounts/delete",
     name: "DeleteUser",
-    component: DeleteUserView,
+    component: DeleteUserView
   },
   {
     path: "/accounts/update",
     name: "UpdateUser",
-    component: UpdateUserView,
+    component: UpdateUserView
   },
   {
     path: "/today",
     name: "Today",
-    component: Today,
+    component: Today
   },
   {
     path: "/later",
     name: "Later",
-    component: Later,
+    component: Later
   },
   {
     path: "/mypage/:postDirId",
     name: "PostDir",
-    component: PostDir,
+    component: PostDir
   },
 
   {
-    path: "/mypage/:postDirName/post",
-    name: "EditArticle",
-    component: EditArticle,
+    path: "/mypage/:postDirId/newpost",
+    name: "NewPost",
+    component: EditArticle
+  },
+
+  {
+    path: "/scrap/:postDirId/newpost",
+    name: "NewScrapFromGoole",
+    component: EditArticle
+  },
+
+  {
+    path: "/fromothersite/select/:scrapKey",
+    name: "SelectFromOutside",
+    component: SelectFromOutSide
+  },
+
+  {
+    path: "/mypage/:postDirId/:postId/post",
+    name: "EditPost",
+    component: EditArticle
+  },
+
+  {
+    path: "/mypage/:tagName/hashtag",
+    name: "HashTag",
+    component: HashTag
   },
 
   {
     path: "/add",
     name: "AddRss",
-    component: AddRss,
+    component: AddRss
   },
   {
-    path: "/feeds/:feedName/:feedId",
+    path: "/feed/:feedId",
     name: "Feed",
-    component: FeedPage,
+    component: FeedPage
   },
   {
-    path: "/:feedName/subscription/:subscribeId",
+    path: "/feed/:feedId/subscription/:subscribeId",
     name: "ArticleListInRss",
-    component: ArticleListInRss,
+    component: ArticleListInRss
   },
   {
-    path: "/:feedName/subscription/:subscribeId/:articleId",
+    path: "/feed/:feedId/subscription/:subscribeId/:articleId",
     name: "ArticleDetail",
     component: ArticleDetail,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInSubs",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInSubs",
+        component: EditArticle
+      }
+    ]
   },
   {
-    path: "/feed/:feedName/:feedId/article/:articleId",
+    path: "/feed/:feedId/article/:articleId",
     name: "ArticleDetailInFeed",
     component: ArticleDetailInFeed,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInFeed",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInFeed",
+        component: EditArticle
+      }
+    ]
   },
   {
-    path: "/boards/:boardName",
-    name: "BoardList",
-    component: BoardList,
+    path: "/board/:boardId",
+    name: "BoardArticleList",
+    component: BoardArticleList
   },
+  {
+    path: "/board/:boardId/news/:newsId",
+    name: "BoardArticleDetail",
+    component: BoardArticleDetail,
+    children: [
+      {
+        path: "scrap",
+        name: "NewScrapInBoard",
+        component: EditArticle
+      },
+      {
+        path: "scrap/:postId",
+        name: "EditScrapInBoard",
+        component: EditArticle
+      }
+    ]
+  },
+  {
+    path: "/explain/mypage",
+    name: "MypageExplain",
+    component: MypageExplain
+  },
+  {
+    path: "/explain/board",
+    name: "BoardExplain",
+    component: BoardExplain
+  },
+  {
+    path: "/explain/feed",
+    name: "FeedExplain",
+    component: FeedExplain
+  }
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior(to, from, savedPositin) {
+    return { x: 0, y: 0 };
+  }
 });
 
-// router.beforeEach(function(to, from, next) {
-//   if (!window.sessionStorage.getItem("jwt-token")) {
-//     next("/cover");
-//     next(false);
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const publicPages = ["Cover", "Signup", "Login", "SocialLogin"];
+  const authRequired = !publicPages.includes(to.name!);
+  const isLogedIn = !!window.sessionStorage.getItem("jwt-token");
+  const unAuthRequiredPages = ["Signup", "Login", "SocialLogin"];
+  const unAuthRequired = unAuthRequiredPages.includes(to.name!);
+
+  authRequired && !isLogedIn
+    ? to.name === "Home" && !isLogedIn
+      ? next({ name: "Cover" })
+      : next({ name: "Login" })
+    : next();
+  unAuthRequired && isLogedIn ? next({ name: "Home" }) : next();
+});
 
 export default router;

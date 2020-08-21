@@ -9,11 +9,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ssafy.model.BasicResponse;
+import com.ssafy.model.dto.Category;
+import com.ssafy.model.dto.Feed;
+import com.ssafy.model.dto.Rss;
+import com.ssafy.model.dto.Subscribe;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.SubscribeService;
 
 @Controller
@@ -24,22 +29,87 @@ public class SubscribeController {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
-	@PostMapping(value = "/api/subscribe/save")
-	public Object saveSubscribe(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedId") long feedId,
-			@RequestParam("subscribeName") String subscribeName, @RequestParam("rssUrl") String rssUrl,
-			@RequestParam("categoryName") String categoryName) {
+	@PostMapping(value = "/api/subscribe/new")
+	public Object saveSubscribeNew(@RequestHeader("Authorization") String jwtToken, @RequestBody Subscribe subscribe) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		result.data = subscribeService.saveSubscribe(user, feedId, subscribeName, rssUrl, categoryName);
-		result.status = (result.data != null) ? true : false;
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		if (subscribe.getSubscribeName() == null || subscribe.getRss().getRssUrl() == null
+				|| subscribe.getRss().getCategory().getCategoryName() == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요 ";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		Category category = new Category();
+		category.setCategoryName(subscribe.getRss().getCategory().getCategoryName());
+
+		Rss rss = new Rss();
+		rss.setRssUrl(subscribe.getRss().getRssUrl());
+		rss.setCategory(category);
+
+		Subscribe subscribeDto = new Subscribe();
+		subscribeDto.setSubscribeName(subscribe.getSubscribeName());
+		subscribeDto.setFeedId(subscribe.getFeedId());
+		subscribeDto.setUserNo(user.getUserNo());
+
+		subscribeDto.setRss(rss);
+
+		result = subscribeService.saveSubscribe(user, subscribeDto);
 
 		if (result.status) {
-			result.message = "구독이 저장되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "저장에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
+	@PostMapping(value = "/api/subscribe/save")
+	public Object saveSubscribe(@RequestHeader("Authorization") String jwtToken, @RequestBody Subscribe subscribe) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		if (subscribe.getSubscribeName() == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요 ";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+			return response;
+		}
+
+		Rss rss = new Rss();
+		rss.setRssId(subscribe.getRss().getRssId());
+
+		Subscribe subscribeDto = new Subscribe();
+		subscribeDto.setSubscribeName(subscribe.getSubscribeName());
+		subscribeDto.setFeedId(subscribe.getFeedId());
+		subscribeDto.setUserNo(user.getUserNo());
+
+		subscribeDto.setRss(rss);
+
+		result = subscribeService.saveSubscribe(user, subscribeDto);
+
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -53,15 +123,31 @@ public class SubscribeController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		result.data = subscribeService.updateSubscribe(user, feedId, subscribeId, subscribeName);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.status = (result.data != null) ? true : false;
+		if (subscribeName == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
+		Subscribe subscribe = new Subscribe();
+
+		subscribe.setSubscribeId(subscribeId);
+		subscribe.setFeedId(feedId);
+		subscribe.setSubscribeName(subscribeName);
+		subscribe.setUserNo(user.getUserNo());
+
+		result = subscribeService.updateSubscribe(user, subscribe);
 		if (result.status) {
-			result.message = "수정되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "수정에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -75,14 +161,21 @@ public class SubscribeController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		result.data = subscribeService.deleteSubscribe(subscribeId);
-		result.status = (result.data != null) ? true : false;
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		Subscribe subscribe = new Subscribe();
+		subscribe.setSubscribeId(subscribeId);
+
+		result = subscribeService.deleteSubscribe(user, subscribe);
 
 		if (result.status) {
-			result.message = "삭제되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "삭제에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -95,14 +188,18 @@ public class SubscribeController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		result.data = subscribeService.findSubscribeByUser(user);
-		result.status = (result.data != null) ? true : false;
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		result = subscribeService.findSubscribeByUser(user);
 
 		if (result.status) {
-			result.message = "사용자의 구독 목록 입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -115,14 +212,21 @@ public class SubscribeController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.data = subscribeService.findSubscribeByFeed(feedId);
-		result.status = (result.data != null) ? true : false;
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
+		Feed feed = new Feed();
+		feed.setFeedId(feedId);
+
+		result = subscribeService.findSubscribeByFeed(user, feed);
 		if (result.status) {
-			result.message = "피드로 조회한 결과입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -135,14 +239,21 @@ public class SubscribeController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		result.data = subscribeService.findSubscribeBySubscribe(subscribeId);
-		result.status = (result.data != null) ? true : false;
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
+		Subscribe subscribe = new Subscribe();
+		subscribe.setSubscribeId(subscribeId);
+
+		result = subscribeService.findSubscribeBySubscribe(user, subscribe);
 		if (result.status) {
-			result.message = "구독 Id로 조회한 결과입니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 

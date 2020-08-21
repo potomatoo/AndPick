@@ -1,23 +1,35 @@
 package com.ssafy.model.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
+import com.ssafy.model.dto.Category;
+import com.ssafy.model.dto.Feed;
 import com.ssafy.model.dto.Rss;
+import com.ssafy.model.dto.Subscribe;
+import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public interface RssService {
-	public List<Rss> findAll();
 
-	public List<Rss> findByCategoryName(String categoryName);
+	public BasicResponse findAll();
 
-	public List<Rss> findByRssName(String rssName);
+	public BasicResponse findByCategoryName(String categoryName);
 
-	public Rss saveRss(Rss rss, String categoryName);
+	public BasicResponse findByRssName(String rssName);
 
-	public List<Rss> findItemByFeed(long feedId);
+	public BasicResponse saveRss(Rss rss, Category category);
 
-	public List<Rss> findItemBySubscribe(long subscribeId);
+	public BasicResponse findItemByFeed(User user, Feed feed);
+
+	public BasicResponse findItemBySubscribe(User user, Subscribe subscribe);
+
+	public BasicResponse findByCategoryNameLike(String categoryName);
+
+	public BasicResponse findByRssNameLike(String rssName);
+
+	public BasicResponse findMain();
+
+	public BasicResponse findCount();
 
 }

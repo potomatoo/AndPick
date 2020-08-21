@@ -1,92 +1,114 @@
 package com.ssafy.model.service;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.model.dto.Tag;
+import com.ssafy.model.dto.User;
+import com.ssafy.model.repository.PostTagRepository;
 import com.ssafy.model.repository.TagRepository;
+import com.ssafy.model.response.BasicResponse;
 
 @Service
 public class TagServiceImpl implements TagService {
 
 	@Autowired
 	private TagRepository tagRepository;
+	@Autowired
+	private PostTagRepository postTagRepository;
 
 	@Override
 	@Transactional
-	public Tag saveTag(String tagName) {
+	public BasicResponse saveTag(Tag tag) {
 		// TODO Auto-generated method stub
-		if (tagName == null)
-			return null;
-		
-		if (tagRepository.findOneByTagName(tagName) != null) {
-			return null;
+		BasicResponse result = new BasicResponse();
+
+		Tag checkTag = tagRepository.findOneByTagName(tag.getTagName());
+		if (checkTag != null) {
+			result.status = false;
+			result.message = "중복된 태그 입니다.";
+			result.data = checkTag;
+			return result;
 		}
 
-		Tag tag = new Tag();
-		tag.setTagName(tagName);
-
-		return tagRepository.save(tag);
-	}
-
-	@Override
-	public List<Tag> findAll() {
-		// TODO Auto-generated method stub
-		return tagRepository.findAll();
-	}
-
-	@Override
-	public List<Tag> findAllByName(String tagName) {
-		// TODO Auto-generated method stub
-		if (tagName == null || tagName.equals("")) {
-			return null;
+		result.data = tagRepository.save(tag);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "태그 저장에 성공하였습니다.";
+		} else {
+			result.message = "태그 저장에 실패하였습니다.";
 		}
-		return tagRepository.findByTagNameLike('%' + tagName + '%');
-	}
 
-	@Override
-	public Tag findOneByName(String tagName) {
-		// TODO Auto-generated method stub
-		if (tagName == null || tagName.equals(""))
-			return null;
-		return tagRepository.findOneByTagName(tagName);
-	}
-
-	@Override
-	public Tag findOneById(long tagId) {
-		// TODO Auto-generated method stub
-		return tagRepository.findOneByTagId(tagId);
-	}
-
-	@Override
-	public Tag updateTag(long tagId, String tagName) {
-		// TODO Auto-generated method stub
-		if (tagName == null || tagName.equals(""))
-			return null;
-
-		Tag tag = new Tag();
-
-		tag.setTagId(tagId);
-		tag.setTagName(tagName);
-
-		return tagRepository.save(tag);
+		return result;
 	}
 
 	@Override
 	@Transactional
-	public boolean deleteTag(long tagId) {
+	public BasicResponse findAll() {
 		// TODO Auto-generated method stub
-		Tag tag = tagRepository.findOneByTagId(tagId);
+		BasicResponse result = new BasicResponse();
 
-		if (tag == null)
-			return false;
+		result.data = tagRepository.findAll();
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "태그 조회에 성공하였습니다.";
+		} else {
+			result.message = "태그 조회에 실패하였습니다.";
+		}
 
-		tagRepository.delete(tag);
-		return true;
+		return result;
 	}
 
+	@Override
+	@Transactional
+	public BasicResponse findAllByName(Tag tag) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		result.data = tagRepository.findByTagNameLike("%" + tag.getTagName() + "%");
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "태그 조회에 성공하였습니다.";
+		} else {
+			result.message = "태그 조회에 실패하였습니다.";
+		}
+
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public BasicResponse findOneByName(Tag tag) {
+		// TODO Auto-generated method stub
+		BasicResponse result = new BasicResponse();
+
+		result.data = tagRepository.findOneByTagName(tag.getTagName());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "태그 조회에 성공하였습니다.";
+		} else {
+			result.message = "태그 조회에 실패하였습니다.";
+		}
+
+		return result;
+	}
+
+	@Override
+	public BasicResponse findAllTagCount(User user) {
+		// TODO Auto-generated method stub
+
+		BasicResponse result = new BasicResponse();
+
+		result.data = postTagRepository.findAllTagCount(user.getUserNo());
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "태그 조회에 성공하였습니다.";
+		} else {
+			result.message = "태그 조회에 실패하였습니다.";
+		}
+
+		return result;
+	}
 }

@@ -1,117 +1,145 @@
 <template>
   <div>
     <v-list>
-      <v-subheader>Board</v-subheader>
-      <v-list-item-group>
-        <v-list-item v-for="board in boardList" :key="board.title">
-          <v-list-item-icon>
-            <v-icon>
-              mdi-star-outline
-            </v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <router-link
-              :to="{ name: 'BoardList', params: { boardname: board.title } }"
-              class="router-link"
-            >
-              <v-list-item-title v-text="board.title"></v-list-item-title>
-            </router-link>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
+      <div class="d-flex justify-content-between mr-2">
+        <v-subheader style="font-family: 'Do Hyeon', sans-serif; color: black"
+          >보드</v-subheader
+        >
+        <router-link
+          :to="{
+            name: 'BoardExplain'
+          }"
+          class="router-link explain"
+        >
+          <i class="mdi mdi-help-circle"></i>
+        </router-link>
+      </div>
+      <!-- <v-list-item-group> -->
+      <v-list-item
+        v-for="board in boardList"
+        :key="board.title"
+        @contextmenu.prevent="showBoardCtx($event, board)"
+        @click="toBoardArticleList(board.boardId, $event)"
+        class="sidebar-board"
+        color="#f57e7e"
+      >
+        <!-- <v-list-item-icon>
+          <v-icon>
+            mdi-star-outline
+          </v-icon>
+        </v-list-item-icon> -->
+        <v-list-item-content>
+          <v-list-item-title v-text="board.boardName"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <!-- </v-list-item-group> -->
 
       <v-list-item @click="modalActive = !modalActive">
         <v-list-item-content class="text-center">
-          <v-list-item-title>Create New Board</v-list-item-title>
+          <v-list-item-title>새 보드 생성</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
-      <v-dialog v-model="modalActive" max-width="500px">
-        <v-card>
-          <v-form ref="form" onsubmit="return false;">
-            <v-card-text>
-              <v-text-field
-                v-model="newBoardName"
-                label="Board Name"
-                autofocus
-                clearable
-                :rules="rules"
-                @keyup.enter="addBoards"
-              ></v-text-field>
-
-              <small class="grey--text">* Create New Board</small>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="addBoards">Create</v-btn>
-              <v-btn text color="error" @click="closeModal">Cancle</v-btn>
-            </v-card-actions>
-          </v-form>
-        </v-card>
-      </v-dialog>
+      <create-board-modal
+        :modalActive.sync="modalActive"
+        @addBoard="addBoards"
+        @closeModal="closeModal"
+      />
     </v-list>
+    <board-context-menu :boardItem="boardItem" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 
-import { SidebarList } from "../../store/Feed.interface";
+import { Board } from "../../store/Feed.interface";
+import BoardContextMenu from "@/components/feeds/BoardContextMenu.vue";
+import CreateBoardModal from "@/components/feeds/CreateBoardModal.vue";
 
 const feedModule = namespace("feedModule");
 
-@Component
+@Component({
+  components: {
+    BoardContextMenu,
+    CreateBoardModal
+  }
+})
 export default class SidebarBoard extends Vue {
   @feedModule.State boardList!: [];
-  @feedModule.Mutation ADD_BOARD: any;
-
-  newBoardName = null;
+  @feedModule.Action ADD_BOARD: any;
+  @feedModule.Mutation SET_BOARD_CONTEXT_MENU: any;
 
   modalActive = false;
 
-  rules = [
-    (value: any) => !!value || "this filed is required.",
-    (value: string) =>
-      !this.checkDuplication(value) || "동일한 보드가 존재합니다."
-  ];
-
-  @Watch("modalActive")
-  onModalClose(isActive: boolean) {
-    if (isActive && this.$refs.form) {
-      (this.$refs.form as HTMLFormElement).reset();
-    }
-  }
-
-  checkDuplication(name: string | null) {
-    if (this.boardList.length) {
-      return this.boardList.some((feed: SidebarList) => feed.title === name);
-    }
-  }
+  boardItem = {};
 
   closeModal() {
-    this.newBoardName = null;
     this.modalActive = false;
   }
 
-  addBoards() {
-    if (this.newBoardName && !this.checkDuplication(this.newBoardName)) {
-      this.ADD_BOARD({ title: this.newBoardName });
-      this.closeModal();
+  addBoards(boardName: string) {
+    this.ADD_BOARD(boardName);
+    this.closeModal();
+  }
+
+  showBoardCtx(e: MouseEvent, board: Board) {
+    this.boardItem = board;
+    const ctx = {
+      showCtx: true,
+      x: e.clientX,
+      y: e.clientY
+    };
+    this.SET_BOARD_CONTEXT_MENU(ctx);
+  }
+
+  toBoardArticleList(boardId: number, $event: MouseEvent) {
+    const boards = document.querySelectorAll(".sidebar-board");
+    const mypages = document.querySelectorAll(".sidebar-mypage");
+    const subscriptions = document.querySelectorAll(".sidebar-subscription");
+    const addrss = document.querySelectorAll(".sidebar-addrss");
+    if (boards?.length) {
+      boards.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
     }
+    if (mypages?.length) {
+      mypages.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (subscriptions?.length) {
+      subscriptions.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    if (addrss?.length) {
+      addrss.forEach(el =>
+        el.classList.remove("v-item--active", "v-list-item--active")
+      );
+    }
+    ($event.currentTarget as HTMLElement).classList.add("v-list-item--active");
+    if (
+      this.$route.name === "BoardArticleList" &&
+      Number(this.$route.params.boardId) === boardId
+    )
+      return;
+    this.$router.push({
+      name: "BoardArticleList",
+      params: { boardId: boardId.toString() }
+    });
   }
 }
 </script>
 
 <style scoped>
-a.router-link-exact-active {
-  text-decoration: none;
-  color: inherit;
+.explain {
+  opacity: 0.4;
+  font-size: 20px;
+  margin-top: 3px;
+  float: left;
 }
-</style>
-
-<style scoped>
 .router-link {
   text-decoration: none;
   color: inherit;

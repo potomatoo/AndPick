@@ -1,13 +1,21 @@
 package com.ssafy.util;
 
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.ssafy.model.dto.Rss;
 import com.ssafy.model.dto.RssChannel;
 import com.ssafy.model.dto.RssItem;
 
@@ -16,9 +24,10 @@ public class RssParser implements Runnable {
 	private RssChannel rssChannel;
 	private RedisTemplate<String, Object> redisTemplate;
 
-	public RssParser(String link) {
-		this.link = link;
+	public RssParser(Rss rss) {
+		this.link = rss.getRssUrl();
 		this.rssChannel = new RssChannel();
+		this.rssChannel.setRss(rss);
 	}
 
 	public void parse() {
@@ -26,25 +35,77 @@ public class RssParser implements Runnable {
 			Connection con = Jsoup.connect(this.link);
 			Document document = con.get();
 
-			this.rssChannel.setTitle(document.selectFirst("title").text());
+			this.rssChannel.setTitle(this.rssChannel.getRss().getRssName());
 			this.rssChannel.setLink(document.selectFirst("link").text());
-			
+			try {
+				Element img = document.selectFirst("image");
+				try {
+					this.rssChannel.setImg(img.selectFirst("url").text());
+				} catch (Exception e) {
+					this.rssChannel.setImg("");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				this.rssChannel.setImg("");
+			}
+
 			Elements items = document.select("item");
+			HashMap<String, String> newsDetail = new HashMap<String, String>();
 			this.rssChannel.itemInit();
 			for (Element item : items) {
 				RssItem rssItem = new RssItem();
 				rssItem.setTitle(item.select("title").text());
-				rssItem.setDescription(item.select("description").text());
 				rssItem.setLink(item.select("link").text());
-				rssItem.setPubDate(item.select("pubDate").text());
+				Elements description = item.select("description");
+				rssItem.setDescription(Jsoup.parse(description.text()).text());
+				newsDetail.put(rssItem.getLink(), description.text());
 				rssItem.setRssTitle(this.rssChannel.getTitle());
+
+				try {
+					SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
+					String sdate = item.selectFirst("pubDate").text();
+					Date date = format.parse(sdate);
+					rssItem.setPubDate(date);
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println("[ERROR] DATE ERROR" + this.rssChannel.getRss().getRssName());
+				}
+
+				Document descDoc = Jsoup.parse(description.text());
+				Element imgelement = descDoc.selectFirst("img");
+				if (imgelement != null) {
+					String imgsrc = imgelement.attr("src");
+
+					if (!imgsrc.substring(0, 4).equals("http")) {
+						URL url = new URL(this.link);
+						String baseUrlAuthority = url.getProtocol() + "://" + url.getAuthority();
+						imgsrc = baseUrlAuthority + imgsrc;
+					}
+
+					rssItem.setImgsrc(imgsrc);
+				} else {
+					rssItem.setImgsrc(rssChannel.getImg());
+				}
+
 				this.rssChannel.addItem(rssItem);
 			}
-			
+
 			redisTemplate.opsForValue().set(this.link, this.rssChannel);
+			redisTemplate.opsForValue().set(this.rssChannel.getRss().getRssName(), newsDetail);
+
+			List<RssItem> sub = new ArrayList<RssItem>();
+			try {
+				sub = new ArrayList<RssItem>(this.rssChannel.getItems().subList(0, 3));
+			} catch (Exception e) {
+				sub = new ArrayList<RssItem>(this.rssChannel.getItems().subList(0, this.rssChannel.getItems().size()));
+			}
+			this.rssChannel.setItems(sub);
+			redisTemplate.opsForValue().set("limit " + this.link, this.rssChannel);
+
+			System.out.println("[PARSE] " + this.rssChannel.getRss().getRssName());
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("[ERROR] 파싱에러");
+			System.out.println("[ERROR] " + this.rssChannel.getRss().getRssName());
 			e.printStackTrace();
 		}
 	}
@@ -56,15 +117,14 @@ public class RssParser implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		try {
-			while (true) {
+		while (true) {
+			try {
 				this.parse();
-				this.redisTemplate.opsForValue().set(this.link, this.rssChannel);
-				Thread.sleep(1000);
+				Thread.sleep(300000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}

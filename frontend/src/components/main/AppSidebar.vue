@@ -1,5 +1,11 @@
 <template>
-  <v-navigation-drawer v-if="isSidebarActive" app clipped permanent>
+  <v-navigation-drawer
+    v-if="isSidebarActive"
+    app
+    clipped
+    permanent
+    class="sidebar"
+  >
     <!-- <div class="pt-3">
       <v-list-item-title class="text-center font-weight-bold"
         >Welcome Junho!</v-list-item-title
@@ -39,4 +45,7 @@ export default class AppSidebar extends Vue {}
 </script>
 
 <style scoped>
+.sidebar {
+  background-color: #f6f7f8 !important;
+}
 </style>

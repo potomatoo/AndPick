@@ -5,17 +5,17 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.Feed;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.FeedService;
 
 @Controller
@@ -28,21 +28,30 @@ public class FeedController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/feed/save")
-	public Object saveFeed(@RequestHeader("Authorization") String jwtToken, @RequestParam("feedName") String feedName) {
+	public Object saveFeed(@RequestHeader("Authorization") String jwtToken, @RequestBody Feed feed) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		Feed feed = new Feed();
-		feed.setFeedName(feedName);
-
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		if (user != null) {
-			feed.setUserNo(user.getUserNo());
-			result.data = feedService.save(feed);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
-		result.status = (result.data != null) ? true : false;
+		if (feed.getFeedName() == null) {
+			result.status = false;
+			result.message = "필수값을 입력해 주세요.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
+		Feed feedDto = new Feed();
+		feedDto.setFeedName(feed.getFeedName());
+		feedDto.setUserNo(user.getUserNo());
+
+		result = feedService.saveFeed(user, feedDto);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -58,12 +67,14 @@ public class FeedController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		if (user != null) {
-			result.data = feedService.findAllByuser(user.getUserNo());
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
-		result.status = (result.data != null) ? true : false;
-
+		result = feedService.findAllByuser(user);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -79,18 +90,20 @@ public class FeedController {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
 		Feed feed = new Feed();
 		feed.setFeedId(feedId);
 		feed.setFeedName(feedName);
+		feed.setUserNo(user.getUserNo());
 
-		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		if (user != null) {
-			feed.setUserNo(user.getUserNo());
-			result.data = feedService.save(feed);
-		}
-
-		result.status = (result.data != null) ? true : false;
-
+		result = feedService.updateFeed(user, feed);
 		if (result.status) {
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -106,13 +119,52 @@ public class FeedController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
-		if (user != null) {
-			feedService.deleteFeed(feedId);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
-		result.status = true;
-		result.message = "삭제가 완료되었습니다.";
-		response = new ResponseEntity<>(result, HttpStatus.OK);
+		Feed feed = new Feed();
+		feed.setFeedId(feedId);
+		feed.setUserNo(user.getUserNo());
+
+		result = feedService.deleteFeed(user, feed);
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
+	@GetMapping(value = "/api/feed/feedid")
+	public Object findFeedByFeedid(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("feedId") Long feedId) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		Feed feed = new Feed();
+		feed.setFeedId(feedId);
+
+		result = feedService.findOneByFeedId(user, feed);
+		
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
 		return response;
 	}
 }

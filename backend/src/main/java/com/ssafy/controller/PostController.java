@@ -10,12 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ssafy.model.BasicResponse;
 import com.ssafy.model.dto.Post;
+import com.ssafy.model.dto.PostDir;
+import com.ssafy.model.dto.Tag;
 import com.ssafy.model.dto.User;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.PostService;
 
 @Controller
@@ -26,28 +30,36 @@ public class PostController {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping(value = "/api/post/save")
-	public Object savePostDir(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam("postDirId") long postDirId, @RequestParam("postTitle") String postTitle,
-			@RequestParam("postContent") String postContent) {
+	public Object savePostDir(@RequestHeader("Authorization") String jwtToken, @RequestBody Post post) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		Post post = new Post();
-		post.setPostDirId(postDirId);
-		post.setPostTitle(postTitle);
-		post.setPostContetnt(postContent);
-		post.setPostDate(new Date());
+		if (post.getPostTitle() == null || post.getPostContent() == null) {
+			result.status = false;
+			result.message = "필수값을 입력하세요.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.savePost(user, post);
-		result.status = (result.data != null) ? true : false;
+		Post postDto = new Post();
+		postDto.setPostDirId(post.getPostDirId());
+		postDto.setPostTitle(post.getPostTitle());
+		postDto.setPostContent(post.getPostContent());
+		postDto.setPostDate(new Date());
+		postDto.setUserNo(user.getUserNo());
 
+		result = postService.savePost(user, postDto, post.getTagList());
 		if (result.status) {
-			result.message = "게시글 저장이 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 저장에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -60,15 +72,17 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.findByUser(user);
-		result.status = (result.data != null) ? true : false;
-
+		result = postService.findByUser(user);
 		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -82,15 +96,20 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.findByDirId(user, postDirId);
-		result.status = (result.data != null) ? true : false;
+		PostDir postDir = new PostDir();
+		postDir.setPostDirId(postDirId);
 
+		result = postService.findByDirId(user, postDir);
 		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -103,37 +122,59 @@ public class PostController {
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.findByPostId(user, postId);
-		result.status = (result.data != null) ? true : false;
+		Post post = new Post();
+		post.setPostId(postId);
 
+		result = postService.findByPostId(user, post);
 		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
 		return response;
 	}
 
-	@GetMapping(value = "/api/post/find/title")
-	public Object findByTitle(@RequestHeader("Authorization") String jwtToken,
-			@RequestParam("postTitle") String title) {
+	@PutMapping(value = "/api/post/update")
+	public Object updatePost(@RequestHeader("Authorization") String jwtToken, @RequestBody Post post) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.findByTitle(user, title);
-		result.status = (result.data != null) ? true : false;
+		if (post.getPostTitle() == null || post.getPostContent() == null) {
+			result.status = false;
+			result.message = "필수값을 입력하세요.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
+		Post postDto = new Post();
+
+		postDto.setPostId(post.getPostId());
+		postDto.setPostDirId(post.getPostDirId());
+		postDto.setPostTitle(post.getPostTitle());
+		postDto.setPostContent(post.getPostContent());
+		postDto.setUserNo(user.getUserNo());
+		postDto.setPostDate(new Date());
+
+		result = postService.updatePost(user, postDto, post.getTagList());
 		if (result.status) {
-			result.message = "게시글 조회가 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 조회에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
@@ -141,22 +182,57 @@ public class PostController {
 	}
 
 	@DeleteMapping(value = "/api/post/delete")
-	public Object savePostDir(@RequestHeader("Authorization") String jwtToken, @RequestParam("postId") long postId) {
+	public Object deletePost(@RequestHeader("Authorization") String jwtToken, @RequestParam("postId") long postId) {
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
 		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
 
-		result.data = postService.deletePost(user, postId);
+		Post post = new Post();
+		post.setPostId(postId);
+
+		result = postService.deletePost(user, post);
 
 		if (result.status) {
-			result.message = "게시글 저장이 완료되었습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
-			result.message = "게시글 저장에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 		}
 
 		return response;
 	}
+
+	@GetMapping("/api/post/find/tagname")
+	public Object findByTagName(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("tagName") String tagName) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		Tag tag = new Tag();
+		tag.setTagName(tagName);
+
+		result = postService.findByTagName(user, tag);
+		if (result.status) {
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
 }

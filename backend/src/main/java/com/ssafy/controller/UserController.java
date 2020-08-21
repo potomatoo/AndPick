@@ -1,7 +1,5 @@
 package com.ssafy.controller;
 
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -12,14 +10,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.model.BasicResponse;
+import com.ssafy.model.dto.PostDir;
 import com.ssafy.model.dto.User;
-import com.ssafy.model.repository.UserRepository;
+import com.ssafy.model.response.BasicResponse;
 import com.ssafy.model.service.UserService;
 
 @CrossOrigin("*")
@@ -34,19 +32,18 @@ public class UserController {
 	RedisTemplate<String, Object> redisTemplate;
 
 	@PostMapping("/api/public/signup")
-	public Object signup(@RequestParam(value = "userId") String userId,
-			@RequestParam(value = "userPassword") String userPassword,
-			@RequestParam(value = "userName") String userName, @RequestParam(value = "userType") int userType) {
+	public Object signup(@RequestBody User user) {
 
-		User user = userService.Signup(new User(userId, encoder.encode(userPassword), userName, userType));
-
+		User userDto = userService.Signup(new User(user.getUserId(), encoder.encode(user.getUserPassword()),
+				user.getUserName(), user.getUserType()));
+		userDto.setUserPassword(null);
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
 
-		if (user != null) {
+		if (userDto != null) {
 			result.status = true;
 			result.message = "Sign up success";
-			result.data = user;
+			result.data = userDto;
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.status = false;
@@ -103,12 +100,14 @@ public class UserController {
 
 		ResponseEntity response = null;
 		BasicResponse result = new BasicResponse();
-		
+
 		User user = (User) this.redisTemplate.opsForValue().get(jwtToken);
 		user.setUserName(userName);
-		
-		User update = userService.UpdateUser(user);
-		
+
+		User update = userService.updateUser(user);
+		this.redisTemplate.opsForValue().set(jwtToken, user);
+
+		update.setUserPassword("");
 		if (update != null) {
 			result.status = true;
 			result.message = "회원정보 수정에 성공하였습니다.";
@@ -119,7 +118,75 @@ public class UserController {
 			result.message = "회원정보 수정에 실패하였습니다.";
 			response = new ResponseEntity<>(result, HttpStatus.CONFLICT);
 		}
-		
+
+		return response;
+	}
+
+	@GetMapping(value = "/api/user/detail")
+	public Object userDetail(@RequestHeader("Authorization") String jwtToken) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+		user.setUserPassword("");
+		result.data = user;
+		result.status = true;
+		if (result.status) {
+			result.message = "회원 정보 조회에 성공하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "회원 정보 조회에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
+		return response;
+	}
+
+	@PutMapping("/api/update/user/password")
+	public Object upateUserPassword(@RequestHeader("Authorization") String jwtToken,
+			@RequestParam("userPassword") String userPassword, @RequestParam("changePassword") String changePassword) {
+		ResponseEntity response = null;
+		BasicResponse result = new BasicResponse();
+
+		User user = (User) redisTemplate.opsForValue().get(jwtToken);
+		if (user == null) {
+			result.status = false;
+			result.message = "잘못된 사용자 입니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		if (userPassword == null || changePassword == null) {
+			result.status = false;
+			result.message = "필수 값을 입력하세요";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		if (!encoder.matches(userPassword, user.getUserPassword())) {
+			result.status = false;
+			result.message = "기존 비밀번호가 다릅니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+			return response;
+		}
+
+		user.setUserPassword(encoder.encode(changePassword));
+		result.data = userService.updateUser(user);
+		result.status = (result.data != null) ? true : false;
+		if (result.status) {
+			result.message = "비밀번호 변경에 성공하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.message = "비밀번호 변경에 실패하였습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+		}
+
 		return response;
 	}
 
